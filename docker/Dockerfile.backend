@@ -1,0 +1,20 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy backend package files
+COPY backend/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy backend source
+COPY backend/ ./
+
+# Copy root .env if exists
+COPY .env* ./
+
+EXPOSE 3001
+
+# Run sync script on a schedule (every hour)
+CMD ["node", "syncNotion.js"]

@@ -1,0 +1,49 @@
+{
+  "name": "sheffdatasoc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sheffield Data Science Society Website",
+  "dependencies": {
+    "@notionhq/client": "^5.3.0",
+    "@supabase/supabase-js": "^2.76.1",
+    "dotenv": "^17.2.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.9.4",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^3.5.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
+    "docker:dev:detached": "docker-compose -f docker-compose.dev.yml up -d --build",
+    "docker:prod": "docker-compose up --build",
+    "docker:prod:detached": "docker-compose up -d --build",
+    "docker:stop": "docker-compose -f docker-compose.dev.yml down && docker-compose down",
+    "docker:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "docker:clean": "docker-compose -f docker-compose.dev.yml down -v && docker-compose down -v && docker system prune -af --volumes",
+    "sync": "cd backend && node syncNotion.js",
+    "backend:install": "cd backend && npm install",
+    "install:all": "npm install && npm run backend:install"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

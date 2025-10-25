@@ -1,0 +1,22 @@
+{
+  "name": "sheffdatasoc-backend",
+  "version": "1.0.0",
+  "description": "Backend sync service for SheffDataSoc",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sync": "node syncNotion.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "@notionhq/client": "^5.3.0",
+    "@supabase/supabase-js": "^2.76.1",
+    "dotenv": "^17.2.3",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
