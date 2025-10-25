@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SheffDataSoc Wesbite
 
 ## 📋 Understanding the Architecture
@@ -215,3 +216,7 @@ Once Supabase is working:
 2. Run `npm run sync` to sync from Notion
 3. Add more fields to tables (images, tags, etc.)
 4. Build individual post/event detail pages
+=======
+# 2025-26
+The Repository for the DataSoc activities through the academic year 2025/2026.
+>>>>>>> d74d675b3f7983b5a0e648146626bccd1eaaacc7
