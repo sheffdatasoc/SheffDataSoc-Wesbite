@@ -4,14 +4,15 @@ const { createClient } = require('@supabase/supabase-js');
 
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
 // Debug the client
-console.log('Notion client keys:', Object.keys(notion));
-console.log('Has databases?', 'databases' in notion);
-console.log('Databases type:', typeof notion.databases);
-console.log('Token length:', process.env.NOTION_TOKEN?.length);
-console.log('Token starts with:', process.env.NOTION_TOKEN?.substring(0, 4));
-// ADD THIS LINE
-console.log('Available database methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(notion.databases)));
+//console.log('Notion client keys:', Object.keys(notion));
+//console.log('Has databases?', 'databases' in notion);
+//console.log('Databases type:', typeof notion.databases);
+//console.log('Token length:', process.env.NOTION_TOKEN?.length);
+//console.log('Token starts with:', process.env.NOTION_TOKEN?.substring(0, 4));
+//console.log('Available database methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(notion.databases)));
+
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
