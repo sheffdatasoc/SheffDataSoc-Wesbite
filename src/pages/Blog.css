@@ -1,0 +1,22 @@
+/* ========================================
+   /pages/Blog.css
+   ======================================== */
+
+.blog-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.blog-header h1 {
+  color: var(--dark-bg);
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.blog-header p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* BlogCard styles are in components/BlogCard.css */
+/* blog-grid is defined in components.css */

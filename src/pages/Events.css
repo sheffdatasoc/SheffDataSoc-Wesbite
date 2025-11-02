@@ -1,0 +1,31 @@
+/* ========================================
+   /pages/Events.css
+   ======================================== */
+
+.events-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.events-header h1 {
+  color: var(--dark-bg);
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.events-header p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* Event filters use .sandbox-tabs from Sandbox.css or create new class */
+.events-filters {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* EventCard styles are in components/EventCard.css */
+/* Grid layout uses .events-grid from components.css */

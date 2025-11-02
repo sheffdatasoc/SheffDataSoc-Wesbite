@@ -1,0 +1,206 @@
+/* ========================================
+   /pages/Glossary.css
+   ======================================== */
+
+.glossary-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.glossary-header h1 {
+  color: var(--dark-bg);
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.glossary-header p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.glossary-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-bar {
+  flex: 1;
+  min-width: 300px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-md);
+  transition: border-color var(--transition-normal);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.filter-group label {
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+}
+
+.filter-group select {
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color var(--transition-normal);
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.results-info {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.letter-nav {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  justify-content: center;
+}
+
+.letter-link {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--white);
+  color: var(--primary-color);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  transition: all var(--transition-normal);
+  border: 2px solid var(--border-color);
+}
+
+.letter-link:hover {
+  background: var(--primary-color);
+  color: var(--white);
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.glossary-content {
+  margin-top: var(--spacing-lg);
+}
+
+.letter-section {
+  margin-bottom: var(--spacing-xl);
+  scroll-margin-top: 80px;
+}
+
+.letter-heading {
+  color: var(--dark-bg);
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+}
+
+.terms-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.term-card {
+  background: var(--white);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.term-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.term-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.term-title {
+  color: var(--dark-bg);
+  font-size: var(--font-size-xl);
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+}
+
+/* category-badge is defined in components.css */
+
+.term-definition {
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.term-example {
+  background: var(--bg-card);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary-color);
+  margin-top: var(--spacing-sm);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+}
+
+.term-example strong {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
+}
+
+.related-terms {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.related-terms strong {
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
+}

@@ -1,38 +1,30 @@
+/* ========================================
+   BlogCard.jsx
+   ======================================== */
+
 import React from 'react';
+import './BlogCard.css';
 
-function BlogCard({ post }) {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', { 
-      day: 'numeric', 
-      month: 'long',
-      year: 'numeric'
-    });
-  };
-
+function BlogCard({ title, excerpt, author, date, readTime, image, onReadMore }) {
   return (
     <div className="blog-card">
-      {post.image && (
-        <div 
-          className="blog-image"
-          style={{ backgroundImage: `url(${post.image})` }}
-        />
-      )}
-      
+      <div 
+        className="blog-image" 
+        style={{ backgroundImage: image ? `url(${image})` : 'none' }}
+      />
       <div className="blog-content">
         <div className="blog-meta">
-          <span className="blog-author">✍️ {post.author}</span>
-          <span className="blog-date">📅 {formatDate(post.published_date)}</span>
+          <span>By {author}</span>
+          <span>•</span>
+          <span>{date}</span>
         </div>
-
-        <h3 className="blog-title">{post.title}</h3>
-        <p className="blog-excerpt">{post.excerpt}</p>
-
+        <h3 className="blog-title">{title}</h3>
+        <p className="blog-excerpt">{excerpt}</p>
         <div className="blog-footer">
-          <button className="btn-read-more">Read More →</button>
-          {post.readTime && (
-            <span className="blog-read-time">⏱️ {post.readTime} min read</span>
-          )}
+          <button className="btn-read-more" onClick={onReadMore}>
+            Read More
+          </button>
+          <span className="blog-read-time">{readTime} min read</span>
         </div>
       </div>
     </div>
