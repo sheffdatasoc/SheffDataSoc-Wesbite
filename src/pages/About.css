@@ -1,0 +1,35 @@
+/* ========================================
+   /pages/About.css
+   ======================================== */
+
+.about-preview {
+  background: var(--white);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  margin: var(--spacing-xl) 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-preview h2 {
+  color: var(--dark-bg);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-2xl);
+}
+
+.about-preview p {
+  line-height: 1.8;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.about-section {
+  margin: var(--spacing-2xl) 0;
+}
+
+.about-section h2 {
+  color: var(--dark-bg);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-2xl);
+}
+
+/* Team grid uses .events-grid from components.css */

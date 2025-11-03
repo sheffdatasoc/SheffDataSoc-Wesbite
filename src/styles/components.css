@@ -1,0 +1,257 @@
+/* ========================================
+   components.css - OPTIMIZED VERSION
+   Using CSS variables throughout
+   ======================================== */
+
+/* ========== BUTTONS ========== */
+.btn {
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  transition: transform var(--transition-normal);
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  display: inline-block;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: var(--dark-bg);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+}
+
+.btn-github,
+.btn-demo {
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--transition-normal);
+  font-size: var(--font-size-base);
+  flex: 1;
+}
+
+.btn-github {
+  background: var(--dark-bg);
+  color: var(--white);
+}
+
+.btn-github:hover {
+  background: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.btn-demo {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.btn-demo:hover {
+  background: var(--primary-color);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.btn-register {
+  background: var(--primary-gradient);
+  color: var(--white);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: transform var(--transition-normal);
+}
+
+.btn-register:hover {
+  transform: scale(1.05);
+}
+
+.btn-read-more {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.btn-read-more:hover {
+  background: var(--primary-color);
+  color: var(--white);
+}
+
+/* ========== BADGES & TAGS ========== */
+.tag {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  display: inline-block;
+}
+
+/* REMOVE .project-tag - use .tag instead */
+
+/* Status badges */
+.project-status,
+.event-status,
+.resource-type,
+.difficulty-badge,
+.category-badge {
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-2xl);
+  color: var(--white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ========== LOADING & ERROR STATES ========== */
+.loading-spinner {
+  text-align: center;
+  font-size: 3rem;
+  padding: var(--spacing-2xl);
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: #fee;
+  border: 2px solid #fcc;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  color: #c33;
+}
+
+.info-message {
+  background: #e7f3ff;
+  border: 2px solid #b3d9ff;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  color: var(--color-info);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* ========== GRID LAYOUTS ========== */
+.events-grid,
+.projects-grid,
+.blog-grid,
+.guides-grid,
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) auto;  /* ← ADDED auto to center */
+  max-width: 1200px;                /* ← ADDED max-width */
+}
+
+/* Force 3 columns on large screens for guides/resources */
+@media (min-width: 1200px) {
+  .guides-grid,
+  .resources-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Responsive - 2 columns */
+@media (max-width: 1100px) {
+  .guides-grid,
+  .resources-grid,
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Responsive - 1 column */
+@media (max-width: 768px) {
+  .events-grid,
+  .projects-grid,
+  .blog-grid,
+  .guides-grid,
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: var(--spacing-lg);
+  margin: 0 auto var(--spacing-xl) auto;  /* ← ADDED auto to center */
+  max-width: 1200px;                       /* ← ADDED max-width */
+}
+
+/* ========== UTILITY CLASSES ========== */
+/* Text alignment */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+/* Margin utilities */
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mt-xl { margin-top: var(--spacing-xl); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+
+/* Flexbox utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }

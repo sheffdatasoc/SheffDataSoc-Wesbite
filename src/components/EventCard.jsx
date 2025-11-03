@@ -1,24 +1,17 @@
+/* ========================================
+   EventCard.jsx
+   ======================================== */
+
 import React from 'react';
+import './EventCard.css';
 
-function EventCard({ event }) {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-GB', { 
-      weekday: 'short',
-      day: 'numeric', 
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
+function EventCard({ title, date, location, description, status, attendees, onRegister }) {
   const getStatusColor = (status) => {
-    switch(status) {
+    switch(status?.toLowerCase()) {
       case 'upcoming': return '#4cc9f0';
-      case 'ongoing': return '#f72585';
-      case 'completed': return '#7209b7';
-      default: return '#666';
+      case 'ongoing': return '#667eea';
+      case 'completed': return '#999';
+      default: return '#667eea';
     }
   };
 
@@ -27,22 +20,20 @@ function EventCard({ event }) {
       <div className="event-header">
         <span 
           className="event-status" 
-          style={{ backgroundColor: getStatusColor(event.status) }}
+          style={{ backgroundColor: getStatusColor(status) }}
         >
-          {event.status}
+          {status}
         </span>
-        <span className="event-date">📅 {formatDate(event.date)}</span>
+        <span className="event-date">{date}</span>
       </div>
-      
-      <h3 className="event-title">{event.title}</h3>
-      <p className="event-location">📍 {event.location}</p>
-      <p className="event-description">{event.description}</p>
-      
+      <h3 className="event-title">{title}</h3>
+      <p className="event-location">📍 {location}</p>
+      <p className="event-description">{description}</p>
       <div className="event-footer">
-        <button className="btn-register">Register</button>
-        <span className="event-attendees">
-          👥 {event.attendees || 0} attending
-        </span>
+        <button className="btn-register" onClick={onRegister}>
+          Register Now
+        </button>
+        <span className="event-attendees">{attendees} attending</span>
       </div>
     </div>
   );

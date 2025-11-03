@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './Layout';
+import App from './App';
+
+// Pages
 import Home from './pages/Home';
 import Events from './pages/Events';
 import Blog from './pages/Blog';
@@ -11,12 +13,12 @@ import Guides from './pages/Guides';
 import Glossary from './pages/Glossary';
 import Gallery from './pages/Gallery';
 import Resources from './pages/Resources';
-import TheSandbox from './pages/TheSandbox';
+import Sandbox from './pages/Sandbox';
 
-function App() {
+function AppRouter() {  // ← Changed to AppRouter
   return (
     <Router>
-      <Layout>
+      <App>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/events" element={<Events />} />
@@ -28,11 +30,11 @@ function App() {
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/resources" element={<Resources />} />
-          <Route path="/sandbox" element={<TheSandbox />} />
+          <Route path="/sandbox" element={<Sandbox />} />
         </Routes>
-      </Layout>
+      </App>
     </Router>
   );
 }
 
-export default App;
+export default AppRouter;  // ← Changed here too

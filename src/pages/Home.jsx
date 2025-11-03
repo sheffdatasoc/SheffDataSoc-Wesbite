@@ -1,21 +1,26 @@
 import React from 'react';
 import Hero from '../components/Hero';
-import StatCard from '../components/StatCard';
+import './Home.css';
 
 function Home() {
+  const stats = [
+    { value: '300+', title: 'Members' },
+    { value: '40+', title: 'Events/Year' },
+    { value: '15+', title: 'Partners' }
+  ];
+
   return (
     <div className="home-page">
-      <Hero />
-      
-      <section className="stats-section">
-        <h2>Our Impact</h2>
-        <div className="stats-grid">
-          <StatCard title="Members" value="150+" />
-          <StatCard title="Events" value="30+" />
-          <StatCard title="Projects" value="20+" />
-          <StatCard title="Partners" value="10+" />
-        </div>
-      </section>
+      <Hero 
+        title="Sheffield's Data Science Community"
+        subtitle="Join SheffDataSoc - where students passionate about data, AI, and analytics come together to learn, build, and grow."
+        showButtons={true}
+        showStats={true}
+        stats={stats}
+        showBadge={true}
+        badgeText="University of Sheffield"
+        highlightWord="Data Science"
+      />
 
       <section className="about-preview">
         <h2>Welcome to Sheffield Data Science Society</h2>

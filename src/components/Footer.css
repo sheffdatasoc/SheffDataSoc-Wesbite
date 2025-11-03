@@ -1,0 +1,11 @@
+/* ========================================
+   Footer.css
+   ======================================== */
+
+.footer {
+  background: #1a1a2e;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+}

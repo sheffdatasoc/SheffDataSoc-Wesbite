@@ -1,0 +1,76 @@
+:root {
+  /* ========== COLORS ========== */
+  /* Primary */
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --accent-color: #4cc9f0;
+  
+  /* Neutrals */
+  --dark-bg: #1a1a2e;
+  --light-bg: #f5f5f5;
+  --white: #ffffff;
+  --text-primary: #333;
+  --text-secondary: #666;
+  --text-tertiary: #999;
+  --border-color: #e5e7eb;
+  --bg-card: #f9fafb;
+  
+  /* Status Colors (ADD THESE) */
+  --color-success: #4cc9f0;
+  --color-warning: #ffd166;
+  --color-error: #ef476f;
+  --color-info: #0066cc;
+  
+  /* ========== SPACING ========== */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  
+  /* ========== TYPOGRAPHY (ADD THESE) ========== */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-base: 0.95rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.4rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 3rem;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* ========== BORDER RADIUS ========== */
+  --radius-sm: 4px;  /* ADD: was missing */
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 20px;
+  --radius-pill: 50px;
+  --radius-circle: 50%;  /* ADD */
+  
+  /* ========== SHADOWS ========== */
+  --shadow-xs: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+  --shadow-xl: 0 8px 24px rgba(0,0,0,0.15);
+  
+  /* ========== TRANSITIONS ========== */
+  --transition-fast: 0.15s ease;  /* CHANGED: added 'ease' */
+  --transition-normal: 0.2s ease;  /* CHANGED: reduced from 0.3s */
+  --transition-slow: 0.3s ease;    /* ADD */
+  
+  /* ========== Z-INDEX LAYERS (ADD THESE) ========== */
+  --z-base: 1;
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-modal: 1050;
+  --z-tooltip: 1070;
+}

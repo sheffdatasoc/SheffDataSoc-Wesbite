@@ -3,7 +3,7 @@ import ProjectCard from '../components/ProjectCard';
 import { useProjects } from '../hooks/useSupabase';
 
 function TheSandbox() {
-  const { projects, loading, error } = useProjects();
+  const { projects, loading } = useProjects();
   const [activeTab, setActiveTab] = useState('projects');
   const [searchQuery, setSearchQuery] = useState('');
 

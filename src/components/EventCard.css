@@ -1,0 +1,57 @@
+/* ========================================
+   EventCard.css
+   ======================================== */
+
+.event-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.event-date {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.event-title {
+  color: #1a1a2e;
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-location {
+  color: #667eea;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.event-description {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.event-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-attendees {
+  color: #666;
+  font-size: 0.9rem;
+}

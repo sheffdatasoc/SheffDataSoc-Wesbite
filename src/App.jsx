@@ -1,18 +1,18 @@
 import React from 'react';
 import NavBar from './components/NavBar';
+import Footer from './components/Footer';
+import './App.css';  // ← Now imports App.css (was Layout.css)
 
-function Layout({ children }) {
+function App({ children }) {
   return (
     <div className="app">
       <NavBar />
       <main className="main-content">
         {children}
       </main>
-      <footer className="footer">
-        <p>&copy; 2024 Sheffield Data Science Society. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
 
-export default Layout;
+export default App;

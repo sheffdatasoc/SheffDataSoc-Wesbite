@@ -1,0 +1,243 @@
+/* ========================================
+   responsive.css - ENHANCED VERSION
+   Add more breakpoints and utilities
+   ======================================== */
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablets and below */
+@media (max-width: 768px) {
+  /* Navigation */
+  .nav-menu {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Hero */
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .hero p {
+    font-size: 1.2rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+  }
+  
+  .sandbox-hero h1 {
+    font-size: 2.5rem;
+  }
+
+  /* Grids - Single column on tablets */
+  .events-grid,
+  .projects-grid,
+  .blog-grid,
+  .guides-grid,
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+  }
+  
+  /* Main content - reduce padding */
+  .main-content {
+    padding: 1.5rem;
+  }
+  
+  /* Glossary */
+  .glossary-header h1 {
+    font-size: 2rem;
+  }
+
+  .glossary-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar {
+    min-width: 100%;
+  }
+
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-group select {
+    flex: 1;
+  }
+
+  .letter-nav {
+    gap: 0.3rem;
+  }
+
+  .letter-link {
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+  }
+
+  .term-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .term-title {
+    font-size: 1.2rem;
+  }
+  
+  /* Cards - reduce padding */
+  .project-card,
+  .event-card,
+  .blog-card,
+  .member-card,
+  .guide-card,
+  .resource-card {
+    padding: 1.25rem;
+  }
+  
+  /* Buttons - stack vertically */
+  .project-buttons,
+  .hero-buttons {
+    flex-direction: column;
+  }
+  
+  .btn-github,
+  .btn-demo {
+    width: 100%;
+  }
+  
+  /* Sandbox tabs - wrap better */
+  .sandbox-tabs {
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  /* Hero - even smaller text */
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .sandbox-hero h1 {
+    font-size: 2rem;
+  }
+  
+  .sandbox-hero p {
+    font-size: 1rem;
+  }
+  
+  /* Main content - minimal padding */
+  .main-content {
+    padding: 1rem;
+  }
+  
+  /* Page container */
+  .page {
+    padding: 1.5rem;
+  }
+  
+  /* Cards - compact */
+  .project-card,
+  .event-card,
+  .blog-card,
+  .member-card,
+  .guide-card,
+  .resource-card,
+  .term-card {
+    padding: 1rem;
+  }
+  
+  /* Stats grid - single column */
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Typography adjustments */
+  .project-title,
+  .event-title,
+  .blog-title,
+  .member-name {
+    font-size: 1.2rem;
+  }
+  
+  /* Logo text */
+  .logo-text h1 {
+    font-size: 1.1rem;
+  }
+  
+  .logo-text p {
+    font-size: 0.75rem;
+  }
+  
+  /* Navbar container */
+  .nav-container {
+    padding: 0 1rem;
+  }
+  
+  /* Search inputs */
+  .search-input,
+  .search-bar input,
+  .resources-search input {
+    font-size: 0.95rem;
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Member avatar */
+  .member-avatar {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+  }
+  
+  /* Reduce gaps in tag containers */
+  .project-tags,
+  .guide-tags,
+  .member-skills {
+    gap: 0.3rem;
+  }
+  
+  .tag,
+  .project-tag {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Large desktop screens */
+@media (min-width: 1280px) {
+  /* Wider containers on large screens */
+  .nav-container {
+    max-width: 1600px;
+  }
+  
+  .main-content {
+    max-width: 1400px;
+  }
+  
+  /* More grid columns on large screens */
+  .featured-grid {
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}

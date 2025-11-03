@@ -1,5 +1,10 @@
+/* ========================================
+   /pages/Guides.jsx
+   ======================================== */
+
 import React, { useState } from 'react';
 import { useGuides } from '../hooks/useSupabase';
+import './Guides.css';
 
 function Guides() {
   const { guides, loading, error } = useGuides();
@@ -20,15 +25,28 @@ function Guides() {
 
   if (loading) {
     return (
-      <div className="page">
-        <h1>Guides</h1>
-        <p>Loading guides...</p>
+      <div className="guides-page">
+        <div className="guides-header">
+          <h1>📚 Learning Guides</h1>
+          <p>Loading guides...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="guides-page">
+        <div className="guides-header">
+          <h1>📚 Learning Guides</h1>
+          <p className="error-message">Error loading guides: {error}</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="page">
+    <div className="guides-page">
       <div className="guides-header">
         <h1>📚 Learning Guides</h1>
         <p>Step-by-step tutorials and resources to boost your data science skills</p>
@@ -38,7 +56,11 @@ function Guides() {
       <div className="guides-filters">
         <div className="filter-group">
           <label>Category:</label>
-          <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+          <select 
+            value={selectedCategory} 
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="filter-select"
+          >
             {categories.map(cat => (
               <option key={cat} value={cat}>
                 {cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ')}
@@ -48,7 +70,11 @@ function Guides() {
         </div>
         <div className="filter-group">
           <label>Difficulty:</label>
-          <select value={selectedDifficulty} onChange={(e) => setSelectedDifficulty(e.target.value)}>
+          <select 
+            value={selectedDifficulty} 
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+            className="filter-select"
+          >
             {difficulties.map(diff => (
               <option key={diff} value={diff}>
                 {diff.charAt(0).toUpperCase() + diff.slice(1)}
@@ -84,7 +110,7 @@ function Guides() {
 
       {filteredGuides.length === 0 && (
         <div className="empty-state">
-          <p>No guides found for selected filters</p>
+          <p>No guides found for selected filters. Try adjusting your criteria!</p>
         </div>
       )}
     </div>
@@ -115,7 +141,7 @@ function GuideCard({ guide, featured = false }) {
       <h3>{guide.title}</h3>
       <p className="guide-description">{guide.description}</p>
 
-      {guide.tags && (
+      {guide.tags && guide.tags.length > 0 && (
         <div className="guide-tags">
           {guide.tags.map((tag, i) => (
             <span key={i} className="tag">{tag}</span>
@@ -126,7 +152,12 @@ function GuideCard({ guide, featured = false }) {
       <div className="guide-footer">
         {guide.author && <span className="author">By {guide.author}</span>}
         {guide.github_url && (
-          <a href={guide.github_url} className="guide-link" target="_blank" rel="noopener noreferrer">
+          <a 
+            href={guide.github_url} 
+            className="guide-link" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
             View Guide →
           </a>
         )}
