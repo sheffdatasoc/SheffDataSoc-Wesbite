@@ -1,24 +1,118 @@
-import React from 'react';
+/* ========================================
+   /pages/Members.jsx
+   ======================================== */
+
+import React, { useState } from 'react';
 import { useMembers } from '../hooks/useSupabase';
+import MemberCard from '../components/MemberCard';
+import { Search } from 'lucide-react';
+import './Members.css';
 
 function Members() {
-  const { members, loading, error } = useMembers();
+  const { members, loading } = useMembers();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('extended');
 
-  if (loading) return <div className="page"><h1>Loading members...</h1></div>;
-  if (error) return <div className="page"><h1>Error: {error}</h1></div>;
+  // Get unique academic years and sort them (most recent first)
+  const academicYears = [...new Set(members.map(m => m.getAcademicYear()))]
+    .filter(year => year !== 'Unknown')
+    .sort((a, b) => {
+      // Sort by first year in format "2024/25"
+      const yearA = parseInt(a.split('/')[0]);
+      const yearB = parseInt(b.split('/')[0]);
+      return yearB - yearA; // Most recent first
+    });
+
+  // Group members by academic year
+  const membersByYear = academicYears.reduce((acc, year) => {
+    acc[year] = members.filter(member => {
+      const matchesSearch = member.matchesSearch(searchQuery);
+      const matchesYear = member.getAcademicYear() === year;
+      const matchesTab = activeTab === 'extended' 
+        ? true 
+        : member.isCommittee();
+      
+      return matchesSearch && matchesYear && matchesTab;
+    });
+    return acc;
+  }, {});
+
+  if (loading) {
+    return (
+      <div className="members-page">
+        <div className="members-header">
+          <h1>Our Community</h1>
+          <p>Loading members...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if there are any members to display
+  const hasMembers = academicYears.some(year => membersByYear[year].length > 0);
 
   return (
-    <div className="page">
-      <h1>Our Team</h1>
-      <div className="members-grid">
-        {members.map(member => (
-          <div key={member.id} className="member-card">
-            <h3>{member.name}</h3>
-            <p className="role">{member.role}</p>
-            <p>{member.bio}</p>
-          </div>
-        ))}
+    <div className="members-page">
+      {/* Header */}
+      <div className="members-header">
+        <h1>Our Community</h1>
+        <p>Meet the amazing people who make our society vibrant and dynamic</p>
       </div>
+
+      {/* Search Bar */}
+      <div className="members-search">
+        <div className="search-container">
+          <Search className="search-icon" size={20} />
+          <input
+            type="text"
+            placeholder="Search members by name, position, or major..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="members-tabs">
+        <button
+          className={`tab-button ${activeTab === 'extended' ? 'active' : ''}`}
+          onClick={() => setActiveTab('extended')}
+        >
+          Extended Committee
+        </button>
+        <button
+          className={`tab-button ${activeTab === 'committee' ? 'active' : ''}`}
+          onClick={() => setActiveTab('committee')}
+        >
+          Committee
+        </button>
+      </div>
+
+      {/* Members Grid by Year */}
+      {hasMembers ? (
+        <div className="members-by-year">
+          {academicYears.map(year => {
+            const yearMembers = membersByYear[year];
+            if (yearMembers.length === 0) return null;
+
+            return (
+              <div key={year} className="year-section">
+                <h2 className="year-heading">{year}</h2>
+                <div className="members-grid">
+                  {yearMembers.map(member => (
+                    <MemberCard key={member.id} member={member} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <p>No members found {searchQuery && `matching "${searchQuery}"`}</p>
+        </div>
+      )}
     </div>
   );
 }

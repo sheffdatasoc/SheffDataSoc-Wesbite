@@ -87,11 +87,14 @@
   background: transparent;
   color: var(--primary-color);
   border: 2px solid var(--primary-color);
-  padding: 0.6rem 1.5rem;
+  padding: 0.4rem 1rem;              /* Smaller padding */
+  font-size: 0.85rem;                /* Slightly smaller text */
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: all var(--transition-normal);
+  margin-bottom: 0.0rem;            /* Space above the footer line */
+  align-self: flex-start;            /* Align left inside flex container */
 }
 
 .btn-read-more:hover {

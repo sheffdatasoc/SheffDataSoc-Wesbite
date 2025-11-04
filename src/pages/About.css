@@ -1,35 +1,383 @@
 /* ========================================
-   /pages/About.css
+   About.css - Updated to Match Design
    ======================================== */
 
-.about-preview {
+/* Hero Section */
+.about-hero {
+  background: var(--primary-gradient);
+  color: var(--white);
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-xl);
+}
+
+.about-hero h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.about-hero p {
+  font-size: var(--font-size-xl);
+  opacity: 0.95;
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ========== Navigation Cards ========== */
+.about-nav-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.nav-card {
+  background: var(--white);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.nav-card:hover::before {
+  opacity: 1;
+}
+
+.nav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.nav-card-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  flex-shrink: 0;
+  transition: transform var(--transition-normal);
+  z-index: 1;
+}
+
+.nav-card:hover .nav-card-icon {
+  transform: scale(1.1);
+}
+
+.timeline-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.members-icon {
+  background: linear-gradient(135deg, #667eea 0%, #4cc9f0 100%);
+}
+
+.nav-card-content {
+  flex: 1;
+  z-index: 1;
+}
+
+.nav-card-content h3 {
+  color: var(--dark-bg);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.nav-card-content p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  margin: 0;
+}
+
+.nav-card-arrow {
+  color: var(--text-tertiary);
+  transition: all var(--transition-normal);
+  z-index: 1;
+}
+
+.nav-card:hover .nav-card-arrow {
+  color: var(--primary-color);
+  transform: translateX(8px);
+}
+
+/* ========== Mission, Vision, Values Cards ========== */
+.about-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.about-card {
   background: var(--white);
   padding: var(--spacing-xl);
-  border-radius: var(--radius-lg);
-  margin: var(--spacing-xl) 0;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  transition: all var(--transition-normal);
+  border: 2px solid transparent;
+}
+
+.about-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  transition: transform var(--transition-normal);
+}
+
+.about-card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.mission-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.vision-icon {
+  background: linear-gradient(135deg, #667eea 0%, #4cc9f0 100%);
+}
+
+.values-icon {
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+}
+
+.about-card h2 {
+  color: var(--dark-bg);
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.about-card p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: var(--font-size-base);
+}
+
+/* ========== What We Do Section ========== */
+.what-we-do {
+  background: var(--white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-2xl);
   box-shadow: var(--shadow-sm);
 }
 
-.about-preview h2 {
+.what-we-do h2 {
   color: var(--dark-bg);
-  margin-bottom: var(--spacing-sm);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-3xl);
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  font-weight: var(--font-weight-bold);
 }
 
-.about-preview p {
-  line-height: 1.8;
-  color: var(--text-secondary);
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.activity-item {
+  background: var(--bg-card);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--primary-color);
+  transition: all var(--transition-normal);
+}
+
+.activity-item:hover {
+  background: var(--white);
+  border-left-color: var(--accent-color);
+  transform: translateX(8px);
+  box-shadow: var(--shadow-md);
+}
+
+.activity-item h3 {
+  color: var(--dark-bg);
   font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
 }
 
-.about-section {
-  margin: var(--spacing-2xl) 0;
+.activity-item p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: var(--font-size-base);
 }
 
-.about-section h2 {
-  color: var(--dark-bg);
-  margin-bottom: var(--spacing-lg);
-  font-size: var(--font-size-2xl);
+/* ========== Join CTA Section ========== */
+.join-cta {
+  background: var(--primary-gradient);
+  color: var(--white);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
 }
 
-/* Team grid uses .events-grid from components.css */
+.join-cta h2 {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--white);
+}
+
+.join-cta p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xl);
+  opacity: 0.95;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.join-cta .btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-md);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-normal);
+}
+
+.join-cta .btn-primary {
+  background: var(--white);
+  color: var(--primary-color);
+}
+
+.join-cta .btn-primary:hover {
+  background: var(--bg-card);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.join-cta .btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+}
+
+.join-cta .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 768px) {
+  .about-hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .about-hero p {
+    font-size: var(--font-size-lg);
+  }
+
+  .about-nav-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-card {
+    padding: var(--spacing-md);
+  }
+
+  .nav-card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-card {
+    padding: var(--spacing-lg);
+  }
+
+  .card-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .what-we-do {
+    padding: var(--spacing-lg);
+  }
+
+  .join-cta {
+    padding: var(--spacing-lg);
+  }
+
+  .join-cta h2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .join-cta .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-card-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .nav-card-content h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .about-card h2 {
+    font-size: var(--font-size-xl);
+  }
+}

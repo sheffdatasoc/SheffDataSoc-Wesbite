@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import { createMembers } from '../entities/Member';
+import { createBlogPost, createBlogPosts } from '../entities/BlogPost';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
@@ -30,7 +32,25 @@ export async function getBlogPosts() {
     return [];
   }
 
-  return data;
+  return createBlogPosts(data);
+}
+
+// Helper function to fetch a single blog post by ID
+export async function getBlogPostById(id) {
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('blog_posts')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching blog post:', error);
+    return null;
+  }
+
+  return createBlogPost(data);
 }
 
 // Helper function to fetch all events
@@ -90,7 +110,7 @@ export async function getMembers() {
     return [];
   }
 
-  return data;
+  return createMembers(data);
 }
 
 // Helper function to fetch all guides
@@ -189,24 +209,6 @@ export async function getTimelineEvents() {
   if (error) {
     console.error('Error fetching timeline events:', error);
     return [];
-  }
-
-  return data;
-}
-
-// Helper function to fetch a single blog post by ID
-export async function getBlogPostById(id) {
-  if (!supabase) return null;
-
-  const { data, error } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('id', id)
-    .single();
-
-  if (error) {
-    console.error('Error fetching blog post:', error);
-    return null;
   }
 
   return data;

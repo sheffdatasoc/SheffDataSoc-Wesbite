@@ -195,11 +195,31 @@ async function syncMembers() {
       name: extractText(page.properties.Name?.title),
       role: page.properties.Role?.select?.name,
       bio: extractText(page.properties.Bio?.rich_text),
+      major: page.properties.major?.select?.name
+        || extractText(page.properties.major?.rich_text)
+        || null,
       image_url: page.properties['Image URL']?.url,
       github_url: page.properties['GitHub URL']?.url,
       linkedin_url: page.properties['LinkedIn URL']?.url,
-      created_at: page.created_time
+      created_at: page.created_time,
+      interests: page.properties.Interests?.multi_select
+        ? page.properties.Interests.multi_select.map(t => t.name)
+        : extractText(page.properties.Interests?.rich_text)
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean),
+      academic_year: page.properties.academic_year?.select?.name
+        || extractText(page.properties.academic_year?.rich_text)
+        || null
     }));
+
+    // Debug step
+    console.log('Members to upsert:', members.map(m => ({
+      name: m.name,
+      academic_year: m.academic_year,
+      major: m.major,
+      interests: m.interests
+    })));
 
     const { data, error } = await supabase
       .from('members')

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   getBlogPosts, 
+  getBlogPostById,
   getEvents, 
   getProjects, 
   getMembers,
@@ -36,6 +37,38 @@ export function useBlogPosts() {
   }, []);
 
   return { posts, loading, error };
+}
+
+// Custom hook to fetch a single blog post by ID
+export function useBlogPost(id) {
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchPost() {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const data = await getBlogPostById(id);
+        setPost(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error in useBlogPost:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPost();
+  }, [id]);
+
+  return { post, loading, error };
 }
 
 // Custom hook to fetch events

@@ -39,7 +39,8 @@
     grid-template-columns: 1fr;
   }
   
-  .featured-grid {
+  /* Featured grid - let Sandbox.css handle its own featured grid */
+  .featured-grid:not(.sandbox-featured-section .featured-grid) {
     grid-template-columns: 1fr;
   }
   
@@ -47,8 +48,13 @@
     grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
   }
   
-  /* Main content - reduce padding */
+  /* Main content - NO padding for pages with full-width heroes */
   .main-content {
+    padding: 0;
+  }
+  
+  /* Add padding back to specific pages that need it */
+  .page:not(.sandbox-page) {
     padding: 1.5rem;
   }
   
@@ -115,13 +121,16 @@
   }
   
   /* Sandbox tabs - wrap better */
-  .sandbox-tabs {
-    gap: 0.5rem;
+  .sandbox-tabs-container {
+    flex-direction: row;
+    width: 100%;
+    max-width: 400px;
   }
   
   .tab-button {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+    flex: 1;
   }
 }
 
@@ -144,14 +153,14 @@
     font-size: 1rem;
   }
   
-  /* Main content - minimal padding */
+  /* Main content - NO padding for full-width pages */
   .main-content {
-    padding: 1rem;
+    padding: 0;
   }
   
-  /* Page container */
-  .page {
-    padding: 1.5rem;
+  /* Add padding back to specific pages that need it */
+  .page:not(.sandbox-page) {
+    padding: 1rem;
   }
   
   /* Cards - compact */
@@ -228,8 +237,9 @@
     max-width: 1600px;
   }
   
+  /* Main content should NOT constrain full-width sections */
   .main-content {
-    max-width: 1400px;
+    max-width: none;
   }
   
   /* More grid columns on large screens */
