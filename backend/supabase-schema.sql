@@ -1,15 +1,35 @@
 -- ============================================
--- SheffDataSoc Safe Migration Schema (2025)
--- Converts base schema into ALTER-safe version
+-- FULL CLEAN DEPLOY: SheffDataSoc Schema (Supabase)
+-- WARNING: This will DROP existing tables and DATA
 -- ============================================
 
--- Enable UUID support
+-- 1) Drop everything
+DROP TABLE IF EXISTS timeline_events CASCADE;
+DROP TABLE IF EXISTS gallery_items CASCADE;
+DROP TABLE IF EXISTS glossary CASCADE;
+DROP TABLE IF EXISTS resources CASCADE;
+DROP TABLE IF EXISTS guides CASCADE;
+DROP TABLE IF EXISTS members CASCADE;
+DROP TABLE IF EXISTS projects CASCADE;
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS blog_posts CASCADE;
+
+-- 2) Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 3) Helper: updated_at trigger function
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
 -- ============================================
 -- BLOG POSTS TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS blog_posts (
+CREATE TABLE blog_posts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
@@ -21,24 +41,18 @@ CREATE TABLE IF NOT EXISTS blog_posts (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE blog_posts
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS author TEXT,
-  ADD COLUMN IF NOT EXISTS published_date DATE,
-  ADD COLUMN IF NOT EXISTS excerpt TEXT,
-  ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'draft',
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_blog_posts_set_updated_at
+BEFORE UPDATE ON blog_posts
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
 -- EVENTS TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS events (
+CREATE TABLE events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
-  date TIMESTAMP WITH TIME ZONE,
+  event_date TIMESTAMP WITH TIME ZONE,
   location TEXT,
   description TEXT,
   status TEXT DEFAULT 'upcoming',
@@ -47,21 +61,14 @@ CREATE TABLE IF NOT EXISTS events (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE events
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS date TIMESTAMP WITH TIME ZONE,
-  ADD COLUMN IF NOT EXISTS location TEXT,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'upcoming',
-  ADD COLUMN IF NOT EXISTS attendees INTEGER DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_events_set_updated_at
+BEFORE UPDATE ON events
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
--- PROJECTS TABLE (projects + workshops)
+-- PROJECTS TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS projects (
+CREATE TABLE projects (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
@@ -77,41 +84,32 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE projects
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS github_url TEXT,
-  ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active',
-  ADD COLUMN IF NOT EXISTS members INTEGER DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'project',
-  ADD COLUMN IF NOT EXISTS tags TEXT[],
-  ADD COLUMN IF NOT EXISTS demo_url TEXT,
-  ADD COLUMN IF NOT EXISTS featured BOOLEAN DEFAULT false,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_projects_set_updated_at
+BEFORE UPDATE ON projects
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
 -- MEMBERS TABLE
 -- ============================================
-ALTER TABLE members
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS name TEXT,
-  ADD COLUMN IF NOT EXISTS role TEXT,
-  ADD COLUMN IF NOT EXISTS bio TEXT,
-  ADD COLUMN IF NOT EXISTS image_url TEXT,
-  ADD COLUMN IF NOT EXISTS github_url TEXT,
-  ADD COLUMN IF NOT EXISTS linkedin_url TEXT,
-  ADD COLUMN IF NOT EXISTS interests TEXT[],
-  ADD COLUMN IF NOT EXISTS academic_year TEXT,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
-
-ALTER TABLE members DROP COLUMN IF EXISTS twitter_url;
+CREATE TABLE members (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  notion_id TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  role TEXT,
+  bio TEXT,
+  major TEXT,                     -- NEW COLUMN
+  image_url TEXT,
+  github_url TEXT,
+  linkedin_url TEXT,
+  interests TEXT[],
+  academic_year TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
 
 -- ============================================
 -- GUIDES TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS guides (
+CREATE TABLE guides (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
@@ -128,25 +126,14 @@ CREATE TABLE IF NOT EXISTS guides (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE guides
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS content TEXT,
-  ADD COLUMN IF NOT EXISTS category TEXT,
-  ADD COLUMN IF NOT EXISTS difficulty TEXT DEFAULT 'beginner',
-  ADD COLUMN IF NOT EXISTS tags TEXT[],
-  ADD COLUMN IF NOT EXISTS author TEXT,
-  ADD COLUMN IF NOT EXISTS read_time INTEGER,
-  ADD COLUMN IF NOT EXISTS github_url TEXT,
-  ADD COLUMN IF NOT EXISTS featured BOOLEAN DEFAULT false,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_guides_set_updated_at
+BEFORE UPDATE ON guides
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
 -- RESOURCES TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS resources (
+CREATE TABLE resources (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
@@ -160,22 +147,14 @@ CREATE TABLE IF NOT EXISTS resources (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE resources
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS url TEXT,
-  ADD COLUMN IF NOT EXISTS type TEXT,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS tags TEXT[],
-  ADD COLUMN IF NOT EXISTS category TEXT,
-  ADD COLUMN IF NOT EXISTS featured BOOLEAN DEFAULT false,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_resources_set_updated_at
+BEFORE UPDATE ON resources
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
 -- GLOSSARY TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS glossary (
+CREATE TABLE glossary (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   term TEXT NOT NULL,
@@ -187,49 +166,33 @@ CREATE TABLE IF NOT EXISTS glossary (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE glossary
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS term TEXT,
-  ADD COLUMN IF NOT EXISTS definition TEXT,
-  ADD COLUMN IF NOT EXISTS category TEXT,
-  ADD COLUMN IF NOT EXISTS examples TEXT,
-  ADD COLUMN IF NOT EXISTS related_terms TEXT[],
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+CREATE TRIGGER trg_glossary_set_updated_at
+BEFORE UPDATE ON glossary
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================
--- GALLERY ITEMS TABLE
+-- GALLERY TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS gallery_items (
+CREATE TABLE gallery_items (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
   title TEXT NOT NULL,
   image_url TEXT NOT NULL,
   event_name TEXT,
-  date DATE,
+  event_date DATE,
   description TEXT,
   tags TEXT[],
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE gallery_items
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS image_url TEXT,
-  ADD COLUMN IF NOT EXISTS event_name TEXT,
-  ADD COLUMN IF NOT EXISTS date DATE,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS tags TEXT[],
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
-
 -- ============================================
--- TIMELINE EVENTS TABLE
+-- TIMELINE TABLE
 -- ============================================
-CREATE TABLE IF NOT EXISTS timeline_events (
+CREATE TABLE timeline_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   notion_id TEXT UNIQUE NOT NULL,
-  year INTEGER NOT NULL,
-  month INTEGER,
+  event_year INTEGER NOT NULL,
+  event_month INTEGER,
   title TEXT NOT NULL,
   description TEXT,
   icon TEXT,
@@ -237,148 +200,74 @@ CREATE TABLE IF NOT EXISTS timeline_events (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-ALTER TABLE timeline_events
-  ADD COLUMN IF NOT EXISTS notion_id TEXT,
-  ADD COLUMN IF NOT EXISTS year INTEGER,
-  ADD COLUMN IF NOT EXISTS month INTEGER,
-  ADD COLUMN IF NOT EXISTS title TEXT,
-  ADD COLUMN IF NOT EXISTS description TEXT,
-  ADD COLUMN IF NOT EXISTS icon TEXT,
-  ADD COLUMN IF NOT EXISTS category TEXT,
-  ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+-- ============================================
+-- INDEXES
+-- ============================================
+CREATE INDEX idx_blog_posts_status ON blog_posts(status);
+CREATE INDEX idx_blog_posts_published_date ON blog_posts(published_date DESC);
+
+CREATE INDEX idx_events_event_date ON events(event_date);
+CREATE INDEX idx_events_status ON events(status);
+
+CREATE INDEX idx_projects_status ON projects(status);
+CREATE INDEX idx_projects_type ON projects(type);
+CREATE INDEX idx_projects_featured ON projects(featured);
+
+CREATE INDEX idx_guides_category ON guides(category);
+CREATE INDEX idx_guides_difficulty ON guides(difficulty);
+CREATE INDEX idx_guides_featured ON guides(featured);
+
+CREATE INDEX idx_resources_type ON resources(type);
+CREATE INDEX idx_resources_category ON resources(category);
+CREATE INDEX idx_resources_featured ON resources(featured);
+
+CREATE INDEX idx_glossary_term ON glossary(term);
+
+CREATE INDEX idx_timeline_event_year ON timeline_events(event_year DESC);
+
+CREATE INDEX idx_members_academic_year ON members(academic_year);
 
 -- ============================================
--- INDEXES (safe)
+-- ROW LEVEL SECURITY
 -- ============================================
-CREATE INDEX IF NOT EXISTS idx_blog_posts_status ON blog_posts(status);
-CREATE INDEX IF NOT EXISTS idx_blog_posts_published_date ON blog_posts(published_date DESC);
-CREATE INDEX IF NOT EXISTS idx_events_date ON events(date);
-CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);
-CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
-CREATE INDEX IF NOT EXISTS idx_projects_type ON projects(type);
-CREATE INDEX IF NOT EXISTS idx_projects_featured ON projects(featured);
-CREATE INDEX IF NOT EXISTS idx_guides_category ON guides(category);
-CREATE INDEX IF NOT EXISTS idx_guides_difficulty ON guides(difficulty);
-CREATE INDEX IF NOT EXISTS idx_guides_featured ON guides(featured);
-CREATE INDEX IF NOT EXISTS idx_resources_type ON resources(type);
-CREATE INDEX IF NOT EXISTS idx_resources_category ON resources(category);
-CREATE INDEX IF NOT EXISTS idx_resources_featured ON resources(featured);
-CREATE INDEX IF NOT EXISTS idx_glossary_term ON glossary(term);
-CREATE INDEX IF NOT EXISTS idx_timeline_year ON timeline_events(year DESC);
-CREATE INDEX IF NOT EXISTS idx_members_academic_year ON members(academic_year);
+ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE guides ENABLE ROW LEVEL SECURITY;
+ALTER TABLE resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE glossary ENABLE ROW LEVEL SECURITY;
+ALTER TABLE gallery_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE timeline_events ENABLE ROW LEVEL SECURITY;
 
 -- ============================================
--- ROW LEVEL SECURITY (RLS) + PUBLIC READ (Safe)
+-- PUBLIC READ POLICIES (allow SELECT)
 -- ============================================
-
--- BLOG POSTS
-ALTER TABLE IF EXISTS blog_posts ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'blog_posts' AND policyname = 'Allow public read on blog_posts'
-  ) THEN
-    CREATE POLICY "Allow public read on blog_posts"
-      ON blog_posts FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- EVENTS
-ALTER TABLE IF EXISTS events ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'events' AND policyname = 'Allow public read on events'
-  ) THEN
-    CREATE POLICY "Allow public read on events"
-      ON events FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- PROJECTS
-ALTER TABLE IF EXISTS projects ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'projects' AND policyname = 'Allow public read on projects'
-  ) THEN
-    CREATE POLICY "Allow public read on projects"
-      ON projects FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- MEMBERS
-ALTER TABLE IF EXISTS members ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'members' AND policyname = 'Allow public read on members'
-  ) THEN
-    CREATE POLICY "Allow public read on members"
-      ON members FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- GUIDES
-ALTER TABLE IF EXISTS guides ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'guides' AND policyname = 'Allow public read on guides'
-  ) THEN
-    CREATE POLICY "Allow public read on guides"
-      ON guides FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- RESOURCES
-ALTER TABLE IF EXISTS resources ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'resources' AND policyname = 'Allow public read on resources'
-  ) THEN
-    CREATE POLICY "Allow public read on resources"
-      ON resources FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- GLOSSARY
-ALTER TABLE IF EXISTS glossary ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'glossary' AND policyname = 'Allow public read on glossary'
-  ) THEN
-    CREATE POLICY "Allow public read on glossary"
-      ON glossary FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- GALLERY ITEMS
-ALTER TABLE IF EXISTS gallery_items ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'gallery_items' AND policyname = 'Allow public read on gallery_items'
-  ) THEN
-    CREATE POLICY "Allow public read on gallery_items"
-      ON gallery_items FOR SELECT USING (true);
-  END IF;
-END $$;
-
--- TIMELINE EVENTS
-ALTER TABLE IF EXISTS timeline_events ENABLE ROW LEVEL SECURITY;
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies WHERE tablename = 'timeline_events' AND policyname = 'Allow public read on timeline_events'
-  ) THEN
-    CREATE POLICY "Allow public read on timeline_events"
-      ON timeline_events FOR SELECT USING (true);
-  END IF;
-END $$;
+CREATE POLICY "Allow public read on blog_posts" ON blog_posts FOR SELECT USING (true);
+CREATE POLICY "Allow public read on events" ON events FOR SELECT USING (true);
+CREATE POLICY "Allow public read on projects" ON projects FOR SELECT USING (true);
+CREATE POLICY "Allow public read on members" ON members FOR SELECT USING (true);
+CREATE POLICY "Allow public read on guides" ON guides FOR SELECT USING (true);
+CREATE POLICY "Allow public read on resources" ON resources FOR SELECT USING (true);
+CREATE POLICY "Allow public read on glossary" ON glossary FOR SELECT USING (true);
+CREATE POLICY "Allow public read on gallery_items" ON gallery_items FOR SELECT USING (true);
+CREATE POLICY "Allow public read on timeline_events" ON timeline_events FOR SELECT USING (true);
 
 -- ============================================
--- ✅ COMPLETE
+-- SAMPLE DATA
+-- ============================================
+INSERT INTO events (notion_id, title, event_date, location, description, status, attendees) VALUES
+  ('event-1', 'Intro to ML Workshop', '2024-11-15 18:00:00+00', 'Diamond Building, Lecture Theatre 1', 'Hands-on workshop covering fundamentals of ML', 'upcoming', 45),
+  ('event-2', 'Data Science Career Panel', '2024-11-20 17:30:00+00', 'Students'' Union, Conference Room', 'Hear from data science professionals', 'upcoming', 67),
+  ('event-3', 'Kaggle Competition Night', '2024-11-10 19:00:00+00', 'The Diamond, Computer Room 4', 'Team up and tackle real-world data science problems', 'completed', 32)
+ON CONFLICT (notion_id) DO NOTHING;
+
+INSERT INTO timeline_events (notion_id, event_year, event_month, title, description, icon, category) VALUES
+  ('timeline-1', 2024, 10, 'Website Launch', 'Launched our new website', '🚀', 'milestone'),
+  ('timeline-2', 2024, 9, 'Partnership with DataCamp', 'Free premium access for members', '🤝', 'partnership'),
+  ('timeline-3', 2024, 3, 'Won National Competition', '1st place at UK Data Science Challenge', '🏆', 'achievement')
+ON CONFLICT (notion_id) DO NOTHING;
+
+-- ============================================
+-- Done
 -- ============================================
