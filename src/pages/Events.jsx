@@ -1,5 +1,5 @@
 /* ========================================
-   /pages/Events.jsx
+   /pages/Events.jsx - Updated with End Date
    ======================================== */
 
 import React, { useState } from 'react';
@@ -10,16 +10,25 @@ import './Events.css';
 
 function Events() {
   const { events, loading } = useEvents();
-  const [filter, setFilter] = useState('all'); // all, upcoming, past
+  const [filter, setFilter] = useState('all');
 
-  const today = new Date();
-  
+  // Registration handler
+  const handleRegister = (event) => {
+    if (event.registration_url) {
+      window.open(event.registration_url, '_blank');
+    } else {
+      alert(`Registration for "${event.title}" coming soon!`);
+    }
+  };
+
+  // Filter events by status (more reliable than date comparison)
   const upcomingEvents = events.filter(event => 
-    new Date(event.date) >= today
+    event.status?.toLowerCase() === 'upcoming' || 
+    event.status?.toLowerCase() === 'ongoing'
   );
   
   const pastEvents = events.filter(event => 
-    new Date(event.date) < today
+    event.status?.toLowerCase() === 'completed'
   );
 
   const displayEvents = filter === 'all' 
@@ -77,7 +86,20 @@ function Events() {
         {displayEvents.length > 0 ? (
           <div className="events-grid">
             {displayEvents.map(event => (
-              <EventCard key={event.id} event={event} />
+              <EventCard 
+                key={event.id}
+                title={event.title}
+                date={event.date}
+                endDate={event.end_date}
+                location={event.location}
+                description={event.description}
+                status={event.status}
+                type={event.type}
+                attendees={event.attendees || 0}
+                maxAttendees={event.max_attendees}
+                imageUrl={event.image_url}
+                onRegister={() => handleRegister(event)}
+              />
             ))}
           </div>
         ) : (
