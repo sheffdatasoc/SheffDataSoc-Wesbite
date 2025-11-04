@@ -12,6 +12,8 @@ export class BlogPost {
     this.published_date = data.published_date;
     this.excerpt = data.excerpt;
     this.status = data.status || 'draft';
+    this.image = data.image;  // ADD THIS
+    this.slug = data.slug;    // ADD THIS
     this.created_at = data.created_at;
     this.updated_at = data.updated_at;
   }
@@ -38,6 +40,16 @@ export class BlogPost {
     return Math.max(1, Math.ceil(words / wordsPerMinute));
   }
 
+  // ADD THIS: Get image URL with fallback
+  getImageUrl() {
+    return this.image || '/images/default-blog.jpg'; // Provide a default image path
+  }
+
+  // ADD THIS: Get URL-friendly slug
+  getSlug() {
+    return this.slug || this.notion_id;
+  }
+
   // Convert to plain object for components
   toJSON() {
     return {
@@ -48,7 +60,11 @@ export class BlogPost {
       published_date: this.published_date,
       excerpt: this.excerpt,
       status: this.status,
+      image: this.image,        // ADD THIS
+      slug: this.slug,          // ADD THIS
+      imageUrl: this.getImageUrl(), // ADD THIS (computed)
       readTime: this.getEstimatedReadTime(),
+      formattedDate: this.getFormattedDate(), // ADD THIS for convenience
       created_at: this.created_at,
       updated_at: this.updated_at
     };

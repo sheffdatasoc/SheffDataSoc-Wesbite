@@ -82,21 +82,32 @@ async function syncEvents() {
 async function syncBlogPosts() {
   try {
     console.log('Syncing blog posts...');
-    // V2 syntax
     const response = await notion.databases.query({
       database_id: DATABASES.blog,
     });
 
-    const posts = response.results.map(page => ({
-      notion_id: page.id,
-      title: extractText(page.properties.Name?.title),
-      author: extractText(page.properties.Author?.rich_text),
-      published_date: extractDate(page.properties.Date?.date),
-      excerpt: extractText(page.properties.Excerpt?.rich_text),
-      status: page.properties.Status?.select?.name || 'draft',
-      created_at: page.created_time,
-      updated_at: page.last_edited_time
-    }));
+    const posts = response.results.map(page => {
+      // Extract image URL from files property
+      const imageFiles = page.properties.Image?.files || [];
+      const imageUrl = imageFiles.length > 0 
+        ? (imageFiles[0].type === 'external' 
+            ? imageFiles[0].external.url 
+            : imageFiles[0].file.url)
+        : null;
+
+      return {
+        notion_id: page.id,
+        title: extractText(page.properties.Title?.title),
+        author: extractText(page.properties.Author?.rich_text),
+        published_date: extractDate(page.properties['Published Date']?.date), // FIXED
+        excerpt: extractText(page.properties.Excerpt?.rich_text),
+        status: page.properties.Status?.select?.name || 'draft',
+        image: imageUrl,
+        slug: extractText(page.properties.Slug?.rich_text) || page.id,
+        created_at: page.created_time,
+        updated_at: page.last_edited_time
+      };
+    });
 
     const { data, error } = await supabase
       .from('blog_posts')
