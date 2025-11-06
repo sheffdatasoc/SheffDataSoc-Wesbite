@@ -1,6 +1,49 @@
 /* ========================================
-   /pages/Events.css
+   /pages/Events.css - UPDATED FULL FILE
    ======================================== */
+
+/* ✅ Sandbox-style Hero */
+.sandbox-hero {
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
+  color: var(--white);
+  text-align: center;
+  padding: 5rem 2rem;
+  width: 100%;
+}
+
+.sandbox-hero .hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.sandbox-hero h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 800;
+}
+
+.sandbox-hero p {
+  font-size: var(--font-size-xl);
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+/* Page Layout */
+.events-page {
+  min-height: 100vh;
+}
+
+.events-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
 
 .events-header {
   text-align: center;
@@ -18,14 +61,77 @@
   font-size: var(--font-size-lg);
 }
 
-/* Event filters use .sandbox-tabs from Sandbox.css or create new class */
+/* Filter Tabs */
 .events-filters {
   display: flex;
   gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
   flex-wrap: wrap;
   justify-content: center;
 }
 
-/* EventCard styles are in components/EventCard.css */
-/* Grid layout uses .events-grid from components.css */
+.filter-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+/* Events Grid */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* ✅ Mobile Responsive */
+@media (max-width: 768px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .events-filters {
+    flex-direction: column;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+
+  .sandbox-hero {
+    padding: 4rem 1.5rem;
+  }
+
+  .sandbox-hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .sandbox-hero p {
+    font-size: var(--font-size-lg);
+  }
+}

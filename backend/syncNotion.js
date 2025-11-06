@@ -5,14 +5,6 @@ const { createClient } = require('@supabase/supabase-js');
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
-// Debug the client
-//console.log('Notion client keys:', Object.keys(notion));
-//console.log('Has databases?', 'databases' in notion);
-//console.log('Databases type:', typeof notion.databases);
-//console.log('Token length:', process.env.NOTION_TOKEN?.length);
-//console.log('Token starts with:', process.env.NOTION_TOKEN?.substring(0, 4));
-//console.log('Available database methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(notion.databases)));
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
@@ -45,32 +37,59 @@ function extractUrl(urlObj) {
   return urlObj;
 }
 
-// Sync Events
 async function syncEvents() {
   try {
     console.log('Syncing events...');
-    // V2 syntax: pass database_id as first parameter
     const response = await notion.databases.query({
       database_id: DATABASES.events,
     });
 
-    const events = response.results.map(page => ({
-      notion_id: page.id,
-      title: extractText(page.properties.Name?.title),
-      date: extractDate(page.properties.Date?.date),
-      location: extractText(page.properties.Location?.rich_text),
-      description: extractText(page.properties.Description?.rich_text),
-      status: page.properties.Status?.select?.name || 'upcoming',
-      created_at: page.created_time,
-      updated_at: page.last_edited_time
-    }));
+    console.log(`\n📋 Found ${response.results.length} events in Notion\n`);
 
+    const events = response.results.map(page => {
+      // Extract image URL from files property
+      const imageFiles = page.properties.Image?.files || [];
+      const imageUrl = imageFiles.length > 0 
+        ? (imageFiles[0].type === 'external' 
+            ? imageFiles[0].external.url 
+            : imageFiles[0].file.url)
+        : null;
+
+      // 🔍 DEBUG: Log raw status and type values
+      const eventTitle = extractText(page.properties.Title?.title);
+      const extractedStatus = extractText(page.properties.status?.rich_text);
+      const extractedType = extractText(page.properties.Type?.rich_text);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('📌 Event:', eventTitle);
+      console.log('📝 Status:', extractedStatus || 'upcoming');
+      console.log('🏷️  Type:', extractedType || 'workshop');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+
+      return {
+        notion_id: page.id,
+        title: eventTitle,
+        date: extractDate(page.properties.Date?.date),
+        end_date: page.properties['End Date']?.date?.start || null,
+        location: extractText(page.properties.Location?.rich_text),
+        description: extractText(page.properties.Description?.rich_text),
+        status: extractText(page.properties.status?.rich_text) || 'upcoming',
+        type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
+        attendees: page.properties.Attendees?.number || 0,
+        max_attendees: page.properties['Max Attendees']?.number || null,
+        image_url: imageUrl,
+        registration_url: page.properties['Registration URL']?.url || null,
+        created_at: page.created_time,
+        updated_at: page.last_edited_time
+      };
+    });
+
+    console.log('\n💾 Upserting to Supabase...');
     const { data, error } = await supabase
       .from('events')
       .upsert(events, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${events.length} events`);
+    console.log(`✓ Synced ${events.length} events\n`);
     return { count: events.length, data };
   } catch (error) {
     console.error('✗ Error syncing events:', error.message);
@@ -99,7 +118,7 @@ async function syncBlogPosts() {
         notion_id: page.id,
         title: extractText(page.properties.Title?.title),
         author: extractText(page.properties.Author?.rich_text),
-        published_date: extractDate(page.properties['Published Date']?.date), // FIXED
+        published_date: extractDate(page.properties['Published Date']?.date),
         excerpt: extractText(page.properties.Excerpt?.rich_text),
         status: page.properties.Status?.select?.name || 'draft',
         image: imageUrl,
@@ -126,7 +145,6 @@ async function syncBlogPosts() {
 async function syncProjects() {
   try {
     console.log('Syncing projects...');
-    // V2 syntax
     const response = await notion.databases.query({
       database_id: DATABASES.projects,
     });
@@ -158,7 +176,6 @@ async function syncProjects() {
 async function syncGuides() {
   try {
     console.log('Syncing guides...');
-    // V2 syntax
     const response = await notion.databases.query({
       database_id: DATABASES.guides,
     });
@@ -196,7 +213,6 @@ async function syncGuides() {
 async function syncMembers() {
   try {
     console.log('Syncing members...');
-    // V2 syntax
     const response = await notion.databases.query({
       database_id: DATABASES.members,
     });
@@ -223,14 +239,6 @@ async function syncMembers() {
         || extractText(page.properties.academic_year?.rich_text)
         || null
     }));
-
-    // Debug step
-    console.log('Members to upsert:', members.map(m => ({
-      name: m.name,
-      academic_year: m.academic_year,
-      major: m.major,
-      interests: m.interests
-    })));
 
     const { data, error } = await supabase
       .from('members')
