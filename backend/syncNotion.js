@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
+const { NotionToMarkdown } = require("notion-to-md");
 
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -9,6 +10,9 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
+
+// Initialize markdown converter
+const n2m = new NotionToMarkdown({ notionClient: notion });
 
 // Database IDs from Notion
 const DATABASES = {
@@ -19,24 +23,22 @@ const DATABASES = {
   members: process.env.NOTION_MEMBERS_DB_ID
 };
 
-// Helper function to extract text from Notion rich text
+// Helper functions
 function extractText(richText) {
   if (!richText || richText.length === 0) return '';
   return richText.map(t => t.plain_text).join('');
 }
 
-// Helper function to extract date
 function extractDate(dateObj) {
   if (!dateObj) return null;
   return dateObj.start;
 }
 
-// Helper function to extract URL
 function extractUrl(urlObj) {
-  if (!urlObj) return null;
-  return urlObj;
+  return urlObj || null;
 }
 
+// Sync Events
 async function syncEvents() {
   try {
     console.log('Syncing events...');
@@ -47,18 +49,18 @@ async function syncEvents() {
     console.log(`\n📋 Found ${response.results.length} events in Notion\n`);
 
     const events = response.results.map(page => {
-      // Extract image URL from files property
       const imageFiles = page.properties.Image?.files || [];
-      const imageUrl = imageFiles.length > 0 
-        ? (imageFiles[0].type === 'external' 
-            ? imageFiles[0].external.url 
-            : imageFiles[0].file.url)
-        : null;
+      const imageUrl =
+        imageFiles.length > 0
+          ? imageFiles[0].type === 'external'
+            ? imageFiles[0].external.url
+            : imageFiles[0].file.url
+          : null;
 
-      // 🔍 DEBUG: Log raw status and type values
       const eventTitle = extractText(page.properties.Title?.title);
       const extractedStatus = extractText(page.properties.status?.rich_text);
       const extractedType = extractText(page.properties.Type?.rich_text);
+
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('📌 Event:', eventTitle);
       console.log('📝 Status:', extractedStatus || 'upcoming');
@@ -72,8 +74,8 @@ async function syncEvents() {
         end_date: page.properties['End Date']?.date?.start || null,
         location: extractText(page.properties.Location?.rich_text),
         description: extractText(page.properties.Description?.rich_text),
-        status: extractText(page.properties.status?.rich_text) || 'upcoming',
-        type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
+        status: extractedStatus || 'upcoming',
+        type: extractedType?.toLowerCase() || 'workshop',
         attendees: page.properties.Attendees?.number || 0,
         max_attendees: page.properties['Max Attendees']?.number || null,
         image_url: imageUrl,
@@ -83,7 +85,7 @@ async function syncEvents() {
       };
     });
 
-    console.log('\n💾 Upserting to Supabase...');
+    console.log(`\n💾 Upserting ${events.length} events to Supabase...\n`);
     const { data, error } = await supabase
       .from('events')
       .upsert(events, { onConflict: 'notion_id' });
@@ -106,13 +108,13 @@ async function syncBlogPosts() {
     });
 
     const posts = response.results.map(page => {
-      // Extract image URL from files property
       const imageFiles = page.properties.Image?.files || [];
-      const imageUrl = imageFiles.length > 0 
-        ? (imageFiles[0].type === 'external' 
-            ? imageFiles[0].external.url 
-            : imageFiles[0].file.url)
-        : null;
+      const imageUrl =
+        imageFiles.length > 0
+          ? imageFiles[0].type === 'external'
+            ? imageFiles[0].external.url
+            : imageFiles[0].file.url
+          : null;
 
       return {
         notion_id: page.id,
@@ -176,31 +178,43 @@ async function syncProjects() {
 async function syncGuides() {
   try {
     console.log('Syncing guides...');
+
+    // Pull database rows
     const response = await notion.databases.query({
       database_id: DATABASES.guides,
     });
 
-    const guides = response.results.map(page => ({
-      notion_id: page.id,
-      title: extractText(page.properties.Name?.title),
-      description: extractText(page.properties.Description?.rich_text),
-      content: extractText(page.properties.Content?.rich_text),
-      category: page.properties.Category?.select?.name,
-      difficulty: page.properties.Difficulty?.select?.name || 'beginner',
-      tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
-      author: extractText(page.properties.Author?.rich_text),
-      read_time: page.properties['Read Time']?.number,
-      github_url: page.properties.GitHub?.url,
-      featured: page.properties.Featured?.checkbox || false,
-      created_at: page.created_time,
-      updated_at: page.last_edited_time
-    }));
+    const guides = [];
 
+    for (const page of response.results) {
+      // Convert page body (blocks) → markdown
+      const mdBlocks = await n2m.pageToMarkdown(page.id);
+      const mdString = n2m.toMarkdownString(mdBlocks);
+
+      guides.push({
+        notion_id: page.id,
+        title: extractText(page.properties.Name?.title),
+        description: extractText(page.properties.Description?.rich_text),
+        content: mdString.parent, // <-- FIXED
+        category: page.properties.Category?.select?.name || null,
+        difficulty: page.properties.Difficulty?.select?.name || 'beginner',
+        tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
+        author: extractText(page.properties.Author?.rich_text),
+        read_time: page.properties['Read Time']?.number,
+        github_url: page.properties.GitHub?.url,
+        featured: page.properties.Featured?.checkbox || false,
+        created_at: page.created_time,
+        updated_at: page.last_edited_time
+      });
+    }
+
+    // Upsert into Supabase
     const { data, error } = await supabase
       .from('guides')
       .upsert(guides, { onConflict: 'notion_id' });
 
     if (error) throw error;
+
     console.log(`✓ Synced ${guides.length} guides`);
     return { count: guides.length, data };
   } catch (error) {
@@ -222,9 +236,10 @@ async function syncMembers() {
       name: extractText(page.properties.Name?.title),
       role: page.properties.Role?.select?.name,
       bio: extractText(page.properties.Bio?.rich_text),
-      major: page.properties.major?.select?.name
-        || extractText(page.properties.major?.rich_text)
-        || null,
+      major:
+        page.properties.major?.select?.name ||
+        extractText(page.properties.major?.rich_text) ||
+        null,
       image_url: page.properties['Image URL']?.url,
       github_url: page.properties['GitHub URL']?.url,
       linkedin_url: page.properties['LinkedIn URL']?.url,
@@ -235,9 +250,10 @@ async function syncMembers() {
             .split(',')
             .map(s => s.trim())
             .filter(Boolean),
-      academic_year: page.properties.academic_year?.select?.name
-        || extractText(page.properties.academic_year?.rich_text)
-        || null
+      academic_year:
+        page.properties.academic_year?.select?.name ||
+        extractText(page.properties.academic_year?.rich_text) ||
+        null
     }));
 
     const { data, error } = await supabase
@@ -253,11 +269,11 @@ async function syncMembers() {
   }
 }
 
-// Main sync function
+// Main Sync
 async function syncAllData() {
   console.log('\n🔄 Starting full sync...\n');
   const startTime = Date.now();
-  
+
   const results = {
     events: null,
     blogPosts: null,
@@ -268,23 +284,21 @@ async function syncAllData() {
   };
 
   try {
-    // Sync each database if it's configured
     if (DATABASES.events) results.events = await syncEvents();
     if (DATABASES.blog) results.blogPosts = await syncBlogPosts();
     if (DATABASES.projects) results.projects = await syncProjects();
     if (DATABASES.guides) results.guides = await syncGuides();
     if (DATABASES.members) results.members = await syncMembers();
-    
+
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log(`\n✅ Full sync completed in ${duration}s`);
-    
-    // Log summary
+
     const totalSynced = Object.values(results)
       .filter(r => r && typeof r === 'object')
       .reduce((sum, r) => sum + (r.count || 0), 0);
-    
+
     console.log(`📊 Total records synced: ${totalSynced}\n`);
-    
+
     return results;
   } catch (error) {
     console.error('\n❌ Full sync failed:', error);
@@ -292,24 +306,22 @@ async function syncAllData() {
   }
 }
 
-// Export for use in server
-module.exports = { 
-  syncAllData, 
-  syncEvents, 
-  syncBlogPosts, 
+module.exports = {
+  syncAllData,
+  syncEvents,
+  syncBlogPosts,
   syncProjects,
   syncGuides,
   syncMembers
 };
 
-// Run if called directly
 if (require.main === module) {
   syncAllData()
     .then(() => {
       console.log('✓ Sync complete\n');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('✗ Sync failed:', error);
       process.exit(1);
     });
