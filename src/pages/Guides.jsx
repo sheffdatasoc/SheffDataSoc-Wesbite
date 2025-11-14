@@ -3,11 +3,15 @@
    ======================================== */
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGuides } from '../hooks/useSupabase';
+import GuideCard from '../components/GuideCard';
 import './Guides.css';
 
 function Guides() {
   const { guides, loading, error } = useGuides();
+  const navigate = useNavigate();
+
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
@@ -15,8 +19,10 @@ function Guides() {
   const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
 
   const filteredGuides = guides.filter(guide => {
-    const categoryMatch = selectedCategory === 'all' || guide.category === selectedCategory;
-    const difficultyMatch = selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty;
+    const categoryMatch =
+      selectedCategory === 'all' || guide.category === selectedCategory;
+    const difficultyMatch =
+      selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty;
     return categoryMatch && difficultyMatch;
   });
 
@@ -49,15 +55,15 @@ function Guides() {
     <div className="guides-page">
       <div className="guides-header">
         <h1>📚 Learning Guides</h1>
-        <p>Step-by-step tutorials and resources to boost your data science skills</p>
+        <p>Step-by-step tutorials to help you grow as a data scientist</p>
       </div>
 
       {/* Filters */}
       <div className="guides-filters">
         <div className="filter-group">
           <label>Category:</label>
-          <select 
-            value={selectedCategory} 
+          <select
+            value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="filter-select"
           >
@@ -68,10 +74,11 @@ function Guides() {
             ))}
           </select>
         </div>
+
         <div className="filter-group">
           <label>Difficulty:</label>
-          <select 
-            value={selectedDifficulty} 
+          <select
+            value={selectedDifficulty}
             onChange={(e) => setSelectedDifficulty(e.target.value)}
             className="filter-select"
           >
@@ -90,7 +97,11 @@ function Guides() {
           <h2>⭐ Featured Guides</h2>
           <div className="guides-grid">
             {featuredGuides.map(guide => (
-              <GuideCard key={guide.id} guide={guide} featured={true} />
+              <GuideCard
+                key={guide.id}
+                guide={guide}
+                onReadMore={() => navigate(`/guides/${guide.id}`)}
+              />
             ))}
           </div>
         </section>
@@ -102,7 +113,11 @@ function Guides() {
           <h2>All Guides</h2>
           <div className="guides-grid">
             {regularGuides.map(guide => (
-              <GuideCard key={guide.id} guide={guide} />
+              <GuideCard
+                key={guide.id}
+                guide={guide}
+                onReadMore={() => navigate(`/guides/${guide.id}`)}
+              />
             ))}
           </div>
         </section>
@@ -110,58 +125,9 @@ function Guides() {
 
       {filteredGuides.length === 0 && (
         <div className="empty-state">
-          <p>No guides found for selected filters. Try adjusting your criteria!</p>
+          <p>No guides found for the selected filters.</p>
         </div>
       )}
-    </div>
-  );
-}
-
-function GuideCard({ guide, featured = false }) {
-  const difficultyColors = {
-    beginner: '#06d6a0',
-    intermediate: '#ffd166',
-    advanced: '#f72585'
-  };
-
-  return (
-    <div className={`guide-card ${featured ? 'featured-card' : ''}`}>
-      <div className="guide-header">
-        <span 
-          className="difficulty-badge"
-          style={{ backgroundColor: difficultyColors[guide.difficulty] }}
-        >
-          {guide.difficulty}
-        </span>
-        {guide.read_time && (
-          <span className="read-time">⏱️ {guide.read_time} min</span>
-        )}
-      </div>
-
-      <h3>{guide.title}</h3>
-      <p className="guide-description">{guide.description}</p>
-
-      {guide.tags && guide.tags.length > 0 && (
-        <div className="guide-tags">
-          {guide.tags.map((tag, i) => (
-            <span key={i} className="tag">{tag}</span>
-          ))}
-        </div>
-      )}
-
-      <div className="guide-footer">
-        {guide.author && <span className="author">By {guide.author}</span>}
-        {guide.github_url && (
-          <a 
-            href={guide.github_url} 
-            className="guide-link" 
-            target="_blank" 
-            rel="noopener noreferrer"
-          >
-            View Guide →
-          </a>
-        )}
-      </div>
     </div>
   );
 }

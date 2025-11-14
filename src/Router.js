@@ -11,6 +11,7 @@ import Members from './pages/Members';
 import About from './pages/About';
 import Timeline from './pages/Timeline';
 import Guides from './pages/Guides';
+import GuideDetail from './pages/GuideDetail';  // <-- ADD THIS
 import Glossary from './pages/Glossary';
 import Gallery from './pages/Gallery';
 import Resources from './pages/Resources';
@@ -25,10 +26,13 @@ function AppRouter() {
           <Route path="/events" element={<Events />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
+
+          <Route path="/guides" element={<Guides />} />
+          <Route path="/guides/:id" element={<GuideDetail />} /> {/* <-- FIX */}
+
           <Route path="/members" element={<Members />} />
           <Route path="/about" element={<About />} />
           <Route path="/timeline" element={<Timeline />} />
-          <Route path="/guides" element={<Guides />} />
           <Route path="/glossary" element={<Glossary />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/resources" element={<Resources />} />

@@ -133,6 +133,24 @@ export async function getGuides() {
   return data;
 }
 
+// Helper function to fetch a single guide by ID
+export async function getGuideById(id) {
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from('guides')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching guide:', error);
+    return null;
+  }
+
+  return data;
+}
+
 // Helper function to fetch all resources
 export async function getResources() {
   if (!supabase) {
