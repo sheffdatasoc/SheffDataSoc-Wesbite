@@ -1,0 +1,205 @@
+/* ========================================
+   GuideDetail.css (SCOPED VERSION)
+   ======================================== */
+
+.guide-detail-page {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 100vh;
+}
+
+.guide-detail-page .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.guide-detail-page .back-button:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.guide-detail-page .guide-detail-container {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Detail page specific title (larger) */
+.guide-detail-page .guide-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+  line-height: 1.2;
+}
+
+.guide-detail-page .guide-meta {
+  display: flex;
+  gap: 1rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.guide-detail-page .guide-category {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  color: #374151;
+}
+
+.guide-detail-page .guide-description {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.guide-detail-page .guide-content {
+  margin-top: 2rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #374151;
+}
+
+/* ===============================
+   Code Blocks (Prism-Compatible)
+   =============================== */
+
+.guide-detail-page .guide-content pre {
+  background: #1e1e1e !important;
+  padding: 1.5rem;
+  border-radius: 12px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.guide-detail-page .guide-content pre code {
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Inline code */
+.guide-detail-page .guide-content :not(pre) > code {
+  background: #f4f4f4;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-family: "Fira Code", "Courier New", monospace;
+  color: #e83e8c;
+  font-size: 0.9em;
+}
+
+/* Markdown headings */
+.guide-detail-page .guide-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1a1a2e;
+}
+
+.guide-detail-page .guide-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.875rem;
+  color: #1a1a2e;
+}
+
+.guide-detail-page .guide-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: #1a1a2e;
+}
+
+.guide-detail-page .guide-content h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #1a1a2e;
+}
+
+/* Paragraphs */
+.guide-detail-page .guide-content p {
+  margin-bottom: 1.25rem;
+}
+
+/* Lists */
+.guide-detail-page .guide-content ul,
+.guide-detail-page .guide-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.guide-detail-page .guide-content li {
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+.guide-detail-page .guide-content a {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+.guide-detail-page .guide-content a:hover {
+  color: #6366f1;
+}
+
+/* Blockquotes */
+.guide-detail-page .guide-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Loading and Error States */
+.guide-detail-page .loading,
+.guide-detail-page .error {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .guide-detail-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .guide-detail-page .guide-detail-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .guide-detail-page .guide-title {
+    font-size: 2rem;
+  }
+
+  .guide-detail-page .guide-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .guide-detail-page .guide-content h2 {
+    font-size: 1.5rem;
+  }
+}

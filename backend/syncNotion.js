@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
+const { NotionToMarkdown } = require("notion-to-md");
 
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
@@ -9,6 +10,9 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
+
+// Initialize markdown converter
+const n2m = new NotionToMarkdown({ notionClient: notion });
 
 // Database IDs from Notion
 const DATABASES = {
@@ -174,31 +178,43 @@ async function syncProjects() {
 async function syncGuides() {
   try {
     console.log('Syncing guides...');
+
+    // Pull database rows
     const response = await notion.databases.query({
       database_id: DATABASES.guides,
     });
 
-    const guides = response.results.map(page => ({
-      notion_id: page.id,
-      title: extractText(page.properties.Name?.title),
-      description: extractText(page.properties.Description?.rich_text),
-      content: extractText(page.properties.Content?.rich_text),
-      category: page.properties.Category?.select?.name,
-      difficulty: page.properties.Difficulty?.select?.name || 'beginner',
-      tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
-      author: extractText(page.properties.Author?.rich_text),
-      read_time: page.properties['Read Time']?.number,
-      github_url: page.properties.GitHub?.url,
-      featured: page.properties.Featured?.checkbox || false,
-      created_at: page.created_time,
-      updated_at: page.last_edited_time
-    }));
+    const guides = [];
 
+    for (const page of response.results) {
+      // Convert page body (blocks) → markdown
+      const mdBlocks = await n2m.pageToMarkdown(page.id);
+      const mdString = n2m.toMarkdownString(mdBlocks);
+
+      guides.push({
+        notion_id: page.id,
+        title: extractText(page.properties.Name?.title),
+        description: extractText(page.properties.Description?.rich_text),
+        content: mdString.parent, // <-- FIXED
+        category: page.properties.Category?.select?.name || null,
+        difficulty: page.properties.Difficulty?.select?.name || 'beginner',
+        tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
+        author: extractText(page.properties.Author?.rich_text),
+        read_time: page.properties['Read Time']?.number,
+        github_url: page.properties.GitHub?.url,
+        featured: page.properties.Featured?.checkbox || false,
+        created_at: page.created_time,
+        updated_at: page.last_edited_time
+      });
+    }
+
+    // Upsert into Supabase
     const { data, error } = await supabase
       .from('guides')
       .upsert(guides, { onConflict: 'notion_id' });
 
     if (error) throw error;
+
     console.log(`✓ Synced ${guides.length} guides`);
     return { count: guides.length, data };
   } catch (error) {
