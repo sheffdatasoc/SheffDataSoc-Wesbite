@@ -44,7 +44,7 @@ async function syncEvents() {
       database_id: DATABASES.events,
     });
 
-    console.log(`\n📋 Found ${response.results.length} events in Notion\n`);
+    console.log('\n📋 Found ${response.results.length} events in Notion\n');
 
     const events = response.results.map(page => {
       // Extract image URL from files property
@@ -62,7 +62,7 @@ async function syncEvents() {
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('📌 Event:', eventTitle);
       console.log('📝 Status:', extractedStatus || 'upcoming');
-      console.log('🏷️  Type:', extractedType || 'workshop');
+      console.log('🏷  Type:', extractedType || 'workshop');
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
       return {
@@ -89,7 +89,7 @@ async function syncEvents() {
       .upsert(events, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${events.length} events\n`);
+    console.log('✓ Synced ${events.length} events\n');
     return { count: events.length, data };
   } catch (error) {
     console.error('✗ Error syncing events:', error.message);
@@ -133,7 +133,7 @@ async function syncBlogPosts() {
       .upsert(posts, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${posts.length} blog posts`);
+    console.log('✓ Synced ${posts.length} blog posts');
     return { count: posts.length, data };
   } catch (error) {
     console.error('✗ Error syncing blog posts:', error.message);
@@ -164,7 +164,7 @@ async function syncProjects() {
       .upsert(projects, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${projects.length} projects`);
+    console.log('✓ Synced ${projects.length} projects');
     return { count: projects.length, data };
   } catch (error) {
     console.error('✗ Error syncing projects:', error.message);
@@ -201,7 +201,7 @@ async function syncGuides() {
       .upsert(guides, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${guides.length} guides`);
+    console.log('✓ Synced ${guides.length} guides');
     return { count: guides.length, data };
   } catch (error) {
     console.error('✗ Error syncing guides:', error.message);
@@ -245,7 +245,7 @@ async function syncMembers() {
       .upsert(members, { onConflict: 'notion_id' });
 
     if (error) throw error;
-    console.log(`✓ Synced ${members.length} members`);
+    console.log('✓ Synced ${members.length} members');
     return { count: members.length, data };
   } catch (error) {
     console.error('✗ Error syncing members:', error.message);
@@ -276,14 +276,14 @@ async function syncAllData() {
     if (DATABASES.members) results.members = await syncMembers();
     
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    console.log(`\n✅ Full sync completed in ${duration}s`);
+    console.log('\n✅ Full sync completed in ${duration}s');
     
     // Log summary
     const totalSynced = Object.values(results)
       .filter(r => r && typeof r === 'object')
       .reduce((sum, r) => sum + (r.count || 0), 0);
     
-    console.log(`📊 Total records synced: ${totalSynced}\n`);
+    console.log('📊 Total records synced: ${totalSynced}\n');
     
     return results;
   } catch (error) {
