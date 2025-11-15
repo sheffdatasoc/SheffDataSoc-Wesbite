@@ -107,7 +107,9 @@ async function syncBlogPosts() {
       database_id: DATABASES.blog,
     });
 
-    const posts = response.results.map(page => {
+    const posts = [];
+    
+    for (const page of response.results) {
       const imageFiles = page.properties.Image?.files || [];
       const imageUrl =
         imageFiles.length > 0
@@ -115,8 +117,10 @@ async function syncBlogPosts() {
             ? imageFiles[0].external.url
             : imageFiles[0].file.url
           : null;
-
-      return {
+      const mdBlocks = await n2m.pageToMarkdown(page.id);
+      const mdString = n2m.toMarkdownString(mdBlocks);
+      
+      posts.push({
         notion_id: page.id,
         title: extractText(page.properties.Title?.title),
         author: extractText(page.properties.Author?.rich_text),
@@ -124,12 +128,13 @@ async function syncBlogPosts() {
         excerpt: extractText(page.properties.Excerpt?.rich_text),
         status: page.properties.Status?.select?.name || 'draft',
         image: imageUrl,
+        content: mdString.parent,
         slug: extractText(page.properties.Slug?.rich_text) || page.id,
         created_at: page.created_time,
         updated_at: page.last_edited_time
-      };
-    });
-
+      });
+    }
+    // Upsert into Supabase
     const { data, error } = await supabase
       .from('blog_posts')
       .upsert(posts, { onConflict: 'notion_id' });
@@ -187,6 +192,13 @@ async function syncGuides() {
     const guides = [];
 
     for (const page of response.results) {
+      const imageFiles = page.properties.Image?.files || [];
+      const imageUrl =
+        imageFiles.length > 0
+          ? imageFiles[0].type === 'external'
+            ? imageFiles[0].external.url
+            : imageFiles[0].file.url
+          : null;
       // Convert page body (blocks) → markdown
       const mdBlocks = await n2m.pageToMarkdown(page.id);
       const mdString = n2m.toMarkdownString(mdBlocks);
@@ -202,6 +214,7 @@ async function syncGuides() {
         author: extractText(page.properties.Author?.rich_text),
         read_time: page.properties['Read Time']?.number,
         github_url: page.properties.GitHub?.url,
+        image: imageUrl,
         featured: page.properties.Featured?.checkbox || false,
         created_at: page.created_time,
         updated_at: page.last_edited_time
