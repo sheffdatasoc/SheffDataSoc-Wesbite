@@ -5,6 +5,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, ArrowLeft } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypePrism from 'rehype-prism-plus';
 import { getBlogPostById } from '../lib/supabase';
 import './BlogDetail.css';
 
@@ -93,9 +96,13 @@ function BlogDetail() {
           </div>
         )}
 
-        <div className="blog-detail-content">
+        <div className="blog-detail-content markdown-body">
           <p className="blog-detail-excerpt">{post.excerpt}</p>
-          {/* Add more content here when you have full blog post content */}
+          {post.content && (
+            <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypePrism]}>
+              {post.content}
+            </ReactMarkdown>
+          )}
         </div>
       </article>
     </div>

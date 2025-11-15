@@ -35,13 +35,13 @@ export async function getBlogPosts() {
   return createBlogPosts(data);
 }
 
-// Helper function to fetch a single blog post by ID
+// Helper function to fetch a single blog post by ID (test)
 export async function getBlogPostById(id) {
   if (!supabase) return null;
 
   const { data, error } = await supabase
     .from('blog_posts')
-    .select('*')
+    .select('*')   // include all columns, especially 'content'
     .eq('id', id)
     .single();
 
@@ -50,7 +50,7 @@ export async function getBlogPostById(id) {
     return null;
   }
 
-  return createBlogPost(data);
+  return data;  // ✅ return raw data without createBlogPost()
 }
 
 // Helper function to fetch all events
