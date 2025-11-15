@@ -1,15 +1,17 @@
 /* ========================================
-   GuideDetail.css (SCOPED VERSION)
-   ======================================== */
-
+   Page Wrapper
+======================================== */
 .guide-detail-page {
-  max-width: 850px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
   min-height: 100vh;
 }
 
-.guide-detail-page .back-button {
+/* ========================================
+   Back Button
+======================================== */
+.back-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -23,21 +25,270 @@
   margin-bottom: 2rem;
 }
 
-.guide-detail-page .back-button:hover {
+.back-button:hover {
   background: #f9fafb;
   border-color: #d1d5db;
   color: #374151;
 }
 
-.guide-detail-page .guide-detail-container {
+/* ========================================
+   Floating Action Buttons (FAB)
+======================================== */
+.fab-container {
+  position: fixed;
+  top: 14rem;
+  left: 50%;
+  transform: translateX(-560px);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* align menu under FAB on the right */
+  gap: 1rem;
+}
+
+/* Action buttons container */
+.fab-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.fab-actions.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Individual action buttons */
+.fab-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  color: #4f46e5;
+  border: 2px solid #4f46e5;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  white-space: nowrap;
+
+  /* Base left shift */
+  transform: translateX(-40px);
+}
+
+/* Progressive left offsets (cascade effect) */
+.fab-action-btn:nth-child(1) {
+  transform: translateX(-40px);
+}
+
+.fab-action-btn:nth-child(2) {
+  transform: translateX(-40px);
+}
+
+/* Hover keeps relative offset but shifts slightly more */
+.fab-action-btn:hover {
+  background: #4f46e5;
+  color: white;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+  transform: translateX(calc(-40px - 10px));
+}
+
+.fab-action-btn:nth-child(2):hover {
+  transform: translateX(calc(-40px - 10px));
+}
+
+/* Main FAB button */
+.floating-toc-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.floating-toc-button:hover {
+  background: #4338ca;
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
+}
+
+.floating-toc-button.active {
+  transform: rotate(90deg);
+}
+
+.floating-toc-button:active:not(.active) {
+  transform: scale(0.95);
+}
+
+/* ========================================
+   TOC Backdrop
+======================================== */
+.toc-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 998;
+}
+
+.toc-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ========================================
+   Floating TOC Sidebar
+======================================== */
+.floating-toc {
+  position: fixed;
+  top: 0;
+  left: -360px;
+  width: 320px;
+  height: 100vh;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.floating-toc.open {
+  left: 0;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+
+.toc-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.toc-close-btn {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.toc-close-btn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+/* TOC List */
+.floating-toc ul {
+  list-style: none;
+  padding: 1.5rem;
+  margin: 0;
+}
+
+.floating-toc li {
+  margin: 0.75rem 0;
+}
+
+.floating-toc a {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.95rem;
+  display: block;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.floating-toc a:hover {
+  background: #f3f4f6;
+  color: #4f46e5;
+}
+
+.floating-toc a.active {
+  background: #eef2ff;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.level-1 {
+  font-weight: 600;
+}
+
+.level-2 {
+  padding-left: 1rem;
+  font-size: 0.9rem;
+}
+
+.level-3 {
+  padding-left: 2rem;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+/* ========================================
+   Layout
+======================================== */
+.guide-layout {
+  display: flex;
+  justify-content: center;
+}
+
+.guide-layout-right {
+  width: 100%;
+  max-width: 800px;
+}
+
+/* ========================================
+   Article Card
+======================================== */
+.guide-detail-container {
   background: white;
   border-radius: 16px;
   padding: 3rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
 }
 
-/* Detail page specific title (larger) */
-.guide-detail-page .guide-title {
+.guide-detail-container .guide-title {
   font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -45,7 +296,8 @@
   line-height: 1.2;
 }
 
-.guide-detail-page .guide-meta {
+/* Metadata */
+.guide-detail-container .guide-meta {
   display: flex;
   gap: 1rem;
   color: #6b7280;
@@ -54,7 +306,8 @@
   flex-wrap: wrap;
 }
 
-.guide-detail-page .guide-category {
+/* Category */
+.guide-detail-container .guide-category {
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -62,25 +315,25 @@
   color: #374151;
 }
 
-.guide-detail-page .guide-description {
+/* Description */
+.guide-detail-container .guide-description {
   font-size: 1.1rem;
   margin-bottom: 2rem;
   color: #6b7280;
   line-height: 1.6;
 }
 
-.guide-detail-page .guide-content {
+/* ========================================
+   CONTENT STYLING
+======================================== */
+.guide-content {
   margin-top: 2rem;
   font-size: 1.05rem;
   line-height: 1.7;
   color: #374151;
 }
 
-/* ===============================
-   Code Blocks (Prism-Compatible)
-   =============================== */
-
-.guide-detail-page .guide-content pre {
+.guide-content pre {
   background: #1e1e1e !important;
   padding: 1.5rem;
   border-radius: 12px;
@@ -88,14 +341,14 @@
   margin: 1.5rem 0;
 }
 
-.guide-detail-page .guide-content pre code {
+.guide-content pre code {
   font-family: "Fira Code", "Courier New", monospace;
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 /* Inline code */
-.guide-detail-page .guide-content :not(pre) > code {
+.guide-content :not(pre) > code {
   background: #f4f4f4;
   padding: 3px 6px;
   border-radius: 5px;
@@ -104,67 +357,63 @@
   font-size: 0.9em;
 }
 
-/* Markdown headings */
-.guide-detail-page .guide-content h1 {
+/* Headings */
+.guide-content h1,
+.guide-content h2,
+.guide-content h3,
+.guide-content h4 {
+  color: #1a1a2e;
+  scroll-margin-top: 2rem;
+}
+
+.guide-content h1 {
   font-size: 2rem;
-  font-weight: 700;
   margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  color: #1a1a2e;
 }
 
-.guide-detail-page .guide-content h2 {
+.guide-content h2 {
   font-size: 1.75rem;
-  font-weight: 700;
   margin-top: 2rem;
-  margin-bottom: 0.875rem;
-  color: #1a1a2e;
 }
 
-.guide-detail-page .guide-content h3 {
+.guide-content h3 {
   font-size: 1.5rem;
-  font-weight: 600;
   margin-top: 1.75rem;
-  margin-bottom: 0.75rem;
-  color: #1a1a2e;
 }
 
-.guide-detail-page .guide-content h4 {
+.guide-content h4 {
   font-size: 1.25rem;
-  font-weight: 600;
   margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: #1a1a2e;
 }
 
 /* Paragraphs */
-.guide-detail-page .guide-content p {
+.guide-content p {
   margin-bottom: 1.25rem;
 }
 
 /* Lists */
-.guide-detail-page .guide-content ul,
-.guide-detail-page .guide-content ol {
+.guide-content ul,
+.guide-content ol {
   padding-left: 1.5rem;
   margin-bottom: 1.25rem;
 }
 
-.guide-detail-page .guide-content li {
+.guide-content li {
   margin-bottom: 0.5rem;
 }
 
 /* Links */
-.guide-detail-page .guide-content a {
+.guide-content a {
   color: #4f46e5;
   text-decoration: underline;
 }
 
-.guide-detail-page .guide-content a:hover {
+.guide-content a:hover {
   color: #6366f1;
 }
 
 /* Blockquotes */
-.guide-detail-page .guide-content blockquote {
+.guide-content blockquote {
   border-left: 4px solid #e5e7eb;
   padding-left: 1rem;
   margin: 1.5rem 0;
@@ -172,34 +421,45 @@
   font-style: italic;
 }
 
-/* Loading and Error States */
-.guide-detail-page .loading,
-.guide-detail-page .error {
-  text-align: center;
-  padding: 3rem;
-  color: #6b7280;
-  font-size: 1.1rem;
+/* Anchor on headings */
+.markdown-heading {
+  position: relative;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .guide-detail-page {
-    padding: 1.5rem 1rem;
+.header-anchor {
+  text-decoration: none;
+  color: transparent;
+  position: absolute;
+  left: -24px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-weight: 400;
+  font-size: 0.8em;
+}
+
+.markdown-heading:hover .header-anchor {
+  opacity: 0.3;
+  color: #9ca3af;
+}
+
+.header-anchor:hover {
+  opacity: 1 !important;
+  color: #4f46e5 !important;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 968px) {
+  .guide-layout {
+    flex-direction: column;
   }
 
-  .guide-detail-page .guide-detail-container {
-    padding: 2rem 1.5rem;
-  }
-
-  .guide-detail-page .guide-title {
-    font-size: 2rem;
-  }
-
-  .guide-detail-page .guide-content h1 {
-    font-size: 1.75rem;
-  }
-
-  .guide-detail-page .guide-content h2 {
-    font-size: 1.5rem;
+  .floating-toc {
+    position: relative;
+    top: 0;
+    width: 100%;
+    max-height: 400px;
+    margin-bottom: 2rem;
   }
 }
