@@ -208,6 +208,7 @@ async function syncGuides() {
         title: extractText(page.properties.Name?.title),
         description: extractText(page.properties.Description?.rich_text),
         content: mdString.parent, // <-- FIXED
+        published_date: extractDate(page.properties['Published Date']?.date),
         category: page.properties.Category?.select?.name || null,
         difficulty: page.properties.Difficulty?.select?.name || 'beginner',
         tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],

@@ -1,3 +1,7 @@
+/* ========================================
+   /pages/GuideDetail.jsx
+   ======================================== */
+
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Clock, Tag, Menu, X, ArrowUp, List } from "lucide-react";
@@ -41,6 +45,15 @@ function GuideDetail() {
     fetchGuide();
   }, [id]);
 
+  /* Format published date (same as BlogDetail) */
+  const formattedDate = guide?.published_date
+    ? new Date(guide.published_date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+
   /* Slug generator */
   const generateSlug = (text) =>
     text
@@ -79,7 +92,6 @@ function GuideDetail() {
           });
         }
       }
-
       if (node.children) node.children.forEach(walk);
     }
 
@@ -99,9 +111,7 @@ function GuideDetail() {
         if (!el) continue;
 
         const rect = el.getBoundingClientRect();
-        if (rect.top <= 150) {
-          activeHeading = heading;
-        }
+        if (rect.top <= 150) activeHeading = heading;
       }
 
       document
@@ -171,17 +181,12 @@ function GuideDetail() {
           <button
             className={`floating-toc-button ${fabOpen ? "active" : ""}`}
             onClick={() => setFabOpen(!fabOpen)}
-            aria-label="Quick actions"
           >
             {fabOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
 
           <div className={`fab-actions ${fabOpen ? "open" : ""}`}>
-            <button
-              className="fab-action-btn"
-              onClick={scrollToTop}
-              aria-label="Scroll to top"
-            >
+            <button className="fab-action-btn" onClick={scrollToTop}>
               <ArrowUp size={20} />
               <span>Top</span>
             </button>
@@ -192,7 +197,6 @@ function GuideDetail() {
                 setTocOpen(true);
                 setFabOpen(false);
               }}
-              aria-label="Open table of contents"
             >
               <List size={20} />
               <span>Contents</span>
@@ -215,7 +219,6 @@ function GuideDetail() {
               <button
                 className="toc-close-btn"
                 onClick={() => setTocOpen(false)}
-                aria-label="Close table of contents"
               >
                 <X size={20} />
               </button>
@@ -239,9 +242,17 @@ function GuideDetail() {
           <article className="guide-detail-container">
             <h1 className="guide-title">{guide.title}</h1>
 
+            {/* UPDATED META SECTION WITH DATE */}
             <div className="guide-meta">
               {guide.author && <span>{guide.author}</span>}
               {guide.difficulty && <span>{guide.difficulty}</span>}
+
+              {formattedDate && (
+                <span className="guide-date">
+                  <Clock size={16} /> {formattedDate}
+                </span>
+              )}
+
               {guide.read_time && (
                 <span className="guide-readtime">
                   <Clock size={16} /> {guide.read_time} min read
@@ -277,3 +288,4 @@ function GuideDetail() {
 }
 
 export default GuideDetail;
+
