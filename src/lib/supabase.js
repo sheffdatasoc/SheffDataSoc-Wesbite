@@ -73,6 +73,7 @@ export async function getEvents() {
   return data;
 }
 
+
 // Helper function to fetch all projects
 export async function getProjects() {
   if (!supabase) {
@@ -123,7 +124,7 @@ export async function getGuides() {
   const { data, error } = await supabase
     .from('guides')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('published_date', { ascending: false });
 
   if (error) {
     console.error('Error fetching guides:', error);
