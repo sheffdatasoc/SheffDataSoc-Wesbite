@@ -1,5 +1,5 @@
 /* ========================================
-   Guides.css (FIXED)
+   Guides.css (WITH SEARCH BAR)
    ======================================== */
 
 .guides-page {
@@ -25,6 +25,50 @@
 .guides-header p {
   color: #4b5563;
   font-size: 1.1rem;
+}
+
+/* Search Bar - Matching Blog Style */
+.guides-search {
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.25rem;
+  color: #6b7280;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1.1rem 1rem 1.1rem 3rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: white;
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
 }
 
 /* Filters */
@@ -56,13 +100,12 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
-  /* CHANGED: Remove justify-items: center and add align-items: stretch */
   align-items: stretch;
   width: 100%;
   max-width: 1400px;
 }
 
-/* ADDED: Ensure cards fill grid cells */
+/* Ensure cards fill grid cells */
 .guides-grid > * {
   height: 100%;
 }
@@ -102,6 +145,19 @@ section h2 {
 
   .guides-header p {
     font-size: 1rem;
+  }
+
+  .guides-search {
+    padding: 0 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-input {
+    padding: 1rem 1rem 1rem 2.75rem;
+  }
+
+  .search-icon {
+    left: 1rem;
   }
 
   .guides-filters {

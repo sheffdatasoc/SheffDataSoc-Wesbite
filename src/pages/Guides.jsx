@@ -6,12 +6,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuides } from '../hooks/useSupabase';
 import GuideCard from '../components/GuideCard';
+import { Search } from 'lucide-react';
 import './Guides.css';
 
 function Guides() {
   const { guides, loading, error } = useGuides();
   const navigate = useNavigate();
 
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
@@ -23,7 +25,13 @@ function Guides() {
       selectedCategory === 'all' || guide.category === selectedCategory;
     const difficultyMatch =
       selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty;
-    return categoryMatch && difficultyMatch;
+    const searchMatch =
+      searchQuery === '' ||
+      guide.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      guide.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      guide.category?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return categoryMatch && difficultyMatch && searchMatch;
   });
 
   const featuredGuides = filteredGuides.filter(g => g.featured);
@@ -33,7 +41,7 @@ function Guides() {
     return (
       <div className="guides-page">
         <div className="guides-header">
-          <h1>📚 Learning Guides</h1>
+          <h1>Learning Guides</h1>
           <p>Loading guides...</p>
         </div>
       </div>
@@ -44,7 +52,7 @@ function Guides() {
     return (
       <div className="guides-page">
         <div className="guides-header">
-          <h1>📚 Learning Guides</h1>
+          <h1>Learning Guides</h1>
           <p className="error-message">Error loading guides: {error}</p>
         </div>
       </div>
@@ -54,8 +62,22 @@ function Guides() {
   return (
     <div className="guides-page">
       <div className="guides-header">
-        <h1>📚 Learning Guides</h1>
+        <h1>Learning Guides</h1>
         <p>Step-by-step tutorials to help you grow as a data scientist</p>
+      </div>
+
+      {/* Search Bar */}
+      <div className="guides-search">
+        <div className="search-container">
+          <Search className="search-icon" size={20} />
+          <input
+            type="text"
+            placeholder="Search guides..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
       </div>
 
       {/* Filters */}
@@ -125,7 +147,11 @@ function Guides() {
 
       {filteredGuides.length === 0 && (
         <div className="empty-state">
-          <p>No guides found for the selected filters.</p>
+          <p>
+            {searchQuery
+              ? `No guides found matching "${searchQuery}"`
+              : 'No guides found for the selected filters.'}
+          </p>
         </div>
       )}
     </div>
