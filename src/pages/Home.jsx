@@ -1,6 +1,7 @@
 import Hero from '../components/Hero';
 import './Home.css';
 import Footer from '../components/Footer'; 
+import AboutSection from '../components/AboutSection';
 
 
 function Home() {
@@ -24,13 +25,15 @@ function Home() {
         highlightWord="Data Science"
       />
 
-      <section className="about-preview">
+      <AboutSection />
+
+      {/* <section className="about-preview">
         <h2>Welcome to Sheffield Data Science Society</h2>
         <p>
           We're a community of students passionate about data science, machine learning, 
           and artificial intelligence. Join us for workshops, projects, and networking events!
         </p>
-      </section>
+      </section> */}
 
       <section className="projects-preview">
         <h2>Our Projects</h2>

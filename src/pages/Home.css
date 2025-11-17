@@ -130,3 +130,14 @@
 }
 
 
+/* Disable scroll-snap on mobile */ 
+@media (max-width: 768px) {
+  .home-page {
+    scroll-snap-type: none; /* Disable snapping on mobile */
+  }
+  
+  .home-page section {
+    height: auto; /* Let sections be as tall as their content */
+    min-height: calc(var(--vh, 1vh) * 100); /* At least full height */
+  }
+}
