@@ -2,6 +2,46 @@
    /pages/Resources.css
    ======================================== */
 
+.resources-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--white);
+  margin-bottom: var(--spacing-xl);
+}
+
+.resources-hero .hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.resources-hero h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.resources-hero p {
+  font-size: var(--font-size-lg);
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.resources-content {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--spacing-md);
+}
+
 .resources-header {
   text-align: center;
   margin-bottom: var(--spacing-lg);
@@ -18,21 +58,32 @@
   font-size: var(--font-size-lg);
 }
 
-.resources-filters {
+.resources-controls {
   display: flex;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .resources-search {
   flex: 1;
   min-width: 300px;
+  position: relative;
+}
+
+.resources-search .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
 }
 
 .resources-search input {
   width: 100%;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1.2rem 0.8rem 3rem;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-md);
@@ -44,7 +95,40 @@
   border-color: var(--primary-color);
 }
 
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.filter-group label {
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+}
+
+.filter-group select {
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  background: var(--white);
+  cursor: pointer;
+  transition: border-color var(--transition-normal);
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
 /* resources-grid is defined in components.css */
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
 
 .resource-card {
   background: var(--white);
@@ -71,7 +155,15 @@
   flex-wrap: wrap;
 }
 
-/* resource-type badge is defined in components.css */
+.resource-type {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: capitalize;
+}
 
 .resource-card h3 {
   color: var(--dark-bg);
@@ -85,6 +177,22 @@
   line-height: 1.6;
   margin-bottom: var(--spacing-sm);
   flex-grow: 1;
+}
+
+.resource-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.resource-tags .tag {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .resource-footer {
@@ -114,4 +222,10 @@
 .resource-link:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--text-secondary);
 }
