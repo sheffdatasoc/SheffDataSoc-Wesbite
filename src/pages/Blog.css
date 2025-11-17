@@ -2,21 +2,126 @@
    /pages/Blog.css
    ======================================== */
 
+.blog-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1.5rem;
+  background-color: var(--background-light);
+}
+
+/* Header Section */
 .blog-header {
   text-align: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 2.5rem;
 }
 
 .blog-header h1 {
-  color: var(--dark-bg);
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
 }
 
 .blog-header p {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  color: #4b5563;
+  font-size: 1.1rem;
 }
 
-/* BlogCard styles are in components/BlogCard.css */
-/* blog-grid is defined in components.css */
+/* Search Bar - Sandbox Style */
+.blog-search {
+  max-width: 700px;
+  width: 100%;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.25rem;
+  color: #6b7280;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1.1rem 1rem 1.1rem 3rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: white;
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Blog Grid */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  width: 100%;
+  max-width: 1400px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .blog-page {
+    padding: 3rem 1rem;
+  }
+
+  .blog-header h1 {
+    font-size: 2rem;
+  }
+
+  .blog-header p {
+    font-size: 1rem;
+  }
+
+  .blog-search {
+    padding: 0 0.5rem;
+  }
+
+  .search-input {
+    padding: 1rem 1rem 1rem 2.75rem;
+  }
+
+  .search-icon {
+    left: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,27 +1,44 @@
 /* ========================================
-   /pages/Sandbox.css
+   /pages/Sandbox.css - FIXED VERSION
+   Using CSS variables from components.css
    ======================================== */
 
+/* ========== PAGE WRAPPER ========== */
 .sandbox-page {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 0;
+  min-height: 100vh;
+  background: #f9fafb;
 }
 
+/* ========== HERO SECTION ========== */
 .sandbox-hero {
-  background: var(--primary-gradient);
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
   color: var(--white);
   text-align: center;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  margin: calc(var(--spacing-lg) * -1) calc(var(--spacing-lg) * -1) var(--spacing-xl) calc(var(--spacing-lg) * -1);
+  padding: 5rem 2rem;
+  margin: 0;
+  width: 100%;
+  position: relative;
 }
 
-/* hero-badge is defined in components.css */
+.sandbox-hero .hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-2xl);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+}
 
 .sandbox-hero h1 {
   font-size: var(--font-size-4xl);
   margin-bottom: var(--spacing-sm);
   font-weight: var(--font-weight-bold);
+  line-height: 1.2;
 }
 
 .sandbox-hero p {
@@ -29,82 +46,212 @@
   opacity: 0.95;
   max-width: 700px;
   margin: 0 auto;
+  line-height: 1.6;
+  color: rgba(219, 234, 254, 1);
 }
 
+/* ========== SEARCH BAR ========== */
 .sandbox-search {
-  max-width: 600px;
-  margin: calc(var(--spacing-xl) * -1) auto var(--spacing-xl) auto;
+  max-width: 700px;
+  margin: 2rem auto 3rem auto;
   padding: 0 var(--spacing-lg);
+  position: relative;
+  z-index: 10;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.25rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .search-input {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: 1.1rem 1rem 1.1rem 3rem;
   border: none;
-  border-radius: var(--radius-pill);
-  font-size: var(--font-size-md);
-  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   background: var(--white);
+  transition: all var(--transition-normal);
 }
 
 .search-input:focus {
   outline: none;
-  box-shadow: 0 4px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
 }
 
-.featured-section {
-  margin-bottom: var(--spacing-xl);
-  padding: 0 var(--spacing-lg);
-}
-
-.featured-section h2 {
-  color: var(--dark-bg);
-  margin-bottom: var(--spacing-md);
-  font-size: var(--font-size-2xl);
-}
-
-/* featured-grid is defined in components.css */
-
-.featured-card {
-  border: 3px solid var(--color-warning);
-  background: linear-gradient(to bottom, #fffbf0 0%, var(--white) 100%);
-}
-
-.sandbox-tabs {
-  display: flex;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  padding: 0 var(--spacing-lg);
-  flex-wrap: wrap;
-}
-
-.tab-button {
-  padding: 0.8rem 2rem;
-  border: 2px solid var(--border-color);
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: all var(--transition-normal);
+.search-input::placeholder {
   color: var(--text-secondary);
 }
 
-.tab-button:hover {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
+/* ========== TABS (Segmented Control Style) ========== */
+.sandbox-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-xl);
+  padding: 0 var(--spacing-lg);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sandbox-tabs-container {
+  display: inline-flex;
+  background: #e5e7eb;
+  padding: 0.4rem;
+  border-radius: 14px;
+  gap: 0.3rem;
+}
+
+.tab-button {
+  padding: 0.9rem 2rem;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.tab-button:hover:not(.active) {
+  color: #4b5563;
 }
 
 .tab-button.active {
-  background: var(--primary-color);
-  color: var(--white);
-  border-color: var(--primary-color);
+  background: white;
+  color: #1f2937;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.sandbox-content {
+.tab-button svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+/* ========== FEATURED SECTION ========== */
+.sandbox-featured-section {
+  margin-bottom: var(--spacing-xl);
   padding: 0 var(--spacing-lg);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* ProjectCard styles are in components/ProjectCard.css */
-/* projects-grid is defined in components.css */
+.sandbox-featured-title {
+  font-size: var(--font-size-2xl);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Use the featured-grid from components.css but override for Sandbox */
+.sandbox-featured-section .featured-grid {
+  margin-bottom: 0;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+/* Featured card styling - applies to ProjectCard when featured */
+.sandbox-featured-section .project-card {
+  border: 3px solid #fbbf24;
+  background: linear-gradient(to bottom, #fffbeb 0%, #fef3c7 100%);
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.15);
+}
+
+/* Override any hover effects for featured cards */
+.sandbox-featured-section .project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.25);
+}
+
+/* ========== MAIN CONTENT ========== */
+.sandbox-content {
+  padding: 0 var(--spacing-lg) var(--spacing-2xl) var(--spacing-lg);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Use projects-grid from components.css */
+
+/* ========== EMPTY STATE ========== */
+.sandbox-content .empty-state {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+.sandbox-content .empty-state p {
+  margin: 0;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+@media (max-width: 768px) {
+  .sandbox-hero {
+    padding: var(--spacing-xl) var(--spacing-md);
+    margin: calc(var(--spacing-md) * -1) calc(var(--spacing-md) * -1) var(--spacing-lg) calc(var(--spacing-md) * -1);
+  }
+
+  .sandbox-hero h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .sandbox-hero p {
+    font-size: var(--font-size-base);
+  }
+
+  .sandbox-search {
+    padding: 0 var(--spacing-md);
+    margin: calc(var(--spacing-lg) * -1) auto var(--spacing-lg) auto;
+  }
+
+  .sandbox-featured-section,
+  .sandbox-content {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+
+  .sandbox-tabs {
+    padding: 0 var(--spacing-md);
+  }
+
+  .tab-button {
+    padding: 0.75rem 1.5rem;
+    font-size: var(--font-size-sm);
+  }
+
+  .sandbox-hero .hero-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sandbox-hero h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .sandbox-hero p {
+    font-size: var(--font-size-sm);
+  }
+}

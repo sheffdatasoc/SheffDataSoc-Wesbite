@@ -4,11 +4,14 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden; /* Prevent horizontal scroll from full-width sections */
 }
 
 .main-content {
   flex: 1;
   width: 100%;
+  padding: 0; /* Remove any default padding */
+  margin: 0;  /* Remove any default margin */
 }
 
 /* Responsive */

@@ -1,57 +1,89 @@
 /* ========================================
-   ProjectCard.jsx
+   ProjectCard.jsx - FIXED VERSION
    ======================================== */
 
 import React from 'react';
 import './ProjectCard.css';
 
-function ProjectCard({ 
-  title, 
-  description, 
-  status, 
-  tags = [], 
-  members, 
-  githubUrl, 
-  demoUrl 
-}) {
+function ProjectCard({ project, featured, isSandbox }) {
+  // Destructure project properties with fallbacks
+  const {
+    title = 'Untitled Project',
+    description = 'No description available',
+    status = 'active',
+    tags = [],
+    technologies = [],
+    members,
+    github_url,
+    demo_url,
+    githubUrl,
+    demoUrl
+  } = project || {};
+
+  // Handle both snake_case and camelCase for backwards compatibility
+  const finalGithubUrl = github_url || githubUrl;
+  const finalDemoUrl = demo_url || demoUrl;
+  const finalTags = tags.length > 0 ? tags : technologies;
+
   const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
-      case 'active': return '#4cc9f0';
-      case 'completed': return '#667eea';
-      case 'planning': return '#ffd166';
-      case 'on hold': return '#999';
-      default: return '#667eea';
+    switch (status?.toLowerCase()) {
+      case 'active': 
+      case 'in progress': 
+        return '#3b82f6';
+      case 'completed': 
+        return '#10b981';
+      case 'planning': 
+        return '#f59e0b';
+      case 'on hold': 
+        return '#6b7280';
+      default: 
+        return '#667eea';
     }
   };
 
+  const getStatusLabel = (status) => {
+    if (status?.toLowerCase() === 'in progress') return 'in progress';
+    return status;
+  };
+
   return (
-    <div className="project-card">
-      <div className="project-card-header">
-        <span 
-          className="project-status" 
+    <article className={`project-card ${featured ? 'featured-card' : ''}`}>
+      <header className="project-card-header">
+        <span
+          className="project-status"
           style={{ backgroundColor: getStatusColor(status) }}
         >
-          {status}
+          {getStatusLabel(status)}
         </span>
-      </div>
+      </header>
+
       <h3 className="project-title">{title}</h3>
       <p className="project-description">{description}</p>
-      {tags.length > 0 && (
+
+      {finalTags.length > 0 && (
         <div className="project-tags">
-          {tags.map((tag, index) => (
+          {finalTags.map((tag, index) => (
             <span key={index} className="project-tag">{tag}</span>
           ))}
         </div>
       )}
-      <div className="project-footer">
+
+      <footer className="project-footer">
         <div className="project-buttons">
-          {githubUrl && (
-            <a href={githubUrl} className="btn-github" target="_blank" rel="noopener noreferrer">
-              GitHub →
+          {finalGithubUrl && (
+            <a href={finalGithubUrl} className="btn-github" target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+              View on GitHub
             </a>
           )}
-          {demoUrl && (
-            <a href={demoUrl} className="btn-demo" target="_blank" rel="noopener noreferrer">
+          {finalDemoUrl && (
+            <a href={finalDemoUrl} className="btn-demo" target="_blank" rel="noopener noreferrer">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                <path d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+              </svg>
               Live Demo
             </a>
           )}
@@ -59,8 +91,8 @@ function ProjectCard({
         {members && (
           <p className="project-members">👥 {members} members</p>
         )}
-      </div>
-    </div>
+      </footer>
+    </article>
   );
 }
 

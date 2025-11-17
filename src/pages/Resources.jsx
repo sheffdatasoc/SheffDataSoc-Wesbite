@@ -1,122 +1,173 @@
+/* ========================================
+   /pages/Resources.jsx
+   ======================================== */
+
 import React, { useState } from 'react';
-import { useResources } from '../hooks/useSupabase';
+import { ExternalLink, Search } from 'lucide-react';
+import './Resources.css';
 
 function Resources() {
-  const { resources, loading, error } = useResources();
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
 
-  const types = ['all', 'dataset', 'tool', 'course', 'book', 'article', 'video'];
+  // Sample resources - replace with Supabase data
+  const resources = [
+    {
+      id: 1,
+      title: 'Python for Data Science Handbook',
+      description: 'Comprehensive guide to using Python for data analysis and visualization.',
+      type: 'book',
+      url: 'https://jakevdp.github.io/PythonDataScienceHandbook/',
+      tags: ['python', 'data-analysis']
+    },
+    {
+      id: 2,
+      title: 'Kaggle Learn',
+      description: 'Free micro-courses covering machine learning, Python, and data visualization.',
+      type: 'course',
+      url: 'https://www.kaggle.com/learn',
+      tags: ['ml', 'python', 'free']
+    },
+    {
+      id: 3,
+      title: 'Fast.ai',
+      description: 'Practical deep learning course for coders.',
+      type: 'course',
+      url: 'https://www.fast.ai/',
+      tags: ['deep-learning', 'free']
+    },
+    {
+      id: 4,
+      title: 'Scikit-learn Documentation',
+      description: 'Official documentation for the most popular ML library in Python.',
+      type: 'documentation',
+      url: 'https://scikit-learn.org/stable/',
+      tags: ['ml', 'python', 'documentation']
+    },
+    {
+      id: 5,
+      title: 'Towards Data Science',
+      description: 'Medium publication with thousands of data science articles.',
+      type: 'blog',
+      url: 'https://towardsdatascience.com/',
+      tags: ['articles', 'tutorials']
+    },
+    {
+      id: 6,
+      title: 'Kaggle Datasets',
+      description: 'Find and publish datasets for your data science projects.',
+      type: 'dataset',
+      url: 'https://www.kaggle.com/datasets',
+      tags: ['datasets', 'projects']
+    }
+  ];
 
-  const filteredResources = selectedType === 'all' 
-    ? resources 
-    : resources.filter(r => r.type === selectedType);
+  const types = ['all', ...new Set(resources.map(r => r.type))];
 
-  const featuredResources = filteredResources.filter(r => r.featured);
-  const regularResources = filteredResources.filter(r => !r.featured);
+  const filteredResources = resources.filter(resource => {
+    const matchesSearch = 
+      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      resource.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesType = selectedType === 'all' || resource.type === selectedType;
+    return matchesSearch && matchesType;
+  });
 
-  if (loading) {
-    return (
-      <div className="page">
-        <h1>Resources</h1>
-        <p>Loading resources...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="page">
-      <div className="resources-header">
-        <h1>🔗 Resources</h1>
-        <p>Curated collection of datasets, tools, courses, and learning materials</p>
-      </div>
-
-      {/* Type Filter */}
-      <div className="resource-types">
-        {types.map(type => (
-          <button
-            key={type}
-            className={`type-button ${selectedType === type ? 'active' : ''}`}
-            onClick={() => setSelectedType(type)}
-          >
-            {getTypeIcon(type)} {type.charAt(0).toUpperCase() + type.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* Featured Resources */}
-      {featuredResources.length > 0 && (
-        <section className="featured-resources">
-          <h2>⭐ Featured Resources</h2>
-          <div className="resources-grid">
-            {featuredResources.map(resource => (
-              <ResourceCard key={resource.id} resource={resource} featured={true} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* All Resources */}
-      {regularResources.length > 0 && (
-        <section>
-          <h2>All Resources</h2>
-          <div className="resources-grid">
-            {regularResources.map(resource => (
-              <ResourceCard key={resource.id} resource={resource} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {filteredResources.length === 0 && (
-        <div className="empty-state">
-          <p>No {selectedType} resources found</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function getTypeIcon(type) {
-  const icons = {
-    all: '🔗',
-    dataset: '📊',
-    tool: '🛠️',
-    course: '🎓',
-    book: '📚',
-    article: '📰',
-    video: '🎥'
+  const getTypeColor = (type) => {
+    const colors = {
+      book: '#667eea',
+      course: '#06d6a0',
+      documentation: '#ffd166',
+      blog: '#f72585',
+      dataset: '#4cc9f0',
+      tool: '#7209b7'
+    };
+    return colors[type] || '#667eea';
   };
-  return icons[type] || '🔗';
-}
 
-function ResourceCard({ resource, featured = false }) {
   return (
-    <div className={`resource-card ${featured ? 'featured-card' : ''}`}>
-      <div className="resource-header">
-        <span className="resource-type">
-          {getTypeIcon(resource.type)} {resource.type}
-        </span>
+    <div className="resources-page">
+      {/* Hero Section */}
+      <div className="resources-hero">
+        <span className="hero-badge">📚 Curated Learning</span>
+        <h1>Learning Resources</h1>
+        <p>Curated collection of books, courses, and tools for data science</p>
       </div>
 
-      <h3>{resource.title}</h3>
-      <p className="resource-description">{resource.description}</p>
+      <div className="resources-content">
+        {/* Search and Filter */}
+        <div className="resources-controls">
+          <div className="resources-search">
+            <Search size={20} className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search resources..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+            />
+          </div>
 
-      {resource.tags && (
-        <div className="resource-tags">
-          {resource.tags.map((tag, i) => (
-            <span key={i} className="tag">{tag}</span>
-          ))}
+          <div className="filter-group">
+            <label>Type:</label>
+            <select 
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="filter-select"
+            >
+              {types.map(type => (
+                <option key={type} value={type}>
+                  {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-      )}
 
-      <a 
-        href={resource.url} 
-        className="resource-link"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Visit Resource →
-      </a>
+        {/* Resources Grid */}
+        {filteredResources.length > 0 ? (
+          <div className="resources-grid">
+            {filteredResources.map(resource => (
+              <div key={resource.id} className="resource-card">
+                <div className="resource-header">
+                  <span 
+                    className="resource-type"
+                    style={{ backgroundColor: getTypeColor(resource.type) }}
+                  >
+                    {resource.type}
+                  </span>
+                </div>
+
+                <h3>{resource.title}</h3>
+                <p className="resource-description">{resource.description}</p>
+
+                {resource.tags && (
+                  <div className="resource-tags">
+                    {resource.tags.map((tag, i) => (
+                      <span key={i} className="tag">{tag}</span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="resource-footer">
+                  <a 
+                    href={resource.url} 
+                    className="resource-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Visit Resource <ExternalLink size={16} />
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">
+            <p>No resources found matching your search.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

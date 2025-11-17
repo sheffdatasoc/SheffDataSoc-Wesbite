@@ -1,63 +1,187 @@
 /* ========================================
-   /pages/Members.css (Team/Members Page)
+   /pages/Members.css
    ======================================== */
 
+.members-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  background: #f9fafb;
+}
+
+/* Header */
 .members-header {
   text-align: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 3rem;
 }
 
 .members-header h1 {
-  color: var(--dark-bg);
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
+  font-size: 3rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
 }
 
 .members-header p {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
-}
-
-.members-search {
+  font-size: 1.25rem;
+  color: #6b7280;
   max-width: 600px;
-  margin: 0 auto var(--spacing-lg);
+  margin: 0 auto;
 }
 
-.members-search input {
+/* Search Bar */
+.members-search {
+  max-width: 700px;
   width: 100%;
-  padding: 0.8rem 1.2rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-md);
-  transition: border-color var(--transition-normal);
+  margin: 0 auto 2.5rem auto;
 }
 
-.members-search input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
-.members-filters {
+.search-container {
+  position: relative;
   display: flex;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1.25rem;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1.1rem 1rem 1.1rem 3rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.2s ease;
+  color: #1f2937;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Tabs */
+.members-tabs {
+  display: flex;
   justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
 }
 
-/* Reuse .tab-button from Sandbox.css */
-
-.members-section {
-  margin-bottom: var(--spacing-2xl);
+.tab-button {
+  padding: 0.75rem 2rem;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
 }
 
-.members-section h2 {
-  color: var(--dark-bg);
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-xs);
-  border-bottom: 2px solid var(--border-color);
+.tab-button:hover {
+  background: #e5e7eb;
+  color: #374151;
 }
 
-/* MemberCard styles are in components/MemberCard.css */
-/* Use .events-grid from components.css for layout */
+.tab-button.active {
+  background: #111827;
+  color: white;
+}
+
+/* Members by Year */
+.members-by-year {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.year-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.year-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #8b5cf6;
+}
+
+/* Members Grid */
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .members-page {
+    padding: 2rem 1rem;
+  }
+
+  .members-header h1 {
+    font-size: 2rem;
+  }
+
+  .members-header p {
+    font-size: 1rem;
+  }
+
+  .members-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tab-button {
+    width: 100%;
+  }
+
+  .year-heading {
+    font-size: 1.5rem;
+  }
+
+  .members-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .members-by-year {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .members-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .year-heading {
+    font-size: 1.25rem;
+  }
+}

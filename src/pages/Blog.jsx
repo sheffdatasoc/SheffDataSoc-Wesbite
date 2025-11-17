@@ -1,87 +1,83 @@
-import React from 'react';
-import BlogCard from '../components/BlogCard.jsx';
+/* ========================================
+   /pages/Blog.jsx
+   ======================================== */
+
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useBlogPosts } from '../hooks/useSupabase';
+import BlogCard from '../components/BlogCard';
+import { Search } from 'lucide-react';
+import './Blog.css';
 
 function Blog() {
-  const { posts, loading, error } = useBlogPosts();
+  const navigate = useNavigate();
+  const { posts, loading } = useBlogPosts();
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Mock data as fallback when Supabase is not configured
-  const mockPosts = [
-    {
-      id: 1,
-      title: "How Our Members Won the National Data Science Challenge",
-      author: "Sarah Chen",
-      published_date: "2024-11-05",
-      excerpt: "Read about how our team developed an innovative solution for predicting housing prices using ensemble methods and feature engineering techniques.",
-      readTime: 5,
-      image: null
-    },
-    {
-      id: 2,
-      title: "Getting Started with Natural Language Processing",
-      author: "James Wilson",
-      published_date: "2024-10-28",
-      excerpt: "A beginner's guide to NLP covering tokenization, sentiment analysis, and building your first chatbot with Python.",
-      readTime: 8,
-      image: null
-    },
-    {
-      id: 3,
-      title: "Welcome to SheffDataSoc 2024/25!",
-      author: "Committee Team",
-      published_date: "2024-10-15",
-      excerpt: "Meet your new committee and discover what we have planned for this academic year. Exciting workshops, competitions, and networking events await!",
-      readTime: 3,
-      image: null
-    }
-  ];
+  const filteredPosts = posts.filter(post =>
+    post.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.excerpt?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    post.author?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  // Use Supabase data if available, otherwise use mock data
-  const displayPosts = posts.length > 0 ? posts : mockPosts;
+  const handleReadMore = (id) => {
+    navigate(`/blog/${id}`);
+  };
 
   if (loading) {
     return (
-      <div className="page">
-        <h1>The Blog</h1>
-        <p>Loading posts...</p>
-        <div className="loading-spinner">⏳</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="page">
-        <h1>The Blog</h1>
-        <div className="error-message">
-          <p>❌ Error loading posts: {error}</p>
-          <p>Showing sample data instead.</p>
-        </div>
-        <div className="blog-grid">
-          {mockPosts.map(post => (
-            <BlogCard key={post.id} post={post} />
-          ))}
+      <div className="blog-page">
+        <div className="blog-header">
+          <h1>The Blog</h1>
+          <p>Loading posts...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="page">
-      <h1>The Blog</h1>
-      <p>Stories, tutorials, and insights from the SheffDataSoc community.</p>
-      
-      {posts.length === 0 && (
-        <div className="info-message">
-          <p>💡 No posts found in database. Showing sample data.</p>
+    <div className="blog-page">
+      {/* Page Header */}
+      <div className="blog-header">
+        <h1>The Blog</h1>
+        <p>Stay informed about our latest activities, achievements, and announcements</p>
+      </div>
+
+      {/* Search Bar - Sandbox Style */}
+      <div className="blog-search">
+        <div className="search-container">
+          <Search className="search-icon" size={20} />
+          <input
+            type="text"
+            placeholder="Find a post..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
+
+      {/* Blog Grid */}
+      {filteredPosts.length > 0 ? (
+        <div className="blog-grid">
+          {filteredPosts.map(post => (
+            <BlogCard
+              key={post.id}
+              title={post.title}
+              excerpt={post.excerpt}
+              author={post.author}
+              date={post.published_date}
+              image={post.image}
+              category={post.category}
+              onReadMore={() => handleReadMore(post.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="empty-state">
+          <p>No articles found matching "{searchQuery}"</p>
         </div>
       )}
-
-      <div className="blog-grid">
-        {displayPosts.map(post => (
-          <BlogCard key={post.id} post={post} />
-        ))}
-      </div>
     </div>
   );
 }

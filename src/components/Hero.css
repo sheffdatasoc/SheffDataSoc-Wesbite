@@ -1,8 +1,8 @@
 /* ========================================
-   Hero.css - Modern Design
+   Hero.css - Modern + Sandbox Variants
    ======================================== */
 
-/* Modern Hero Section */
+/* ===== MODERN HERO (default) ===== */
 .hero-modern {
   background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
   color: white;
@@ -16,13 +16,11 @@
   overflow: hidden;
 }
 
-/* Content Side */
 .hero-content {
   flex: 1;
   max-width: 700px;
 }
 
-/* Badge */
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -36,7 +34,6 @@
   font-weight: 500;
 }
 
-/* Title */
 .hero-title {
   font-size: 3.5rem;
   font-weight: 800;
@@ -46,10 +43,8 @@
 
 .hero-title-highlight {
   color: #fbbf24;
-  /* Yellow highlight for "Data Science" */
 }
 
-/* Subtitle */
 .hero-subtitle {
   font-size: 1.2rem;
   margin-bottom: 2rem;
@@ -58,7 +53,6 @@
   max-width: 600px;
 }
 
-/* Buttons */
 .hero-buttons {
   display: flex;
   gap: 1rem;
@@ -68,14 +62,11 @@
 .btn {
   padding: 0.875rem 2rem;
   border-radius: 8px;
-  text-decoration: none;
   font-weight: 600;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  border: none;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -100,7 +91,7 @@
   transform: translateY(-2px);
 }
 
-/* ===== EMBEDDED STAT CARDS ===== */
+/* Stats for Modern Variant */
 .hero-stats {
   display: flex;
   gap: 2.5rem;
@@ -110,72 +101,59 @@
 .hero-stat-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 0.5rem;
-}
-
-.hero-stat-card .stat-icon {
-  color: white;
-  opacity: 0.9;
-  margin-bottom: 0.3rem;
 }
 
 .hero-stat-card .stat-value {
   font-size: 2.5rem;
   font-weight: 700;
-  color: white;
-  line-height: 1;
-  margin: 0;
 }
 
-.hero-stat-card .stat-label {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 400;
-  margin: 0;
-}
-
-/* Visual Side (for dashboard graphic) */
+/* Optional visual right city */
 .hero-visual {
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   max-width: 600px;
 }
 
-/* Responsive */
+/* ===== SANDBOX VARIANT ===== */
+.hero-sandbox {
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
+  color: var(--white);
+  text-align: center;
+  padding: 5rem 2rem;
+  width: 100%;
+}
+
+.hero-sandbox .hero-badge {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius-2xl);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.hero-sandbox h1 {
+  font-size: var(--font-size-4xl);
+  line-height: 1.2;
+  font-weight: var(--font-weight-bold);
+}
+
+.hero-sandbox p {
+  font-size: var(--font-size-xl);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: rgba(219, 234, 254, 1);
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1200px) {
   .hero-modern {
     flex-direction: column;
     text-align: center;
     padding: 3rem 2rem;
   }
-
-  .hero-content {
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-badge {
-    margin: 0 auto 1.5rem;
-  }
-
-  .hero-subtitle {
-    max-width: 100%;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .hero-stats {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
   .hero-visual {
     display: none;
   }
@@ -185,96 +163,10 @@
   .hero-title {
     font-size: 2.5rem;
   }
-
-  .hero-subtitle {
-    font-size: 1.1rem;
+  .hero-sandbox {
+    padding: var(--spacing-xl) var(--spacing-md);
   }
-
-  .hero-buttons {
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
+  .hero-sandbox p {
+    font-size: var(--font-size-base);
   }
-
-  .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .hero-stats {
-    flex-direction: column;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .hero-stat-card {
-    align-items: center;
-    text-align: center;
-  }
-
-  .hero-stat-card .stat-value {
-    font-size: 2rem;
-  }
-}
-
-/* ===== OLD STYLES (for pages still using old hero) ===== */
-/* Keep these for backward compatibility */
-
-.hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 4rem 2rem;
-  text-align: center;
-  border-radius: 8px;
-  margin-bottom: 3rem;
-}
-
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.stats-section {
-  margin: 3rem 0;
-}
-
-.stats-section h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #1a1a2e;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-}
-
-.stat-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.stat-card:hover {
-  transform: translateY(-4px);
-}
-
-.stat-value {
-  font-size: 2.5rem;
-  color: #667eea;
-  margin-bottom: 0.5rem;
-}
-
-.stat-title {
-  color: #666;
-  font-size: 1.1rem;
 }

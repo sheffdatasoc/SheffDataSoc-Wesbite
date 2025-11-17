@@ -1,5 +1,5 @@
 /* ========================================
-   Hero.jsx - Upgraded Version
+   Hero.jsx - Upgraded + Sandbox Variant
    ======================================== */
 
 import React from 'react';
@@ -14,10 +14,10 @@ function Hero({
   stats = [],
   showBadge = false,
   badgeText = "University of Sheffield",
-  highlightWord = "" // Word to highlight in yellow
+  highlightWord = "",
+  variant = "modern" // ✅ NEW
 }) {
-  
-  // Split title to highlight specific word
+
   const renderTitle = () => {
     if (!highlightWord || !title) return <h1 className="hero-title">{title}</h1>;
     
@@ -31,7 +31,6 @@ function Hero({
     );
   };
 
-  // Icon mapping
   const getIcon = (title) => {
     const lowerTitle = title.toLowerCase();
     if (lowerTitle.includes('member')) return <Users size={28} />;
@@ -40,10 +39,11 @@ function Hero({
     return <Sparkles size={28} />;
   };
 
+  const variantClass = variant === "sandbox" ? "hero-sandbox" : "hero-modern";
+
   return (
-    <section className="hero-modern">
+    <section className={variantClass}>
       <div className="hero-content">
-        {/* Badge */}
         {showBadge && (
           <div className="hero-badge">
             <Sparkles size={16} />
@@ -51,25 +51,16 @@ function Hero({
           </div>
         )}
 
-        {/* Title with highlight */}
         {renderTitle()}
-
-        {/* Subtitle */}
         <p className="hero-subtitle">{subtitle}</p>
 
-        {/* Buttons */}
         {showButtons && (
           <div className="hero-buttons">
-            <a href="/events" className="btn btn-primary">
-              Explore Events →
-            </a>
-            <a href="/about" className="btn btn-secondary">
-              Learn More
-            </a>
+            <a href="/events" className="btn btn-primary">Explore Events →</a>
+            <a href="/about" className="btn btn-secondary">Learn More</a>
           </div>
         )}
 
-        {/* Stats embedded in hero */}
         {showStats && stats.length > 0 && (
           <div className="hero-stats">
             {stats.map((stat, index) => (
@@ -83,10 +74,9 @@ function Hero({
         )}
       </div>
 
-      {/* Optional: Visual side for dashboard graphic */}
-      <div className="hero-visual">
-        {/* You can add dashboard image here */}
-      </div>
+      {variant !== "sandbox" && (
+        <div className="hero-visual">{/* Optional right-side graphic */}</div>
+      )}
     </section>
   );
 }

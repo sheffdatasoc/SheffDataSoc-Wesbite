@@ -1,53 +1,78 @@
 /* ========================================
    MemberCard.jsx
    ======================================== */
-
 import React from 'react';
+import { Github, Linkedin } from 'lucide-react';
 import './MemberCard.css';
 
-function MemberCard({ name, role, bio, skills = [], image, social = {} }) {
-  const getInitials = (name) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase();
-  };
+function MemberCard({ member }) {
+  // Check if member has the toJSON method (it's a Member instance)
+  const memberData = member.toJSON ? member.toJSON() : member;
 
   return (
     <div className="member-card">
       <div className="member-avatar">
-        {image ? (
-          <img src={image} alt={name} />
+        {memberData.imageUrl ? (
+          <img src={memberData.imageUrl} alt={memberData.name} />
         ) : (
-          getInitials(name)
+          <div className="avatar-initials">
+            {memberData.initials}
+          </div>
         )}
       </div>
-      <h3 className="member-name">{name}</h3>
-      <p className="member-role">{role}</p>
-      <p className="member-bio">{bio}</p>
-      {skills.length > 0 && (
-        <div className="member-skills">
-          {skills.map((skill, index) => (
-            <span key={index} className="tag">{skill}</span>
-          ))}
-        </div>
-      )}
-      <div className="member-social">
-        {social.linkedin && (
-          <a href={social.linkedin} className="social-link" target="_blank" rel="noopener noreferrer">
-            LinkedIn
-          </a>
+
+      <div className="member-info">
+        <h3 className="member-name">{memberData.name}</h3>
+        <p className="member-position">{memberData.role}</p>
+        
+        {memberData.year && (
+          <p className="member-detail">{memberData.year}</p>
         )}
-        {social.github && (
-          <a href={social.github} className="social-link" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
+        
+        {memberData.major && (
+          <p className="member-detail">{memberData.major}</p>
         )}
-        {social.twitter && (
-          <a href={social.twitter} className="social-link" target="_blank" rel="noopener noreferrer">
-            Twitter
-          </a>
+        
+        {memberData.cleanBio && memberData.cleanBio !== 'No bio available' && (
+          <p className="member-bio">{memberData.cleanBio}</p>
+        )}
+
+        {memberData.interests && memberData.interests.length > 0 && (
+          <div className="member-interests">
+            {memberData.interests.map((interest, index) => (
+              <span key={index} className="interest-tag">
+                {interest}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Social Links */}
+        {(memberData.linkedinUrl || memberData.githubUrl) && (
+          <div className="social-links">
+            {memberData.linkedinUrl && (
+              <a 
+                href={memberData.linkedinUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-button"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={18} />
+              </a>
+            )}
+            {memberData.githubUrl && (
+              <a 
+                href={memberData.githubUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-button"
+                aria-label="GitHub"
+              >
+                <Github size={18} />
+              </a>
+            )}
+          </div>
         )}
       </div>
     </div>
