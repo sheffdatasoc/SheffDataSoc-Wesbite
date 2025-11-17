@@ -3,7 +3,6 @@
    ======================================== */
 
 import React, { useState } from 'react';
-import Hero from '../components/Hero';
 import { ExternalLink, Search } from 'lucide-react';
 import './Resources.css';
 
@@ -88,12 +87,12 @@ function Resources() {
 
   return (
     <div className="resources-page">
-      <Hero 
-        title="Learning Resources"
-        subtitle="Curated collection of books, courses, and tools for data science"
-        showButtons={false}
-        showStats={false}
-      />
+      {/* Hero Section */}
+      <div className="resources-hero">
+        <span className="hero-badge">📚 Curated Learning</span>
+        <h1>Learning Resources</h1>
+        <p>Curated collection of books, courses, and tools for data science</p>
+      </div>
 
       <div className="resources-content">
         {/* Search and Filter */}

@@ -3,13 +3,11 @@
    ======================================== */
 
 import React, { useState } from 'react';
-import Hero from '../components/Hero';
 import { Search } from 'lucide-react';
 import './Glossary.css';
 
 function Glossary() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
 
   // Sample glossary terms - replace with Supabase data when ready
   const terms = [
@@ -45,15 +43,11 @@ function Glossary() {
     }
   ];
 
-  const categories = ['all', ...new Set(terms.map(t => t.category))];
-
   const filteredTerms = terms.filter(term => {
     const matchesSearch = 
       term.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
       term.definition.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = 
-      selectedCategory === 'all' || term.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   // Group by first letter
@@ -68,15 +62,15 @@ function Glossary() {
 
   return (
     <div className="glossary-page">
-      <Hero 
-        title="Data Science Glossary"
-        subtitle="Your comprehensive guide to data science terminology"
-        showButtons={false}
-        showStats={false}
-      />
+      {/* Hero Section */}
+      <div className="glossary-hero">
+        <span className="hero-badge">📚 Learn the Language</span>
+        <h1>Data Science Glossary</h1>
+        <p>Your comprehensive guide to data science terminology</p>
+      </div>
 
       <div className="glossary-content">
-        {/* Search and Filter */}
+        {/* Search */}
         <div className="glossary-controls">
           <div className="search-bar">
             <Search size={20} className="search-icon" />
@@ -87,21 +81,6 @@ function Glossary() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-          </div>
-
-          <div className="filter-group">
-            <label>Category:</label>
-            <select 
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="filter-select"
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : cat}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
