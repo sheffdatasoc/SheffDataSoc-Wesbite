@@ -17,8 +17,19 @@ function Guides() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
-  const categories = ['all', 'python', 'ml', 'data-viz', 'statistics', 'tools'];
-  const difficulties = ['all', 'beginner', 'intermediate', 'advanced'];
+  const categories = [
+    { value: 'all', label: 'All' },
+    { value: 'technical', label: 'Technical' },
+    { value: 'career', label: 'Career' },
+    { value: 'society', label: 'Society' }
+  ];
+
+  const difficulties = [
+    { value: 'all', label: 'All Levels' },
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' }
+  ];
 
   const filteredGuides = guides.filter(guide => {
     const categoryMatch =
@@ -80,38 +91,37 @@ function Guides() {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="guides-filters">
-        <div className="filter-group">
-          <label>Category:</label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="filter-select"
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ')}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="filter-group">
-          <label>Difficulty:</label>
-          <select
-            value={selectedDifficulty}
-            onChange={(e) => setSelectedDifficulty(e.target.value)}
-            className="filter-select"
-          >
-            {difficulties.map(diff => (
-              <option key={diff} value={diff}>
-                {diff.charAt(0).toUpperCase() + diff.slice(1)}
-              </option>
-            ))}
-          </select>
+      {/* Category Slider */}
+      <div className="slider-background">
+        <div className="slider-container">
+          {categories.map(cat => (
+            <button
+              key={cat.value}
+              onClick={() => setSelectedCategory(cat.value)}
+              className={`slider-button ${selectedCategory === cat.value ? 'active' : ''}`}
+            >
+              {cat.label}
+            </button>
+          ))}
         </div>
       </div>
+
+
+      {/* Difficulty Slider */}
+      <div className="slider-background">
+        <div className="slider-container">
+          {difficulties.map(diff => (
+            <button
+              key={diff.value}
+              onClick={() => setSelectedDifficulty(diff.value)}
+              className={`slider-button ${selectedDifficulty === diff.value ? 'active' : ''}`}
+            >
+              {diff.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
 
       {/* Featured Guides */}
       {featuredGuides.length > 0 && (
