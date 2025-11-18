@@ -187,7 +187,7 @@ export function useGlossary() {
     async function fetchTerms() {
       try {
         setLoading(true);
-        const data = await getGlossary();
+        const data = await getGlossary(); 
         setTerms(data);
         setError(null);
       } catch (err) {

@@ -20,7 +20,8 @@ const DATABASES = {
   blog: process.env.NOTION_BLOG_DB_ID,
   projects: process.env.NOTION_PROJECTS_DB_ID,
   guides: process.env.NOTION_GUIDES_DB_ID,
-  members: process.env.NOTION_MEMBERS_DB_ID
+  members: process.env.NOTION_MEMBERS_DB_ID,
+  glossary: process.env.NOTION_GLOSSARY_DB_ID
 };
 
 // Helper functions
@@ -283,6 +284,42 @@ async function syncMembers() {
   }
 }
 
+// Sync Glossary 
+async function syncGlossary() {
+  try {
+    console.log('Syncing glossary terms...');
+
+    const response = await notion.databases.query({
+      database_id: DATABASES.glossary,
+    });
+
+    const glossary = response.results.map(page => ({
+      notion_id: page.id,
+      term: extractText(page.properties.Term?.title),
+      definition: extractText(page.properties.Definition?.rich_text),
+      category: extractText(page.properties.Category?.rich_text),
+      examples: extractText(page.properties.Examples?.rich_text),
+      related_terms: page.properties['Related Terms']?.multi_select?.map(t => t.name) || [],
+      created_at: page.created_time,
+      updated_at: page.last_edited_time
+    }));
+
+    // Upsert into Supabase
+    const { data, error } = await supabase
+      .from('glossary')
+      .upsert(glossary, { onConflict: 'notion_id' });
+
+    if (error) throw error;
+
+    console.log(`✓ Synced ${glossary.length} glossary terms`);
+    return { count: glossary.length, data };
+
+  } catch (error) {
+    console.error('✗ Error syncing glossary:', error.message);
+    return { count: 0, error: error.message };
+  }
+}
+
 // Main Sync
 async function syncAllData() {
   console.log('\n🔄 Starting full sync...\n');
@@ -303,6 +340,7 @@ async function syncAllData() {
     if (DATABASES.projects) results.projects = await syncProjects();
     if (DATABASES.guides) results.guides = await syncGuides();
     if (DATABASES.members) results.members = await syncMembers();
+    if (DATABASES.glossary) results.glossary = await syncGlossary();
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log(`\n✅ Full sync completed in ${duration}s`);
@@ -326,7 +364,8 @@ module.exports = {
   syncBlogPosts,
   syncProjects,
   syncGuides,
-  syncMembers
+  syncMembers,
+  syncGlossary
 };
 
 if (require.main === module) {

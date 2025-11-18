@@ -5,46 +5,33 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import './Glossary.css';
+import { useGlossary } from '../hooks/useSupabase';
 
 function Glossary() {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Sample glossary terms - replace with Supabase data when ready
-  const terms = [
-    {
-      term: 'API',
-      definition: 'Application Programming Interface - A set of protocols and tools for building software applications.',
-      category: 'Programming',
-      example: 'REST APIs allow different applications to communicate with each other.'
-    },
-    {
-      term: 'Machine Learning',
-      definition: 'A subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed.',
-      category: 'AI/ML',
-      example: 'Recommendation systems use machine learning to suggest products based on user behavior.'
-    },
-    {
-      term: 'Data Visualization',
-      definition: 'The graphical representation of information and data using visual elements like charts, graphs, and maps.',
-      category: 'Data Science',
-      example: 'A bar chart showing sales trends over time is a form of data visualization.'
-    },
-    {
-      term: 'Python',
-      definition: 'A high-level, interpreted programming language known for its simplicity and readability.',
-      category: 'Programming',
-      example: 'Python is widely used in data science for its powerful libraries like Pandas and NumPy.'
-    },
-    {
-      term: 'Neural Network',
-      definition: 'A series of algorithms that attempt to recognize underlying relationships in data through a process that mimics the human brain.',
-      category: 'AI/ML',
-      example: 'Deep learning uses neural networks with multiple layers to process complex patterns.'
-    }
-  ];
+  // Fetch glossary terms from Supabase
+  const { terms, loading, error } = useGlossary();
 
+  if (loading) {
+    return (
+      <div className="glossary-page">
+        <p>Loading glossary...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="glossary-page">
+        <p>Error loading glossary: {String(error)}</p>
+      </div>
+    );
+  }
+
+  // Search filter
   const filteredTerms = terms.filter(term => {
-    const matchesSearch = 
+    const matchesSearch =
       term.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
       term.definition.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
@@ -92,8 +79,8 @@ function Glossary() {
         {letters.length > 0 && (
           <div className="letter-nav">
             {letters.map(letter => (
-              <a 
-                key={letter} 
+              <a
+                key={letter}
                 href={`#letter-${letter}`}
                 className="letter-link"
               >
