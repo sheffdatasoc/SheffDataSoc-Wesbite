@@ -4,32 +4,14 @@
 
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
+import { useGlossary } from '../hooks/useSupabase';
 import './Glossary.css';
 import { useGlossary } from '../hooks/useSupabase';
 
 function Glossary() {
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Fetch glossary terms from Supabase
   const { terms, loading, error } = useGlossary();
 
-  if (loading) {
-    return (
-      <div className="glossary-page">
-        <p>Loading glossary...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="glossary-page">
-        <p>Error loading glossary: {String(error)}</p>
-      </div>
-    );
-  }
-
-  // Search filter
   const filteredTerms = terms.filter(term => {
     const matchesSearch =
       term.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -46,6 +28,36 @@ function Glossary() {
   }, {});
 
   const letters = Object.keys(groupedTerms).sort();
+
+  if (loading) {
+    return (
+      <div className="glossary-page">
+        <div className="glossary-hero">
+          <span className="hero-badge">📚 Learn the Language</span>
+          <h1>Data Science Glossary</h1>
+          <p>Your comprehensive guide to data science terminology</p>
+        </div>
+        <div className="glossary-content">
+          <p className="results-info">Loading glossary terms...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="glossary-page">
+        <div className="glossary-hero">
+          <span className="hero-badge">📚 Learn the Language</span>
+          <h1>Data Science Glossary</h1>
+          <p>Your comprehensive guide to data science terminology</p>
+        </div>
+        <div className="glossary-content">
+          <p className="results-info error-message">Error loading glossary: {error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="glossary-page">
@@ -98,15 +110,22 @@ function Glossary() {
                 <h2 className="letter-heading">{letter}</h2>
                 <div className="terms-list">
                   {groupedTerms[letter].map((term, index) => (
-                    <div key={index} className="term-card">
+                    <div key={term.id || index} className="term-card">
                       <div className="term-header">
                         <h3 className="term-title">{term.term}</h3>
-                        <span className="category-badge">{term.category}</span>
+                        {term.category && (
+                          <span className="category-badge">{term.category}</span>
+                        )}
                       </div>
                       <p className="term-definition">{term.definition}</p>
-                      {term.example && (
+                      {term.examples && (
                         <div className="term-example">
-                          <strong>Example:</strong> {term.example}
+                          <strong>Example:</strong> {term.examples}
+                        </div>
+                      )}
+                      {term.related_terms && term.related_terms.length > 0 && (
+                        <div className="term-example">
+                          <strong>Related Term(s): </strong> {term.related_terms.join(', ')}
                         </div>
                       )}
                     </div>
