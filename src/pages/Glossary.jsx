@@ -12,7 +12,7 @@ function Glossary() {
   const { terms, loading, error } = useGlossary();
 
   const filteredTerms = terms.filter(term => {
-    const matchesSearch = 
+    const matchesSearch =
       term.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
       term.definition.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesSearch;
@@ -90,8 +90,8 @@ function Glossary() {
         {letters.length > 0 && (
           <div className="letter-nav">
             {letters.map(letter => (
-              <a 
-                key={letter} 
+              <a
+                key={letter}
                 href={`#letter-${letter}`}
                 className="letter-link"
               >
@@ -100,7 +100,7 @@ function Glossary() {
             ))}
           </div>
         )}
-
+        
         {/* Terms by Letter */}
         <div className="glossary-terms">
           {letters.length > 0 ? (
