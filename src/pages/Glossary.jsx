@@ -100,7 +100,6 @@ function Glossary() {
             ))}
           </div>
         )}
-
         {/* Terms by Letter */}
         <div className="glossary-terms">
           {letters.length > 0 ? (
