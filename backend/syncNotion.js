@@ -441,42 +441,6 @@ async function syncGlossary() {
   }
 }
 
-// Sync Glossary 
-async function syncGlossary() {
-  try {
-    console.log('Syncing glossary terms...');
-
-    const response = await notion.databases.query({
-      database_id: DATABASES.glossary,
-    });
-
-    const glossary = response.results.map(page => ({
-      notion_id: page.id,
-      term: extractText(page.properties.Term?.title),
-      definition: extractText(page.properties.Definition?.rich_text),
-      category: extractText(page.properties.Category?.rich_text),
-      examples: extractText(page.properties.Examples?.rich_text),
-      related_terms: page.properties['Related Terms']?.multi_select?.map(t => t.name) || [],
-      created_at: page.created_time,
-      updated_at: page.last_edited_time
-    }));
-
-    // Upsert into Supabase
-    const { data, error } = await supabase
-      .from('glossary')
-      .upsert(glossary, { onConflict: 'notion_id' });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${glossary.length} glossary terms`);
-    return { count: glossary.length, data };
-
-  } catch (error) {
-    console.error('✗ Error syncing glossary:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
 // Main Sync
 async function syncAllData() {
   console.log('\n🔄 Starting sync...\n');
