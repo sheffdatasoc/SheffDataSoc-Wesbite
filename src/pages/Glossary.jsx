@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { Search } from 'lucide-react';
 import { useGlossary } from '../hooks/useSupabase';
 import './Glossary.css';
-import { useGlossary } from '../hooks/useSupabase';
 
 function Glossary() {
   const [searchQuery, setSearchQuery] = useState('');
