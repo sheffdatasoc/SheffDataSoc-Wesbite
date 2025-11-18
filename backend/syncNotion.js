@@ -21,7 +21,8 @@ const DATABASES = {
   projects: process.env.NOTION_PROJECTS_DB_ID,
   guides: process.env.NOTION_GUIDES_DB_ID,
   members: process.env.NOTION_MEMBERS_DB_ID,
-  glossary: process.env.NOTION_GLOSSARY_DB_ID
+  glossary: process.env.NOTION_GLOSSARY_DB_ID,
+  resources: process.env.NOTION_RESOURCES_DB_ID
 };
 
 // Configuration
@@ -441,6 +442,75 @@ async function syncGlossary() {
   }
 }
 
+// Sync Resources
+async function syncResources() {
+  try {
+    console.log('Syncing resources...');
+    
+    const pages = await getAllPages(DATABASES.resources); // Fetch all Notion pages for resources
+    const resources = [];
+    const errors = [];
+
+    for (const page of pages) {
+      try {
+        // Map Notion properties to Supabase format
+        const resource = {
+          notion_id: page.id,
+          name: extractText(page.properties.Name?.title),
+          resource_url: extractUrl(page.properties['Resource url']?.url),
+          type: extractText(page.properties.Type?.rich_text),
+          description: extractText(page.properties.Description?.rich_text),
+          category: extractText(page.properties.Category?.rich_text),
+          tags: page.properties.Tags?.multi_select?.map(tag => tag.name) || [],
+          featured: page.properties.Featured?.checkbox || false,
+          created_at: page.created_time,
+          updated_at: page.last_edited_time
+        };
+
+        // Only push resources with a title
+        if (resource.name) {
+          resources.push(resource);
+        }
+
+        await delay(RATE_LIMIT_DELAY); // Respect rate limits
+      } catch (err) {
+        // Handle per-page errors without stopping the loop
+        errors.push({
+          pageId: page.id,
+          title: extractText(page.properties.Title?.title),
+          error: err.message
+        });
+        debugLog(`Failed to process resource ${page.id}:`, err.message);
+      }
+    }
+
+    if (errors.length > 0) {
+      console.warn(`⚠️  ${errors.length} resources failed to sync`);
+    }
+
+    if (resources.length === 0) {
+      console.log('⚠️  No valid resources found');
+      return { count: 0, data: null, errors };
+    }
+
+    // Upsert resources into Supabase
+    const { data, error } = await supabase
+      .from('resources')
+      .upsert(resources, {
+        onConflict: 'notion_id',
+        ignoreDuplicates: false
+      });
+
+    if (error) throw error;
+
+    console.log(`✓ Synced ${resources.length} resources`);
+    return { count: resources.length, data, errors };
+  } catch (error) {
+    console.error('Error syncing resources:', error.message);
+    return { count: 0, error: error.message };
+  }
+}
+
 // Main Sync
 async function syncAllData() {
   console.log('\n🔄 Starting sync...\n');
@@ -453,6 +523,7 @@ async function syncAllData() {
     guides: null,
     members: null,
     glossary: null,
+    resources: null,
     timestamp: new Date().toISOString()
   };
 
@@ -481,6 +552,10 @@ async function syncAllData() {
       results.glossary = await syncGlossary();
       console.log('');
     }
+    if (DATABASES.resources) {
+      results.resources = await syncResources();
+      console.log('');
+    }
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     const totalSynced = Object.values(results)
@@ -503,7 +578,8 @@ module.exports = {
   syncProjects,
   syncGuides,
   syncMembers,
-  syncGlossary
+  syncGlossary,
+  syncResources
 };
 
 if (require.main === module) {
