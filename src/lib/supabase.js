@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase credentials not found. Using mock data mode.');
 }
 
-export const supabase = supabaseUrl && supabaseAnonKey 
+export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
 
@@ -426,16 +426,36 @@ export async function getTimelineEvents() {
 
   const { data, error } = await supabase
     .from('timeline_events')
-    .select('*')
-    .order('year', { ascending: false })
-    .order('month', { ascending: false });
+    .select('*');
+
 
   if (error) {
     console.error('Error fetching timeline events:', error);
     return [];
   }
 
-  return data || [];
+
+  if (!data) return [];
+
+
+  // Map events to include year/month and sort in descending order
+  const timelineEvents = data
+    .map(event => {
+      const date = event.event_date ? new Date(event.event_date) : null;
+      return {
+        ...event,
+        year: date ? date.getFullYear() : 0,
+        month: date ? date.getMonth() + 1 : 0 // JS months are 0-indexed
+      };
+    })
+    .sort((a, b) => {
+      // Sort by year descending, then month descending
+      if (b.year !== a.year) return b.year - a.year;
+      return b.month - a.month;
+    });
+
+
+  return timelineEvents;
 }
 
 // ============================================================================

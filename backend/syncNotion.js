@@ -3,16 +3,20 @@ const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
 const { NotionToMarkdown } = require("notion-to-md");
 
+
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
+
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_KEY
 );
 
+
 // Initialize markdown converter
 const n2m = new NotionToMarkdown({ notionClient: notion });
+
 
 // Database IDs from Notion
 const DATABASES = {
@@ -22,12 +26,15 @@ const DATABASES = {
   guides: process.env.NOTION_GUIDES_DB_ID,
   members: process.env.NOTION_MEMBERS_DB_ID,
   glossary: process.env.NOTION_GLOSSARY_DB_ID,
-  resources: process.env.NOTION_RESOURCES_DB_ID
+  resources: process.env.NOTION_RESOURCES_DB_ID,
+  timeline: process.env.NOTION_TIMELINE_DB_ID
 };
+
 
 // Configuration
 const RATE_LIMIT_DELAY = 350; // ~3 requests per second for Notion API
 const DEBUG = process.env.DEBUG === 'true';
+
 
 // Helper functions
 function extractText(richText) {
@@ -35,26 +42,31 @@ function extractText(richText) {
   return richText.map(t => t.plain_text).join('');
 }
 
+
 function extractDate(dateObj) {
   if (!dateObj) return null;
   return dateObj.start;
 }
 
+
 function extractUrl(urlObj) {
   return urlObj || null;
 }
 
+
 function extractImageUrl(imageProperty) {
   const files = imageProperty?.files || [];
   if (files.length === 0) return null;
-  return files[0].type === 'external' 
-    ? files[0].external.url 
+  return files[0].type === 'external'
+    ? files[0].external.url
     : files[0].file.url;
 }
+
 
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
 
 function debugLog(...args) {
   if (DEBUG) {
@@ -62,35 +74,38 @@ function debugLog(...args) {
   }
 }
 
+
 // Get all pages from a database with pagination
 async function getAllPages(databaseId) {
   let results = [];
   let hasMore = true;
   let startCursor = undefined;
-  
+ 
   while (hasMore) {
     const response = await notion.databases.query({
       database_id: databaseId,
       start_cursor: startCursor,
     });
-    
+   
     results.push(...response.results);
     hasMore = response.has_more;
     startCursor = response.next_cursor;
-    
+   
     if (hasMore) {
       await delay(RATE_LIMIT_DELAY);
     }
   }
-  
+ 
   return results;
 }
+
 
 // Sync Events
 async function syncEvents() {
   try {
     console.log('Syncing events...');
     const pages = await getAllPages(DATABASES.events);
+
 
     const events = pages
       .map(page => ({
@@ -111,18 +126,21 @@ async function syncEvents() {
       }))
       .filter(event => event.title); // Skip events without titles
 
+
     if (events.length === 0) {
       console.log('⚠️  No valid events found');
       return { count: 0, data: null };
     }
 
+
     // Upsert events
     const { data, error } = await supabase
       .from('events')
-      .upsert(events, { 
+      .upsert(events, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${events.length} events`);
@@ -133,32 +151,34 @@ async function syncEvents() {
   }
 }
 
+
 // Sync Blog Posts
 async function syncBlogPosts() {
   try {
     console.log('Syncing blog posts...');
     const pages = await getAllPages(DATABASES.blog);
 
+
     const posts = [];
     const errors = [];
-    
+   
     for (const page of pages) {
       try {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const mdString = n2m.toMarkdownString(mdBlocks);
-        
+       
         // Map Notion status to appropriate status value
         // Status is stored as rich_text, not select
         const notionStatus = extractText(page.properties.Status?.rich_text) || 'draft';
         let status = 'draft'; // default
-        
+       
         const statusLower = notionStatus.toLowerCase();
         if (statusLower === 'published') {
           status = 'published';
         } else if (statusLower === 'completed') {
           status = 'in_review';
         }
-        
+       
         const post = {
           notion_id: page.id,
           title: extractText(page.properties.Title?.title),
@@ -173,37 +193,42 @@ async function syncBlogPosts() {
           updated_at: page.last_edited_time
         };
 
+
         if (post.title) {
           posts.push(post);
         }
-        
+       
         await delay(RATE_LIMIT_DELAY);
       } catch (err) {
-        errors.push({ 
-          pageId: page.id, 
+        errors.push({
+          pageId: page.id,
           title: extractText(page.properties.Title?.title),
-          error: err.message 
+          error: err.message
         });
         debugLog(`Failed to process blog post ${page.id}:`, err.message);
       }
     }
 
+
     if (errors.length > 0) {
       console.warn(`⚠️  ${errors.length} blog posts failed to sync`);
     }
+
 
     if (posts.length === 0) {
       console.log('⚠️  No valid blog posts found');
       return { count: 0, data: null, errors };
     }
 
+
     // Upsert blog posts
     const { data, error } = await supabase
       .from('blog_posts')
-      .upsert(posts, { 
+      .upsert(posts, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${posts.length} blog posts`);
@@ -214,11 +239,13 @@ async function syncBlogPosts() {
   }
 }
 
+
 // Sync Projects
 async function syncProjects() {
   try {
     console.log('Syncing projects...');
     const pages = await getAllPages(DATABASES.projects);
+
 
     const projects = pages
       .map(page => ({
@@ -232,18 +259,21 @@ async function syncProjects() {
       }))
       .filter(project => project.title); // Skip projects without titles
 
+
     if (projects.length === 0) {
       console.log('⚠️  No valid projects found');
       return { count: 0, data: null };
     }
 
+
     // Upsert projects
     const { data, error } = await supabase
       .from('projects')
-      .upsert(projects, { 
+      .upsert(projects, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${projects.length} projects`);
@@ -254,19 +284,23 @@ async function syncProjects() {
   }
 }
 
+
 // Sync Guides
 async function syncGuides() {
   try {
     console.log('Syncing guides...');
     const pages = await getAllPages(DATABASES.guides);
 
+
     const guides = [];
     const errors = [];
+
 
     for (const page of pages) {
       try {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const mdString = n2m.toMarkdownString(mdBlocks);
+
 
         const guide = {
           notion_id: page.id,
@@ -286,37 +320,42 @@ async function syncGuides() {
           updated_at: page.last_edited_time
         };
 
+
         if (guide.title) {
           guides.push(guide);
         }
-        
+       
         await delay(RATE_LIMIT_DELAY);
       } catch (err) {
-        errors.push({ 
+        errors.push({
           pageId: page.id,
           title: extractText(page.properties.Name?.title),
-          error: err.message 
+          error: err.message
         });
         debugLog(`Failed to process guide ${page.id}:`, err.message);
       }
     }
 
+
     if (errors.length > 0) {
       console.warn(`⚠️  ${errors.length} guides failed to sync`);
     }
+
 
     if (guides.length === 0) {
       console.log('⚠️  No valid guides found');
       return { count: 0, data: null, errors };
     }
 
+
     // Upsert guides
     const { data, error } = await supabase
       .from('guides')
-      .upsert(guides, { 
+      .upsert(guides, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${guides.length} guides`);
@@ -327,11 +366,13 @@ async function syncGuides() {
   }
 }
 
+
 // Sync Members
 async function syncMembers() {
   try {
     console.log('Syncing members...');
     const pages = await getAllPages(DATABASES.members);
+
 
     const members = pages
       .map(page => ({
@@ -360,18 +401,21 @@ async function syncMembers() {
       }))
       .filter(member => member.name); // Skip members without names
 
+
     if (members.length === 0) {
       console.log('⚠️  No valid members found');
       return { count: 0, data: null };
     }
 
+
     // Upsert members
     const { data, error } = await supabase
       .from('members')
-      .upsert(members, { 
+      .upsert(members, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${members.length} members`);
@@ -382,27 +426,29 @@ async function syncMembers() {
   }
 }
 
+
 // Sync Glossary
 async function syncGlossary() {
   try {
     console.log('Syncing glossary...');
     const pages = await getAllPages(DATABASES.glossary);
 
+
     const glossaryTerms = pages
       .map(page => {
         const term = extractText(page.properties.Term?.title);
-        
+       
         debugLog(`\nTerm: "${term}"`);
         debugLog('Related Terms property:', page.properties['Related Terms']);
-        
+       
         return {
           notion_id: page.id,
           term: term,
           definition: extractText(page.properties.Definition?.rich_text),
           category: extractText(page.properties.Category?.rich_text),
           examples: extractText(page.properties.Examples?.rich_text),
-          related_terms: page.properties['Related Terms']?.multi_select 
-            ? page.properties['Related Terms'].multi_select.map(item => item.name) 
+          related_terms: page.properties['Related Terms']?.multi_select
+            ? page.properties['Related Terms'].multi_select.map(item => item.name)
             : [],
           created_at: page.created_time,
           updated_at: page.last_edited_time
@@ -410,28 +456,33 @@ async function syncGlossary() {
       })
       .filter(item => item.term && item.term.trim() !== ''); // Remove empty terms
 
+
     // Remove duplicates - keep first occurrence only
     const uniqueTerms = Array.from(
       new Map(glossaryTerms.map(item => [item.term, item])).values()
     );
+
 
     if (glossaryTerms.length !== uniqueTerms.length) {
       const duplicateCount = glossaryTerms.length - uniqueTerms.length;
       console.log(`⚠️  Removed ${duplicateCount} duplicate terms`);
     }
 
+
     if (uniqueTerms.length === 0) {
       console.log('⚠️  No valid glossary terms found');
       return { count: 0, data: null };
     }
 
+
     // Upsert glossary terms
     const { data, error } = await supabase
       .from('glossary')
-      .upsert(uniqueTerms, { 
+      .upsert(uniqueTerms, {
         onConflict: 'notion_id',
-        ignoreDuplicates: false 
+        ignoreDuplicates: false
       });
+
 
     if (error) throw error;
     console.log(`✓ Synced ${uniqueTerms.length} glossary terms`);
@@ -442,14 +493,16 @@ async function syncGlossary() {
   }
 }
 
+
 // Sync Resources
 async function syncResources() {
   try {
     console.log('Syncing resources...');
-    
+   
     const pages = await getAllPages(DATABASES.resources); // Fetch all Notion pages for resources
     const resources = [];
     const errors = [];
+
 
     for (const page of pages) {
       try {
@@ -467,10 +520,12 @@ async function syncResources() {
           updated_at: page.last_edited_time
         };
 
+
         // Only push resources with a title
         if (resource.name) {
           resources.push(resource);
         }
+
 
         await delay(RATE_LIMIT_DELAY); // Respect rate limits
       } catch (err) {
@@ -484,14 +539,17 @@ async function syncResources() {
       }
     }
 
+
     if (errors.length > 0) {
       console.warn(`⚠️  ${errors.length} resources failed to sync`);
     }
+
 
     if (resources.length === 0) {
       console.log('⚠️  No valid resources found');
       return { count: 0, data: null, errors };
     }
+
 
     // Upsert resources into Supabase
     const { data, error } = await supabase
@@ -501,7 +559,9 @@ async function syncResources() {
         ignoreDuplicates: false
       });
 
+
     if (error) throw error;
+
 
     console.log(`✓ Synced ${resources.length} resources`);
     return { count: resources.length, data, errors };
@@ -511,10 +571,80 @@ async function syncResources() {
   }
 }
 
+
+// Sync Timeline
+async function syncTimeline() {
+  try {
+    console.log('Syncing timeline events...');
+
+
+    const pages = await getAllPages(DATABASES.timeline);
+    const timelineEvents = [];
+    const errors = [];
+
+
+    for (const page of pages) {
+      try {
+        const timeline = {
+          notion_id: page.id,
+          title: extractText(page.properties.Title?.title),
+          event_date: extractDate(page.properties['Event date']?.date),
+          term: page.properties.Term?.select?.name || null,
+          description: extractText(page.properties.Description?.rich_text),
+          tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
+          icon: extractText(page.properties.Icon?.rich_text) || null,
+          created_at: page.created_time
+        };
+        if (timeline.title) {
+          timelineEvents.push(timeline);
+        }
+        await delay(RATE_LIMIT_DELAY);
+      } catch (err) {
+        errors.push({
+          pageId: page.id,
+          title: extractText(page.properties.Title?.title),
+          error: err.message
+        });
+        debugLog(`Failed to process timeline event ${page.id}:`, err.message);
+      }
+    }
+    if (errors.length > 0) {
+      console.warn(`⚠️  ${errors.length} timeline events failed to sync`);
+    }
+
+
+    if (timelineEvents.length === 0) {
+      console.log('⚠️  No valid timeline events found');
+      return { count: 0, data: null, errors };
+    }
+
+
+    // Upsert timeline events into Supabase
+    const { data, error } = await supabase
+      .from('timeline_events')
+      .upsert(timelineEvents, {
+        onConflict: 'notion_id',
+        ignoreDuplicates: false
+      });
+
+
+    if (error) throw error;
+
+
+    console.log(`✓ Synced ${timelineEvents.length} timeline events`);
+    return { count: timelineEvents.length, data, errors };
+  } catch (error) {
+    console.error('Error syncing timeline events:', error.message);
+    return { count: 0, error: error.message };
+  }
+}
+
+
 // Main Sync
 async function syncAllData() {
   console.log('\n🔄 Starting sync...\n');
   const startTime = Date.now();
+
 
   const results = {
     events: null,
@@ -524,8 +654,10 @@ async function syncAllData() {
     members: null,
     glossary: null,
     resources: null,
+    timeline: null,
     timestamp: new Date().toISOString()
   };
+
 
   try {
     if (DATABASES.events) {
@@ -556,13 +688,20 @@ async function syncAllData() {
       results.resources = await syncResources();
       console.log('');
     }
+    if (DATABASES.timeline) {
+      results.timeline = await syncTimeline();
+      console.log('');
+    }
+
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     const totalSynced = Object.values(results)
       .filter(r => r && typeof r === 'object')
       .reduce((sum, r) => sum + (r.count || 0), 0);
 
+
     console.log(`✅ Sync completed in ${duration}s - ${totalSynced} records synced\n`);
+
 
     return results;
   } catch (error) {
@@ -570,6 +709,7 @@ async function syncAllData() {
     throw error;
   }
 }
+
 
 module.exports = {
   syncAllData,
@@ -579,8 +719,10 @@ module.exports = {
   syncGuides,
   syncMembers,
   syncGlossary,
-  syncResources
+  syncResources,
+  syncTimeline
 };
+
 
 if (require.main === module) {
   syncAllData()
