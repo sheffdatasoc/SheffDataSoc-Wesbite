@@ -1,29 +1,54 @@
 /* ========================================
-   About.css - Updated to Match Design
+   About.css - Updated Hero Style
    ======================================== */
 
-/* Hero Section */
+/* ========== PAGE WRAPPER (Matches Timeline/Sandbox) ========== */
+.about-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: #f9fafb; /* Consistent light gray background */
+}
+
+/* ========== HERO SECTION (Updated to Sandbox Style) ========== */
 .about-hero {
-  background: var(--primary-gradient);
-  color: var(--white);
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6); /* Same gradient */
+  color: white;
   text-align: center;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
-  border-radius: var(--radius-xl);
+  padding: 5rem 2rem;
+  margin-bottom: 3rem;
+  width: 100%;
+  position: relative;
+  /* Removed border-radius to be full-width like other pages */
+}
+
+.about-hero .hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px; /* Full pill shape */
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
 }
 
 .about-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: white;
 }
 
 .about-hero p {
-  font-size: var(--font-size-xl);
+  font-size: 1.25rem;
   opacity: 0.95;
-  max-width: 900px;
+  max-width: 800px; /* Slightly wider for About text */
   margin: 0 auto;
   line-height: 1.6;
+  color: rgba(219, 234, 254, 1);
 }
 
 /* ========== Navigation Cards ========== */
@@ -32,13 +57,17 @@
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-2xl);
+  padding: 0 2rem; /* Added horizontal padding to match page layout */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .nav-card {
-  background: var(--white);
+  background: white; /* Explicit white */
   padding: var(--spacing-lg);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
@@ -67,8 +96,8 @@
 
 .nav-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #6366f1;
 }
 
 .nav-card-icon {
@@ -78,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white);
+  color: white;
   flex-shrink: 0;
   transition: transform var(--transition-normal);
   z-index: 1;
@@ -102,26 +131,26 @@
 }
 
 .nav-card-content h3 {
-  color: var(--dark-bg);
+  color: #1f2937;
   font-size: var(--font-size-xl);
   margin-bottom: var(--spacing-xs);
   font-weight: var(--font-weight-semibold);
 }
 
 .nav-card-content p {
-  color: var(--text-secondary);
+  color: #4b5563;
   font-size: var(--font-size-base);
   margin: 0;
 }
 
 .nav-card-arrow {
-  color: var(--text-tertiary);
+  color: #9ca3af;
   transition: all var(--transition-normal);
   z-index: 1;
 }
 
 .nav-card:hover .nav-card-arrow {
-  color: var(--primary-color);
+  color: #6366f1;
   transform: translateX(8px);
 }
 
@@ -131,13 +160,17 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-2xl);
+  padding: 0 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .about-card {
-  background: var(--white);
+  background: white;
   padding: var(--spacing-xl);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: all var(--transition-normal);
   border: 2px solid transparent;
@@ -145,8 +178,8 @@
 
 .about-card:hover {
   transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--primary-color);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #6366f1;
 }
 
 .card-icon {
@@ -157,7 +190,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--white);
+  color: white;
   transition: transform var(--transition-normal);
 }
 
@@ -178,29 +211,32 @@
 }
 
 .about-card h2 {
-  color: var(--dark-bg);
+  color: #1f2937;
   font-size: var(--font-size-2xl);
   margin-bottom: var(--spacing-sm);
   font-weight: var(--font-weight-bold);
 }
 
 .about-card p {
-  color: var(--text-secondary);
+  color: #4b5563;
   line-height: 1.7;
   font-size: var(--font-size-base);
 }
 
 /* ========== What We Do Section ========== */
 .what-we-do {
-  background: var(--white);
+  background: white;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-xl);
-  margin-bottom: var(--spacing-2xl);
-  box-shadow: var(--shadow-sm);
+  margin: 0 2rem var(--spacing-2xl) 2rem; /* Added margins */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .what-we-do h2 {
-  color: var(--dark-bg);
+  color: #1f2937;
   font-size: var(--font-size-3xl);
   text-align: center;
   margin-bottom: var(--spacing-xl);
@@ -214,48 +250,52 @@
 }
 
 .activity-item {
-  background: var(--bg-card);
+  background: #f9fafb;
   padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
-  border-left: 4px solid var(--primary-color);
+  border-left: 4px solid #6366f1;
   transition: all var(--transition-normal);
 }
 
 .activity-item:hover {
-  background: var(--white);
-  border-left-color: var(--accent-color);
+  background: white;
+  border-left-color: #8b5cf6;
   transform: translateX(8px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .activity-item h3 {
-  color: var(--dark-bg);
+  color: #1f2937;
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-xs);
   font-weight: var(--font-weight-semibold);
 }
 
 .activity-item p {
-  color: var(--text-secondary);
+  color: #4b5563;
   line-height: 1.6;
   font-size: var(--font-size-base);
 }
 
 /* ========== Join CTA Section ========== */
 .join-cta {
-  background: var(--primary-gradient);
-  color: var(--white);
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
+  color: white;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-xl);
   text-align: center;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  margin: 0 2rem 3rem 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .join-cta h2 {
   font-size: var(--font-size-3xl);
   margin-bottom: var(--spacing-sm);
   font-weight: var(--font-weight-bold);
-  color: var(--white);
+  color: white;
 }
 
 .join-cta p {
@@ -277,23 +317,25 @@
   border-radius: var(--radius-lg);
   font-weight: var(--font-weight-semibold);
   transition: all var(--transition-normal);
+  text-decoration: none;
+  display: inline-block;
 }
 
 .join-cta .btn-primary {
-  background: var(--white);
-  color: var(--primary-color);
+  background: white;
+  color: #6366f1;
 }
 
 .join-cta .btn-primary:hover {
-  background: var(--bg-card);
+  background: #f3f4f6;
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .join-cta .btn-secondary {
   background: transparent;
-  color: var(--white);
-  border: 2px solid var(--white);
+  color: white;
+  border: 2px solid white;
 }
 
 .join-cta .btn-secondary:hover {
@@ -303,12 +345,23 @@
 
 /* ========== Responsive Design ========== */
 @media (max-width: 768px) {
+  .about-hero {
+    padding: 3rem 1rem;
+  }
+
   .about-hero h1 {
-    font-size: var(--font-size-3xl);
+    font-size: 2rem;
   }
 
   .about-hero p {
-    font-size: var(--font-size-lg);
+    font-size: 1.125rem;
+  }
+  
+  .about-nav-cards, .about-cards, .what-we-do, .join-cta {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .about-nav-cards {
@@ -339,18 +392,6 @@
   .card-icon {
     width: 60px;
     height: 60px;
-  }
-
-  .what-we-do {
-    padding: var(--spacing-lg);
-  }
-
-  .join-cta {
-    padding: var(--spacing-lg);
-  }
-
-  .join-cta h2 {
-    font-size: var(--font-size-2xl);
   }
 
   .cta-buttons {

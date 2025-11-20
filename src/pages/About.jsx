@@ -1,5 +1,5 @@
 /* ========================================
-   About.jsx - Updated to Match Design
+   About.jsx - Updated Hero Style
    ======================================== */
 
 import React from 'react';
@@ -10,8 +10,9 @@ import './About.css';
 function About() {
   return (
     <div className="about-page">
-      {/* Hero Section */}
+      {/* Hero Section (Updated to match Sandbox/Timeline) */}
       <div className="about-hero">
+        <span className="hero-badge">👋 Who We Are</span>
         <h1>About Us</h1>
         <p>We're a passionate community of students dedicated to fostering growth, connection, and unforgettable experiences on campus.</p>
       </div>
