@@ -593,6 +593,7 @@ async function syncTimeline() {
           description: extractText(page.properties.Description?.rich_text),
           tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
           icon: extractText(page.properties.Icon?.rich_text) || null,
+          image_url: extractImageUrl(page.properties.Image),
           created_at: page.created_time
         };
         if (timeline.title) {

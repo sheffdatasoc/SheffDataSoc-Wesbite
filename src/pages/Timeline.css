@@ -2,6 +2,9 @@
    /pages/Timeline.css
    ======================================== */
 
+:root {
+  --card-gap: 25px;
+}
 
 /* Timeline Page Header */
 .timeline-header {
@@ -9,19 +12,16 @@
   margin-bottom: var(--spacing-xl);
 }
 
-
 .timeline-header h1 {
   color: var(--dark-bg);
   font-size: var(--font-size-4xl);
   margin-bottom: var(--spacing-sm);
 }
 
-
 .timeline-header p {
   color: var(--text-secondary);
   font-size: var(--font-size-lg);
 }
-
 
 /* Timeline Filter Bar */
 .timeline-filters {
@@ -32,43 +32,41 @@
   justify-content: center;
 }
 
-
-/* Main Timeline Container */
-.timeline-container {
+/* Timeline Container */
+.timeline {
+  position: relative;
   max-width: 900px;
   margin: 0 auto;
-  position: relative;
-  padding: var(--spacing-lg) 0;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
 }
 
-
 /* Vertical center line */
-.timeline-container::before {
+.timeline::after {
   content: '';
   position: absolute;
   left: 50%;
-  top: 0;
+  top: 239px;
   bottom: 0;
-  width: 3px;
-  background: var(--border-color);
+  width: 4px;
+  background: var(--primary-color);
   transform: translateX(-50%);
+  z-index: 1;
 }
-
 
 /* Year Header */
 .timeline-year-header {
-  text-align: center;
-  font-size: var(--font-size-2xl);
+  font-size: 2.8rem;
   font-weight: var(--font-weight-bold);
   margin: var(--spacing-2xl) 0 var(--spacing-lg);
   color: var(--dark-bg);
-  position: relative;
+  text-align: left;
 }
-
 
 /* Month Header */
 .timeline-month-header {
-  font-size: var(--font-size-xl);
+  font-size: 2.0rem;
   font-weight: var(--font-weight-semibold);
   margin: var(--spacing-lg) 0 var(--spacing-md);
   color: var(--primary-color);
@@ -76,117 +74,117 @@
   padding-bottom: var(--spacing-xs);
 }
 
-
 /* Timeline Item */
 .timeline-item {
   position: relative;
-  margin-bottom: var(--spacing-xl);
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  width: 100%;
+  margin: 3rem 0;
 }
 
-
-/* Timeline Marker (circle on vertical line) */
+/* Marker */
 .timeline-marker {
   position: absolute;
   left: 50%;
+  top: 0;
   transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-circle);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
   background: var(--primary-color);
-  border: 3px solid var(--white);
+  border: 3px solid white;
   box-shadow: 0 0 0 2px var(--border-color);
-  z-index: 2;
+  z-index: 3;
 }
 
-
-/* Timeline Icon */
-.timeline-icon {
-  font-size: 1.8rem;
-  margin-right: var(--spacing-md);
-  flex-shrink: 0;
+/* Branch connector */
+.timeline-connector {
+  position: absolute;
+  top: 8px;
+  width: 50px;
+  height: 3px;
+  background: var(--border-color);
 }
 
-
-/* Timeline Event Card */
-.timeline-event-content {
-  background: var(--white);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  width: 100%;
-  transition: all var(--transition-normal);
+.timeline-item.left .timeline-connector {
+  left: calc(50% - 50px);
 }
 
-
-.timeline-event-content:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
+.timeline-item.right .timeline-connector {
+  left: 50%;
 }
 
-
-/* Event Content Text */
-.timeline-event-content h4 {
-  margin: 0 0 var(--spacing-xs) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--dark-bg);
-}
-
-
-.timeline-event-content p {
-  margin: 0.25rem 0;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
-
-/* Event Tags */
-.timeline-tags {
+/* Event Card */
+.timeline-event-card {
   display: flex;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-  margin-top: var(--spacing-sm);
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  gap: 1rem;
+  width: 40%;
+  min-height: 140px;
+  position: relative;
 }
 
+.timeline-item.left .timeline-event-card {
+  margin-left: calc(50% - 40% - var(--card-gap));
+}
 
-/* Event Images */
-.timeline-image {
-  width: 100%;
-  height: 200px;
+.timeline-item.right .timeline-event-card {
+  margin-left: calc(50% + var(--card-gap));
+}
+
+/* Icon */
+.timeline-icon {
+  position: absolute;
+  top: 0;
+  font-size: 1.8rem;
+}
+
+.timeline-item.left .timeline-icon {
+  right: calc(50% + 40% + 30px);
+}
+
+.timeline-item.right .timeline-icon {
+  left: calc(50% + 40% + 30px);
+}
+
+/* Card Text */
+.card-text {
+  width: 65%;
+}
+
+/* Card Image */
+.card-image {
+  width: 50%;
   object-fit: cover;
   border-radius: var(--radius-md);
-  margin-top: var(--spacing-sm);
 }
 
-
-/* Responsive for Mobile */
+/* MOBILE */
 @media (max-width: 768px) {
-  .timeline-container::before {
-    left: 10px;
+  .timeline::after {
+    left: 20px;
   }
-
 
   .timeline-item {
     padding-left: 40px;
   }
 
-
-  .timeline-icon {
-    margin-right: var(--spacing-sm);
+  .timeline-event-card {
+    width: 100%;
+    margin-left: 0 !important;
   }
 
-
-  .timeline-event-content {
-    width: 100%;
+  .timeline-icon {
+    left: -10px !important;
+    right: auto !important;
   }
 
   .timeline-year-header {
     font-size: var(--font-size-xl);
+    text-align: left;
   }
-
 
   .timeline-month-header {
     font-size: var(--font-size-lg);
