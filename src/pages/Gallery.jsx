@@ -2,68 +2,59 @@
    /pages/Gallery.jsx
    ======================================== */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Hero from '../components/Hero';
+import { createClient } from '@supabase/supabase-js';
 import './Gallery.css';
 
+const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_ANON_KEY
+);
+
 function Gallery() {
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  // Sample gallery items - replace with actual data/Supabase
-  const galleryItems = [
-    {
-      id: 1,
-      title: 'Annual Data Science Hackathon 2024',
-      category: 'events',
-      imageUrl: 'https://via.placeholder.com/400x300?text=Hackathon+2024',
-      date: '2024-03-15'
-    },
-    {
-      id: 2,
-      title: 'Python Workshop Series',
-      category: 'workshops',
-      imageUrl: 'https://via.placeholder.com/400x300?text=Python+Workshop',
-      date: '2024-02-10'
-    },
-    {
-      id: 3,
-      title: 'Industry Panel Discussion',
-      category: 'talks',
-      imageUrl: 'https://via.placeholder.com/400x300?text=Panel+Discussion',
-      date: '2024-01-20'
-    },
-    {
-      id: 4,
-      title: 'Team Social Event',
-      category: 'social',
-      imageUrl: 'https://via.placeholder.com/400x300?text=Social+Event',
-      date: '2024-04-05'
-    },
-    {
-      id: 5,
-      title: 'ML Model Deployment Workshop',
-      category: 'workshops',
-      imageUrl: 'https://via.placeholder.com/400x300?text=ML+Workshop',
-      date: '2024-03-01'
-    },
-    {
-      id: 6,
-      title: 'Data Visualization Competition',
-      category: 'events',
-      imageUrl: 'https://via.placeholder.com/400x300?text=Viz+Competition',
-      date: '2024-02-28'
+  // Fetch gallery items from Supabase
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('gallery_items')
+          .select('*')
+          .order('event_date', { ascending: false });
+        if (error) throw error;
+        setGalleryItems(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
+    fetchGallery();
+  }, []);
+
+  // Extract unique categories from items
+  const categories = [
+    'all',
+    ...Array.from(new Set(galleryItems.map(item => item.category))).filter(Boolean)
   ];
 
-  const categories = ['all', 'events', 'workshops', 'talks', 'social'];
-
-  const filteredItems = selectedCategory === 'all' 
-    ? galleryItems 
+  // Filter items by selected category
+  const filteredItems = selectedCategory === 'all'
+    ? galleryItems
     : galleryItems.filter(item => item.category === selectedCategory);
+
+  if (loading) return <p className="gallery-loading">Loading gallery…</p>;
+  if (error) return <p className="gallery-error">Error: {error}</p>;
 
   return (
     <div className="gallery-page">
-      <Hero 
+      <Hero
         title="Gallery"
         subtitle="Memories from our events, workshops, and community gatherings"
         showButtons={false}
@@ -73,32 +64,47 @@ function Gallery() {
       <div className="gallery-content">
         {/* Category Filter */}
         <div className="gallery-filters">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
+          {categories.map(cat => {
+            // Capitalize first letter and pluralize
+            let label = cat.charAt(0).toUpperCase() + cat.slice(1);
+            if (cat !== 'all' && !label.endsWith('s')) {
+              label += 's';
+            }
+
+            return (
+              <button
+                key={cat}
+                className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Gallery Grid */}
         {filteredItems.length > 0 ? (
           <div className="gallery-grid">
             {filteredItems.map(item => (
-              <div key={item.id} className="gallery-item">
+              <div key={item.notion_id} className="gallery-item">
                 <div className="gallery-image">
-                  <img src={item.imageUrl} alt={item.title} />
-                  <div className="gallery-overlay">
-                    <h3>{item.title}</h3>
-                    <p>{new Date(item.date).toLocaleDateString('en-GB', { 
-                      day: 'numeric', 
-                      month: 'long', 
-                      year: 'numeric' 
-                    })}</p>
-                  </div>
+                  <img src={item.image_url} alt={item.title} />
+                </div>
+                <div className="gallery-info">
+                  <h3>{item.title}</h3>
+                  {item.event_date && (
+                    <p className="gallery-date">
+                      {new Date(item.event_date).toLocaleDateString('en-GB', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p className="gallery-description">{item.description}</p>
+                  )}
                 </div>
               </div>
             ))}
@@ -114,3 +120,4 @@ function Gallery() {
 }
 
 export default Gallery;
+

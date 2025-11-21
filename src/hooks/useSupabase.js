@@ -13,11 +13,15 @@ import {
 } from '../lib/supabase';
 
 
+
+
 // Custom hook to fetch blog posts
 export function useBlogPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -36,12 +40,18 @@ export function useBlogPosts() {
     }
 
 
+
+
     fetchPosts();
   }, []);
 
 
+
+
   return { posts, loading, error };
 }
+
+
 
 
 // Custom hook to fetch a single blog post by ID
@@ -51,12 +61,16 @@ export function useBlogPost(id) {
   const [error, setError] = useState(null);
 
 
+
+
   useEffect(() => {
     async function fetchPost() {
       if (!id) {
         setLoading(false);
         return;
       }
+
+
 
 
       try {
@@ -73,12 +87,18 @@ export function useBlogPost(id) {
     }
 
 
+
+
     fetchPost();
   }, [id]);
 
 
+
+
   return { post, loading, error };
 }
+
+
 
 
 // Custom hook to fetch events
@@ -86,6 +106,8 @@ export function useEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -104,12 +126,18 @@ export function useEvents() {
     }
 
 
+
+
     fetchEvents();
   }, []);
 
 
+
+
   return { events, loading, error };
 }
+
+
 
 
 // Custom hook to fetch projects
@@ -117,6 +145,8 @@ export function useProjects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -135,12 +165,18 @@ export function useProjects() {
     }
 
 
+
+
     fetchProjects();
   }, []);
 
 
+
+
   return { projects, loading, error };
 }
+
+
 
 
 // Custom hook to fetch members
@@ -148,6 +184,8 @@ export function useMembers() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -166,18 +204,26 @@ export function useMembers() {
     }
 
 
+
+
     fetchMembers();
   }, []);
+
+
 
 
   return { members, loading, error };
 }
 
 
+
+
 export function useGuides() {
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -199,14 +245,20 @@ export function useGuides() {
   }, []);
 
 
+
+
   return { guides, loading, error };
 }
+
+
 
 
 export function useGlossary() {
   const [terms, setTerms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -228,14 +280,20 @@ export function useGlossary() {
   }, []);
 
 
+
+
   return { terms, loading, error };
 }
+
+
 
 
 export function useResources() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -257,14 +315,20 @@ export function useResources() {
   }, []);
 
 
+
+
   return { resources, loading, error };
 }
+
+
 
 
 export function useTimelineEvents() {
   const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+
 
 
   useEffect(() => {
@@ -282,8 +346,42 @@ export function useTimelineEvents() {
       }
     }
 
+
     fetchTimeline();
   }, []);
 
+
   return { timeline, loading, error };
 }
+
+
+// Custom hook to fetch gallery items
+export function useGalleryItems(limit = null) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        setLoading(true);
+        const data = await getGalleryItems(limit);
+        setItems(data);
+        setError(null);
+      } catch (err) {
+        console.error("Error in useGalleryItems:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+
+    fetchGallery();
+  }, [limit]);
+
+
+  return { items, loading, error };
+}
+
