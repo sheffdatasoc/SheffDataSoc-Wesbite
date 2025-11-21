@@ -78,8 +78,6 @@ export async function getBlogPostById(id) {
     console.error('Error fetching blog post:', error);
     return null;
   }
-
-
   return data;
 }
 
@@ -100,10 +98,10 @@ export async function getBlogPostBySlug(slug) {
     console.error('Error fetching blog post:', error);
     return null;
   }
-
-
   return data;
 }
+
+
 
 
 // ============================================================================
@@ -116,8 +114,6 @@ export async function getEvents(options = {}) {
     console.warn('Supabase not configured, returning empty array');
     return [];
   }
-
-
   const { includeAll = false } = options;
 
 
@@ -142,8 +138,6 @@ export async function getEvents(options = {}) {
     console.error('Error fetching events:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -192,18 +186,16 @@ export async function getPastEvents(limit = 10) {
 }
 
 
+
+
 // ============================================================================
 // PROJECTS
 // ============================================================================
-
-
 export async function getProjects(status = null) {
   if (!supabase) {
     console.warn('Supabase not configured, returning empty array');
     return [];
   }
-
-
   let query = supabase
     .from('projects')
     .select('*');
@@ -212,8 +204,6 @@ export async function getProjects(status = null) {
   if (status) {
     query = query.eq('status', status);
   }
-
-
   query = query.order('created_at', { ascending: false });
 
 
@@ -230,18 +220,16 @@ export async function getProjects(status = null) {
 }
 
 
+
+
 // ============================================================================
 // MEMBERS
 // ============================================================================
-
-
 export async function getMembers(role = null) {
   if (!supabase) {
     console.warn('Supabase not configured, returning empty array');
     return [];
   }
-
-
   let query = supabase
     .from('members')
     .select('*');
@@ -250,8 +238,6 @@ export async function getMembers(role = null) {
   if (role) {
     query = query.eq('role', role);
   }
-
-
   query = query.order('name', { ascending: true });
 
 
@@ -262,17 +248,15 @@ export async function getMembers(role = null) {
     console.error('Error fetching members:', error);
     return [];
   }
-
-
   return data || [];
 }
+
+
 
 
 // ============================================================================
 // GUIDES
 // ============================================================================
-
-
 export async function getGuides(filters = {}) {
   if (!supabase) {
     console.warn('Supabase not configured, returning empty array');
@@ -315,8 +299,6 @@ export async function getGuides(filters = {}) {
     console.error('Error fetching guides:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -336,8 +318,6 @@ export async function getGuideById(id) {
     console.error('Error fetching guide:', error);
     return null;
   }
-
-
   return data;
 }
 
@@ -358,17 +338,15 @@ export async function getFeaturedGuides(limit = 3) {
     console.error('Error fetching featured guides:', error);
     return [];
   }
-
-
   return data || [];
 }
+
+
 
 
 // ============================================================================
 // GLOSSARY
 // ============================================================================
-
-
 export async function getGlossary(forceRefresh = false) {
   if (!supabase) {
     console.warn('Supabase not configured, returning empty array');
@@ -415,8 +393,6 @@ export async function getGlossaryByCategory(category) {
     console.error('Error fetching glossary by category:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -436,8 +412,6 @@ export async function searchGlossary(searchTerm) {
     console.error('Error searching glossary:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -445,8 +419,6 @@ export async function searchGlossary(searchTerm) {
 // ============================================================================
 // RESOURCES
 // ============================================================================
-
-
 export async function getResources(category = null) {
   if (!supabase) {
     console.warn('Supabase not configured, returning empty array');
@@ -474,8 +446,6 @@ export async function getResources(category = null) {
     console.error('Error fetching resources:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -510,8 +480,6 @@ export async function getGalleryItems(limit = null) {
     console.error('Error fetching gallery items:', error);
     return [];
   }
-
-
   return data || [];
 }
 
@@ -533,19 +501,13 @@ export async function getTimelineEvents() {
     .select('*');
 
 
-
-
   if (error) {
     console.error('Error fetching timeline events:', error);
     return [];
   }
 
 
-
-
   if (!data) return [];
-
-
 
 
   // Map events to include year/month and sort in descending order
@@ -565,10 +527,10 @@ export async function getTimelineEvents() {
     });
 
 
-
-
   return timelineEvents;
 }
+
+
 
 
 // ============================================================================
