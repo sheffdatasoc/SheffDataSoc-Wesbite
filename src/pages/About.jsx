@@ -20,7 +20,8 @@ function About() {
       {/* Navigation Cards */}
       <div className="about-nav-cards">
         <Link to="/timeline" className="nav-card">
-          <div className="nav-card-icon timeline-icon">
+          {/* FIX: Changed class name here to avoid conflict */}
+          <div className="nav-card-icon about-timeline-icon">
             <Clock size={32} />
           </div>
           <div className="nav-card-content">

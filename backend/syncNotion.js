@@ -443,17 +443,11 @@ async function syncGuides() {
   }
 }
 
-
-
-
-// Sync Members
 async function syncMembers() {
   try {
     console.log('Syncing members...');
+    // Assuming getAllPages and DATABASES are defined in your scope or imported
     const pages = await getAllPages(DATABASES.members);
-
-
-
 
     const members = pages
       .map(page => ({
@@ -478,20 +472,16 @@ async function syncMembers() {
         academic_year:
           page.properties.academic_year?.select?.name ||
           extractText(page.properties.academic_year?.rich_text) ||
-          null
+          null,
+        is_committee: 
+          page.properties.Committee?.checkbox === true
       }))
       .filter(member => member.name); // Skip members without names
-
-
-
 
     if (members.length === 0) {
       console.log('⚠️  No valid members found');
       return { count: 0, data: null };
     }
-
-
-
 
     // Upsert members
     const { data, error } = await supabase
@@ -501,9 +491,6 @@ async function syncMembers() {
         ignoreDuplicates: false
       });
 
-
-
-
     if (error) throw error;
     console.log(`✓ Synced ${members.length} members`);
     return { count: members.length, data };
@@ -512,8 +499,6 @@ async function syncMembers() {
     return { count: 0, error: error.message };
   }
 }
-
-
 
 
 // Sync Glossary
