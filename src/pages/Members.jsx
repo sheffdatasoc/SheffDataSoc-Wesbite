@@ -1,23 +1,19 @@
-/* ========================================
-   /pages/Members.jsx
-   ======================================== */
-
 import React, { useState } from 'react';
 import { useMembers } from '../hooks/useSupabase';
 import MemberCard from '../components/MemberCard';
 import { Search } from 'lucide-react';
 import './Members.css';
 
-// --- Helper Functions to replace Class Methods ---
+// --- Helper Functions ---
 
 const getMemberYear = (member) => {
   return member.academic_year || 'Unknown';
 };
 
 const isCommitteeMember = (member) => {
-  // Adjust this logic based on your actual role names
-  // Example: Returns true if role exists and isn't explicitly "Member" or "General Member"
-  return member.role && !['Member', 'General Member'].includes(member.role);
+  // NEW LOGIC: Checks the database flag directly
+  // This gives you manual control via the Notion column
+  return member.is_committee === true;
 };
 
 const checkMemberMatches = (member, query) => {
@@ -39,7 +35,6 @@ function Members() {
   const [activeTab, setActiveTab] = useState('extended');
 
   // Get unique academic years and sort them (most recent first)
-  // FIX: Used helper function getMemberYear instead of m.getAcademicYear()
   const academicYears = [...new Set(members.map(m => getMemberYear(m)))]
     .filter(year => year !== 'Unknown')
     .sort((a, b) => {
@@ -53,10 +48,12 @@ function Members() {
   const membersByYear = academicYears.reduce((acc, year) => {
     acc[year] = members.filter(member => {
       
-      // FIX: Replaced class methods with helper functions
       const matchesSearch = checkMemberMatches(member, searchQuery);
       const matchesYear = getMemberYear(member) === year;
       
+      // Tab Logic:
+      // 'extended' -> Shows everyone (Extended + Core + Members)
+      // 'committee' -> Shows only those marked as Committee in Notion
       const matchesTab = activeTab === 'extended' 
         ? true 
         : isCommitteeMember(member);
