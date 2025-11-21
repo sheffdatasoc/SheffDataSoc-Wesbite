@@ -3,7 +3,7 @@
    ======================================== */
 
 import React, { useState, useEffect } from 'react';
-import Hero from '../components/Hero';
+// Removed Hero import
 import { createClient } from '@supabase/supabase-js';
 import './Gallery.css';
 
@@ -54,13 +54,14 @@ function Gallery() {
 
   return (
     <div className="gallery-page">
-      <Hero
-        title="Gallery"
-        subtitle="Memories from our events, workshops, and community gatherings"
-        showButtons={false}
-        showStats={false}
-      />
+      {/* --- NEW HERO SECTION (Matches Timeline Page) --- */}
+      <div className="gallery-hero">
+        <span className="hero-badge">📸 Captured Moments</span>
+        <h1>Gallery</h1>
+        <p>Memories from our events, workshops, and community gatherings</p>
+      </div>
 
+      {/* Content Wrapper to center grid and filters */}
       <div className="gallery-content">
         {/* Category Filter */}
         <div className="gallery-filters">
@@ -120,4 +121,3 @@ function Gallery() {
 }
 
 export default Gallery;
-
