@@ -4,7 +4,6 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { getTimelineEvents } from '../lib/supabase';
-// Ya no necesitamos importar Hero porque lo haremos custom como en Sandbox
 import './Timeline.css';
 
 function Timeline() {

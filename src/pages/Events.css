@@ -1,11 +1,11 @@
 /* ========================================
-   /pages/Events.css - UPDATED FULL FILE
+   /pages/Events.css
    ======================================== */
 
-/* ✅ Sandbox-style Hero */
+/* Keep Sandbox Hero Styles */
 .sandbox-hero {
   background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: var(--white);
+  color: #fff;
   text-align: center;
   padding: 5rem 2rem;
   width: 100%;
@@ -15,20 +15,20 @@
   display: inline-block;
   background: rgba(255, 255, 255, 0.2);
   padding: 0.5rem 1.5rem;
-  border-radius: var(--radius-2xl);
-  font-size: var(--font-size-sm);
+  border-radius: 9999px;
+  font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1rem;
 }
 
 .sandbox-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
   font-weight: 800;
 }
 
 .sandbox-hero p {
-  font-size: var(--font-size-xl);
+  font-size: 1.25rem;
   max-width: 700px;
   margin: 0 auto;
   opacity: 0.95;
@@ -37,101 +37,105 @@
 /* Page Layout */
 .events-page {
   min-height: 100vh;
+  background-color: #fdfdfd; /* Very clean white background */
 }
 
 .events-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: 3rem 1.5rem;
 }
 
-.events-header {
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-}
-
-.events-header h1 {
-  color: var(--dark-bg);
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-}
-
-.events-header p {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
-}
-
-/* Filter Tabs */
-.events-filters {
+/* --- FILTER STYLES (Segmented Control) --- */
+.filter-container {
   display: flex;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-xl);
-  flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 3rem;
 }
 
-.filter-btn {
-  padding: 0.75rem 1.5rem;
-  border: 2px solid #e5e7eb;
-  background: white;
+.events-filters-control {
+  background: #f3f4f6; /* Light grey container */
+  padding: 4px;
   border-radius: 8px;
+  display: inline-flex;
+  gap: 4px;
+}
+
+.filter-tab-btn {
+  padding: 8px 32px; /* Wide padding */
+  border: none;
+  background: transparent;
+  border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #6b7280; /* Grey text inactive */
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
-.filter-btn:hover {
-  border-color: #667eea;
-  color: #667eea;
+.filter-tab-btn:hover {
+  color: #111827;
 }
 
-.filter-btn.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-color: transparent;
+.filter-tab-btn.active {
+  background: white;
+  color: #111827; /* Dark text active */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 /* Events Grid */
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
 
-/* Empty State */
 .empty-state {
   text-align: center;
-  padding: var(--spacing-xl);
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  padding: 3rem;
+  color: #6b7280;
 }
 
-/* ✅ Mobile Responsive */
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #6b7280;
+  gap: 1rem;
+}
+
+/* Simple CSS Spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #6366f1; /* Purple/Blue match */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .events-grid {
     grid-template-columns: 1fr;
   }
   
-  .events-filters {
-    flex-direction: column;
+  .events-filters-control {
+    width: 100%;
+    display: flex;
   }
   
-  .filter-btn {
-    width: 100%;
-  }
-
-  .sandbox-hero {
-    padding: 4rem 1.5rem;
-  }
-
-  .sandbox-hero h1 {
-    font-size: var(--font-size-3xl);
-  }
-
-  .sandbox-hero p {
-    font-size: var(--font-size-lg);
+  .filter-tab-btn {
+    flex: 1;
+    padding: 8px 0;
   }
 }
