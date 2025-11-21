@@ -1,26 +1,25 @@
 /* ========================================
-   About.css - Updated Hero Style
+   /pages/About.css
    ======================================== */
 
-/* ========== PAGE WRAPPER (Matches Timeline/Sandbox) ========== */
+/* ========== PAGE WRAPPER ========== */
 .about-page {
   width: 100%;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f9fafb; /* Consistent light gray background */
+  background: #fcfcfc; /* Cleaner white/gray background */
 }
 
-/* ========== HERO SECTION (Updated to Sandbox Style) ========== */
+/* ========== HERO SECTION ========== */
 .about-hero {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6); /* Same gradient */
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
   color: white;
   text-align: center;
   padding: 5rem 2rem;
   margin-bottom: 3rem;
   width: 100%;
   position: relative;
-  /* Removed border-radius to be full-width like other pages */
 }
 
 .about-hero .hero-badge {
@@ -28,7 +27,7 @@
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   padding: 0.5rem 1.5rem;
-  border-radius: 9999px; /* Full pill shape */
+  border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -45,381 +44,348 @@
 .about-hero p {
   font-size: 1.25rem;
   opacity: 0.95;
-  max-width: 800px; /* Slightly wider for About text */
+  max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
   color: rgba(219, 234, 254, 1);
 }
 
-/* ========== Navigation Cards ========== */
+/* ========== 1. TOP NAVIGATION CARDS (Clean Row Style) ========== */
 .about-nav-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-2xl);
-  padding: 0 2rem; /* Added horizontal padding to match page layout */
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto 4rem auto;
+  padding: 0 1rem;
 }
 
 .nav-card {
-  background: white; /* Explicit white */
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: 1rem;
   text-decoration: none;
-  transition: all var(--transition-normal);
-  border: 2px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-}
-
-.nav-card:hover::before {
-  opacity: 1;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 .nav-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  border-color: #6366f1;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  border-color: #d1d5db;
 }
 
-.nav-card-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-xl);
+/* Gradient Icon Box for Nav */
+.nav-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   flex-shrink: 0;
-  transition: transform var(--transition-normal);
-  z-index: 1;
-}
-
-.nav-card:hover .nav-card-icon {
-  transform: scale(1.1);
-}
-
-/* FIX: Renamed selector to match JSX */
-.about-timeline-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.members-icon {
-  background: linear-gradient(135deg, #667eea 0%, #4cc9f0 100%);
 }
 
 .nav-card-content {
   flex: 1;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .nav-card-content h3 {
-  color: #1f2937;
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--spacing-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px 0;
 }
 
 .nav-card-content p {
-  color: #4b5563;
-  font-size: var(--font-size-base);
+  font-size: 0.9rem;
+  color: #6b7280;
   margin: 0;
 }
 
-.nav-card-arrow {
+.nav-arrow {
   color: #9ca3af;
-  transition: all var(--transition-normal);
-  z-index: 1;
+  transition: transform 0.2s ease;
 }
 
-.nav-card:hover .nav-card-arrow {
-  color: #6366f1;
-  transform: translateX(8px);
+.nav-card:hover .nav-arrow {
+  transform: translateX(4px);
+  color: #6b7280;
 }
 
-/* ========== Mission, Vision, Values Cards ========== */
-.about-cards {
+/* ========== 2. MISSION / VISION / VALUES (Clean Column Style) ========== */
+.about-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-2xl);
-  padding: 0 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto 5rem auto;
+  padding: 0 1rem;
 }
 
-.about-card {
+.clean-card {
   background: white;
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
   text-align: center;
-  transition: all var(--transition-normal);
-  border: 2px solid transparent;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.about-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border-color: #6366f1;
+.clean-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
 }
 
-.card-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto var(--spacing-md);
-  border-radius: var(--radius-xl);
+/* Gradient Icon Box for Mission */
+.card-icon-box {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  transition: transform var(--transition-normal);
+  margin-bottom: 1.5rem;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
 }
 
-.about-card:hover .card-icon {
-  transform: scale(1.1) rotate(5deg);
+.clean-card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 1rem;
 }
 
-.mission-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.clean-card p {
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
 }
 
-.vision-icon {
-  background: linear-gradient(135deg, #667eea 0%, #4cc9f0 100%);
+/* ========== 3. GRADIENT UTILITIES ========== */
+.gradient-purple {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
-.values-icon {
-  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+.gradient-blue {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
-.about-card h2 {
-  color: #1f2937;
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
+.gradient-indigo {
+  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
 }
 
-.about-card p {
-  color: #4b5563;
-  line-height: 1.7;
-  font-size: var(--font-size-base);
+.gradient-cyan {
+  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
-/* ========== What We Do Section ========== */
+.gradient-pink {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+}
+
+/* ========== 4. WHAT WE DO SECTION ========== */
 .what-we-do {
-  background: white;
-  padding: var(--spacing-2xl);
-  border-radius: var(--radius-xl);
-  margin: 0 2rem var(--spacing-2xl) 2rem; /* Added margins */
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0; 
+  margin: 0 auto 4rem auto;
+  max-width: 1100px;
+  background: transparent;
+  box-shadow: none;
 }
 
-.what-we-do h2 {
-  color: #1f2937;
-  font-size: var(--font-size-3xl);
+.what-we-do-header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
-  font-weight: var(--font-weight-bold);
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.what-we-do-header h2 {
+  color: #111827;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.what-we-do-header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.5;
 }
 
 .activities-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-lg);
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 0 1rem;
 }
 
-.activity-item {
-  background: #f9fafb;
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  border-left: 4px solid #6366f1;
-  transition: all var(--transition-normal);
-}
-
-.activity-item:hover {
+.activity-card {
   background: white;
-  border-left-color: #8b5cf6;
-  transform: translateX(8px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.activity-item h3 {
-  color: #1f2937;
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
-.activity-item p {
-  color: #4b5563;
-  line-height: 1.6;
-  font-size: var(--font-size-base);
-}
-
-/* ========== Join CTA Section ========== */
-.join-cta {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: white;
-  padding: var(--spacing-2xl);
-  border-radius: var(--radius-xl);
-  text-align: center;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  margin: 0 2rem 3rem 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.join-cta h2 {
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
-  color: white;
-}
-
-.join-cta p {
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-xl);
-  opacity: 0.95;
-}
-
-.cta-buttons {
+  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #f3f4f6;
   display: flex;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.activity-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.activity-icon-box {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
 }
 
-.join-cta .btn {
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: var(--font-size-md);
-  border-radius: var(--radius-lg);
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-normal);
-  text-decoration: none;
-  display: inline-block;
+/* Solid colors for the "What We Do" section icons */
+.color-purple { background-color: #f3e8ff; color: #9333ea; }
+.color-blue { background-color: #dbeafe; color: #2563eb; }
+.color-pink { background-color: #fce7f3; color: #db2777; }
+.color-yellow { background-color: #fef3c7; color: #d97706; }
+
+.activity-card h3 {
+  color: #111827;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
 }
 
-.join-cta .btn-primary {
+.activity-card p {
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ========== 5. GET IN TOUCH SECTION ========== */
+.get-in-touch {
+  padding: 0;
+  margin: 0 auto 5rem auto;
+  max-width: 1100px;
+  text-align: center;
+}
+
+.get-in-touch-header {
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.get-in-touch-header h2 {
+  color: #111827;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.get-in-touch-header p {
+  color: #6b7280;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.contact-info-card {
   background: white;
-  color: #6366f1;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f3f4f6;
+  padding: 3rem 2rem;
+  margin: 0 1rem;
 }
 
-.join-cta .btn-primary:hover {
-  background: #f3f4f6;
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: start;
 }
 
-.join-cta .btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-.join-cta .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-4px);
+.contact-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-/* ========== Responsive Design ========== */
+/* Contact Icon Colors */
+.icon-purple { background-color: #f3e8ff; color: #9333ea; }
+.icon-blue { background-color: #dbeafe; color: #2563eb; }
+.icon-pink { background-color: #fce7f3; color: #db2777; }
+
+.contact-item h3 {
+  color: #111827;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.contact-item p {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
-  .about-hero {
-    padding: 3rem 1rem;
-  }
+  .about-hero { padding: 3rem 1rem; }
+  .about-hero h1 { font-size: 2rem; }
+  .about-hero p { font-size: 1.125rem; }
 
-  .about-hero h1 {
-    font-size: 2rem;
-  }
-
-  .about-hero p {
-    font-size: 1.125rem;
-  }
-  
-  .about-nav-cards, .about-cards, .what-we-do, .join-cta {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .about-nav-cards {
+  /* Stack Grids on Mobile */
+  .about-nav-cards, 
+  .about-cards-grid, 
+  .activities-grid, 
+  .contact-grid {
     grid-template-columns: 1fr;
   }
 
-  .nav-card {
-    padding: var(--spacing-md);
+  .contact-info-card {
+    padding: 2rem;
+    margin: 0 1rem;
   }
 
-  .nav-card-icon {
-    width: 56px;
-    height: 56px;
-  }
-
-  .about-cards {
-    grid-template-columns: 1fr;
-  }
-
-  .activities-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about-card {
-    padding: var(--spacing-lg);
-  }
-
-  .card-icon {
-    width: 60px;
-    height: 60px;
-  }
-
-  .cta-buttons {
-    flex-direction: column;
-  }
-
-  .join-cta .btn {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .nav-card-icon {
-    width: 48px;
-    height: 48px;
-  }
-
-  .nav-card-content h3 {
-    font-size: var(--font-size-lg);
-  }
-
-  .card-icon {
-    width: 56px;
-    height: 56px;
-  }
-
-  .about-card h2 {
-    font-size: var(--font-size-xl);
+  .contact-grid {
+    gap: 2.5rem;
   }
 }
