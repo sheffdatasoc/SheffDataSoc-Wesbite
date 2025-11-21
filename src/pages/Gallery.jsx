@@ -38,15 +38,6 @@ function Gallery() {
     fetchGallery();
   }, []);
 
-  // Map of category key -> display label (pluralized)
-  const categoryLabels = {
-    all: 'All',
-    events: 'Events',
-    workshops: 'Workshops',
-    talks: 'Talks',
-    social: 'Socials',
-  };
-
   // Extract unique categories from items
   const categories = [
     'all',
@@ -73,15 +64,23 @@ function Gallery() {
       <div className="gallery-content">
         {/* Category Filter */}
         <div className="gallery-filters">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {categoryLabels[cat] || cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
+          {categories.map(cat => {
+            // Capitalize first letter and pluralize
+            let label = cat.charAt(0).toUpperCase() + cat.slice(1);
+            if (cat !== 'all' && !label.endsWith('s')) {
+              label += 's';
+            }
+
+            return (
+              <button
+                key={cat}
+                className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Gallery Grid */}
@@ -121,3 +120,4 @@ function Gallery() {
 }
 
 export default Gallery;
+
