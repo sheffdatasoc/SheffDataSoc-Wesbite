@@ -82,7 +82,6 @@ export function useBlogPost(id) {
 
 
 
-
 // Custom hook to fetch events
 export function useEvents() {
   const [events, setEvents] = useState([]);
