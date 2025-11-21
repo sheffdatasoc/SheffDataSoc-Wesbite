@@ -27,7 +27,8 @@ const DATABASES = {
   members: process.env.NOTION_MEMBERS_DB_ID,
   glossary: process.env.NOTION_GLOSSARY_DB_ID,
   resources: process.env.NOTION_RESOURCES_DB_ID,
-  timeline: process.env.NOTION_TIMELINE_DB_ID
+  timeline: process.env.NOTION_TIMELINE_DB_ID,
+  gallery: process.env.NOTION_GALLERY_DB_ID
 };
 
 
@@ -621,6 +622,72 @@ async function syncTimeline() {
 
 
     // Upsert timeline events into Supabase
+    const { data, error } = await supabase
+      .from('timeline_events')
+      .upsert(timelineEvents, {
+        onConflict: 'notion_id',
+        ignoreDuplicates: false
+      });
+
+
+    if (error) throw error;
+
+
+    console.log(`✓ Synced ${timelineEvents.length} timeline events`);
+    return { count: timelineEvents.length, data, errors };
+  } catch (error) {
+    console.error('Error syncing timeline events:', error.message);
+    return { count: 0, error: error.message };
+  }
+}
+
+// Sync Gallery
+async function syncGallery() {
+  try {
+    console.log('Syncing gallery items...');
+
+
+    const pages = await getAllPages(DATABASES.gallery);
+    const galleryItems = [];
+    const errors = [];
+
+
+    for (const page of pages) {
+      try {
+        const gallery = {
+          notion_id: page.id,
+          title: extractText(page.properties.Title?.title),
+          event_date: extractDate(page.properties['Event Date']?.date),
+          description: extractText(page.properties.Description?.rich_text),
+          tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
+          image_url: extractImageUrl(page.properties.Image),
+          created_at: page.created_time
+        };
+        if (gallery.title) {
+          galleryItems.push(gallery);
+        }
+        await delay(RATE_LIMIT_DELAY);
+      } catch (err) {
+        errors.push({
+          pageId: page.id,
+          title: extractText(page.properties.Title?.title),
+          error: err.message
+        });
+        debugLog(`Failed to process gallery items ${page.id}:`, err.message);
+      }
+    }
+    if (errors.length > 0) {
+      console.warn(`⚠️  ${errors.length} gallery items failed to sync`);
+    }
+
+
+    if (galleryItems.length === 0) {
+      console.log('⚠️  No valid gallery items found');
+      return { count: 0, data: null, errors };
+    }
+
+
+    // Upsert gallery items into Supabase  WORKKKKKK ONNN
     const { data, error } = await supabase
       .from('timeline_events')
       .upsert(timelineEvents, {
