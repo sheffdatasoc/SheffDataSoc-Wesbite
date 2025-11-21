@@ -696,7 +696,7 @@ async function syncTimeline() {
 // Sync Gallery
 async function syncGallery() {
   try {
-    console.log('🔄 Syncing gallery items...');
+    console.log('Syncing gallery items...');
 
 
     const pages = await getAllPages(DATABASES.gallery);
