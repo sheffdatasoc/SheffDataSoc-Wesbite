@@ -296,30 +296,14 @@ async function syncWorkshops() {
     console.log('Syncing workshops...');
     const pages = await getAllPages(DATABASES.workshops);
 
-
-    // Debug: print all Notion status values
-    console.log('Notion workshop status values:');
-    pages.forEach(page => {
-      const rawStatus = page.properties.Status?.select?.name || '';
-      console.log(`- ${page.id}: "${rawStatus}"`);
-    });
-
-
     const workshops = pages
       .map(page => {
-        // Normalize status
-        let notionStatus = page.properties.Status?.select?.name || '';
-        notionStatus = notionStatus.trim().toLowerCase();
-        const validStatuses = ['beginner', 'intermediate', 'advanced'];
-        const status = validStatuses.includes(notionStatus) ? notionStatus : 'beginner';
-
-
         return {
           notion_id: page.id,
           title: extractText(page.properties.Title?.title),
           description: extractText(page.properties.Description?.rich_text),
           materials_url: extractUrl(page.properties.Materials?.url),
-          status: extractText(page.properties.Status?.rich_text) || 'beginner',
+          status: page.properties.Status?.select?.name?.toLowerCase() || 'beginner',
           tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
           date: page.properties.Date?.date?.start || null,
           duration_minutes: page.properties["Duration Minutes"]?.number ?? null,
@@ -330,21 +314,17 @@ async function syncWorkshops() {
       })
       .filter(workshop => workshop.title);
 
-
     if (workshops.length === 0) {
       console.log('⚠️ No valid workshops found');
       return { count: 0, data: null };
     }
-
 
     // Upsert workshops
     const { data, error } = await supabase
       .from('workshops')
       .upsert(workshops, { onConflict: 'notion_id', ignoreDuplicates: false });
 
-
     if (error) throw error;
-
 
     console.log(`✓ Synced ${workshops.length} workshops`);
     return { count: workshops.length, data };
