@@ -2,6 +2,39 @@
    /pages/Glossary.css
    ======================================== */
 
+.glossary-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: var(--white);
+  margin-bottom: var(--spacing-xl);
+}
+
+.glossary-hero .hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glossary-hero h1 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.glossary-hero p {
+  font-size: var(--font-size-lg);
+  opacity: 0.95;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
 .glossary-header {
   text-align: center;
   margin-bottom: var(--spacing-lg);
@@ -27,13 +60,23 @@
 }
 
 .search-bar {
-  flex: 1;
-  min-width: 300px;
+  max-width: 1000px;
+  width: 100%;
+  position: relative;
+}
+
+.search-bar .search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
 }
 
 .search-bar input {
   width: 100%;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 1.2rem 0.8rem 3rem;
   border: 2px solid var(--border-color);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-md);
@@ -115,6 +158,9 @@
 
 .glossary-content {
   margin-top: var(--spacing-lg);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .letter-section {

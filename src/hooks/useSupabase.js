@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { 
-  getBlogPosts, 
+import {
+  getBlogPosts,
   getBlogPostById,
-  getEvents, 
-  getProjects, 
+  getEvents,
+  getProjects,
   getMembers,
   getGuides,
   getResources,
@@ -12,11 +12,13 @@ import {
   getTimelineEvents
 } from '../lib/supabase';
 
+
 // Custom hook to fetch blog posts
 export function useBlogPosts() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchPosts() {
@@ -33,11 +35,14 @@ export function useBlogPosts() {
       }
     }
 
+
     fetchPosts();
   }, []);
 
+
   return { posts, loading, error };
 }
+
 
 // Custom hook to fetch a single blog post by ID
 export function useBlogPost(id) {
@@ -45,12 +50,14 @@ export function useBlogPost(id) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
   useEffect(() => {
     async function fetchPost() {
       if (!id) {
         setLoading(false);
         return;
       }
+
 
       try {
         setLoading(true);
@@ -65,17 +72,22 @@ export function useBlogPost(id) {
       }
     }
 
+
     fetchPost();
   }, [id]);
 
+
   return { post, loading, error };
 }
+
+
 
 // Custom hook to fetch events
 export function useEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchEvents() {
@@ -92,17 +104,21 @@ export function useEvents() {
       }
     }
 
+
     fetchEvents();
   }, []);
 
+
   return { events, loading, error };
 }
+
 
 // Custom hook to fetch projects
 export function useProjects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchProjects() {
@@ -119,17 +135,21 @@ export function useProjects() {
       }
     }
 
+
     fetchProjects();
   }, []);
 
+
   return { projects, loading, error };
 }
+
 
 // Custom hook to fetch members
 export function useMembers() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchMembers() {
@@ -146,16 +166,20 @@ export function useMembers() {
       }
     }
 
+
     fetchMembers();
   }, []);
 
+
   return { members, loading, error };
 }
+
 
 export function useGuides() {
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchGuides() {
@@ -171,17 +195,20 @@ export function useGuides() {
         setLoading(false);
       }
     }
-    
+   
     fetchGuides();
   }, []);
 
+
   return { guides, loading, error };
 }
+
 
 export function useGlossary() {
   const [terms, setTerms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchTerms() {
@@ -197,17 +224,22 @@ export function useGlossary() {
         setLoading(false);
       }
     }
-    
+   
     fetchTerms();
   }, []);
 
+
   return { terms, loading, error };
 }
+
+
+
 
 export function useResources() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     async function fetchResources() {
@@ -223,9 +255,67 @@ export function useResources() {
         setLoading(false);
       }
     }
-    
+   
     fetchResources();
   }, []);
 
+
   return { resources, loading, error };
+}
+
+
+
+
+export function useTimelineEvents() {
+  const [timeline, setTimeline] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    async function fetchTimeline() {
+      try {
+        setLoading(true);
+        const data = await getTimelineEvents(); // your Supabase query
+        setTimeline(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error in useTimelineEvents:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTimeline();
+  }, []);
+  return { timeline, loading, error };
+}
+
+
+
+
+// Custom hook to fetch gallery items
+export function useGalleryItems(limit = null) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    async function fetchGallery() {
+      try {
+        setLoading(true);
+        const data = await getGalleryItems(limit);
+        setItems(data);
+        setError(null);
+      } catch (err) {
+        console.error("Error in useGalleryItems:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchGallery();
+  }, [limit]);
+  return { items, loading, error };
 }

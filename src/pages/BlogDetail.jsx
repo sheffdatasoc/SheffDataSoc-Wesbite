@@ -1,10 +1,13 @@
 /* ========================================
    /pages/BlogDetail.jsx
-   ======================================== */
+======================================== */
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, ArrowLeft } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypePrism from 'rehype-prism-plus';
 import { getBlogPostById } from '../lib/supabase';
 import './BlogDetail.css';
 
@@ -56,8 +59,7 @@ function BlogDetail() {
           {error ? `Error: ${error}` : 'Blog post not found'}
         </div>
         <button onClick={() => navigate('/blog')} className="back-button">
-          <ArrowLeft size={20} />
-          Back to Blog
+          <ArrowLeft size={20} /> Back to Blog
         </button>
       </div>
     );
@@ -66,8 +68,7 @@ function BlogDetail() {
   return (
     <div className="blog-detail-page">
       <button onClick={() => navigate('/blog')} className="back-button">
-        <ArrowLeft size={20} />
-        Back to Blog
+        <ArrowLeft size={20} /> Back to Blog
       </button>
 
       <article className="blog-detail-container">
@@ -89,13 +90,29 @@ function BlogDetail() {
 
         {post.image && (
           <div className="blog-detail-image-wrapper">
-            <img src={post.image} alt={post.title} className="blog-detail-image" />
+            <img
+              src={post.image}
+              alt={post.title}
+              className="blog-detail-image"
+            />
           </div>
         )}
 
-        <div className="blog-detail-content">
-          <p className="blog-detail-excerpt">{post.excerpt}</p>
-          {/* Add more content here when you have full blog post content */}
+        <div className="blog-detail-content markdown-body">
+          {/* Excerpt */}
+          {post.excerpt && (
+            <p className="blog-detail-excerpt">{post.excerpt}</p>
+          )}
+
+          {/* Full blog content */}
+          {post.content && (
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypePrism]}
+            >
+              {post.content}
+            </ReactMarkdown>
+          )}
         </div>
       </article>
     </div>

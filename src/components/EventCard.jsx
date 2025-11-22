@@ -1,211 +1,134 @@
-/* ========================================
-   EventCard.jsx - Modern Design Update
-   ======================================== */
-
 import React from 'react';
 import './EventCard.css';
+import { Calendar, Clock, MapPin, Users, Check } from 'lucide-react';
 
 function EventCard({ 
+  // We accept the raw database row props here
   title, 
-  date,
-  endDate,
-  time,
-  location, 
   description, 
-  status, 
+  status, // <--- We need this to check if it's 'past'
+  
+  // Handle Date
+  event_date, 
+  date, 
+  
+  // Handle Time
+  time, 
+  
+  // Handle Location
+  location, 
+  
+  // Handle Type
+  category,
   type,
+  
+  // Handle Attendees
   attendees, 
+  
+  // Handle Max Attendees
+  max_attendees, 
   maxAttendees,
+  
+  // Handle Image URL
+  image_url, 
   imageUrl,
+  
   onRegister 
 }) {
-  // Format date range intelligently
-  const formatDateRange = (startDate, endDate) => {
-    if (!startDate) return 'TBA';
-    
-    const start = new Date(startDate);
-    const end = endDate ? new Date(endDate) : null;
-    
-    // Check if it's a multi-day event
-    if (end && start.toDateString() !== end.toDateString()) {
-      const startDay = start.getDate();
-      const endDay = end.getDate();
-      const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
-      const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
-      const year = start.getFullYear();
-      
-      // Same month: "Nov 4-6, 2025"
-      if (startMonth === endMonth) {
-        return `${startMonth} ${startDay}-${endDay}, ${year}`;
-      }
-      // Different months: "Nov 30 - Dec 2, 2025"
-      return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${year}`;
-    }
-    
-    // Single day event
-    return start.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
-  };
+  
+  // --- 1. NORMALIZE DATA ---
+  const effectiveDate = event_date || date;
+  const effectiveImage = image_url || imageUrl;
+  const effectiveMaxAttendees = max_attendees || maxAttendees;
+  const effectiveType = category || type || 'Event'; 
 
-  // Format time range
-  const formatTimeRange = (startDate, endDate) => {
-    if (!startDate) return null;
-    
-    const start = new Date(startDate);
-    const end = endDate ? new Date(endDate) : null;
-    
-    // Check if times are meaningful (not midnight)
-    const startHasMeaningfulTime = start.getHours() !== 0 || start.getMinutes() !== 0;
-    const endHasMeaningfulTime = end && (end.getHours() !== 0 || end.getMinutes() !== 0);
-    
-    if (!startHasMeaningfulTime && !endHasMeaningfulTime) {
-      return null; // No time info available
-    }
-    
-    const formatTime = (date) => {
-      return date.toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
+  // --- 2. LOGIC: CHECK IF EVENT IS PAST ---
+  // We check for 'past' because that is the new rule we added to your database
+  const isCompleted = status?.toLowerCase() === 'past';
+
+  // --- 3. FORMATTING HELPERS ---
+  const formatDate = (dateString) => {
+    if (!dateString) return 'TBA';
+    try {
+      return new Date(dateString).toLocaleDateString('en-US', { 
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric' 
       });
-    };
-    
-    // Same day event with start and end times
-    if (end && start.toDateString() === end.toDateString() && endHasMeaningfulTime) {
-      return `${formatTime(start)} - ${formatTime(end)}`;
-    }
-    
-    // Just start time
-    if (startHasMeaningfulTime) {
-      return formatTime(start);
-    }
-    
-    return null;
-  };
-
-  const formattedDate = formatDateRange(date, endDate);
-  const formattedTime = time || formatTimeRange(date, endDate);
-
-  const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
-      case 'upcoming': return '#4cc9f0';
-      case 'ongoing': return '#667eea';
-      case 'completed': return '#9ca3af';
-      case 'cancelled': return '#ef4444';
-      default: return '#667eea';
+    } catch (e) {
+      return dateString;
     }
   };
 
-  const getTypeColor = (type) => {
-    switch(type?.toLowerCase()) {
-      case 'volunteering': return '#10b981';
-      case 'workshop': return '#3b82f6';
-      case 'social': return '#f59e0b';
-      case 'competition': return '#ef4444';
-      case 'networking': return '#8b5cf6';
-      default: return '#6b7280';
+  const getBadgeClass = (eventType) => {
+    switch (eventType?.toLowerCase()) {
+      case 'volunteering': return 'badge-green';
+      case 'competition': return 'badge-orange';
+      case 'networking': return 'badge-purple';
+      case 'workshop': return 'badge-blue';
+      default: return 'badge-gray';
     }
   };
-
-  const getTypeLabel = (type) => {
-    if (!type) return 'workshop';
-    return type.toLowerCase();
-  };
-
-  const isFull = maxAttendees && attendees >= maxAttendees;
-  const isCompleted = status?.toLowerCase() === 'completed';
-  const spotsLeft = maxAttendees ? maxAttendees - attendees : null;
 
   return (
-    <div className="event-card">
-      {/* Image Section with Badges */}
-      <div className="event-image">
-        {imageUrl ? (
-          <img src={imageUrl} alt={title} />
+    <div className="photo-event-card">
+      {/* 1. Image Header */}
+      <div className="card-image-container">
+        {effectiveImage ? (
+          <img src={effectiveImage} alt={title} className="card-img" />
         ) : (
-          <div className="event-image-placeholder">
-            <span>📅</span>
-          </div>
+          <div className="card-img-placeholder" />
         )}
         
-        {/* Type Badge - Top Right */}
-        <span 
-          className="event-type-badge" 
-          style={{ backgroundColor: getTypeColor(type) }}
-        >
-          {getTypeLabel(type)}
-        </span>
-
-        {/* Status Badge - Top Left */}
-        <span 
-          className="event-status-badge" 
-          style={{ backgroundColor: getStatusColor(status) }}
-        >
-          {status || 'upcoming'}
+        {/* Type Badge */}
+        <span className={`card-badge ${getBadgeClass(effectiveType)}`}>
+          {effectiveType}
         </span>
       </div>
 
-      <div className="event-content">
-        <h3 className="event-title">{title}</h3>
-        <p className="event-description">{description}</p>
+      {/* 2. Content Body */}
+      <div className="card-body">
+        <h3 className="card-title">{title}</h3>
+        <p className="card-desc">{description}</p>
 
-        <div className="event-details">
-          <div className="event-detail-item">
-            <svg className="event-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="16" y1="2" x2="16" y2="6"></line>
-              <line x1="8" y1="2" x2="8" y2="6"></line>
-              <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <span>{formattedDate}</span>
+        {/* Metadata List */}
+        <div className="card-meta-list">
+          <div className="meta-row">
+            <Calendar className="meta-icon" size={18} />
+            <span>{formatDate(effectiveDate)}</span>
           </div>
-          {formattedTime && (
-            <div className="event-detail-item">
-              <svg className="event-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>{formattedTime}</span>
-            </div>
-          )}
-          <div className="event-detail-item">
-            <svg className="event-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
-            <span>{location}</span>
+          
+          <div className="meta-row">
+            <Clock className="meta-icon" size={18} />
+            <span>{time || 'Time TBA'}</span>
           </div>
-          <div className="event-detail-item">
-            <svg className="event-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-            <span>{attendees}{maxAttendees ? ` / ${maxAttendees}` : ''} registered</span>
+          
+          <div className="meta-row">
+            <MapPin className="meta-icon" size={18} />
+            <span>{location || 'Location TBA'}</span>
+          </div>
+          
+          <div className="meta-row">
+            <Users className="meta-icon" size={18} />
+            <span>{attendees || 0} / {effectiveMaxAttendees || '∞'} registered</span>
           </div>
         </div>
 
-        <div className="event-footer">
-          <button 
-            className={`btn-register ${(isFull || isCompleted) ? 'btn-disabled' : ''}`}
-            onClick={onRegister}
-            disabled={isFull || isCompleted}
-          >
-            <svg className="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-            {isCompleted ? 'Event Ended' : isFull ? 'Event Full' : 'Register Now'}
-          </button>
-          {spotsLeft !== null && spotsLeft > 0 && spotsLeft <= 10 && !isCompleted && (
-            <span className="event-spots-left">
-              {spotsLeft} spots left!
-            </span>
+        {/* 3. Register Button (Updated Logic) */}
+        <button 
+          className={`card-btn ${isCompleted ? 'btn-disabled' : ''}`} 
+          onClick={!isCompleted ? onRegister : undefined}
+          disabled={isCompleted}
+        >
+          {isCompleted ? (
+            'Event Ended'
+          ) : (
+            <>
+              <Check size={18} strokeWidth={3} /> Register Now
+            </>
           )}
-        </div>
+        </button>
       </div>
     </div>
   );

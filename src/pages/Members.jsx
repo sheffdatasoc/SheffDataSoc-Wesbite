@@ -1,12 +1,33 @@
-/* ========================================
-   /pages/Members.jsx
-   ======================================== */
-
 import React, { useState } from 'react';
 import { useMembers } from '../hooks/useSupabase';
 import MemberCard from '../components/MemberCard';
 import { Search } from 'lucide-react';
 import './Members.css';
+
+// --- Helper Functions ---
+
+const getMemberYear = (member) => {
+  return member.academic_year || 'Unknown';
+};
+
+const isCommitteeMember = (member) => {
+  // NEW LOGIC: Checks the database flag directly
+  // This gives you manual control via the Notion column
+  return member.is_committee === true;
+};
+
+const checkMemberMatches = (member, query) => {
+  if (!query) return true;
+  const lowerQuery = query.toLowerCase();
+  
+  return (
+    (member.name && member.name.toLowerCase().includes(lowerQuery)) ||
+    (member.role && member.role.toLowerCase().includes(lowerQuery)) ||
+    (member.major && member.major.toLowerCase().includes(lowerQuery))
+  );
+};
+
+// ------------------------------------------------
 
 function Members() {
   const { members, loading } = useMembers();
@@ -14,7 +35,7 @@ function Members() {
   const [activeTab, setActiveTab] = useState('extended');
 
   // Get unique academic years and sort them (most recent first)
-  const academicYears = [...new Set(members.map(m => m.getAcademicYear()))]
+  const academicYears = [...new Set(members.map(m => getMemberYear(m)))]
     .filter(year => year !== 'Unknown')
     .sort((a, b) => {
       // Sort by first year in format "2024/25"
@@ -26,11 +47,16 @@ function Members() {
   // Group members by academic year
   const membersByYear = academicYears.reduce((acc, year) => {
     acc[year] = members.filter(member => {
-      const matchesSearch = member.matchesSearch(searchQuery);
-      const matchesYear = member.getAcademicYear() === year;
+      
+      const matchesSearch = checkMemberMatches(member, searchQuery);
+      const matchesYear = getMemberYear(member) === year;
+      
+      // Tab Logic:
+      // 'extended' -> Shows everyone (Extended + Core + Members)
+      // 'committee' -> Shows only those marked as Committee in Notion
       const matchesTab = activeTab === 'extended' 
         ? true 
-        : member.isCommittee();
+        : isCommitteeMember(member);
       
       return matchesSearch && matchesYear && matchesTab;
     });
@@ -49,7 +75,7 @@ function Members() {
   }
 
   // Check if there are any members to display
-  const hasMembers = academicYears.some(year => membersByYear[year].length > 0);
+  const hasMembers = academicYears.some(year => membersByYear[year] && membersByYear[year].length > 0);
 
   return (
     <div className="members-page">
@@ -94,14 +120,14 @@ function Members() {
         <div className="members-by-year">
           {academicYears.map(year => {
             const yearMembers = membersByYear[year];
-            if (yearMembers.length === 0) return null;
+            if (!yearMembers || yearMembers.length === 0) return null;
 
             return (
               <div key={year} className="year-section">
                 <h2 className="year-heading">{year}</h2>
                 <div className="members-grid">
                   {yearMembers.map(member => (
-                    <MemberCard key={member.id} member={member} />
+                    <MemberCard key={member.id || member.notion_id} member={member} />
                   ))}
                 </div>
               </div>

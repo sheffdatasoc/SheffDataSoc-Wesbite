@@ -3,57 +3,19 @@
    ======================================== */
 
 import React, { useState } from 'react';
-import Hero from '../components/Hero';
 import { Search } from 'lucide-react';
+import { useGlossary } from '../hooks/useSupabase';
 import './Glossary.css';
 
 function Glossary() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
-  // Sample glossary terms - replace with Supabase data when ready
-  const terms = [
-    {
-      term: 'API',
-      definition: 'Application Programming Interface - A set of protocols and tools for building software applications.',
-      category: 'Programming',
-      example: 'REST APIs allow different applications to communicate with each other.'
-    },
-    {
-      term: 'Machine Learning',
-      definition: 'A subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed.',
-      category: 'AI/ML',
-      example: 'Recommendation systems use machine learning to suggest products based on user behavior.'
-    },
-    {
-      term: 'Data Visualization',
-      definition: 'The graphical representation of information and data using visual elements like charts, graphs, and maps.',
-      category: 'Data Science',
-      example: 'A bar chart showing sales trends over time is a form of data visualization.'
-    },
-    {
-      term: 'Python',
-      definition: 'A high-level, interpreted programming language known for its simplicity and readability.',
-      category: 'Programming',
-      example: 'Python is widely used in data science for its powerful libraries like Pandas and NumPy.'
-    },
-    {
-      term: 'Neural Network',
-      definition: 'A series of algorithms that attempt to recognize underlying relationships in data through a process that mimics the human brain.',
-      category: 'AI/ML',
-      example: 'Deep learning uses neural networks with multiple layers to process complex patterns.'
-    }
-  ];
-
-  const categories = ['all', ...new Set(terms.map(t => t.category))];
+  const { terms, loading, error } = useGlossary();
 
   const filteredTerms = terms.filter(term => {
-    const matchesSearch = 
+    const matchesSearch =
       term.term.toLowerCase().includes(searchQuery.toLowerCase()) ||
       term.definition.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = 
-      selectedCategory === 'all' || term.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   });
 
   // Group by first letter
@@ -66,17 +28,47 @@ function Glossary() {
 
   const letters = Object.keys(groupedTerms).sort();
 
+  if (loading) {
+    return (
+      <div className="glossary-page">
+        <div className="glossary-hero">
+          <span className="hero-badge">📚 Learn the Language</span>
+          <h1>Data Science Glossary</h1>
+          <p>Your comprehensive guide to data science terminology</p>
+        </div>
+        <div className="glossary-content">
+          <p className="results-info">Loading glossary terms...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="glossary-page">
+        <div className="glossary-hero">
+          <span className="hero-badge">📚 Learn the Language</span>
+          <h1>Data Science Glossary</h1>
+          <p>Your comprehensive guide to data science terminology</p>
+        </div>
+        <div className="glossary-content">
+          <p className="results-info error-message">Error loading glossary: {error}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="glossary-page">
-      <Hero 
-        title="Data Science Glossary"
-        subtitle="Your comprehensive guide to data science terminology"
-        showButtons={false}
-        showStats={false}
-      />
+      {/* Hero Section */}
+      <div className="glossary-hero">
+        <span className="hero-badge">📚 Learn the Language</span>
+        <h1>Data Science Glossary</h1>
+        <p>Your comprehensive guide to data science terminology</p>
+      </div>
 
       <div className="glossary-content">
-        {/* Search and Filter */}
+        {/* Search */}
         <div className="glossary-controls">
           <div className="search-bar">
             <Search size={20} className="search-icon" />
@@ -88,21 +80,6 @@ function Glossary() {
               className="search-input"
             />
           </div>
-
-          <div className="filter-group">
-            <label>Category:</label>
-            <select 
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="filter-select"
-            >
-              {categories.map(cat => (
-                <option key={cat} value={cat}>
-                  {cat === 'all' ? 'All Categories' : cat}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
 
         <p className="results-info">
@@ -113,8 +90,8 @@ function Glossary() {
         {letters.length > 0 && (
           <div className="letter-nav">
             {letters.map(letter => (
-              <a 
-                key={letter} 
+              <a
+                key={letter}
                 href={`#letter-${letter}`}
                 className="letter-link"
               >
@@ -123,7 +100,7 @@ function Glossary() {
             ))}
           </div>
         )}
-
+        
         {/* Terms by Letter */}
         <div className="glossary-terms">
           {letters.length > 0 ? (
@@ -132,15 +109,22 @@ function Glossary() {
                 <h2 className="letter-heading">{letter}</h2>
                 <div className="terms-list">
                   {groupedTerms[letter].map((term, index) => (
-                    <div key={index} className="term-card">
+                    <div key={term.id || index} className="term-card">
                       <div className="term-header">
                         <h3 className="term-title">{term.term}</h3>
-                        <span className="category-badge">{term.category}</span>
+                        {term.category && (
+                          <span className="category-badge">{term.category}</span>
+                        )}
                       </div>
                       <p className="term-definition">{term.definition}</p>
-                      {term.example && (
+                      {term.examples && (
                         <div className="term-example">
-                          <strong>Example:</strong> {term.example}
+                          <strong>Example:</strong> {term.examples}
+                        </div>
+                      )}
+                      {term.related_terms && term.related_terms.length > 0 && (
+                        <div className="term-example">
+                          <strong>Related Term(s): </strong> {term.related_terms.join(', ')}
                         </div>
                       )}
                     </div>

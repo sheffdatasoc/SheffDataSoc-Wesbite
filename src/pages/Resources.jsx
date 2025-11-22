@@ -3,7 +3,7 @@
    ======================================== */
 
 import React, { useState } from 'react';
-import Hero from '../components/Hero';
+import { useResources } from '../hooks/useSupabase';
 import { ExternalLink, Search } from 'lucide-react';
 import './Resources.css';
 
@@ -11,69 +11,30 @@ function Resources() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('all');
 
-  // Sample resources - replace with Supabase data
-  const resources = [
-    {
-      id: 1,
-      title: 'Python for Data Science Handbook',
-      description: 'Comprehensive guide to using Python for data analysis and visualization.',
-      type: 'book',
-      url: 'https://jakevdp.github.io/PythonDataScienceHandbook/',
-      tags: ['python', 'data-analysis']
-    },
-    {
-      id: 2,
-      title: 'Kaggle Learn',
-      description: 'Free micro-courses covering machine learning, Python, and data visualization.',
-      type: 'course',
-      url: 'https://www.kaggle.com/learn',
-      tags: ['ml', 'python', 'free']
-    },
-    {
-      id: 3,
-      title: 'Fast.ai',
-      description: 'Practical deep learning course for coders.',
-      type: 'course',
-      url: 'https://www.fast.ai/',
-      tags: ['deep-learning', 'free']
-    },
-    {
-      id: 4,
-      title: 'Scikit-learn Documentation',
-      description: 'Official documentation for the most popular ML library in Python.',
-      type: 'documentation',
-      url: 'https://scikit-learn.org/stable/',
-      tags: ['ml', 'python', 'documentation']
-    },
-    {
-      id: 5,
-      title: 'Towards Data Science',
-      description: 'Medium publication with thousands of data science articles.',
-      type: 'blog',
-      url: 'https://towardsdatascience.com/',
-      tags: ['articles', 'tutorials']
-    },
-    {
-      id: 6,
-      title: 'Kaggle Datasets',
-      description: 'Find and publish datasets for your data science projects.',
-      type: 'dataset',
-      url: 'https://www.kaggle.com/datasets',
-      tags: ['datasets', 'projects']
-    }
-  ];
+  const { resources, loading, error } = useResources();
 
-  const types = ['all', ...new Set(resources.map(r => r.type))];
+  // Extract unique types from resources for filter dropdown
+  const types = ['all', ...new Set(resources.map(r => r.type).filter(Boolean))];
 
+  // Filter resources based on search query and type
   const filteredResources = resources.filter(resource => {
-    const matchesSearch = 
-      resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      resource.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-    const matchesType = selectedType === 'all' || resource.type === selectedType;
+    const name = resource.name || '';
+    const description = resource.description || '';
+    const tags = resource.tags || [];
+    const type = resource.type || '';
+
+    const matchesSearch =
+      name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesType =
+      selectedType === 'all' || type.toLowerCase() === selectedType.toLowerCase();
+
     return matchesSearch && matchesType;
   });
 
+  // Map resource type to a color
   const getTypeColor = (type) => {
     const colors = {
       book: '#667eea',
@@ -83,17 +44,20 @@ function Resources() {
       dataset: '#4cc9f0',
       tool: '#7209b7'
     };
-    return colors[type] || '#667eea';
+    return colors[type.toLowerCase()] || '#999999'; // gray default
   };
+
+  if (loading) return <p>Loading resources...</p>;
+  if (error) return <p>Error loading resources: {error}</p>;
 
   return (
     <div className="resources-page">
-      <Hero 
-        title="Learning Resources"
-        subtitle="Curated collection of books, courses, and tools for data science"
-        showButtons={false}
-        showStats={false}
-      />
+      {/* Hero Section */}
+      <div className="resources-hero">
+        <span className="hero-badge">📚 Curated Learning</span>
+        <h1>Learning Resources</h1>
+        <p>Curated collection of books, courses, and tools for data science</p>
+      </div>
 
       <div className="resources-content">
         {/* Search and Filter */}
@@ -111,12 +75,12 @@ function Resources() {
 
           <div className="filter-group">
             <label>Type:</label>
-            <select 
+            <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
               className="filter-select"
             >
-              {types.map(type => (
+              {types.map((type) => (
                 <option key={type} value={type}>
                   {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
                 </option>
@@ -128,10 +92,10 @@ function Resources() {
         {/* Resources Grid */}
         {filteredResources.length > 0 ? (
           <div className="resources-grid">
-            {filteredResources.map(resource => (
-              <div key={resource.id} className="resource-card">
+            {filteredResources.map((resource) => (
+              <div key={resource.notion_id} className="resource-card">
                 <div className="resource-header">
-                  <span 
+                  <span
                     className="resource-type"
                     style={{ backgroundColor: getTypeColor(resource.type) }}
                   >
@@ -139,26 +103,30 @@ function Resources() {
                   </span>
                 </div>
 
-                <h3>{resource.title}</h3>
+                <h3>{resource.name}</h3>
                 <p className="resource-description">{resource.description}</p>
 
-                {resource.tags && (
+                {resource.tags && resource.tags.length > 0 && (
                   <div className="resource-tags">
                     {resource.tags.map((tag, i) => (
-                      <span key={i} className="tag">{tag}</span>
+                      <span key={i} className="tag">
+                        {tag}
+                      </span>
                     ))}
                   </div>
                 )}
 
                 <div className="resource-footer">
-                  <a 
-                    href={resource.url} 
-                    className="resource-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit Resource <ExternalLink size={16} />
-                  </a>
+                  {resource.resource_url && (
+                    <a
+                      href={resource.resource_url}
+                      className="resource-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit Resource <ExternalLink size={16} />
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
