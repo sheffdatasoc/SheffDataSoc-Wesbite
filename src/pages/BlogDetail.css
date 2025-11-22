@@ -3,12 +3,16 @@
 ======================================== */
 
 .blog-detail-page {
-  max-width: 800px;
+  max-width: 850px; /* Slightly tighter for reading */
   margin: 0 auto;
   padding: 2rem 1.5rem;
   min-height: 100vh;
+  position: relative;
 }
 
+/* ========================================
+   Back Button
+======================================== */
 .back-button {
   display: inline-flex;
   align-items: center;
@@ -27,9 +31,229 @@
 .back-button:hover {
   background: #f9fafb;
   border-color: #d1d5db;
-  color: #374151;
+  /* BRAND: Navy on Hover */
+  color: #182F4D; 
 }
 
+/* ========================================
+   Floating Action Buttons (FAB)
+   Same Logic as GuideDetail
+======================================== */
+.fab-container {
+  position: fixed;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+  gap: 1rem;
+
+  /* Desktop Positioning */
+  top: 14rem;
+  /* Calculation: Center - (ContentWidth/2) - Offset */
+  left: calc(50% - 540px); 
+}
+
+/* Main FAB button */
+.floating-toc-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #182F4D; /* Navy */
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.floating-toc-button:hover {
+  background: #DF694E; /* Terracotta */
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(223, 105, 78, 0.4);
+}
+
+.floating-toc-button.active {
+  transform: rotate(90deg);
+  background: #DF694E;
+}
+
+/* Action buttons container */
+.fab-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.fab-actions.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+/* Individual action buttons */
+.fab-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  color: #182F4D; /* Navy */
+  border: 2px solid #182F4D;
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  white-space: nowrap;
+  transform: translateX(-20px); /* Slide animation start */
+}
+
+.fab-action-btn:hover {
+  background: #182F4D;
+  color: white;
+  box-shadow: 0 6px 16px rgba(24, 47, 77, 0.3);
+  transform: translateX(-25px);
+}
+
+/* ========================================
+   RESPONSIVE FAB (Mobile Fix)
+   When screen is < 1200px, move to Bottom Right
+======================================== */
+@media (max-width: 1200px) {
+  .fab-container {
+    top: auto;
+    left: auto;
+    bottom: 2rem;
+    right: 1.5rem;
+    align-items: flex-end;
+    flex-direction: column-reverse; /* Pop up instead of down */
+  }
+
+  .fab-actions {
+    flex-direction: column-reverse;
+    transform: translateY(10px);
+    align-items: flex-end;
+  }
+
+  .fab-actions.open {
+    transform: translateY(0);
+  }
+  
+  .fab-action-btn {
+    transform: none !important;
+  }
+}
+
+/* ========================================
+   TOC Drawer
+======================================== */
+.toc-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(24, 47, 77, 0.4);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 9998;
+}
+
+.toc-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.floating-toc {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 9999;
+  overflow-y: auto;
+}
+
+.floating-toc.open {
+  left: 0;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: white;
+}
+
+.toc-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #182F4D;
+}
+
+.toc-close-btn {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* TOC Links */
+.floating-toc ul { list-style: none; padding: 1.5rem; margin: 0; }
+.floating-toc li { margin: 0.5rem 0; }
+
+.floating-toc a {
+  color: #4b5563;
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: block;
+  transition: all 0.2s ease;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  line-height: 1.4;
+}
+
+.floating-toc a:hover {
+  background: #F5F5F2;
+  color: #DF694E;
+}
+
+.floating-toc a.active {
+  background: #182F4D;
+  font-weight: 600;
+  color: white;
+}
+
+.level-1 { font-weight: 700; }
+.level-2 { padding-left: 1rem; }
+.level-3 { padding-left: 2rem; opacity: 0.9; }
+
+
+/* ========================================
+   Article Container
+======================================== */
 .blog-detail-container {
   background: white;
   border-radius: 16px;
@@ -39,20 +263,20 @@
 
 .blog-detail-tag {
   display: inline-block;
-  background: #eef2f6;
-  color: #333;
+  background: rgba(24, 47, 77, 0.05);
+  color: #182F4D;
   font-size: 0.85rem;
   padding: 6px 14px;
   border-radius: 12px;
   text-transform: lowercase;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
 .blog-detail-title {
   font-size: 2.5rem;
-  font-weight: 700;
-  color: #1a1a2e;
+  font-weight: 800;
+  color: #182F4D;
   line-height: 1.3;
   margin-bottom: 1.5rem;
 }
@@ -93,6 +317,9 @@
   display: block;
 }
 
+/* ========================================
+   Markdown Content
+======================================== */
 .blog-detail-content {
   font-size: 1.1rem;
   line-height: 1.8;
@@ -102,111 +329,50 @@
 .blog-detail-excerpt {
   margin-bottom: 1.5rem;
   color: #4b5563;
-}
-
-.loading,
-.error {
-  text-align: center;
-  padding: 3rem;
-  font-size: 1.1rem;
-  color: #6b7280;
-}
-
-/* ========================================
-   Markdown Content Styling (mimics Guides)
-======================================== */
-.blog-detail-content p {
-  margin-bottom: 1.25rem;
-}
-
-.blog-detail-content ul,
-.blog-detail-content ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.blog-detail-content li {
-  margin-bottom: 0.5rem;
-}
-
-.blog-detail-content a {
-  color: #4f46e5;
-  text-decoration: underline;
-}
-
-.blog-detail-content a:hover {
-  color: #6366f1;
-}
-
-.blog-detail-content blockquote {
-  border-left: 4px solid #e5e7eb;
+  font-size: 1.2rem;
+  border-left: 4px solid #DF694E;
   padding-left: 1rem;
-  margin: 1.5rem 0;
-  color: #6b7280;
-  font-style: italic;
-}
-
-.blog-detail-content pre {
-  background: #1e1e1e !important;
-  padding: 1.5rem;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin: 1.5rem 0;
-}
-
-.blog-detail-content pre code {
-  font-family: "Fira Code", "Courier New", monospace;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-/* Inline code */
-.blog-detail-content :not(pre) > code {
-  background: #f4f4f4;
-  padding: 3px 6px;
-  border-radius: 5px;
-  font-family: "Fira Code", "Courier New", monospace;
-  color: #e83e8c;
-  font-size: 0.9em;
 }
 
 /* Headings */
 .blog-detail-content h1,
 .blog-detail-content h2,
-.blog-detail-content h3,
-.blog-detail-content h4 {
-  color: #1a1a2e;
-  scroll-margin-top: 2rem;
-}
-
-.blog-detail-content h1 {
-  font-size: 2rem;
-  margin-top: 2.5rem;
-}
-
-.blog-detail-content h2 {
-  font-size: 1.75rem;
-  margin-top: 2rem;
-}
-
 .blog-detail-content h3 {
-  font-size: 1.5rem;
-  margin-top: 1.75rem;
+  color: #182F4D;
+  scroll-margin-top: 2rem;
+  font-weight: 700;
 }
 
-.blog-detail-content h4 {
-  font-size: 1.25rem;
-  margin-top: 1.5rem;
+.blog-detail-content h1 { font-size: 2rem; margin-top: 2.5rem; }
+.blog-detail-content h2 { font-size: 1.75rem; margin-top: 2rem; }
+
+/* Links */
+.blog-detail-content a {
+  color: #DF694E;
+  text-decoration: underline;
+}
+.blog-detail-content a:hover {
+  color: #182F4D;
 }
 
-/* ========================================
-   Responsive
-======================================== */
+/* Anchor Links */
+.markdown-heading { position: relative; }
+.header-anchor {
+  text-decoration: none;
+  color: transparent;
+  position: absolute;
+  left: -24px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.markdown-heading:hover .header-anchor { opacity: 0.5; color: #DF694E; }
+.header-anchor:hover { opacity: 1 !important; color: #182F4D !important; }
+
+/* Responsive */
 @media (max-width: 768px) {
   .blog-detail-container {
     padding: 2rem 1.5rem;
   }
-
   .blog-detail-title {
     font-size: 2rem;
   }
