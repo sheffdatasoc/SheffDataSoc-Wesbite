@@ -1,17 +1,17 @@
-/* NavBar.css - Merged & Resolved */
-
 /* =========================================
-   1. GLOBAL STYLES (Desktop Default)
+   /components/NavBar.css - OFFICIAL BRAND PALETTE
    ========================================= */
 
 .navbar {
   background: white;
   color: #333;
   padding: 1rem 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   position: sticky;
   top: 0;
   z-index: 1000;
+  /* Add a subtle top border in Brand Navy */
+  border-top: 4px solid #182F4D;
 }
 
 .nav-container {
@@ -21,7 +21,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: relative; /* Needed for positioning mobile menu correctly */
+  position: relative; 
 }
 
 /* Logo */
@@ -31,40 +31,38 @@
   gap: 1rem;
   text-decoration: none;
   color: inherit;
-  z-index: 1001; /* Ensure logo stays above mobile menu */
+  z-index: 1001; 
 }
 
-.logo-icon {
-  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
-  color: white;
-  width: 50px;
+.navbar-logo-img {
   height: 50px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.1rem;
+  width: auto;
+  object-fit: contain;
 }
 
 .logo-text h1 {
-  color: #1a1a2e;
+  /* BRAND: Official Navy */
+  color: #182F4D;
   font-size: 1.3rem;
   margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .logo-text p {
-  color: #666;
+  /* BRAND: Official Black (Softened) */
+  color: #4a4a4a;
   font-size: 0.85rem;
   margin: 0;
+  font-weight: 500;
 }
 
-/* Hamburger Icon (Hidden by default, shown on mobile) */
+/* Hamburger Icon */
 .menu-icon {
   display: none;
   cursor: pointer;
-  color: #333;
-  z-index: 1001; /* Ensure icon stays above mobile menu */
+  color: #182F4D; /* Navy */
+  z-index: 1001; 
 }
 
 /* Navigation Menu */
@@ -86,13 +84,16 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #333;
+  
+  /* BRAND: Default text is Navy */
+  color: #182F4D;
+  
   text-decoration: none;
   padding: 0.7rem 1rem;
-  border-radius: 8px;
+  border-radius: 8px; /* Soft Rectangle */
   transition: all 0.2s;
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: 600; /* Slightly bolder for readability */
   background: none;
   border: none;
   cursor: pointer;
@@ -101,8 +102,9 @@
 
 /* Hover for non-active links */
 .nav-link:hover {
-  background: #f3f4f6;
-  color: #7c3aed;
+  /* BRAND: Hover bg is Off-White, Text is Terracotta */
+  background: #F5F5F2;
+  color: #DF694E;
 }
 
 .nav-link svg {
@@ -110,13 +112,16 @@
   transition: color 0.2s ease;
 }
 
-/* Active State (Gradient from Maya Branch) */
+/* Active State */
 .nav-link.active {
   font-weight: 700;
   color: white;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  
+  /* BRAND: Active State is Navy Gradient (Matches Filters) */
+  background: linear-gradient(135deg, #374B66 0%, #182F4D 100%);
+  
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(24, 47, 77, 0.2);
 }
 
 .nav-link.active svg {
@@ -124,7 +129,8 @@
 }
 
 .nav-link.active:hover {
-  background: linear-gradient(135deg, #8b3aed 0%, #bf7dfc 100%);
+  /* Slightly lighter navy on hover */
+  background: linear-gradient(135deg, #4a5d7e 0%, #2a4066 100%);
   transform: translateY(-1px);
 }
 
@@ -145,11 +151,12 @@
   right: 0;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   min-width: 180px;
   padding: 0.5rem 0;
   list-style: none;
   margin-top: 0.5rem;
+  border: 1px solid #f3f4f6;
   animation: dropdownFade 0.2s ease;
   z-index: 1002;
 }
@@ -166,37 +173,35 @@
 .dropdown-menu a {
   display: block;
   padding: 0.7rem 1.2rem;
-  color: #333;
+  /* BRAND: Dropdown items are Navy */
+  color: #182F4D;
   text-decoration: none;
   transition: all 0.2s;
+  font-weight: 500;
 }
 
 .dropdown-menu a:hover {
-  background: #f3f4f6;
-  color: #7c3aed;
+  background: #F5F5F2;
+  color: #DF694E; /* Terracotta Hover */
 }
 
 /* =========================================
    2. MEDIUM SCREENS (Tablets)
    Range: < 1024px
-   Goal: Icons Only (No Text)
    ========================================= */
 @media (max-width: 1024px) {
   .nav-menu {
     gap: 0.2rem;
   }
   
-  /* HIDE text labels */
   .nav-link span {
     display: none; 
   }
   
-  /* HIDE tagline */
   .logo-text p {
     display: none;
   }
 
-  /* HIDE dropdown arrow to make icons cleaner */
   .dropdown-toggle svg:last-child {
     display: none;
   }
@@ -210,7 +215,6 @@
 /* =========================================
    3. SMALL SCREENS (Mobile)
    Range: < 768px
-   Goal: Hamburger Menu + Text Returns
    ========================================= */
 @media (max-width: 768px) {
   .nav-container {
@@ -218,19 +222,25 @@
     justify-content: space-between;
   }
 
-  /* 1. Show Hamburger */
+  .navbar-logo-img {
+    height: 40px;
+  }
+
+  .logo-text h1 {
+    font-size: 1.1rem;
+  }
+
   .menu-icon {
     display: block;
   }
 
-  /* 2. Mobile Menu Drawer Style */
   .nav-menu {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
-    top: 80px; /* Starts below the navbar header */
-    left: -100%; /* Hidden off-screen */
+    top: 80px;
+    left: -100%; 
     width: 100%;
     height: calc(100vh - 80px);
     background: white;
@@ -240,7 +250,6 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   }
 
-  /* Class added by React toggles this */
   .nav-menu.active {
     left: 0;
   }
@@ -250,13 +259,11 @@
     margin: 0;
   }
 
-  /* 3. RESTORE Text Labels for the Drawer */
   .nav-link span {
-    display: inline-block; /* Override the 1024px hide rule */
+    display: inline-block; 
     margin-left: 1rem;
   }
 
-  /* Restore dropdown arrow */
   .dropdown-toggle svg:last-child {
     display: block;
     margin-left: auto;
@@ -268,13 +275,17 @@
     padding: 1rem 1.5rem;
   }
 
-  /* 4. Mobile Dropdowns (Relative instead of floating) */
+  /* Mobile Dropdowns */
   .dropdown-menu {
     position: relative;
     top: 0;
     box-shadow: none;
-    background: #f9fafb;
-    border-left: 4px solid #7c3aed;
+    background: #F5F5F2; /* Off-White for nested menu */
+    border: none;
+    
+    /* BRAND: Terracotta accent line for mobile menus */
+    border-left: 4px solid #DF694E; 
+    
     width: 100%;
     padding-left: 1rem;
     animation: none;

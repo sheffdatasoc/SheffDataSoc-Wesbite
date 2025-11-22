@@ -12,13 +12,16 @@ import {
   Menu,
   X
 } from 'lucide-react';
+// IMPORT THE NEW LOGO
+import logoImg from '../assets/datasoc-logo.png'; 
 import './NavBar.css';
 
 function NavBar() {
   // -- State Management --
   const [activeDropdown, setActiveDropdown] = useState(null); // 'learning' | 'about' | null
   const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
-
+  
+  // To track active pages for the gradient styling
   const location = useLocation();
 
   // Close mobile menu automatically when route changes
@@ -55,9 +58,9 @@ function NavBar() {
     <nav className="navbar">
       <div className="nav-container">
 
-        {/* Logo */}
+        {/* --- UPDATED LOGO SECTION --- */}
         <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
-          <div className="logo-icon">SDS</div>
+          <img src={logoImg} alt="SheffDataSoc Logo" className="navbar-logo-img" />
           <div className="logo-text">
             <h1>SheffDataSoc</h1>
             <p>Sheffield Data Science Society</p>
@@ -166,4 +169,3 @@ function NavBar() {
 }
 
 export default NavBar;
-
