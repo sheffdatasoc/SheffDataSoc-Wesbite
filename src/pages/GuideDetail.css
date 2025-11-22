@@ -6,6 +6,7 @@
   margin: 0 auto;
   padding: 2rem 1.5rem;
   min-height: 100vh;
+  position: relative;
 }
 
 /* ========================================
@@ -28,22 +29,61 @@
 .back-button:hover {
   background: #f9fafb;
   border-color: #d1d5db;
-  color: #374151;
+  /* BRAND: Navy on hover */
+  color: #182F4D; 
 }
 
 /* ========================================
    Floating Action Buttons (FAB)
+   FIXED LOGIC: 
+   1. Desktop: Fixed to the left of content
+   2. Tablet/Mobile: Fixed to bottom-right corner
 ======================================== */
 .fab-container {
   position: fixed;
-  top: 14rem;
-  left: 50%;
-  transform: translateX(-560px);
   z-index: 999;
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* align menu under FAB on the right */
+  /* Default (Desktop): Align menu under FAB */
+  align-items: flex-end; 
   gap: 1rem;
+
+  /* DESKTOP POSITIONING */
+  top: 14rem;
+  /* Smart calculation: Center of screen minus half container width minus offset */
+  left: calc(50% - 620px); 
+  transform: none;
+}
+
+/* Main FAB button */
+.floating-toc-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  
+  /* BRAND: Navy Background */
+  background: #182F4D;
+  color: white;
+  
+  border: none;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.floating-toc-button:hover {
+  /* BRAND: Terracotta Hover */
+  background: #DF694E;
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(223, 105, 78, 0.4);
+}
+
+.floating-toc-button.active {
+  transform: rotate(90deg);
+  background: #DF694E; /* Active state Terracotta */
 }
 
 /* Action buttons container */
@@ -52,7 +92,6 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 0.75rem;
-
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
@@ -73,74 +112,76 @@
   align-items: center;
   gap: 0.75rem;
   background: white;
-  color: #4f46e5;
-  border: 2px solid #4f46e5;
+  
+  /* BRAND: Navy Text/Border */
+  color: #182F4D;
+  border: 2px solid #182F4D;
+  
   padding: 0.75rem 1.25rem;
   border-radius: 50px;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   white-space: nowrap;
-
-  /* Base left shift */
-  transform: translateX(-40px);
 }
 
-/* Progressive left offsets (cascade effect) */
-.fab-action-btn:nth-child(1) {
-  transform: translateX(-40px);
+/* Desktop Animation: Slide out to the left */
+.fab-container:not(.mobile-mode) .fab-action-btn {
+  transform: translateX(-20px);
 }
 
-.fab-action-btn:nth-child(2) {
-  transform: translateX(-40px);
-}
-
-/* Hover keeps relative offset but shifts slightly more */
 .fab-action-btn:hover {
-  background: #4f46e5;
+  /* BRAND: Navy Background on hover */
+  background: #182F4D;
   color: white;
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
-  transform: translateX(calc(-40px - 10px));
-}
-
-.fab-action-btn:nth-child(2):hover {
-  transform: translateX(calc(-40px - 10px));
-}
-
-/* Main FAB button */
-.floating-toc-button {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #4f46e5;
-  color: white;
-  border: none;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.floating-toc-button:hover {
-  background: #4338ca;
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.5);
-}
-
-.floating-toc-button.active {
-  transform: rotate(90deg);
-}
-
-.floating-toc-button:active:not(.active) {
-  transform: scale(0.95);
+  box-shadow: 0 6px 16px rgba(24, 47, 77, 0.3);
+  transform: translateX(-25px); /* Slide slightly more */
 }
 
 /* ========================================
-   TOC Backdrop
+   RESPONSIVE FAB (The Fix for "Breaking")
+   When screen is < 1300px, move button to Bottom Right
+======================================== */
+@media (max-width: 1300px) {
+  .fab-container {
+    top: auto;
+    left: auto;
+    bottom: 2rem;
+    right: 2rem;
+    align-items: flex-end;
+  }
+
+  /* Reverse the menu direction so it pops UP from the bottom */
+  .fab-container {
+    flex-direction: column-reverse;
+  }
+
+  .fab-actions {
+    flex-direction: column-reverse;
+    transform: translateY(10px); /* Slide up instead of down */
+    align-items: flex-end;
+  }
+
+  .fab-actions.open {
+    transform: translateY(0);
+  }
+  
+  /* Reset the side-slide animation for mobile */
+  .fab-action-btn, 
+  .fab-action-btn:nth-child(1), 
+  .fab-action-btn:nth-child(2) {
+    transform: none !important;
+  }
+
+  .fab-action-btn:hover {
+    transform: scale(1.05) !important;
+  }
+}
+
+/* ========================================
+   TOC Backdrop (The Overlay)
 ======================================== */
 .toc-backdrop {
   position: fixed;
@@ -148,11 +189,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(24, 47, 77, 0.4); /* Navy tint backdrop */
+  backdrop-filter: blur(2px);
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  z-index: 998;
+  z-index: 9998;
 }
 
 .toc-backdrop.active {
@@ -172,7 +214,7 @@
   background: white;
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   transition: left 0.3s ease;
-  z-index: 1000;
+  z-index: 9999; /* Topmost */
   overflow-y: auto;
 }
 
@@ -184,19 +226,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 1rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   background: white;
-  z-index: 1;
+  z-index: 10;
 }
 
 .toc-header h2 {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 700;
+  color: #182F4D;
 }
 
 .toc-close-btn {
@@ -206,15 +248,13 @@
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .toc-close-btn:hover {
   background: #f3f4f6;
-  color: #111827;
+  color: #DF694E;
 }
 
 /* TOC List */
@@ -225,47 +265,37 @@
 }
 
 .floating-toc li {
-  margin: 0.75rem 0;
+  margin: 0.5rem 0;
 }
 
 .floating-toc a {
-  color: #6b7280;
+  color: #4b5563;
   text-decoration: none;
   font-size: 0.95rem;
   display: block;
   transition: all 0.2s ease;
   padding: 0.5rem 0.75rem;
   border-radius: 6px;
+  line-height: 1.4;
 }
 
 .floating-toc a:hover {
-  background: #f3f4f6;
-  color: #4f46e5;
+  background: #F5F5F2; /* Off white */
+  color: #DF694E; /* Terracotta */
 }
 
 .floating-toc a.active {
-  background: #eef2ff;
+  background: #182F4D; /* Navy Background */
   font-weight: 600;
-  color: #4f46e5;
+  color: white;
 }
 
-.level-1 {
-  font-weight: 600;
-}
-
-.level-2 {
-  padding-left: 1rem;
-  font-size: 0.9rem;
-}
-
-.level-3 {
-  padding-left: 2rem;
-  font-size: 0.875rem;
-  opacity: 0.85;
-}
+.level-1 { font-weight: 700; }
+.level-2 { padding-left: 1rem; font-size: 0.9rem; }
+.level-3 { padding-left: 2rem; font-size: 0.875rem; opacity: 0.9; }
 
 /* ========================================
-   Layout
+   Article Layout
 ======================================== */
 .guide-layout {
   display: flex;
@@ -277,9 +307,6 @@
   max-width: 800px;
 }
 
-/* ========================================
-   Article Card
-======================================== */
 .guide-detail-container {
   background: white;
   border-radius: 16px;
@@ -289,10 +316,10 @@
 }
 
 .guide-detail-container .guide-title {
-  font-size: 2.4rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
   margin-bottom: 1rem;
-  color: #1a1a2e;
+  color: #182F4D; /* Navy */
   line-height: 1.2;
 }
 
@@ -304,162 +331,119 @@
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
-/* Category */
-.guide-detail-container .guide-category {
+.guide-date, .guide-readtime {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 1.5rem;
-  color: #374151;
+  gap: 6px;
 }
 
-/* Description */
-.guide-detail-container .guide-description {
-  font-size: 1.1rem;
+/* Category Tag */
+.guide-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   margin-bottom: 2rem;
-  color: #6b7280;
+  background: rgba(24, 47, 77, 0.05);
+  color: #182F4D;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.guide-detail-container .guide-description {
+  font-size: 1.15rem;
+  margin-bottom: 2rem;
+  color: #4b5563;
   line-height: 1.6;
+  border-left: 4px solid #DF694E; /* Terracotta accent */
+  padding-left: 1rem;
 }
 
 /* ========================================
-   CONTENT STYLING
+   MARKDOWN CONTENT STYLING
 ======================================== */
 .guide-content {
   margin-top: 2rem;
   font-size: 1.05rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: #374151;
-}
-
-.guide-content pre {
-  background: #1e1e1e !important;
-  padding: 1.5rem;
-  border-radius: 12px;
-  overflow-x: auto;
-  margin: 1.5rem 0;
-}
-
-.guide-content pre code {
-  font-family: "Fira Code", "Courier New", monospace;
-  font-size: 0.9rem;
-  line-height: 1.5;
-}
-
-/* Inline code */
-.guide-content :not(pre) > code {
-  background: #f4f4f4;
-  padding: 3px 6px;
-  border-radius: 5px;
-  font-family: "Fira Code", "Courier New", monospace;
-  color: #e83e8c;
-  font-size: 0.9em;
 }
 
 /* Headings */
 .guide-content h1,
 .guide-content h2,
-.guide-content h3,
-.guide-content h4 {
-  color: #1a1a2e;
-  scroll-margin-top: 2rem;
-}
-
-.guide-content h1 {
-  font-size: 2rem;
-  margin-top: 2.5rem;
-}
-
-.guide-content h2 {
-  font-size: 1.75rem;
-  margin-top: 2rem;
-}
-
 .guide-content h3 {
-  font-size: 1.5rem;
-  margin-top: 1.75rem;
+  color: #182F4D; /* Navy */
+  scroll-margin-top: 2rem;
+  font-weight: 700;
 }
 
-.guide-content h4 {
-  font-size: 1.25rem;
-  margin-top: 1.5rem;
-}
-
-/* Paragraphs */
-.guide-content p {
-  margin-bottom: 1.25rem;
-}
-
-/* Lists */
-.guide-content ul,
-.guide-content ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.guide-content li {
-  margin-bottom: 0.5rem;
-}
+.guide-content h1 { font-size: 2rem; margin-top: 2.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
+.guide-content h2 { font-size: 1.6rem; margin-top: 2rem; }
+.guide-content h3 { font-size: 1.3rem; margin-top: 1.75rem; }
 
 /* Links */
 .guide-content a {
-  color: #4f46e5;
+  color: #DF694E; /* Terracotta */
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .guide-content a:hover {
-  color: #6366f1;
+  color: #182F4D;
 }
 
-/* Blockquotes */
-.guide-content blockquote {
-  border-left: 4px solid #e5e7eb;
-  padding-left: 1rem;
+/* Code Blocks */
+.guide-content pre {
+  background: #182F4D !important; /* Navy Background for code */
+  padding: 1.5rem;
+  border-radius: 12px;
+  overflow-x: auto;
   margin: 1.5rem 0;
-  color: #6b7280;
-  font-style: italic;
+  color: #f3f4f6;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* Anchor on headings */
-.markdown-heading {
-  position: relative;
+/* Inline code */
+.guide-content :not(pre) > code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: "Fira Code", monospace;
+  color: #DF694E; /* Terracotta text for inline code */
+  font-size: 0.9em;
+  font-weight: 600;
 }
 
+/* Anchor Links */
+.markdown-heading { position: relative; }
 .header-anchor {
-  text-decoration: none;
+  text-decoration: none !important;
   color: transparent;
   position: absolute;
-  left: -24px;
+  left: -20px;
   opacity: 0;
-  transition: opacity 0.2s ease;
-  font-weight: 400;
-  font-size: 0.8em;
+  transition: all 0.2s ease;
 }
-
 .markdown-heading:hover .header-anchor {
-  opacity: 0.3;
-  color: #9ca3af;
+  opacity: 0.5;
+  color: #DF694E;
 }
-
 .header-anchor:hover {
   opacity: 1 !important;
-  color: #4f46e5 !important;
+  color: #182F4D !important;
 }
 
-/* ========================================
-   RESPONSIVE
-======================================== */
-@media (max-width: 968px) {
-  .guide-layout {
-    flex-direction: column;
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .guide-detail-container {
+    padding: 1.5rem;
   }
-
-  .floating-toc {
-    position: relative;
-    top: 0;
-    width: 100%;
-    max-height: 400px;
-    margin-bottom: 2rem;
+  .guide-detail-container .guide-title {
+    font-size: 1.8rem;
   }
 }
