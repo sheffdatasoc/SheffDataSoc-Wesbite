@@ -6,19 +6,19 @@
   --card-gap: 25px;
 }
 
-/* ========== PAGE WRAPPER (Igual que Sandbox) ========== */
+/* PAGE WRAPPER */
 .timeline-page {
   width: 100%;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f9fafb; /* Fondo gris muy suave consistente */
+  background: #f9fafb;
 }
 
-/* ========== HERO SECTION (Nuevo estilo Sandbox) ========== */
+/* HERO SECTION */
 .timeline-hero {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6); /* Mismo gradiente */
-  color: white; /* Asumimos blanco si no hay var(--white) */
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
+  color: white;
   text-align: center;
   padding: 5rem 2rem;
   margin-bottom: 3rem;
@@ -31,30 +31,27 @@
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   padding: 0.5rem 1.5rem;
-  border-radius: 9999px; /* Pill shape completa */
+  border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
 
 .timeline-hero h1 {
-  font-size: 2.5rem; /* Equivalente a var(--font-size-4xl) aprox */
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
-  line-height: 1.2;
-  color: white;
 }
 
 .timeline-hero p {
-  font-size: 1.25rem; /* Equivalente a var(--font-size-xl) */
+  font-size: 1.25rem;
   opacity: 0.95;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
-  color: rgba(219, 234, 254, 1); /* Azul muy claro para texto secundario */
 }
 
-/* ========== FILTERS ========== */
+/* FILTERS */
 .timeline-filters {
   display: flex;
   gap: 1rem;
@@ -64,6 +61,10 @@
   padding: 0 1rem;
 }
 
+.filter-wrapper {
+  position: relative;
+}
+
 .timeline-filters select {
   padding: 0.75rem 1.5rem;
   border: 1px solid #e5e7eb;
@@ -71,17 +72,35 @@
   background-color: white;
   color: #374151;
   font-size: 0.95rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   cursor: pointer;
-  outline: none;
+  appearance: none;
 }
 
-.timeline-filters select:focus {
-  border-color: #6366f1;
-  ring: 2px solid #6366f1;
+/* Clear button for filters */
+.clear-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
 }
 
-/* ========== TIMELINE STRUCTURE ========== */
+.clear-btn:hover {
+  background: #dc2626;
+}
+
+/* TIMELINE STRUCTURE */
 .timeline {
   position: relative;
   max-width: 900px;
@@ -91,7 +110,6 @@
   flex-direction: column;
 }
 
-/* Vertical center line */
 .timeline::after {
   content: '';
   position: absolute;
@@ -99,49 +117,43 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: #6366f1; /* Color primario (Indigo) */
+  background: #6366f1;
   transform: translateX(-50%);
   z-index: 1;
   border-radius: 2px;
 }
 
-/* Year Header */
 .timeline-year-header {
   font-size: 2.8rem;
   font-weight: 700;
   margin: 3rem 0 1.5rem;
-  color: #1f2937; /* Dark grey */
+  color: #1f2937;
   text-align: left;
-  padding-left: 1rem; /* Un poco de padding para móvil */
+  padding-left: 1rem;
 }
 
-/* Month Header */
 .timeline-month-header {
-  font-size: 2.0rem;
+  font-size: 2rem;
   font-weight: 600;
   margin: 1.5rem 0 1rem;
   color: #6366f1;
   border-bottom: 1px dashed #e5e7eb;
-  padding-bottom: 0.25rem;
-  text-align: center; /* Centrado se ve mejor con la línea */
-  background: #f9fafb; /* Match page bg para tapar la línea si es necesario */
-  position: relative;
-  z-index: 2;
+  text-align: center;
+  background: #f9fafb;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 0 1rem;
+  z-index: 2;
+  position: relative;
 }
 
-/* Timeline Item */
 .timeline-item {
   position: relative;
   width: 100%;
   margin: 3rem 0;
 }
 
-/* Marker */
 .timeline-marker {
   position: absolute;
   left: 50%;
@@ -156,7 +168,6 @@
   z-index: 3;
 }
 
-/* Branch connector */
 .timeline-connector {
   position: absolute;
   top: 8px;
@@ -169,11 +180,10 @@
 .timeline-item.left .timeline-connector { left: calc(50% - 50px); }
 .timeline-item.right .timeline-connector { left: 50%; }
 
-/* Event Card */
 .timeline-event-card {
   display: flex;
   background: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
   border-radius: 0.75rem;
   padding: 1.25rem;
   gap: 1rem;
@@ -186,7 +196,6 @@
 .timeline-item.left .timeline-event-card { margin-left: calc(50% - 40% - var(--card-gap)); }
 .timeline-item.right .timeline-event-card { margin-left: calc(50% + var(--card-gap)); }
 
-/* Icon */
 .timeline-icon {
   position: absolute;
   top: -5px;
@@ -214,13 +223,32 @@
   line-height: 1.5;
 }
 
-.card-image {
-  width: 50%; /* Tu preferencia original */
-  object-fit: cover;
+/* Image container */
+.card-image-container {
+  width: 35%;
+  min-width: 100px;
+  max-height: 140px;
+  overflow: hidden;
   border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Tags (Badges) */
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.card-image-container:hover .card-image {
+  transform: scale(1.05);
+}
+
+/* Tags */
 .tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -238,29 +266,64 @@
   border: 1px solid #e5e7eb;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-  /* Hero adjustments */
-  .timeline-hero {
-    padding: 3rem 1rem;
-  }
-  .timeline-hero h1 {
-    font-size: 2rem;
-  }
+/* MODAL FOR FULL IMAGE */
+.image-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: zoom-out;
+  padding: 1rem;
+}
 
-  /* Timeline adjustments */
+.image-modal img {
+  max-width: 60%;
+  max-height: 60%;
+  border-radius: 0.5rem;
+  object-fit: contain;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .timeline-hero { padding: 3rem 1rem; }
+  .timeline-hero h1 { font-size: 2rem; }
+
   .timeline::after { left: 20px; }
   .timeline-item { padding-left: 40px; }
-  .timeline-event-card { width: 100%; margin-left: 0 !important; }
+  .timeline-event-card { width: 100%; margin-left: 0 !important; flex-direction: column; gap: 0.75rem; }
+  .card-image-container { width: 100%; max-height: 200px; }
+
   .timeline-icon { left: -10px !important; right: auto !important; }
   .timeline-connector { width: 30px; left: 20px !important; }
-  
-  .timeline-year-header {
-    font-size: 2rem;
-    padding-left: 50px; /* Align with content */
-  }
-  
-  .timeline-month-header {
-    font-size: 1.5rem;
+
+  .timeline-year-header { font-size: 2rem; padding-left: 50px; }
+  .timeline-month-header { font-size: 1.5rem; }
+
+  /* Modal image for mobile */
+  .image-modal img {
+    max-width: 90%;
+    max-height: 70%;
   }
 }
+.clear-all-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  background-color: #6366f1;
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.clear-all-btn:hover {
+  background-color: #4f46e5;
+}
+

@@ -11,6 +11,9 @@ function TheSandbox() {
   const [activeTab, setActiveTab] = useState('projects');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Sort workshops by date descending (most recent first)
+  const sortedWorkshops = (workshops || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+
   // Filter based on search
   const filterItems = (items) => {
     if (!searchQuery) return items;
@@ -22,11 +25,11 @@ function TheSandbox() {
 
   const displayItems = activeTab === 'projects'
     ? filterItems(projects || [])
-    : filterItems(workshops || []);
+    : filterItems(sortedWorkshops);
 
   const featuredItems = activeTab === 'projects'
     ? filterItems((projects || []).filter(p => p.featured))
-    : filterItems((workshops || []).filter(w => w.featured));
+    : filterItems(sortedWorkshops.filter(w => w.featured));
 
   const loading = activeTab === 'projects' ? loadingProjects : loadingWorkshops;
 
@@ -122,4 +125,5 @@ function TheSandbox() {
 }
 
 export default TheSandbox;
+
 
