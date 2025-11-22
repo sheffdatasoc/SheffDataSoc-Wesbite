@@ -4,6 +4,7 @@ import {
   getBlogPostById,
   getEvents,
   getProjects,
+  getWorkshops,
   getMembers,
   getGuides,
   getResources,
@@ -141,6 +142,33 @@ export function useProjects() {
 
 
   return { projects, loading, error };
+}
+
+// Custom hook to fetch workshops
+export function useWorkshops() {
+  const [workshops, setWorkshops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function fetchWorkshops() {
+      try {
+        setLoading(true);
+        const data = await getWorkshops();
+        setWorkshops(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error in useWorkshops:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchWorkshops();
+  }, []);
+
+  return { workshops, loading, error };
 }
 
 
