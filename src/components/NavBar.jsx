@@ -14,11 +14,11 @@ import './NavBar.css';
 
 function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'resources' | 'about' | null
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'learning' | 'about' | null
 
   const location = useLocation();
 
-  const resourcesActive = ["/resources", "/guides", "/glossary"].some(path =>
+  const learningActive = ["/resources", "/guides", "/glossary"].some(path =>
     location.pathname.startsWith(path)
   );
 
@@ -115,18 +115,18 @@ function NavBar() {
             </NavLink>
           </li>
 
-          {/* Resources dropdown */}
+          {/* Learning dropdown */}
           <li className="dropdown">
             <button
-              className={`nav-link dropdown-toggle ${resourcesActive ? "active" : ""}`}
-              onClick={() => toggleDropdown('resources')}
+              className={`nav-link dropdown-toggle ${learningActive ? "active" : ""}`}
+              onClick={() => toggleDropdown('learning')}
             >
               <Book size={18} />
-              <span>Resources</span>
+              <span>Learning</span>
               <ChevronDown size={16} />
             </button>
 
-            {(activeDropdown === 'resources' || menuOpen) && (
+            {(activeDropdown === 'learning' || menuOpen) && (
               <ul className={`dropdown-menu ${menuOpen ? 'mobile-expanded' : ''}`}>
                 <li>
                   <NavLink to="/guides" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
@@ -140,7 +140,7 @@ function NavBar() {
                 </li>
                 <li>
                   <NavLink to="/resources" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Learning Hub
+                    Resources
                   </NavLink>
                 </li>
               </ul>
@@ -196,6 +196,7 @@ function NavBar() {
 }
 
 export default NavBar;
+
 
 
 
