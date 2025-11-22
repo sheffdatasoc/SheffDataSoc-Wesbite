@@ -164,7 +164,7 @@ export async function getPastEvents(limit = 10) {
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .eq('status', 'completed')
+    .eq('status', 'past')
     .order('date', { ascending: false })
     .limit(limit);
 
