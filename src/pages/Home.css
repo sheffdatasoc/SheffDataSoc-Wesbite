@@ -5,3 +5,139 @@
 /* Home page uses only shared components */
 /* Hero.css, StatCard.css provide all needed styles */
 /* Add page-specific overrides only if necessary */
+
+/* ========================================
+   /pages/Home.css
+   ======================================== */
+
+.home-page {
+  height: calc(var(--vh, 1vh) * 100);
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Every full-screen section */
+.home-page section:not(.hero-modern):not(.hero-sandbox) {
+  scroll-snap-align: start;
+  height: calc(var(--vh, 1vh) * 100); /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  transition: background 3s ease;
+}
+
+.home-page .hero-modern,
+.home-page .hero-sandbox {
+  scroll-snap-align: start;
+  height: calc(var(--vh, 1vh) * 100);
+  justify-content: flex-start;
+  align-items: stretch;
+  text-align: left;
+  padding: 4rem 3rem;
+}
+
+.about-preview {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,       
+    #ffffff 50%,      
+    #ffffff 100%      
+);
+  color: #1a1a1a;
+}
+
+
+.projects-preview {
+  background: linear-gradient(
+    180deg, 
+    #FBFCFE 0%, 
+    #FBFCFE 50%, 
+    #FBFCFE 100%);
+  color: #000000;
+}
+
+
+.events-preview {
+  background: linear-gradient(
+    180deg, 
+    #312e81 0%, 
+    #1e1b4b 60%, 
+    #1e3a8a 100%);
+  color: #ffffff;
+}
+
+.social-preview {
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,    /* dark from events-preview */
+    #ffffff 40%,   /* mid-tone */
+    #ffffff 100%   /* transitions toward contact-preview */
+  );
+  color: #000000;
+}
+
+
+.contact-preview {
+  background: linear-gradient(
+    180deg, 
+    #1e3a8a 0%, 
+    #4338ca 60%, 
+    #7c3aed 100%);
+  color: #ffffff;
+  justify-content: space-between; /* Changed from center */
+  padding: 0;
+  gap: 0; 
+  overflow: hidden;
+}
+
+.contact-content {
+  height: 50vh; /* Takes up top half */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  width: 100%;
+}
+
+.footer-content {
+  height: 50%; /* Takes up bottom half */
+  width: 100%;
+  background: #1a202c; 
+}
+
+.contact-preview footer {
+  height: 50vh; /* Exactly 50% of viewport */
+  width: 100vw;
+  margin: 0;
+  padding: 2rem;
+  background: #1a202c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  flex-shrink: 0; /* Prevent footer from shrinking */
+  flex-grow: 1;
+}
+
+
+/* Disable scroll-snap on mobile */ 
+@media (max-width: 768px) {
+  .home-page {
+    scroll-snap-type: none; /* Disable snapping on mobile */
+  }
+  
+  .home-page section {
+    height: auto; /* Let sections be as tall as their content */
+    min-height: calc(var(--vh, 1vh) * 100); /* At least full height */
+  }
+}

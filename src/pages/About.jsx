@@ -1,117 +1,145 @@
 /* ========================================
-   About.jsx - Updated Hero Style
+   /pages/About.jsx
    ======================================== */
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Target, Eye, Heart, Clock, Users, ArrowRight } from 'lucide-react';
+import { Target, Eye, Heart, Clock, Users, ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
 import './About.css';
 
 function About() {
   return (
     <div className="about-page">
-      {/* Hero Section (Updated to match Sandbox/Timeline) */}
+      {/* Hero Section */}
       <div className="about-hero">
         <span className="hero-badge">👋 Who We Are</span>
         <h1>About Us</h1>
         <p>We're a passionate community of students dedicated to fostering growth, connection, and unforgettable experiences on campus.</p>
       </div>
 
-      {/* Navigation Cards */}
+      {/* --- NEW CLEANER NAVIGATION CARDS --- */}
       <div className="about-nav-cards">
         <Link to="/timeline" className="nav-card">
-          {/* FIX: Changed class name here to avoid conflict */}
-          <div className="nav-card-icon about-timeline-icon">
-            <Clock size={32} />
+          <div className="nav-icon-box gradient-purple">
+            <Clock size={24} color="white" strokeWidth={2.5} />
           </div>
           <div className="nav-card-content">
             <h3>Our Timeline</h3>
             <p>Explore our journey and milestones</p>
           </div>
-          <ArrowRight className="nav-card-arrow" size={24} />
+          <div className="nav-arrow">
+            <ArrowRight size={20} />
+          </div>
         </Link>
 
         <Link to="/members" className="nav-card">
-          <div className="nav-card-icon members-icon">
-            <Users size={32} />
+          <div className="nav-icon-box gradient-blue">
+            <Users size={24} color="white" strokeWidth={2.5} />
           </div>
           <div className="nav-card-content">
             <h3>Our Members</h3>
             <p>Meet our amazing community</p>
           </div>
-          <ArrowRight className="nav-card-arrow" size={24} />
+          <div className="nav-arrow">
+            <ArrowRight size={20} />
+          </div>
         </Link>
       </div>
 
-      {/* Mission, Vision, Values Cards */}
-      <div className="about-cards">
-        <div className="about-card">
-          <div className="card-icon mission-icon">
-            <Target size={40} />
+      {/* --- NEW CLEANER MISSION CARDS --- */}
+      <div className="about-cards-grid">
+        <div className="clean-card">
+          <div className="card-icon-box gradient-indigo">
+            <Target size={28} color="white" strokeWidth={2} />
           </div>
           <h2>Our Mission</h2>
           <p>
             To create an inclusive environment where students can develop 
             leadership skills, build meaningful connections, and contribute 
-            positively to campus life through data science and analytics.
+            positively to campus life.
           </p>
         </div>
 
-        <div className="about-card">
-          <div className="card-icon vision-icon">
-            <Eye size={40} />
+        <div className="clean-card">
+          <div className="card-icon-box gradient-cyan">
+            <Eye size={28} color="white" strokeWidth={2} />
           </div>
           <h2>Our Vision</h2>
           <p>
             To be the leading student society that empowers individuals to 
             reach their full potential through collaboration, innovation, 
-            and community engagement in the field of data science.
+            and community engagement.
           </p>
         </div>
 
-        <div className="about-card">
-          <div className="card-icon values-icon">
-            <Heart size={40} />
+        <div className="clean-card">
+          <div className="card-icon-box gradient-pink">
+            <Heart size={28} color="white" strokeWidth={2} />
           </div>
           <h2>Our Values</h2>
           <p>
             Integrity, inclusivity, innovation, and impact. We believe in 
             creating opportunities that inspire and empower every member 
-            of our community to grow and succeed.
+            of our community.
           </p>
         </div>
       </div>
 
       {/* What We Do Section */}
       <section className="what-we-do">
-        <h2>What We Do</h2>
+        <div className="what-we-do-header">
+          <h2>What We Do</h2>
+          <p>From workshops to social events, we offer diverse opportunities for growth and connection</p>
+        </div>
+
         <div className="activities-grid">
-          <div className="activity-item">
-            <h3>📚 Workshops & Tutorials</h3>
-            <p>Regular hands-on sessions covering Python, machine learning, data visualization, and more.</p>
+          <div className="activity-card">
+            <div className="activity-icon-box color-purple"><span>🎓</span></div>
+            <h3>Workshops & Learning</h3>
+            <p>Regular workshops on professional development, technical skills, and personal growth led by industry experts and experienced peers.</p>
           </div>
-          <div className="activity-item">
-            <h3>💼 Industry Talks</h3>
-            <p>Connect with data professionals and learn about careers in data science and analytics.</p>
+          <div className="activity-card">
+            <div className="activity-icon-box color-blue"><span>🤝</span></div>
+            <h3>Networking Events</h3>
+            <p>Connect with like-minded students, alumni, and professionals through our regular networking sessions and career fairs.</p>
           </div>
-          <div className="activity-item">
-            <h3>🚀 Projects</h3>
-            <p>Collaborate on real-world data science projects and build your portfolio.</p>
+          <div className="activity-card">
+            <div className="activity-icon-box color-pink"><span>🎉</span></div>
+            <h3>Social Activities</h3>
+            <p>From game nights to cultural celebrations, our social events create lasting friendships and memorable experiences.</p>
           </div>
-          <div className="activity-item">
-            <h3>🤝 Networking</h3>
-            <p>Meet like-minded students, build friendships, and expand your professional network.</p>
+          <div className="activity-card">
+            <div className="activity-icon-box color-yellow"><span>🌟</span></div>
+            <h3>Community Service</h3>
+            <p>Give back to the community through volunteer opportunities, fundraisers, and social impact initiatives.</p>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="join-cta">
-        <h2>Ready to Join?</h2>
-        <p>Become part of Sheffield's most vibrant data science community</p>
-        <div className="cta-buttons">
-          <a href="/events" className="btn btn-primary">View Events</a>
-          <a href="/contact" className="btn btn-secondary">Get in Touch</a>
+      {/* Get In Touch Section */}
+      <section className="get-in-touch">
+        <div className="get-in-touch-header">
+          <h2>Get In Touch</h2>
+          <p>Have questions? Want to get involved? We'd love to hear from you!</p>
+        </div>
+        <div className="contact-info-card">
+          <div className="contact-grid">
+            <div className="contact-item">
+              <div className="contact-icon-box icon-purple"><Mail size={24} /></div>
+              <h3>Email</h3>
+              <p>sheffdatasoc@sheffield.ac.uk</p>
+            </div>
+            <div className="contact-item">
+              <div className="contact-icon-box icon-blue"><MapPin size={24} /></div>
+              <h3>Location</h3>
+              <p>The Diamond<br />University of Sheffield</p>
+            </div>
+            <div className="contact-item">
+              <div className="contact-icon-box icon-pink"><Phone size={24} /></div>
+              <h3>Phone</h3>
+              <p>(555) 123-4567</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

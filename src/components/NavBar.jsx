@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
   Calendar, 
@@ -8,45 +8,39 @@ import {
   Book, 
   Image as ImageIcon, 
   Info,
-  ChevronDown
+  ChevronDown,
+  Menu, // From Main branch
+  X     // From Main branch
 } from 'lucide-react';
 import './NavBar.css';
 
 function NavBar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null); // 'learning' | 'about' | null
-
+  // -- State Management --
+  const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
+  
+  // To track active pages for the gradient styling (From Maya branch)
   const location = useLocation();
 
-  const learningActive = ["/resources", "/guides", "/glossary"].some(path =>
-    location.pathname.startsWith(path)
-  );
+  // Close mobile menu automatically when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
-  const aboutActive = ["/about", "/timeline", "/members"].some(path =>
-    location.pathname.startsWith(path)
-  );
+  // -- Helper Functions --
+  const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Close dropdown when clicking outside
-  const handleClickOutside = (e) => {
-    if (!e.target.closest('.dropdown')) {
-      setActiveDropdown(null);
-    }
+  // Helper to set active class for standard links
+  const getLinkClass = (path) => {
+    return location.pathname === path ? "nav-link active" : "nav-link";
   };
 
-  React.useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
-
-  // Handle parent dropdown click
-  const toggleDropdown = (dropdownName) => {
-    setActiveDropdown(prev => (prev === dropdownName ? null : dropdownName));
-  };
-
-  // Handle child click
-  const handleChildClick = () => {
-    setActiveDropdown(null); // Close dropdown after clicking child
-    if (menuOpen) setMenuOpen(false); // Close mobile menu if open
+  // Helper to set active class for Dropdown parents (e.g., Resources glows if you are on /guides)
+  const getDropdownClass = (paths) => {
+    return paths.some(path => location.pathname.startsWith(path)) 
+      ? "nav-link dropdown-toggle active" 
+      : "nav-link dropdown-toggle";
   };
 
   return (
@@ -54,7 +48,7 @@ function NavBar() {
       <div className="nav-container">
 
         {/* Logo */}
-        <Link to="/" className="nav-logo">
+        <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
           <div className="logo-icon">SDS</div>
           <div className="logo-text">
             <h1>SheffDataSoc</h1>
@@ -62,129 +56,87 @@ function NavBar() {
           </div>
         </Link>
 
-        {/* Hamburger */}
-        <button 
-          className={`hamburger ${menuOpen ? "active" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        {/* Hamburger Icon (Visible only on mobile via CSS) */}
+        <div className="menu-icon" onClick={toggleMenu}>
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </div>
 
         {/* Navigation Links */}
-        <ul className={`nav-menu ${menuOpen ? "open" : ""}`}>
-
+        <ul className={isOpen ? "nav-menu active" : "nav-menu"}>
+          
           <li>
-            <NavLink 
-              to="/" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
+            <Link to="/" className={getLinkClass('/')}>
               <Home size={18} />
               <span>Home</span>
-            </NavLink>
+            </Link>
           </li>
 
           <li>
-            <NavLink 
-              to="/events" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
+            <Link to="/events" className={getLinkClass('/events')}>
               <Calendar size={18} />
               <span>Events</span>
-            </NavLink>
+            </Link>
           </li>
 
           <li>
-            <NavLink 
-              to="/blog" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
+            <Link to="/blog" className={getLinkClass('/blog')}>
               <BookOpen size={18} />
               <span>The Blog</span>
-            </NavLink>
+            </Link>
           </li>
 
           <li>
-            <NavLink 
-              to="/sandbox" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
+            <Link to="/sandbox" className={getLinkClass('/sandbox')}>
               <Code size={18} />
               <span>The Sandbox</span>
-            </NavLink>
+            </Link>
           </li>
 
-          {/* Learning dropdown */}
-          <li className="dropdown">
-            <button
-              className={`nav-link dropdown-toggle ${learningActive ? "active" : ""}`}
-              onClick={() => toggleDropdown('learning')}
-            >
+          {/* Resources Dropdown */}
+          <li 
+            className="dropdown"
+            onMouseEnter={() => setResourcesOpen(true)}
+            onMouseLeave={() => setResourcesOpen(false)}
+          >
+            <button className={getDropdownClass(['/guides', '/glossary', '/resources'])}>
               <Book size={18} />
-              <span>Learning</span>
+              <span>Resources</span>
               <ChevronDown size={16} />
             </button>
-
-            {(activeDropdown === 'learning' || menuOpen) && (
-              <ul className={`dropdown-menu ${menuOpen ? 'mobile-expanded' : ''}`}>
-                <li>
-                  <NavLink to="/guides" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Guides
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/glossary" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Glossary
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/resources" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Resources
-                  </NavLink>
-                </li>
+            
+            {resourcesOpen && (
+              <ul className="dropdown-menu">
+                <li><Link to="/guides">Guides</Link></li>
+                <li><Link to="/glossary">Glossary</Link></li>
+                <li><Link to="/resources">Resources</Link></li>
               </ul>
             )}
           </li>
 
           <li>
-            <NavLink 
-              to="/gallery" 
-              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
-            >
+            <Link to="/gallery" className={getLinkClass('/gallery')}>
               <ImageIcon size={18} />
               <span>Gallery</span>
-            </NavLink>
+            </Link>
           </li>
 
-          {/* About dropdown */}
-          <li className="dropdown">
-            <button
-              className={`nav-link dropdown-toggle ${aboutActive ? "active" : ""}`}
-              onClick={() => toggleDropdown('about')}
-            >
+          {/* About Dropdown */}
+          <li 
+            className="dropdown"
+            onMouseEnter={() => setAboutOpen(true)}
+            onMouseLeave={() => setAboutOpen(false)}
+          >
+            <button className={getDropdownClass(['/about', '/timeline', '/members'])}>
               <Info size={18} />
               <span>About</span>
               <ChevronDown size={16} />
             </button>
-
-            {(activeDropdown === 'about' || menuOpen) && (
-              <ul className={`dropdown-menu ${menuOpen ? 'mobile-expanded' : ''}`}>
-                <li>
-                  <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    About Us
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/timeline" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Timeline
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/members" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
-                    Our Team
-                  </NavLink>
-                </li>
+            
+            {aboutOpen && (
+              <ul className="dropdown-menu">
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/timeline">Timeline</Link></li>
+                <li><Link to="/members">Our Team</Link></li>
               </ul>
             )}
           </li>
@@ -196,8 +148,3 @@ function NavBar() {
 }
 
 export default NavBar;
-
-
-
-
-

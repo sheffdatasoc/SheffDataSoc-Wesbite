@@ -102,8 +102,6 @@ export async function getBlogPostBySlug(slug) {
 }
 
 
-
-
 // ============================================================================
 // EVENTS
 // ============================================================================
@@ -114,25 +112,20 @@ export async function getEvents(options = {}) {
     console.warn('Supabase not configured, returning empty array');
     return [];
   }
-  const { includeAll = false } = options;
-
+  
+  const { includeAll = true } = options; 
 
   let query = supabase
     .from('events')
     .select('*');
 
-
-  // By default, only show upcoming and ongoing events
   if (!includeAll) {
     query = query.in('status', ['upcoming', 'ongoing']);
   }
 
-
   query = query.order('date', { ascending: true });
 
-
   const { data, error } = await query;
-
 
   if (error) {
     console.error('Error fetching events:', error);
@@ -171,7 +164,7 @@ export async function getPastEvents(limit = 10) {
   const { data, error } = await supabase
     .from('events')
     .select('*')
-    .eq('status', 'completed')
+    .eq('status', 'past')
     .order('date', { ascending: false })
     .limit(limit);
 

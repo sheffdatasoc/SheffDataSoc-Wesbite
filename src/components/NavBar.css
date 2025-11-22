@@ -1,4 +1,8 @@
-/* NavBar.css */
+/* NavBar.css - Merged & Resolved */
+
+/* =========================================
+   1. GLOBAL STYLES (Desktop Default)
+   ========================================= */
 
 .navbar {
   background: white;
@@ -17,6 +21,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative; /* Needed for positioning mobile menu correctly */
 }
 
 /* Logo */
@@ -26,6 +31,7 @@
   gap: 1rem;
   text-decoration: none;
   color: inherit;
+  z-index: 1001; /* Ensure logo stays above mobile menu */
 }
 
 .logo-icon {
@@ -51,6 +57,14 @@
   color: #666;
   font-size: 0.85rem;
   margin: 0;
+}
+
+/* Hamburger Icon (Hidden by default, shown on mobile) */
+.menu-icon {
+  display: none;
+  cursor: pointer;
+  color: #333;
+  z-index: 1001; /* Ensure icon stays above mobile menu */
 }
 
 /* Navigation Menu */
@@ -85,31 +99,6 @@
   font-family: inherit;
 }
 
-/* Top-level active nav items with gradient */
-.nav-link.active {
-  font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.nav-link.active svg {
-  color: white;
-  transition: color 0.2s ease;
-}
-
-.nav-link.active:hover {
-  background: linear-gradient(135deg, #8b3aed 0%, #bf7dfc 100%);
-}
-
-.nav-link.active:hover svg {
-  color: #f0f0f0;
-}
-
 /* Hover for non-active links */
 .nav-link:hover {
   background: #f3f4f6;
@@ -118,9 +107,38 @@
 
 .nav-link svg {
   flex-shrink: 0;
+  transition: color 0.2s ease;
 }
 
-/* Dropdown */
+/* Active State (Gradient from Maya Branch) */
+.nav-link.active {
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
+}
+
+.nav-link.active svg {
+  color: white;
+}
+
+.nav-link.active:hover {
+  background: linear-gradient(135deg, #8b3aed 0%, #bf7dfc 100%);
+  transform: translateY(-1px);
+}
+
+/* Dropdown Defaults */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -133,17 +151,16 @@
   list-style: none;
   margin-top: 0.5rem;
   animation: dropdownFade 0.2s ease;
+  z-index: 1002;
 }
 
 @keyframes dropdownFade {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu li {
+  width: 100%;
 }
 
 .dropdown-menu a {
@@ -151,6 +168,7 @@
   padding: 0.7rem 1.2rem;
   color: #333;
   text-decoration: none;
+  transition: all 0.2s;
 }
 
 .dropdown-menu a:hover {
@@ -158,131 +176,107 @@
   color: #7c3aed;
 }
 
-.dropdown-menu a.active {
-  background: #ede9fe;
-  color: #7c3aed;
-  font-weight: 600;
-}
-
-/* Mobile-expanded dropdown items */
-.dropdown-menu.mobile-expanded {
-  position: static;
-  box-shadow: none;
-  background: transparent;
-  padding-left: 1.5rem;
-  margin-top: 0;
-}
-
-.dropdown-menu.mobile-expanded li {
-  width: 100%;
-}
-
-.dropdown-menu.mobile-expanded a {
-  padding: 0.5rem 0;
-  color: #333;
-  font-weight: 500;
-}
-
-.dropdown-menu.mobile-expanded a.active {
-  background: transparent;
-  color: #7c3aed;
-  font-weight: 600;
-}
-
-/* Hamburger button styles */
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.hamburger span {
-  width: 28px;
-  height: 3px;
-  background: #333;
-  border-radius: 3px;
-  transition: 0.3s;
-}
-
-.hamburger.active span:nth-child(1) {
-  transform: rotate(45deg) translateY(8px);
-}
-
-.hamburger.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.active span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-8px);
-}
-
-/* ----------------------------- */
-/* Mobile Styles                 */
-/* ----------------------------- */
-@media (max-width: 768px) {
-  /* Show hamburger */
-  .hamburger {
-    display: flex;
-  }
-
-  /* Stack menu items vertically */
+/* =========================================
+   2. MEDIUM SCREENS (Tablets)
+   Range: < 1024px
+   Goal: Icons Only (No Text)
+   ========================================= */
+@media (max-width: 1024px) {
   .nav-menu {
-    position: absolute;
-    top: 80px;
-    right: 0;
-    width: 100%;
-    background: white;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem 2rem;
     gap: 0.2rem;
-    
-    /* Hidden by default */
-    display: none;          /* hide completely when closed */
   }
-
-  /* Show menu when open */
-  .nav-menu.open {
-    display: flex;
-  }
-
-  /* Show dropdown children fully expanded under hamburger */
-  .nav-menu.open .dropdown-menu {
-    display: flex;
-    flex-direction: column;
-    position: static;        /* remove absolute positioning */
-    box-shadow: none;
-    background: transparent;
-    padding-left: 1.5rem;
-    margin-top: 0;
-    width: 100%;
-  }
-
-  .nav-menu.open .dropdown-menu li {
-    width: 100%;
-  }
-
-  .nav-menu.open .dropdown-menu a {
-    padding: 0.5rem 0;
-    font-weight: 500;
-    color: #333;
-  }
-
-  .nav-menu.open .dropdown-menu a.active {
-    color: #7c3aed;
-    font-weight: 600;
-    background: transparent;
-  }
-
-  /* Full text on mobile */
+  
+  /* HIDE text labels */
   .nav-link span {
-    display: inline;
+    display: none; 
   }
-
+  
+  /* HIDE tagline */
   .logo-text p {
     display: none;
+  }
+
+  /* HIDE dropdown arrow to make icons cleaner */
+  .dropdown-toggle svg:last-child {
+    display: none;
+  }
+
+  .nav-link {
+    padding: 0.7rem;
+    justify-content: center;
+  }
+}
+
+/* =========================================
+   3. SMALL SCREENS (Mobile)
+   Range: < 768px
+   Goal: Hamburger Menu + Text Returns
+   ========================================= */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  /* 1. Show Hamburger */
+  .menu-icon {
+    display: block;
+  }
+
+  /* 2. Mobile Menu Drawer Style */
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: fixed;
+    top: 80px; /* Starts below the navbar header */
+    left: -100%; /* Hidden off-screen */
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: white;
+    transition: left 0.3s ease-in-out;
+    padding: 1rem 0;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  /* Class added by React toggles this */
+  .nav-menu.active {
+    left: 0;
+  }
+
+  .nav-menu > li {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* 3. RESTORE Text Labels for the Drawer */
+  .nav-link span {
+    display: inline-block; /* Override the 1024px hide rule */
+    margin-left: 1rem;
+  }
+
+  /* Restore dropdown arrow */
+  .dropdown-toggle svg:last-child {
+    display: block;
+    margin-left: auto;
+  }
+
+  .nav-link {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 1rem 1.5rem;
+  }
+
+  /* 4. Mobile Dropdowns (Relative instead of floating) */
+  .dropdown-menu {
+    position: relative;
+    top: 0;
+    box-shadow: none;
+    background: #f9fafb;
+    border-left: 4px solid #7c3aed;
+    width: 100%;
+    padding-left: 1rem;
+    animation: none;
   }
 }
