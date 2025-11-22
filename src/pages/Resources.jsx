@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import { useResources } from '../hooks/useSupabase';
-import { ExternalLink, Search } from 'lucide-react';
+import { ExternalLink, Search } from 'lucide-react'; // Removed Filter icon, not needed for slider
 import './Resources.css';
 
 function Resources() {
@@ -13,10 +13,10 @@ function Resources() {
 
   const { resources, loading, error } = useResources();
 
-  // Extract unique types from resources for filter dropdown
+  // Extract unique types
   const types = ['all', ...new Set(resources.map(r => r.type).filter(Boolean))];
 
-  // Filter resources based on search query and type
+  // Filter logic
   const filteredResources = resources.filter(resource => {
     const name = resource.name || '';
     const description = resource.description || '';
@@ -34,7 +34,7 @@ function Resources() {
     return matchesSearch && matchesType;
   });
 
-  // Map resource type to a color
+  // Color mapping
   const getTypeColor = (type) => {
     const colors = {
       book: '#667eea',
@@ -44,52 +44,66 @@ function Resources() {
       dataset: '#4cc9f0',
       tool: '#7209b7'
     };
-    return colors[type.toLowerCase()] || '#999999'; // gray default
+    return colors[type.toLowerCase()] || '#999999';
   };
 
-  if (loading) return <p>Loading resources...</p>;
+  if (loading) {
+    return (
+      <div className="resources-page">
+        <div className="resources-hero">
+          <span className="hero-badge">📚 Curated Learning</span>
+          <h1>Learning Resources</h1>
+          <p>Loading library...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (error) return <p>Error loading resources: {error}</p>;
 
   return (
     <div className="resources-page">
-      {/* Hero Section */}
+      
+      {/* 1. HERO */}
       <div className="resources-hero">
         <span className="hero-badge">📚 Curated Learning</span>
         <h1>Learning Resources</h1>
         <p>Curated collection of books, courses, and tools for data science</p>
       </div>
 
-      <div className="resources-content">
-        {/* Search and Filter */}
-        <div className="resources-controls">
-          <div className="resources-search">
-            <Search size={20} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search resources..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-          </div>
+      {/* 2. SEARCH (Floating) */}
+      <div className="resources-search">
+        <div className="search-container">
+          <Search size={20} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search books, courses, tools..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+      </div>
 
-          <div className="filter-group">
-            <label>Type:</label>
-            <select
-              value={selectedType}
-              onChange={(e) => setSelectedType(e.target.value)}
-              className="filter-select"
-            >
-              {types.map((type) => (
-                <option key={type} value={type}>
-                  {type === 'all' ? 'All Types' : type.charAt(0).toUpperCase() + type.slice(1)}
-                </option>
-              ))}
-            </select>
+      {/* 3. CONTENT */}
+      <div className="resources-content">
+        
+        {/* NEW: SLIDER FILTER (Replaces the old dropdown toolbar) */}
+        <div className="filter-container">
+          <div className="resources-filters-control">
+            {types.map((type) => (
+              <button
+                key={type}
+                className={`filter-tab-btn ${selectedType === type ? 'active' : ''}`}
+                onClick={() => setSelectedType(type)}
+              >
+                {type === 'all' ? 'All Resources' : type.charAt(0).toUpperCase() + type.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Resources Grid */}
+        {/* GRID */}
         {filteredResources.length > 0 ? (
           <div className="resources-grid">
             {filteredResources.map((resource) => (

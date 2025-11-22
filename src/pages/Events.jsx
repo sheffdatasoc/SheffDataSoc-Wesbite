@@ -24,6 +24,7 @@ function Events() {
 
   return (
     <div className="events-page">
+      {/* Hero Section */}
       <div className="sandbox-hero">
         <span className="hero-badge">📅 Data Science Society</span>
         <h1>Discover Events</h1>
@@ -31,6 +32,7 @@ function Events() {
       </div>
 
       <div className="events-content">
+        {/* Filters */}
         <div className="filter-container">
           <div className="events-filters-control">
             <button className={`filter-tab-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
@@ -48,6 +50,7 @@ function Events() {
           </div>
         </div>
 
+        {/* Content Grid */}
         {loading ? (
           <div className="loading-state">
             <div className="spinner"></div>

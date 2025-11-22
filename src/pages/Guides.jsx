@@ -25,7 +25,7 @@ function Guides() {
   ];
 
   const difficulties = [
-    { value: 'all', label: 'All Levels' },
+    { value: 'all', label: 'All' },
     { value: 'beginner', label: 'Beginner' },
     { value: 'intermediate', label: 'Intermediate' },
     { value: 'advanced', label: 'Advanced' }
