@@ -1,5 +1,5 @@
 /* ========================================
-   /components/EventCard.css
+   /components/EventCard.css - FINAL UNIFIED BADGES
    ======================================== */
 
 /* Container */
@@ -7,62 +7,103 @@
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #f3f4f6;
+  border: 1px solid #e2e8f0; 
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  height: 100%; /* Ensures all cards in a grid row are the same height */
+  height: 100%;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .photo-event-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 25px -5px rgba(24, 47, 77, 0.1), 0 8px 10px -6px rgba(24, 47, 77, 0.1);
+  border-color: #cbd5e1;
 }
 
 /* Image Area */
 .card-image-container {
   position: relative;
   width: 100%;
-  height: 200px; /* Fixed height for consistency */
-  background: #e5e7eb;
+  height: 200px;
+  background: #182F4D;
 }
 
 .card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.photo-event-card:hover .card-img {
+  transform: scale(1.05);
 }
 
 .card-img-placeholder {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%);
+  background: linear-gradient(135deg, #182F4D 0%, #EBB479 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Badges (Top Right) */
+/* --- BADGES (UNIFIED GLASS STYLE) --- */
 .card-badge {
   position: absolute;
   top: 12px;
   right: 12px;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  padding: 6px 14px;
+  border-radius: 8px; /* Soft Rectangle */
+  font-size: 0.7rem;
   font-weight: 700;
-  text-transform: lowercase;
+  text-transform: uppercase;
   letter-spacing: 0.5px;
+  z-index: 2;
+  
+  /* White Text */
+  color: #ffffff;
+  
+  /* Glass Look: No border, No shadow, Blur background */
+  box-shadow: none;
+  border: none;
+  backdrop-filter: blur(4px);
 }
 
-/* Badge Colors */
-.badge-green { background-color: #d1fae5; color: #065f46; } /* Volunteering */
-.badge-orange { background-color: #ffedd5; color: #9a3412; } /* Competition */
-.badge-purple { background-color: #f3e8ff; color: #6b21a8; } /* Networking */
-.badge-blue { background-color: #dbeafe; color: #1e40af; } /* Workshop */
-.badge-gray { background-color: #f3f4f6; color: #374151; }
+/* BADGE COLORS mapped to OFFICIAL PALETTE 
+   All set to 0.6 (60%) opacity for "Glass" look 
+*/
+
+.badge-blue { 
+  /* Official Navy (#182F4D) */
+  background-color: rgba(24, 47, 77, 0.6); 
+}
+
+.badge-orange { 
+  /* Official Terracotta (#DF694E) */
+  background-color: rgba(223, 105, 78, 0.6); 
+}
+
+.badge-purple { 
+  /* Official Black (#1A1A1A) - Replaces non-brand Purple */
+  background-color: rgba(26, 26, 26, 0.6); 
+}
+
+.badge-green { 
+  /* Reusing Terracotta (#DF694E) to stay on brand */
+  background-color: rgba(223, 105, 78, 0.6); 
+}
+
+.badge-gray { 
+  /* Official Black (#1A1A1A) */
+  background-color: rgba(26, 26, 26, 0.6); 
+}
+
 
 /* Content Body */
 .card-body {
-  padding: 24px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -70,19 +111,19 @@
 
 .card-title {
   font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 12px;
+  font-weight: 800;
+  color: #182F4D; /* Official Navy */
+  margin: 0 0 0.75rem 0;
   line-height: 1.3;
 }
 
 .card-desc {
-  font-size: 0.95rem;
-  color: #6b7280; /* Grey text */
-  margin-bottom: 24px;
-  line-height: 1.5;
+  font-size: 0.925rem;
+  color: #4a4a4a;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limit to 2 lines */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -92,54 +133,66 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f1f5f9;
 }
 
 .meta-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  color: #374151;
+  gap: 12px;
+  font-size: 0.875rem;
+  color: #1A1A1A;
   font-weight: 500;
 }
 
 .meta-icon {
-  color: #8b5cf6; /* Purple outline icons */
+  color: #182F4D; 
+  opacity: 0.9;
   flex-shrink: 0;
 }
 
-/* Button */
+/* Button Styling */
 .card-btn {
   margin-top: auto;
   width: 100%;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); /* Purple/Blue */
+  /* Gradient: Terracotta -> Sand */
+  background: linear-gradient(135deg, #DF694E 0%, #EBB479 100%);
   color: white;
   border: none;
   padding: 12px;
   border-radius: 8px;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(223, 105, 78, 0.3);
 }
 
 .card-btn:hover {
-  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px -1px rgba(223, 105, 78, 0.4);
+  filter: brightness(105%);
 }
 
-/* Disabled Button State (For Past Events) */
+.card-btn:active {
+  transform: translateY(0);
+}
+
 .card-btn.btn-disabled {
-  background: #e5e7eb; /* Light Grey */
-  color: #9ca3af;     /* Darker Grey Text */
+  background: #f1f5f9;
+  color: #94a3b8;
   cursor: not-allowed;
-  background-image: none; /* Removes the gradient */
+  box-shadow: none;
+  border: 1px solid #e2e8f0;
 }
 
 .card-btn.btn-disabled:hover {
-  opacity: 1; /* Removes hover effect */
+  transform: none;
+  filter: none;
 }

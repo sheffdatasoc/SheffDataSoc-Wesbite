@@ -9,9 +9,11 @@ import {
   Image as ImageIcon, 
   Info,
   ChevronDown,
-  Menu, // From Main branch
-  X     // From Main branch
+  Menu, 
+  X     
 } from 'lucide-react';
+// IMPORT THE NEW LOGO
+import logoImg from '../assets/datasoc-logo.png'; 
 import './NavBar.css';
 
 function NavBar() {
@@ -20,7 +22,7 @@ function NavBar() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
   
-  // To track active pages for the gradient styling (From Maya branch)
+  // To track active pages for the gradient styling
   const location = useLocation();
 
   // Close mobile menu automatically when route changes
@@ -36,7 +38,7 @@ function NavBar() {
     return location.pathname === path ? "nav-link active" : "nav-link";
   };
 
-  // Helper to set active class for Dropdown parents (e.g., Resources glows if you are on /guides)
+  // Helper to set active class for Dropdown parents
   const getDropdownClass = (paths) => {
     return paths.some(path => location.pathname.startsWith(path)) 
       ? "nav-link dropdown-toggle active" 
@@ -47,16 +49,16 @@ function NavBar() {
     <nav className="navbar">
       <div className="nav-container">
 
-        {/* Logo */}
+        {/* --- UPDATED LOGO SECTION --- */}
         <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
-          <div className="logo-icon">SDS</div>
+          <img src={logoImg} alt="SheffDataSoc Logo" className="navbar-logo-img" />
           <div className="logo-text">
             <h1>SheffDataSoc</h1>
             <p>Sheffield Data Science Society</p>
           </div>
         </Link>
 
-        {/* Hamburger Icon (Visible only on mobile via CSS) */}
+        {/* Hamburger Icon */}
         <div className="menu-icon" onClick={toggleMenu}>
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </div>
