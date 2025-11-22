@@ -1,0 +1,274 @@
+.about-section {
+  scroll-snap-align: start;
+  height: calc(var(--vh, 1vh) * 100);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f9fafb;
+  color: #1a1a1a;
+  padding: 6rem 2rem 2rem;
+  overflow-y: auto;
+}
+
+.about-container {
+  max-width: 1400px;
+  width: 100%;
+  text-align: center;
+}
+
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  margin-top: -3rem;
+  color: #1a1a1a;
+}
+
+.about-subtitle {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #e5e7eb;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  color: white;
+}
+
+.feature-card:nth-child(2) .feature-icon {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+}
+
+.feature-card:nth-child(3) .feature-icon {
+  background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+}
+
+.feature-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #1a1a1a;
+}
+
+.feature-description {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.about-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.about-buttons .btn {
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.about-buttons .btn-primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
+  color: white;
+  border: none;
+}
+
+.about-buttons .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+}
+
+.about-buttons .btn-secondary {
+  background: white;
+  color: #7c3aed;
+  border: 2px solid #e5e7eb;
+}
+
+.about-buttons .btn-secondary:hover {
+  border-color: #7c3aed;
+  transform: translateY(-2px);
+}
+
+.about-footer-text {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.about-footer-text p {
+  margin: 0.25rem 0;
+}
+
+/* Responsive bigger screens */
+@media (max-width: 768px) {
+  .about-section {
+    padding: 6rem 1rem 2rem; /* Increased top padding to make room */
+    justify-content: flex-start;
+    overflow-y: scroll;
+  }
+  
+  .about-container {
+    padding-top: 3rem; /* Add some top padding */
+  }
+  
+  .about-title {
+    font-size: 1.6rem;
+    margin-top: 0; /* No negative margin */
+    margin-bottom: 0.5rem;
+  }
+  
+  .about-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: 1.25rem 1rem;
+  }
+  
+  .feature-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .feature-description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  
+  .about-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .about-buttons .btn {
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .about-footer-text {
+    font-size: 0.75rem;
+  }
+}
+
+/* Extra small phones (iPhone SE, small Androids) */
+@media (max-width: 375px) {
+  .about-section {
+    padding: 5rem 0.75rem 1rem;
+    overflow-y: scroll;
+  }
+  
+  .about-container {
+    padding-top: 0.5rem;
+  }
+  
+  .about-title {
+    font-size: 1.25rem; /* Much smaller */
+    margin-top: 0;
+    margin-bottom: 0.4rem; /* Less space */
+  }
+  
+  .about-subtitle {
+    font-size: 0.8rem; /* Smaller */
+    margin-bottom: 0.75rem; /* Less space */
+    line-height: 1.3; /* Tighter */
+  }
+  
+  .features-grid {
+    gap: 0.65rem; /* Tighter gap */
+    margin-bottom: 1rem; /* Less space */
+  }
+  
+  .feature-card {
+    padding: 0.85rem 0.65rem; /* Much more compact */
+  }
+  
+  .feature-icon {
+    width: 40px; /* Smaller */
+    height: 40px;
+    margin-bottom: 0.35rem; /* Less space */
+  }
+  
+  .feature-title {
+    font-size: 0.95rem; /* Smaller */
+    margin-bottom: 0.3rem; /* Less space */
+  }
+  
+  .feature-description {
+    font-size: 0.75rem; /* Much smaller */
+    line-height: 1.3; /* Tighter */
+  }
+  
+  .about-buttons {
+    margin-bottom: 0.6rem; /* Less space */
+  }
+  
+  .about-buttons .btn {
+    padding: 0.6rem 1.25rem; /* Smaller buttons */
+    font-size: 0.85rem;
+  }
+  
+  .about-footer-text {
+    font-size: 0.7rem; /* Smaller */
+    line-height: 1.3;
+  }
+}
+
