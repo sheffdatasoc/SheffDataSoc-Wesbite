@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // 1. Import Link
 import './Hero.css'; 
 
 const Hero = ({ 
@@ -40,7 +41,6 @@ const Hero = ({
   // Auto-rotate timer
   useEffect(() => {
     // Only rotate if we have more than 1 *unique* image origin
-    // (Optional: remove this check if you want it to "breathe" even with 1 image)
     if (images.length < 2) return; 
 
     const interval = setInterval(() => {
@@ -79,14 +79,21 @@ const Hero = ({
     <section className="hero-modern">
       {/* Left Column */}
       <div className="hero-text-content">
-        {showBadge && <div className="hero-badge">✨ {badgeText}</div>}
+        {showBadge && <div className="hero-badge">{badgeText}</div>}
+        
         <h1>{renderTitle()}</h1>
         <p className="hero-subtitle">{subtitle}</p>
 
         {showButtons && (
           <div className="hero-buttons">
-            <button className="btn-primary">Explore Events &rarr;</button>
-            <button className="btn-secondary">Learn More</button>
+            {/* 2. Updated to use Link components for routing */}
+            <Link to="/events" className="btn-primary">
+              Explore Events &rarr;
+            </Link>
+            
+            <Link to="/about" className="btn-secondary">
+              Learn More
+            </Link>
           </div>
         )}
 

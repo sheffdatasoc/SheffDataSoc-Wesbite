@@ -56,9 +56,9 @@ function Home() {
   }, []);
 
   const stats = [
-    { value: '300+', title: 'Members' },
-    { value: '40+', title: 'Events/Year' },
-    { value: '15+', title: 'Partners' }
+    { value: '100+', title: 'Members' },
+    { value: '20+', title: 'Events/Year' },
+    { value: '5+', title: 'Partners' }
   ];
 
   return (
@@ -72,7 +72,7 @@ function Home() {
         showStats={true}
         stats={stats}
         showBadge={true}
-        badgeText="University of Sheffield"
+        badgeText="The University of Sheffield"
         highlightWord="Data Science"
         images={heroImages} 
         fallbackImage={FALLBACK_IMAGE}
