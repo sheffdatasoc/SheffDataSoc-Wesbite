@@ -10,6 +10,7 @@
   padding: 0;
   min-height: 100vh;
   background: #f9fafb;
+  overflow-x: hidden; /* Prevents any accidental horizontal scroll */
 }
 
 /* ========== HERO SECTION ========== */
@@ -191,8 +192,6 @@
   margin-right: auto;
 }
 
-/* Use projects-grid from components.css */
-
 /* ========== EMPTY STATE ========== */
 .sandbox-content .empty-state {
   text-align: center;
@@ -207,9 +206,14 @@
 
 /* ========== RESPONSIVE DESIGN ========== */
 @media (max-width: 768px) {
+  /* FIX: Corrected Hero Layout */
   .sandbox-hero {
-    padding: var(--spacing-xl) var(--spacing-md);
-    margin: calc(var(--spacing-md) * -1) calc(var(--spacing-md) * -1) var(--spacing-lg) calc(var(--spacing-md) * -1);
+    width: 100%;
+    /* Removed negative margins that caused overflow */
+    margin: 0 0 var(--spacing-lg) 0; 
+    /* Added padding bottom to accommodate search bar overlap */
+    padding: var(--spacing-xl) var(--spacing-md) 4rem var(--spacing-md);
+    border-radius: 0;
   }
 
   .sandbox-hero h1 {
@@ -218,17 +222,28 @@
 
   .sandbox-hero p {
     font-size: var(--font-size-base);
+    padding: 0 0.5rem; /* Prevent text touching edges */
   }
 
+  /* FIX: Search Bar Overlap */
   .sandbox-search {
     padding: 0 var(--spacing-md);
-    margin: calc(var(--spacing-lg) * -1) auto var(--spacing-lg) auto;
+    /* Pull the search bar up with negative margin */
+    margin: -3.5rem auto var(--spacing-lg) auto;
+    position: relative;
+    z-index: 20;
   }
 
   .sandbox-featured-section,
   .sandbox-content {
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
+  }
+  
+  /* Stack featured grid on mobile */
+  .sandbox-featured-section .featured-grid {
+    grid-template-columns: 1fr; 
+    gap: 1rem;
   }
 
   .sandbox-tabs {

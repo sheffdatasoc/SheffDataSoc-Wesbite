@@ -2,11 +2,16 @@
    /pages/Glossary.css
    ======================================== */
 
+/* ========== HERO SECTION ========== */
 .glossary-hero {
   text-align: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 5rem 2rem; /* Increased padding to match other pages */
+  /* UPDATED: Exact gradient match from Events/Resources/Sandbox */
+  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
   color: var(--white);
+  margin: 0;
+  width: 100%;
+  position: relative;
   margin-bottom: var(--spacing-xl);
 }
 
@@ -14,7 +19,7 @@
   display: inline-block;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.5rem;
   border-radius: 50px;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
@@ -26,15 +31,19 @@
   font-size: var(--font-size-4xl);
   margin-bottom: var(--spacing-sm);
   font-weight: var(--font-weight-bold);
+  line-height: 1.2;
 }
 
 .glossary-hero p {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-xl);
   opacity: 0.95;
-  max-width: 600px;
+  max-width: 700px; /* Slightly wider to match other pages */
   margin: 0 auto;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
 }
 
+/* ========== HEADER & CONTROLS ========== */
 .glossary-header {
   text-align: center;
   margin-bottom: var(--spacing-lg);
@@ -57,11 +66,17 @@
   margin-bottom: var(--spacing-lg);
   align-items: center;
   flex-wrap: wrap;
+  /* Center the controls container */
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 var(--spacing-md);
 }
 
+/* ========== SEARCH BAR ========== */
 .search-bar {
-  max-width: 1000px;
-  width: 100%;
+  flex: 1; /* Make it take available space */
+  min-width: 300px;
   position: relative;
 }
 
@@ -81,13 +96,16 @@
   border-radius: var(--radius-lg);
   font-size: var(--font-size-md);
   transition: border-color var(--transition-normal);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
 }
 
 .search-bar input:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: #6366f1; /* Match primary brand color */
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
 }
 
+/* ========== FILTER ========== */
 .filter-group {
   display: flex;
   align-items: center;
@@ -112,25 +130,32 @@
 
 .filter-group select:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: #6366f1;
 }
 
 .results-info {
   color: var(--text-secondary);
   font-size: var(--font-size-base);
   margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-xs) 0;
+  padding: var(--spacing-xs) var(--spacing-md);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* ========== LETTER NAVIGATION ========== */
 .letter-nav {
   display: flex;
   gap: var(--spacing-xs);
   flex-wrap: wrap;
   margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   justify-content: center;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .letter-link {
@@ -140,32 +165,34 @@
   align-items: center;
   justify-content: center;
   background: var(--white);
-  color: var(--primary-color);
+  color: #6366f1;
   text-decoration: none;
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-base);
   transition: all var(--transition-normal);
-  border: 2px solid var(--border-color);
+  border: 1px solid var(--border-color);
 }
 
 .letter-link:hover {
-  background: var(--primary-color);
+  background: #6366f1;
   color: var(--white);
-  border-color: var(--primary-color);
+  border-color: #6366f1;
   transform: scale(1.1);
 }
 
+/* ========== CONTENT ========== */
 .glossary-content {
   margin-top: var(--spacing-lg);
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 var(--spacing-md);
 }
 
 .letter-section {
   margin-bottom: var(--spacing-xl);
-  scroll-margin-top: 80px;
+  scroll-margin-top: 100px; /* Adjusted for header clearance */
 }
 
 .letter-heading {
@@ -173,7 +200,7 @@
   font-size: var(--font-size-3xl);
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-xs);
-  border-bottom: 3px solid var(--primary-color);
+  border-bottom: 3px solid #6366f1;
   display: inline-block;
 }
 
@@ -185,15 +212,15 @@
 
 .term-card {
   background: var(--white);
-  border: 2px solid var(--border-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-xl);
   padding: var(--spacing-md);
   transition: all var(--transition-normal);
 }
 
 .term-card:hover {
-  border-color: var(--primary-color);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
   transform: translateY(-2px);
 }
 
@@ -213,8 +240,6 @@
   font-weight: var(--font-weight-bold);
 }
 
-/* category-badge is defined in components.css */
-
 .term-definition {
   color: var(--text-primary);
   line-height: 1.7;
@@ -223,10 +248,10 @@
 }
 
 .term-example {
-  background: var(--bg-card);
+  background: #f3f4f6;
   padding: var(--spacing-sm);
   border-radius: var(--radius-lg);
-  border-left: 4px solid var(--primary-color);
+  border-left: 4px solid #6366f1;
   margin-top: var(--spacing-sm);
   color: var(--text-secondary);
   font-size: var(--font-size-base);
@@ -234,7 +259,7 @@
 }
 
 .term-example strong {
-  color: var(--primary-color);
+  color: #6366f1;
   font-weight: var(--font-weight-semibold);
 }
 
@@ -247,6 +272,6 @@
 }
 
 .related-terms strong {
-  color: var(--primary-color);
+  color: #6366f1;
   font-weight: var(--font-weight-semibold);
 }
