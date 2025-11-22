@@ -16,25 +16,33 @@ import './NavBar.css';
 
 function NavBar() {
   // -- State Management --
-  const [resourcesOpen, setResourcesOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'learning' | 'about' | null
   const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
-  
-  // Track active pages for gradient styling
+
   const location = useLocation();
 
   // Close mobile menu automatically when route changes
   useEffect(() => {
     setIsOpen(false);
+    setActiveDropdown(null); // Also close any open dropdown
   }, [location]);
 
   // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  // Helper to set active class for standard links
-  const getLinkClass = (path) => {
-    return location.pathname === path ? "nav-link active" : "nav-link";
+  // Toggle dropdown (click)
+  const toggleDropdown = (dropdownName) => {
+    setActiveDropdown(prev => (prev === dropdownName ? null : dropdownName));
   };
+
+  // Close dropdown after clicking a child link
+  const handleChildClick = () => {
+    setActiveDropdown(null);
+    if (isOpen) setIsOpen(false);
+  };
+
+  // Helper to set active class for standard links
+  const getLinkClass = (path) => location.pathname === path ? "nav-link active" : "nav-link";
 
   // Helper to set active class for Dropdown parents
   const getDropdownClass = (paths) => {
@@ -63,7 +71,7 @@ function NavBar() {
 
         {/* Navigation Links */}
         <ul className={isOpen ? "nav-menu active" : "nav-menu"}>
-          
+
           <li>
             <Link to="/" className={getLinkClass('/')}>
               <Home size={18} />
@@ -93,22 +101,27 @@ function NavBar() {
           </li>
 
           {/* Learning Dropdown */}
-          <li 
-            className="dropdown"
-            onMouseEnter={() => setResourcesOpen(true)}
-            onMouseLeave={() => setResourcesOpen(false)}
-          >
-            <button className={getDropdownClass(['/guides', '/glossary', '/resources'])}>
+          <li className="dropdown">
+            <button 
+              className={getDropdownClass(['/guides', '/glossary', '/resources'])}
+              onClick={() => toggleDropdown('learning')}
+            >
               <Book size={18} />
-              <span>Learning</span> {/* Parent renamed */}
+              <span>Learning</span>
               <ChevronDown size={16} />
             </button>
-            
-            {resourcesOpen && (
-              <ul className="dropdown-menu">
-                <li><Link to="/guides">Guides</Link></li>
-                <li><Link to="/glossary">Glossary</Link></li>
-                <li><Link to="/resources">Resources</Link></li> {/* Child stays */}
+
+            {(activeDropdown === 'learning' || isOpen) && (
+              <ul className={`dropdown-menu ${isOpen ? 'mobile-expanded' : ''}`}>
+                <li>
+                  <Link to="/guides" onClick={handleChildClick}>Guides</Link>
+                </li>
+                <li>
+                  <Link to="/glossary" onClick={handleChildClick}>Glossary</Link>
+                </li>
+                <li>
+                  <Link to="/resources" onClick={handleChildClick}>Resources</Link>
+                </li>
               </ul>
             )}
           </li>
@@ -121,22 +134,27 @@ function NavBar() {
           </li>
 
           {/* About Dropdown */}
-          <li 
-            className="dropdown"
-            onMouseEnter={() => setAboutOpen(true)}
-            onMouseLeave={() => setAboutOpen(false)}
-          >
-            <button className={getDropdownClass(['/about', '/timeline', '/members'])}>
+          <li className="dropdown">
+            <button
+              className={getDropdownClass(['/about', '/timeline', '/members'])}
+              onClick={() => toggleDropdown('about')}
+            >
               <Info size={18} />
               <span>About</span>
               <ChevronDown size={16} />
             </button>
-            
-            {aboutOpen && (
-              <ul className="dropdown-menu">
-                <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/timeline">Timeline</Link></li>
-                <li><Link to="/members">Our Team</Link></li>
+
+            {(activeDropdown === 'about' || isOpen) && (
+              <ul className={`dropdown-menu ${isOpen ? 'mobile-expanded' : ''}`}>
+                <li>
+                  <Link to="/about" onClick={handleChildClick}>About Us</Link>
+                </li>
+                <li>
+                  <Link to="/timeline" onClick={handleChildClick}>Timeline</Link>
+                </li>
+                <li>
+                  <Link to="/members" onClick={handleChildClick}>Our Team</Link>
+                </li>
               </ul>
             )}
           </li>
@@ -148,3 +166,4 @@ function NavBar() {
 }
 
 export default NavBar;
+
