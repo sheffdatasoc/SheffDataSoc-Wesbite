@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
   Calendar, 
@@ -8,17 +8,51 @@ import {
   Book, 
   Image as ImageIcon, 
   Info,
-  ChevronDown 
+  ChevronDown
 } from 'lucide-react';
 import './NavBar.css';
 
 function NavBar() {
-  const [resourcesOpen, setResourcesOpen] = useState(false);
-  const [aboutOpen, setAboutOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null); // 'resources' | 'about' | null
+
+  const location = useLocation();
+
+  const resourcesActive = ["/resources", "/guides", "/glossary"].some(path =>
+    location.pathname.startsWith(path)
+  );
+
+  const aboutActive = ["/about", "/timeline", "/members"].some(path =>
+    location.pathname.startsWith(path)
+  );
+
+  // Close dropdown when clicking outside
+  const handleClickOutside = (e) => {
+    if (!e.target.closest('.dropdown')) {
+      setActiveDropdown(null);
+    }
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  // Handle parent dropdown click
+  const toggleDropdown = (dropdownName) => {
+    setActiveDropdown(prev => (prev === dropdownName ? null : dropdownName));
+  };
+
+  // Handle child click
+  const handleChildClick = () => {
+    setActiveDropdown(null); // Close dropdown after clicking child
+    if (menuOpen) setMenuOpen(false); // Close mobile menu if open
+  };
 
   return (
     <nav className="navbar">
       <div className="nav-container">
+
         {/* Logo */}
         <Link to="/" className="nav-logo">
           <div className="logo-icon">SDS</div>
@@ -28,82 +62,133 @@ function NavBar() {
           </div>
         </Link>
 
+        {/* Hamburger */}
+        <button 
+          className={`hamburger ${menuOpen ? "active" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
         {/* Navigation Links */}
-        <ul className="nav-menu">
+        <ul className={`nav-menu ${menuOpen ? "open" : ""}`}>
+
           <li>
-            <Link to="/" className="nav-link">
+            <NavLink 
+              to="/" 
+              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+            >
               <Home size={18} />
               <span>Home</span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/events" className="nav-link">
+            <NavLink 
+              to="/events" 
+              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+            >
               <Calendar size={18} />
               <span>Events</span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/blog" className="nav-link">
+            <NavLink 
+              to="/blog" 
+              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+            >
               <BookOpen size={18} />
               <span>The Blog</span>
-            </Link>
+            </NavLink>
           </li>
 
           <li>
-            <Link to="/sandbox" className="nav-link">
+            <NavLink 
+              to="/sandbox" 
+              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+            >
               <Code size={18} />
               <span>The Sandbox</span>
-            </Link>
+            </NavLink>
           </li>
 
-          {/* Resources Dropdown */}
-          <li 
-            className="dropdown"
-            onMouseEnter={() => setResourcesOpen(true)}
-            onMouseLeave={() => setResourcesOpen(false)}
-          >
-            <button className="nav-link dropdown-toggle">
+          {/* Resources dropdown */}
+          <li className="dropdown">
+            <button
+              className={`nav-link dropdown-toggle ${resourcesActive ? "active" : ""}`}
+              onClick={() => toggleDropdown('resources')}
+            >
               <Book size={18} />
               <span>Resources</span>
               <ChevronDown size={16} />
             </button>
-            {resourcesOpen && (
-              <ul className="dropdown-menu">
-                <li><Link to="/guides">Guides</Link></li>
-                <li><Link to="/glossary">Glossary</Link></li>
-                <li><Link to="/resources">Resources</Link></li>
+
+            {(activeDropdown === 'resources' || menuOpen) && (
+              <ul className={`dropdown-menu ${menuOpen ? 'mobile-expanded' : ''}`}>
+                <li>
+                  <NavLink to="/guides" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    Guides
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/glossary" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    Glossary
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/resources" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    Learning Hub
+                  </NavLink>
+                </li>
               </ul>
             )}
           </li>
 
           <li>
-            <Link to="/gallery" className="nav-link">
+            <NavLink 
+              to="/gallery" 
+              className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}
+            >
               <ImageIcon size={18} />
               <span>Gallery</span>
-            </Link>
+            </NavLink>
           </li>
 
-          {/* About Dropdown */}
-          <li 
-            className="dropdown"
-            onMouseEnter={() => setAboutOpen(true)}
-            onMouseLeave={() => setAboutOpen(false)}
-          >
-            <button className="nav-link dropdown-toggle">
+          {/* About dropdown */}
+          <li className="dropdown">
+            <button
+              className={`nav-link dropdown-toggle ${aboutActive ? "active" : ""}`}
+              onClick={() => toggleDropdown('about')}
+            >
               <Info size={18} />
               <span>About</span>
               <ChevronDown size={16} />
             </button>
-            {aboutOpen && (
-              <ul className="dropdown-menu">
-                <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/timeline">Timeline</Link></li>
-                <li><Link to="/members">Our Team</Link></li>
+
+            {(activeDropdown === 'about' || menuOpen) && (
+              <ul className={`dropdown-menu ${menuOpen ? 'mobile-expanded' : ''}`}>
+                <li>
+                  <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    About Us
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/timeline" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    Timeline
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/members" className={({ isActive }) => isActive ? "active" : ""} onClick={handleChildClick}>
+                    Our Team
+                  </NavLink>
+                </li>
               </ul>
             )}
           </li>
+
         </ul>
       </div>
     </nav>
@@ -111,3 +196,7 @@ function NavBar() {
 }
 
 export default NavBar;
+
+
+
+
