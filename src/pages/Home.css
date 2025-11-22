@@ -2,14 +2,7 @@
    /pages/Home.css
    ======================================== */
 
-/* Home page uses only shared components */
-/* Hero.css, StatCard.css provide all needed styles */
-/* Add page-specific overrides only if necessary */
-
-/* ========================================
-   /pages/Home.css
-   ======================================== */
-
+/* 1. Main Scroll Container */
 .home-page {
   height: calc(var(--vh, 1vh) * 100);
   overflow-y: scroll;
@@ -17,85 +10,73 @@
   scroll-behavior: smooth;
 }
 
-/* Every full-screen section */
+/* 2. SCROLL SNAP LOGIC
+   We apply this to ALL sections so they snap to the viewport.
+*/
+
+/* Standard centered sections (About, Projects, etc.) */
 .home-page section:not(.hero-modern):not(.hero-sandbox) {
   scroll-snap-align: start;
   height: calc(var(--vh, 1vh) * 100); /* Full viewport height */
+  
+  /* Center content in these sections */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   padding: 2rem;
-  transition: background 3s ease;
 }
 
-.home-page .hero-modern,
-.home-page .hero-sandbox {
+/* HERO SECTION OVERRIDE */
+.home-page .hero-modern {
   scroll-snap-align: start;
-  height: calc(var(--vh, 1vh) * 100);
-  justify-content: flex-start;
-  align-items: stretch;
-  text-align: left;
-  padding: 4rem 3rem;
+  height: auto; 
+  min-height: 80vh; /* This allows the next section to "peek" through at the bottom */
+  width: 100%;
+  display: flex; /* Re-enable flex here if Home.css was stripping it */
+  align-items: center;
 }
+
+
+/* ========================================
+   3. INDIVIDUAL SECTION STYLES
+   ======================================== */
 
 .about-preview {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,       
-    #ffffff 50%,      
-    #ffffff 100%      
-);
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 50%, #ffffff 100%);
   color: #1a1a1a;
 }
 
-
 .projects-preview {
-  background: linear-gradient(
-    180deg, 
-    #FBFCFE 0%, 
-    #FBFCFE 50%, 
-    #FBFCFE 100%);
+  background: linear-gradient(180deg, #FBFCFE 0%, #FBFCFE 50%, #FBFCFE 100%);
   color: #000000;
 }
 
-
 .events-preview {
-  background: linear-gradient(
-    180deg, 
-    #312e81 0%, 
-    #1e1b4b 60%, 
-    #1e3a8a 100%);
+  background: linear-gradient(180deg, #312e81 0%, #1e1b4b 60%, #1e3a8a 100%);
   color: #ffffff;
 }
 
 .social-preview {
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,    /* dark from events-preview */
-    #ffffff 40%,   /* mid-tone */
-    #ffffff 100%   /* transitions toward contact-preview */
-  );
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 40%, #ffffff 100%);
   color: #000000;
 }
 
-
+/* Contact Section Split Layout */
 .contact-preview {
-  background: linear-gradient(
-    180deg, 
-    #1e3a8a 0%, 
-    #4338ca 60%, 
-    #7c3aed 100%);
+  background: linear-gradient(180deg, #1e3a8a 0%, #4338ca 60%, #7c3aed 100%);
   color: #ffffff;
-  justify-content: space-between; /* Changed from center */
-  padding: 0;
+  
+  /* Split content top/bottom */
+  justify-content: space-between; 
+  padding: 0 !important; /* Override default section padding */
   gap: 0; 
   overflow: hidden;
 }
 
 .contact-content {
-  height: 50vh; /* Takes up top half */
+  height: 50vh; /* Top half */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -105,39 +86,30 @@
 }
 
 .footer-content {
-  height: 50%; /* Takes up bottom half */
+  height: 50vh; /* Bottom half */
   width: 100%;
   background: #1a202c; 
-}
-
-.contact-preview footer {
-  height: 50vh; /* Exactly 50% of viewport */
-  width: 100vw;
-  margin: 0;
-  padding: 2rem;
-  background: #1a202c;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  flex-shrink: 0; /* Prevent footer from shrinking */
-  flex-grow: 1;
 }
 
-
-/* Disable scroll-snap on mobile */ 
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
 @media (max-width: 768px) {
   .home-page {
-    scroll-snap-type: none; /* Disable snapping on mobile */
+    scroll-snap-type: none; /* Disable snapping on mobile for smoother scrolling */
   }
   
   .home-page section {
-    height: auto; /* Let sections be as tall as their content */
-    min-height: calc(var(--vh, 1vh) * 100); /* At least full height */
+    height: auto; /* Allow sections to grow naturally */
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
+
+  /* Ensure the hero takes up full screen on mobile too */
+  .home-page .hero-modern {
+      height: auto;
+      min-height: 90vh;
   }
 }

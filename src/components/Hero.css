@@ -1,172 +1,320 @@
 /* ========================================
-   Hero.css - Modern + Sandbox Variants
+   HERO COMPONENT STYLES - OFFICIAL THEME
    ======================================== */
 
-/* ===== MODERN HERO (default) ===== */
+/* 1. Main Container */
 .hero-modern {
-  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%);
-  color: white;
-  padding: 4rem 3rem;
+  min-height: 65vh; /* Slightly taller for better vertical breathing room */
+  width: 100%;
+  
+  /* Layout: Center content */
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4rem;
-  min-height: 500px;
+  align-items: center; 
+  justify-content: center; 
+  gap: 10rem; 
+  padding: 3rem 2rem; 
+  
   position: relative;
   overflow: hidden;
+
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%);
+  color: #ffffff; 
 }
 
-.hero-content {
-  flex: 1;
-  max-width: 700px;
+/* 2. Left Side: Text Content */
+.hero-text-content {
+  flex: 0 1 550px; /* Don't grow, allow shrink, target 550px */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
 }
 
+/* Badge Styling */
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(245, 245, 242, 0.15); 
+  backdrop-filter: blur(4px);
+  border: none; 
+  color: #F5F5F2; 
   padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  margin-bottom: 1.5rem;
-  backdrop-filter: blur(10px);
-  font-weight: 500;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700; 
+  margin-bottom: 1rem; 
+  letter-spacing: 0.5px;
 }
 
-.hero-title {
-  font-size: 3.5rem;
+/* Heading Typography */
+.hero-text-content h1 {
+  font-size: 3rem; 
   font-weight: 800;
-  margin-bottom: 1.5rem;
   line-height: 1.1;
+  margin-bottom: 1rem; 
+  letter-spacing: -0.02em;
+  color: #ffffff; 
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-.hero-title-highlight {
-  color: #fbbf24;
+/* Highlights */
+.highlight {
+  color: #EBB479; /* Sand Color */
+  position: relative;
+  display: inline-block;
 }
 
+/* Subtitle */
 .hero-subtitle {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+  font-size: 1.125rem;
   line-height: 1.6;
+  color: #F5F5F2; 
   opacity: 0.95;
-  max-width: 600px;
+  margin-bottom: 1.5rem; 
+  max-width: 90%;
+  font-weight: 400;
 }
 
+/* 3. Buttons Area */
 .hero-buttons {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 3rem;
+  gap: 1rem; 
+  margin-bottom: 2rem; 
+  align-items: center;
 }
 
-.btn {
-  padding: 0.875rem 2rem;
+/* Primary Button */
+.btn-primary {
+  background: #ffffff; 
+  color: #182F4D; /* Navy Text */
+  padding: 0.75rem 1.5rem; 
+  font-size: 1rem;
+  font-weight: 700;
   border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: white;
-  color: #7c3aed;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F2; 
 }
 
+/* Secondary Button */
 .btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+  background-color: transparent;
+  color: #ffffff; 
+  padding: 0.75rem 1.5rem; 
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid rgba(245, 245, 242, 0.3); 
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
 }
 
-/* Stats for Modern Variant */
+/* 4. Stats Area */
 .hero-stats {
   display: flex;
-  gap: 2.5rem;
-  margin-top: 3rem;
-}
-
-.hero-stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.hero-stat-card .stat-value {
-  font-size: 2.5rem;
-  font-weight: 700;
-}
-
-/* Optional visual right city */
-.hero-visual {
-  flex: 1;
-  max-width: 600px;
-}
-
-/* ===== SANDBOX VARIANT ===== */
-.hero-sandbox {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: var(--white);
-  text-align: center;
-  padding: 5rem 2rem;
+  gap: 3rem; 
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(245, 245, 242, 0.2); 
   width: 100%;
 }
 
-.hero-sandbox .hero-badge {
-  display: inline-flex;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.5rem 1.5rem;
-  border-radius: var(--radius-2xl);
-  margin-bottom: var(--spacing-md);
-  font-size: var(--font-size-sm);
+.stat-item h3 {
+  font-size: 1.5rem; 
+  font-weight: 800;
+  color: #ffffff; 
+  margin: 0;
 }
 
-.hero-sandbox h1 {
-  font-size: var(--font-size-4xl);
-  line-height: 1.2;
-  font-weight: var(--font-weight-bold);
+.stat-item p {
+  font-size: 0.875rem;
+  color: #EBB479; 
+  margin-top: 0.25rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.hero-sandbox p {
-  font-size: var(--font-size-xl);
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-  color: rgba(219, 234, 254, 1);
+/* ========================================
+   5. RIGHT SIDE: 3D CAROUSEL
+   ======================================== */
+
+.hero-image-container {
+  flex: 0 0 550px; 
+  height: 450px;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  
+  /* Perspective creates the depth */
+  perspective: 1000px; 
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 1200px) {
+.carousel-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Shared Card Styles */
+.carousel-card {
+  position: absolute;
+  width: 300px;  /* Card Width */
+  height: 400px; /* Card Height */
+  object-fit: cover;
+  border-radius: 20px; /* Smooth corners */
+  
+  /* Smooth glide transition */
+  transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  cursor: pointer;
+  
+  /* REMOVED HARD BORDER */
+  border: none; 
+  
+  background-color: #182F4D; /* Fallback color */
+}
+
+/* --- POSITION LOGIC --- */
+
+/* 1. CENTER CARD (Active) */
+.card-center {
+  z-index: 10;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  
+  /* Stronger shadow to pop */
+  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  filter: brightness(1);
+}
+
+/* 2. LEFT CARD (Behind) */
+.card-left {
+  z-index: 5;
+  opacity: 0.7;
+  
+  /* Move Left and Push Back */
+  transform: translateX(-60%) scale(0.85);
+  
+  /* Blur for depth */
+  filter: blur(1px) brightness(0.7); 
+}
+.card-left:hover {
+  filter: blur(0px) brightness(0.9);
+  opacity: 0.9;
+}
+
+/* 3. RIGHT CARD (Behind) */
+.card-right {
+  z-index: 5;
+  opacity: 0.7;
+  
+  /* Move Right and Push Back */
+  transform: translateX(60%) scale(0.85);
+  
+  filter: blur(1px) brightness(0.7);
+}
+.card-right:hover {
+  filter: blur(0px) brightness(0.9);
+  opacity: 0.9;
+}
+
+/* 4. HIDDEN CARDS */
+.card-hidden {
+  z-index: 0;
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+}
+
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
+@media (max-width: 1024px) {
   .hero-modern {
-    flex-direction: column;
-    text-align: center;
-    padding: 3rem 2rem;
+    flex-direction: column; 
+    justify-content: center; /* Keeps content centered vertically */
+    text-align: center; 
+    padding: 3rem 1.5rem; /* Slightly reduced side padding */
+    
+    /* 1. DRASTICALLY REDUCE GAP */
+    /* We set this very low because the image container below has internal spacing */
+    gap: 0.5rem; 
+    
+    background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
+    
+    /* Ensure height is dynamic on mobile so it doesn't stretch empty space */
+    min-height: auto; 
   }
-  .hero-visual {
-    display: none;
-  }
-}
 
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
+  .hero-text-content {
+    flex: 1;
+    align-items: center; 
+    max-width: 100%;
+    margin-bottom: 0; 
   }
-  .hero-sandbox {
-    padding: var(--spacing-xl) var(--spacing-md);
+  
+  .hero-text-content h1 { 
+    font-size: 2.25rem; 
   }
-  .hero-sandbox p {
-    font-size: var(--font-size-base);
+
+  .hero-buttons {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap; 
   }
+
+  .hero-stats {
+    justify-content: center;
+    gap: 1.5rem;
+    /* Reduce padding here too */
+    padding-top: 1rem; 
+    padding-bottom: 0;
+  }
+
+  /* --- THE MAIN FIX --- */
+  .hero-image-container {
+    flex: 1;
+    width: 100%;
+    height: 300px; /* Fixed height for the stage */
+    perspective: 800px;
+    
+    /* 2. PULL THE IMAGES UP */
+    /* Negative margin pulls the carousel up into the gap */
+    margin-top: -20rem; 
+    
+    /* Optional: margin-bottom to ensure space after images */
+    margin-bottom: 2rem; 
+  }
+  
+  .carousel-card {
+    /* Make cards slightly smaller on mobile to fit nicely */
+    width: 200px; 
+    height: 280px;
+  }
+  
+  /* Tighter spread on mobile */
+  .card-left { transform: translateX(-50%) scale(0.85); }
+  .card-right { transform: translateX(50%) scale(0.85); }
 }
