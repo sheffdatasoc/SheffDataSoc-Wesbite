@@ -219,6 +219,28 @@ export async function getProjects(status = null) {
   return data || [];
 }
 
+// ============================================================================
+// WORKSHOPS
+// ============================================================================
+export async function getWorkshops() {
+  if (!supabase) {
+    console.warn('Supabase not configured, returning empty array');
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('workshops')
+    .select('*')
+    .order('date', { ascending: true }); // sort by workshop date
+
+  if (error) {
+    console.error('Error fetching workshops:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
 
 
 

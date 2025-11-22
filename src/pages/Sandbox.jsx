@@ -1,23 +1,15 @@
-// ========================================
-// /pages/Sandbox.jsx - FIXED VERSION
-// ========================================
-
 import React, { useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
-import { useProjects } from '../hooks/useSupabase';
+import WorkshopCard from '../components/WorkshopCard';
+import { useProjects, useWorkshops } from '../hooks/useSupabase';
 import { Search, GitBranch, Code2 } from 'lucide-react';
 import './Sandbox.css';
 
 function TheSandbox() {
-  const { projects, loading } = useProjects();
+  const { projects, loading: loadingProjects } = useProjects();
+  const { workshops, loading: loadingWorkshops } = useWorkshops();
   const [activeTab, setActiveTab] = useState('projects');
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Separate projects and workshops with proper null checks
-  const allProjects = projects?.filter(p => p.type === 'project') || [];
-  const allWorkshops = projects?.filter(p => p.type === 'workshop') || [];
-  const featuredProjects = projects?.filter(p => p.featured && p.type === 'project') || [];
-  const featuredWorkshops = projects?.filter(p => p.featured && p.type === 'workshop') || [];
 
   // Filter based on search
   const filterItems = (items) => {
@@ -29,12 +21,14 @@ function TheSandbox() {
   };
 
   const displayItems = activeTab === 'projects'
-    ? filterItems(allProjects)
-    : filterItems(allWorkshops);
+    ? filterItems(projects || [])
+    : filterItems(workshops || []);
 
   const featuredItems = activeTab === 'projects'
-    ? filterItems(featuredProjects)
-    : filterItems(featuredWorkshops);
+    ? filterItems((projects || []).filter(p => p.featured))
+    : filterItems((workshops || []).filter(w => w.featured));
+
+  const loading = activeTab === 'projects' ? loadingProjects : loadingWorkshops;
 
   if (loading) {
     return (
@@ -42,7 +36,7 @@ function TheSandbox() {
         <div className="sandbox-hero">
           <span className="hero-badge">💻 Learn by Building</span>
           <h1>The Sandbox</h1>
-          <p>Loading projects...</p>
+          <p>Loading {activeTab}...</p>
         </div>
       </div>
     );
@@ -78,9 +72,11 @@ function TheSandbox() {
             ⭐ Featured {activeTab === 'projects' ? 'Projects' : 'Workshops'}
           </h2>
           <div className="featured-grid">
-            {featuredItems.map(item => (
-              <ProjectCard key={item.id} project={item} featured={true} isSandbox={true} />
-            ))}
+            {featuredItems.map(item =>
+              activeTab === 'projects' ? 
+                <ProjectCard key={item.id} project={item} featured={true} isSandbox={true} /> :
+                <WorkshopCard key={item.id} workshop={item} featured={true} isSandbox={true} />
+            )}
           </div>
         </section>
       )}
@@ -113,9 +109,11 @@ function TheSandbox() {
           </div>
         ) : (
           <div className="projects-grid">
-            {displayItems.map(item => (
-              <ProjectCard key={item.id} project={item} />
-            ))}
+            {displayItems.map(item =>
+              activeTab === 'projects' ? 
+                <ProjectCard key={item.id} project={item} /> :
+                <WorkshopCard key={item.id} workshop={item} />
+            )}
           </div>
         )}
       </div>
@@ -124,3 +122,4 @@ function TheSandbox() {
 }
 
 export default TheSandbox;
+
