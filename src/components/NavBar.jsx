@@ -9,8 +9,8 @@ import {
   Image as ImageIcon, 
   Info,
   ChevronDown,
-  Menu, // From Main branch
-  X     // From Main branch
+  Menu,
+  X
 } from 'lucide-react';
 import './NavBar.css';
 
@@ -20,7 +20,7 @@ function NavBar() {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
   
-  // To track active pages for the gradient styling (From Maya branch)
+  // Track active pages for gradient styling
   const location = useLocation();
 
   // Close mobile menu automatically when route changes
@@ -28,7 +28,7 @@ function NavBar() {
     setIsOpen(false);
   }, [location]);
 
-  // -- Helper Functions --
+  // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
 
   // Helper to set active class for standard links
@@ -36,7 +36,7 @@ function NavBar() {
     return location.pathname === path ? "nav-link active" : "nav-link";
   };
 
-  // Helper to set active class for Dropdown parents (e.g., Resources glows if you are on /guides)
+  // Helper to set active class for Dropdown parents
   const getDropdownClass = (paths) => {
     return paths.some(path => location.pathname.startsWith(path)) 
       ? "nav-link dropdown-toggle active" 
@@ -56,7 +56,7 @@ function NavBar() {
           </div>
         </Link>
 
-        {/* Hamburger Icon (Visible only on mobile via CSS) */}
+        {/* Hamburger Icon */}
         <div className="menu-icon" onClick={toggleMenu}>
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </div>
@@ -92,7 +92,7 @@ function NavBar() {
             </Link>
           </li>
 
-          {/* Resources Dropdown */}
+          {/* Learning Dropdown */}
           <li 
             className="dropdown"
             onMouseEnter={() => setResourcesOpen(true)}
@@ -100,7 +100,7 @@ function NavBar() {
           >
             <button className={getDropdownClass(['/guides', '/glossary', '/resources'])}>
               <Book size={18} />
-              <span>Resources</span>
+              <span>Learning</span> {/* Parent renamed */}
               <ChevronDown size={16} />
             </button>
             
@@ -108,7 +108,7 @@ function NavBar() {
               <ul className="dropdown-menu">
                 <li><Link to="/guides">Guides</Link></li>
                 <li><Link to="/glossary">Glossary</Link></li>
-                <li><Link to="/resources">Resources</Link></li>
+                <li><Link to="/resources">Resources</Link></li> {/* Child stays */}
               </ul>
             )}
           </li>
