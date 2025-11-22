@@ -6,30 +6,30 @@ function EventCard({
   // We accept the raw database row props here
   title, 
   description, 
-  status,
+  status, // <--- We need this to check if it's 'past'
   
-  // Handle Date: Supabase usually sends 'event_date' or 'date'
+  // Handle Date
   event_date, 
   date, 
   
-  // Handle Time: Supabase usually sends 'time' or it's part of the date
+  // Handle Time
   time, 
   
   // Handle Location
   location, 
   
-  // Handle Type: 'category' or 'type'
+  // Handle Type
   category,
   type,
   
-  // Handle Attendees: 'attendees' (current count)
+  // Handle Attendees
   attendees, 
   
-  // FIX 1: Handle Max Attendees (snake_case from DB)
+  // Handle Max Attendees
   max_attendees, 
   maxAttendees,
   
-  // FIX 2: Handle Image URL (snake_case from DB)
+  // Handle Image URL
   image_url, 
   imageUrl,
   
@@ -37,16 +37,18 @@ function EventCard({
 }) {
   
   // --- 1. NORMALIZE DATA ---
-  // This ensures we use the correct value regardless of what Supabase sends
   const effectiveDate = event_date || date;
   const effectiveImage = image_url || imageUrl;
   const effectiveMaxAttendees = max_attendees || maxAttendees;
   const effectiveType = category || type || 'Event'; 
 
-  // --- 2. FORMATTING HELPERS ---
+  // --- 2. LOGIC: CHECK IF EVENT IS PAST ---
+  // We check for 'past' because that is the new rule we added to your database
+  const isCompleted = status?.toLowerCase() === 'past';
+
+  // --- 3. FORMATTING HELPERS ---
   const formatDate = (dateString) => {
     if (!dateString) return 'TBA';
-    // Handle potential date parsing errors safely
     try {
       return new Date(dateString).toLocaleDateString('en-US', { 
         weekday: 'short', 
@@ -113,9 +115,19 @@ function EventCard({
           </div>
         </div>
 
-        {/* 3. Register Button */}
-        <button className="card-btn" onClick={onRegister}>
-          <Check size={18} strokeWidth={3} /> Register Now
+        {/* 3. Register Button (Updated Logic) */}
+        <button 
+          className={`card-btn ${isCompleted ? 'btn-disabled' : ''}`} 
+          onClick={!isCompleted ? onRegister : undefined}
+          disabled={isCompleted}
+        >
+          {isCompleted ? (
+            'Event Ended'
+          ) : (
+            <>
+              <Check size={18} strokeWidth={3} /> Register Now
+            </>
+          )}
         </button>
       </div>
     </div>

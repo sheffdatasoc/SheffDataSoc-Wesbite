@@ -1,3 +1,7 @@
+/* ========================================
+   /components/EventCard.css
+   ======================================== */
+
 /* Container */
 .photo-event-card {
   background: white;
@@ -8,6 +12,7 @@
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%; /* Ensures all cards in a grid row are the same height */
 }
 
 .photo-event-card:hover {
@@ -48,7 +53,7 @@
   letter-spacing: 0.5px;
 }
 
-/* Badge Colors (Matching your screenshot) */
+/* Badge Colors */
 .badge-green { background-color: #d1fae5; color: #065f46; } /* Volunteering */
 .badge-orange { background-color: #ffedd5; color: #9a3412; } /* Competition */
 .badge-purple { background-color: #f3e8ff; color: #6b21a8; } /* Networking */
@@ -125,4 +130,16 @@
 
 .card-btn:hover {
   opacity: 0.9;
+}
+
+/* Disabled Button State (For Past Events) */
+.card-btn.btn-disabled {
+  background: #e5e7eb; /* Light Grey */
+  color: #9ca3af;     /* Darker Grey Text */
+  cursor: not-allowed;
+  background-image: none; /* Removes the gradient */
+}
+
+.card-btn.btn-disabled:hover {
+  opacity: 1; /* Removes hover effect */
 }

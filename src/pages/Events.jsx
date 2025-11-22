@@ -4,14 +4,23 @@ import EventCard from '../components/EventCard';
 import './Events.css';
 
 function Events() {
-  // 1. We extract 'loading' here
   const { events, loading } = useEvents();
   const [filter, setFilter] = useState('all');
 
-  const upcomingEvents = events.filter(e => e.status?.toLowerCase() === 'upcoming' || e.status?.toLowerCase() === 'ongoing');
-  const pastEvents = events.filter(e => e.status?.toLowerCase() === 'completed');
+  // 1. Create separate buckets for each status
+  const upcomingEvents = events.filter(e => e.status?.toLowerCase() === 'upcoming');
+  const ongoingEvents = events.filter(e => e.status?.toLowerCase() === 'ongoing');
+  const pastEvents = events.filter(e => e.status?.toLowerCase() === 'past');
 
-  const displayEvents = filter === 'all' ? events : filter === 'upcoming' ? upcomingEvents : pastEvents;
+  // 2. Updated Logic: Handle all 4 distinct cases
+  let displayEvents = events;
+  if (filter === 'upcoming') {
+    displayEvents = upcomingEvents;
+  } else if (filter === 'ongoing') {
+    displayEvents = ongoingEvents;
+  } else if (filter === 'past') {
+    displayEvents = pastEvents;
+  }
 
   return (
     <div className="events-page">
@@ -39,7 +48,6 @@ function Events() {
           </div>
         </div>
 
-        {/* 2. FIX: We USE the loading variable here */}
         {loading ? (
           <div className="loading-state">
             <div className="spinner"></div>
@@ -53,7 +61,7 @@ function Events() {
           </div>
         ) : (
           <div className="empty-state">
-            <p>No events found.</p>
+            <p>No {filter} events found.</p>
           </div>
         )}
       </div>
