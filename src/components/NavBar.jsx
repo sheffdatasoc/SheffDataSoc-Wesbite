@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, 
   Calendar, 
@@ -9,25 +9,44 @@ import {
   Image as ImageIcon, 
   Info,
   ChevronDown,
-  Menu, // Import Menu icon
-  X     // Import X icon
+  Menu, // From Main branch
+  X     // From Main branch
 } from 'lucide-react';
 import './NavBar.css';
 
 function NavBar() {
+  // -- State Management --
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
   
-  // State for the hamburger menu
-  const [isOpen, setIsOpen] = useState(false);
+  // To track active pages for the gradient styling (From Maya branch)
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  // Close mobile menu automatically when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  // -- Helper Functions --
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  // Helper to set active class for standard links
+  const getLinkClass = (path) => {
+    return location.pathname === path ? "nav-link active" : "nav-link";
+  };
+
+  // Helper to set active class for Dropdown parents (e.g., Resources glows if you are on /guides)
+  const getDropdownClass = (paths) => {
+    return paths.some(path => location.pathname.startsWith(path)) 
+      ? "nav-link dropdown-toggle active" 
+      : "nav-link dropdown-toggle";
   };
 
   return (
     <nav className="navbar">
       <div className="nav-container">
+
         {/* Logo */}
         <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
           <div className="logo-icon">SDS</div>
@@ -43,31 +62,31 @@ function NavBar() {
         </div>
 
         {/* Navigation Links */}
-        {/* We add the 'active' class if isOpen is true */}
         <ul className={isOpen ? "nav-menu active" : "nav-menu"}>
+          
           <li>
-            <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>
+            <Link to="/" className={getLinkClass('/')}>
               <Home size={18} />
               <span>Home</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/events" className="nav-link" onClick={() => setIsOpen(false)}>
+            <Link to="/events" className={getLinkClass('/events')}>
               <Calendar size={18} />
               <span>Events</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/blog" className="nav-link" onClick={() => setIsOpen(false)}>
+            <Link to="/blog" className={getLinkClass('/blog')}>
               <BookOpen size={18} />
               <span>The Blog</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/sandbox" className="nav-link" onClick={() => setIsOpen(false)}>
+            <Link to="/sandbox" className={getLinkClass('/sandbox')}>
               <Code size={18} />
               <span>The Sandbox</span>
             </Link>
@@ -79,22 +98,23 @@ function NavBar() {
             onMouseEnter={() => setResourcesOpen(true)}
             onMouseLeave={() => setResourcesOpen(false)}
           >
-            <button className="nav-link dropdown-toggle">
+            <button className={getDropdownClass(['/guides', '/glossary', '/resources'])}>
               <Book size={18} />
               <span>Resources</span>
               <ChevronDown size={16} />
             </button>
+            
             {resourcesOpen && (
               <ul className="dropdown-menu">
-                <li><Link to="/guides" onClick={() => setIsOpen(false)}>Guides</Link></li>
-                <li><Link to="/glossary" onClick={() => setIsOpen(false)}>Glossary</Link></li>
-                <li><Link to="/resources" onClick={() => setIsOpen(false)}>Resources</Link></li>
+                <li><Link to="/guides">Guides</Link></li>
+                <li><Link to="/glossary">Glossary</Link></li>
+                <li><Link to="/resources">Resources</Link></li>
               </ul>
             )}
           </li>
 
           <li>
-            <Link to="/gallery" className="nav-link" onClick={() => setIsOpen(false)}>
+            <Link to="/gallery" className={getLinkClass('/gallery')}>
               <ImageIcon size={18} />
               <span>Gallery</span>
             </Link>
@@ -106,19 +126,21 @@ function NavBar() {
             onMouseEnter={() => setAboutOpen(true)}
             onMouseLeave={() => setAboutOpen(false)}
           >
-            <button className="nav-link dropdown-toggle">
+            <button className={getDropdownClass(['/about', '/timeline', '/members'])}>
               <Info size={18} />
               <span>About</span>
               <ChevronDown size={16} />
             </button>
+            
             {aboutOpen && (
               <ul className="dropdown-menu">
-                <li><Link to="/about" onClick={() => setIsOpen(false)}>About Us</Link></li>
-                <li><Link to="/timeline" onClick={() => setIsOpen(false)}>Timeline</Link></li>
-                <li><Link to="/members" onClick={() => setIsOpen(false)}>Our Team</Link></li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/timeline">Timeline</Link></li>
+                <li><Link to="/members">Our Team</Link></li>
               </ul>
             )}
           </li>
+
         </ul>
       </div>
     </nav>
