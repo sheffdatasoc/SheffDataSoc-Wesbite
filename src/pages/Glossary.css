@@ -1,157 +1,193 @@
 /* ========================================
-   /pages/Glossary.css
+   /pages/Glossary.css - ENFORCED PALETTE
    ======================================== */
 
-/* ========== HERO SECTION ========== */
-.glossary-hero {
-  text-align: center;
-  padding: 5rem 2rem; /* Increased padding to match other pages */
-  /* UPDATED: Exact gradient match from Events/Resources/Sandbox */
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: var(--white);
-  margin: 0;
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
+
+/* ========================================
+   Page Layout
+   ======================================== */
+.glossary-page {
+  min-height: 100vh;
+  background-color: #F5F5F2 !important; /* Off-White */
   width: 100%;
-  position: relative;
-  margin-bottom: var(--spacing-xl);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
+/* ========================================
+   HERO SECTION - Matching Events Page
+   ======================================== */
+.glossary-hero {
+  position: relative;
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
+  color: #fff;
+  text-align: center;
+  padding: 5rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  margin-bottom: 3rem;
+}
+
+.glossary-hero::after { 
+  display: none; 
+}
+
+/* Hero Badge - Off-White Glass Effect */
 .glossary-hero .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  /* Subtle White Glass Background */
+  background: rgba(245, 245, 242, 0.15) !important; 
+  /* Text: Official Off-White */
+  color: #F5F5F2 !important; 
+  /* Border: Removed */
+  border: none !important;
   padding: 0.5rem 1.5rem;
-  border-radius: 50px;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(4px);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .glossary-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  color: #ffffff !important;
 }
 
 .glossary-hero p {
-  font-size: var(--font-size-xl);
-  opacity: 0.95;
-  max-width: 700px; /* Slightly wider to match other pages */
+  font-size: 1.25rem;
+  max-width: 700px;
   margin: 0 auto;
+  color: #F5F5F2 !important; 
+  opacity: 0.9;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.95);
+  font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* ========== HEADER & CONTROLS ========== */
-.glossary-header {
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-}
-
-.glossary-header h1 {
-  color: var(--dark-bg);
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-}
-
-.glossary-header p {
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
-}
-
-.glossary-controls {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-  align-items: center;
-  flex-wrap: wrap;
-  /* Center the controls container */
+/* ========================================
+   CONTENT CONTAINER
+   ======================================== */
+.glossary-content {
+  margin-top: 3rem;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 var(--spacing-md);
+  padding: 0 1.5rem;
 }
 
-/* ========== SEARCH BAR ========== */
+/* ========================================
+   SEARCH BAR
+   ======================================== */
+.glossary-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
+  justify-content: center;
+}
+
 .search-bar {
-  flex: 1; /* Make it take available space */
+  flex: 1;
   min-width: 300px;
+  max-width: 600px;
   position: relative;
 }
 
 .search-bar .search-icon {
   position: absolute;
-  left: 1rem;
+  left: 1.25rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-secondary);
+  /* Updated: Navy icon */
+  color: #182F4D !important;
+  opacity: 0.6;
   pointer-events: none;
+  z-index: 1;
 }
 
-.search-bar input {
+.search-bar input,
+.search-input {
   width: 100%;
-  padding: 0.8rem 1.2rem 0.8rem 3rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-md);
-  transition: border-color var(--transition-normal);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+  padding: 1.1rem 1rem 1.1rem 3rem;
+  border: none !important;
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: white;
+  transition: all 0.2s ease;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
 }
 
-.search-bar input:focus {
+.search-bar input:focus,
+.search-input:focus {
   outline: none;
-  border-color: #6366f1; /* Match primary brand color */
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  /* Updated: Sand border on focus */
+  border: 1px solid #EBB479 !important;
 }
 
-/* ========== FILTER ========== */
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+.search-bar input::placeholder,
+.search-input::placeholder {
+  color: #9ca3af;
 }
 
-.filter-group label {
-  color: var(--text-secondary);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
-}
-
-.filter-group select {
-  padding: 0.8rem 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  background: var(--white);
-  cursor: pointer;
-  transition: border-color var(--transition-normal);
-}
-
-.filter-group select:focus {
-  outline: none;
-  border-color: #6366f1;
-}
-
+/* ========================================
+   RESULTS INFO
+   ======================================== */
 .results-info {
-  color: var(--text-secondary);
-  font-size: var(--font-size-base);
-  margin-bottom: var(--spacing-sm);
-  padding: var(--spacing-xs) var(--spacing-md);
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
+  font-weight: 500;
 }
 
-/* ========== LETTER NAVIGATION ========== */
+.error-message {
+  /* Updated: Terracotta for errors */
+  color: #DF694E !important;
+  font-weight: 600;
+}
+
+/* ========================================
+   LETTER NAVIGATION
+   ======================================== */
 .letter-nav {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: 0.5rem;
   flex-wrap: wrap;
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-md);
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  background: transparent !important;
   justify-content: center;
   max-width: 1000px;
   margin-left: auto;
@@ -159,68 +195,73 @@
 }
 
 .letter-link {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--white);
-  color: #6366f1;
+  background: white !important;
+  /* Updated: Navy text */
+  color: #182F4D !important;
   text-decoration: none;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
-  transition: all var(--transition-normal);
-  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  /* Updated: Sand border */
+  border: 2px solid #EBB479 !important;
 }
 
 .letter-link:hover {
-  background: #6366f1;
-  color: var(--white);
-  border-color: #6366f1;
+  /* Updated: Terracotta background on hover */
+  background: #DF694E !important;
+  color: white !important;
+  border-color: #DF694E !important;
   transform: scale(1.1);
 }
 
-/* ========== CONTENT ========== */
-.glossary-content {
-  margin-top: var(--spacing-lg);
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 var(--spacing-md);
-}
-
+/* ========================================
+   LETTER SECTIONS
+   ======================================== */
 .letter-section {
-  margin-bottom: var(--spacing-xl);
-  scroll-margin-top: 100px; /* Adjusted for header clearance */
+  margin-bottom: 3rem;
+  scroll-margin-top: 100px;
 }
 
 .letter-heading {
-  color: var(--dark-bg);
-  font-size: var(--font-size-3xl);
-  margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-xs);
-  border-bottom: 3px solid #6366f1;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  /* Updated: Terracotta border */
+  border-bottom: 3px solid #DF694E !important;
   display: inline-block;
+  font-weight: 700;
 }
 
+/* ========================================
+   TERM CARDS
+   ======================================== */
 .terms-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 1.5rem;
 }
 
 .term-card {
-  background: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-md);
-  transition: all var(--transition-normal);
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .term-card:hover {
-  border-color: #6366f1;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
   transform: translateY(-2px);
 }
 
@@ -228,50 +269,153 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-sm);
-  gap: var(--spacing-sm);
+  margin-bottom: 1rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .term-title {
-  color: var(--dark-bg);
-  font-size: var(--font-size-xl);
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
+  font-size: 1.5rem;
   margin: 0;
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
+}
+
+.category-badge {
+  /* Updated: Navy background */
+  background: rgba(24, 47, 77, 0.1) !important;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: lowercase;
 }
 
 .term-definition {
-  color: var(--text-primary);
+  /* Updated: Navy text with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   line-height: 1.7;
-  font-size: var(--font-size-md);
-  margin-bottom: var(--spacing-sm);
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .term-example {
-  background: #f3f4f6;
-  padding: var(--spacing-sm);
-  border-radius: var(--radius-lg);
-  border-left: 4px solid #6366f1;
-  margin-top: var(--spacing-sm);
-  color: var(--text-secondary);
-  font-size: var(--font-size-base);
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
+  padding: 1rem;
+  border-radius: 8px;
+  /* Updated: Terracotta border */
+  border-left: 4px solid #DF694E !important;
+  margin-top: 1rem;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 0.95rem;
   line-height: 1.6;
 }
 
 .term-example strong {
-  color: #6366f1;
-  font-weight: var(--font-weight-semibold);
+  /* Updated: Terracotta accent */
+  color: #DF694E !important;
+  font-weight: 600;
 }
 
 .related-terms {
-  margin-top: var(--spacing-sm);
-  padding-top: var(--spacing-sm);
-  border-top: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  font-size: var(--font-size-base);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 0.95rem;
 }
 
 .related-terms strong {
-  color: #6366f1;
-  font-weight: var(--font-weight-semibold);
+  /* Updated: Terracotta accent */
+  color: #DF694E !important;
+  font-weight: 600;
+}
+
+/* ========================================
+   EMPTY STATE
+   ======================================== */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
+  background: white;
+  border-radius: 16px;
+  /* Updated: Sand dashed border */
+  border: 2px dashed #EBB479 !important;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .glossary-hero {
+    padding: 3.5rem 1rem;
+  }
+
+  .glossary-hero h1 {
+    font-size: 2.25rem;
+  }
+
+  .glossary-hero p {
+    font-size: 1.1rem;
+  }
+
+  .glossary-content {
+    padding: 0 1rem;
+  }
+
+  .search-bar {
+    min-width: 100%;
+  }
+
+  .letter-nav {
+    padding: 1rem;
+    gap: 0.4rem;
+  }
+
+  .letter-link {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .letter-heading {
+    font-size: 2rem;
+  }
+
+  .term-title {
+    font-size: 1.25rem;
+  }
+
+  .term-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .glossary-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .glossary-hero p {
+    font-size: 1rem;
+  }
+
+  .letter-heading {
+    font-size: 1.75rem;
+  }
+
+  .term-title {
+    font-size: 1.1rem;
+  }
 }
