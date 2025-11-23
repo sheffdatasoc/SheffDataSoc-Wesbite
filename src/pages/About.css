@@ -1,56 +1,89 @@
 /* ========================================
-   /pages/About.css
+   /pages/About.css - ENFORCED PALETTE
    ======================================== */
 
-/* ========== PAGE WRAPPER ========== */
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
+
+/* ========================================
+   PAGE WRAPPER
+   ======================================== */
 .about-page {
   width: 100%;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #fcfcfc; /* Cleaner white/gray background */
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
 }
 
-/* ========== HERO SECTION ========== */
+/* ========================================
+   HERO SECTION - Matching Events Page
+   ======================================== */
 .about-hero {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
+  position: relative;
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
   color: white;
   text-align: center;
   padding: 5rem 2rem;
   margin-bottom: 3rem;
   width: 100%;
-  position: relative;
+  box-sizing: border-box;
 }
 
+.about-hero::after { 
+  display: none; 
+}
+
+/* Hero Badge - Off-White Glass Effect */
 .about-hero .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  /* Subtle White Glass Background */
+  background: rgba(245, 245, 242, 0.15) !important;
+  backdrop-filter: blur(4px);
+  /* Text: Official Off-White */
+  color: #F5F5F2 !important;
+  /* Border: Removed */
+  border: none !important;
   padding: 0.5rem 1.5rem;
   border-radius: 9999px;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .about-hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
   color: white;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .about-hero p {
   font-size: 1.25rem;
-  opacity: 0.95;
+  opacity: 0.9;
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
-  color: rgba(219, 234, 254, 1);
+  /* Updated: Off-White */
+  color: #F5F5F2 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* ========== 1. TOP NAVIGATION CARDS (Clean Row Style) ========== */
+/* ========================================
+   TOP NAVIGATION CARDS
+   ======================================== */
 .about-nav-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -70,13 +103,14 @@
   gap: 1rem;
   text-decoration: none;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .nav-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-  border-color: #d1d5db;
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
 }
 
 /* Gradient Icon Box for Nav */
@@ -88,6 +122,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: white;
 }
 
 .nav-card-content {
@@ -100,27 +135,36 @@
 .nav-card-content h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   margin: 0 0 4px 0;
 }
 
 .nav-card-content p {
   font-size: 0.9rem;
-  color: #6b7280;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.7;
   margin: 0;
 }
 
 .nav-arrow {
-  color: #9ca3af;
-  transition: transform 0.2s ease;
+  /* Updated: Navy */
+  color: #182F4D !important;
+  opacity: 0.5;
+  transition: all 0.2s ease;
 }
 
 .nav-card:hover .nav-arrow {
   transform: translateX(4px);
-  color: #6b7280;
+  /* Updated: Terracotta on hover */
+  color: #DF694E !important;
+  opacity: 1;
 }
 
-/* ========== 2. MISSION / VISION / VALUES (Clean Column Style) ========== */
+/* ========================================
+   MISSION / VISION / VALUES CARDS
+   ======================================== */
 .about-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -136,8 +180,8 @@
   border-radius: 16px;
   padding: 2.5rem 2rem;
   text-align: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -145,10 +189,12 @@
 
 .clean-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
 }
 
-/* Gradient Icon Box for Mission */
+/* Icon Box for Mission Cards */
 .card-icon-box {
   width: 64px;
   height: 64px;
@@ -157,50 +203,62 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 1.5rem;
-  box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+  color: white;
 }
 
 .clean-card h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   margin-bottom: 1rem;
 }
 
 .clean-card p {
-  color: #6b7280;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
 }
 
-/* ========== 3. GRADIENT UTILITIES ========== */
+/* ========================================
+   GRADIENT UTILITIES - Updated Palette
+   ======================================== */
 .gradient-purple {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+  /* Updated: Navy gradient */
+  background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%) !important;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.2);
 }
 
 .gradient-blue {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  /* Updated: Terracotta gradient */
+  background: linear-gradient(135deg, #DF694E 0%, #c55a3e 100%) !important;
+  box-shadow: 0 4px 12px rgba(223, 105, 78, 0.2);
 }
 
 .gradient-indigo {
-  background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+  /* Updated: Sand gradient */
+  background: linear-gradient(135deg, #EBB479 0%, #d9a063 100%) !important;
+  box-shadow: 0 4px 12px rgba(235, 180, 121, 0.2);
 }
 
 .gradient-cyan {
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  /* Updated: Navy to Terracotta */
+  background: linear-gradient(135deg, #182F4D 0%, #DF694E 100%) !important;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.2);
 }
 
 .gradient-pink {
-  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+  /* Updated: Terracotta to Sand */
+  background: linear-gradient(135deg, #DF694E 0%, #EBB479 100%) !important;
+  box-shadow: 0 4px 12px rgba(223, 105, 78, 0.2);
 }
 
-/* ========== 4. WHAT WE DO SECTION ========== */
+/* ========================================
+   WHAT WE DO SECTION
+   ======================================== */
 .what-we-do {
   padding: 0; 
   margin: 0 auto 4rem auto;
@@ -216,14 +274,17 @@
 }
 
 .what-we-do-header h2 {
-  color: #111827;
+  /* Updated: Navy */
+  color: #182F4D !important;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
 .what-we-do-header p {
-  color: #6b7280;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.7;
   font-size: 1.1rem;
   max-width: 650px;
   margin: 0 auto;
@@ -240,10 +301,10 @@
 .activity-card {
   background: white;
   padding: 2.5rem 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  border: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -252,7 +313,9 @@
 
 .activity-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
 }
 
 .activity-icon-box {
@@ -266,27 +329,52 @@
   margin-bottom: 1.5rem;
 }
 
-/* Solid colors for the "What We Do" section icons */
-.color-purple { background-color: #f3e8ff; color: #9333ea; }
-.color-blue { background-color: #dbeafe; color: #2563eb; }
-.color-pink { background-color: #fce7f3; color: #db2777; }
-.color-yellow { background-color: #fef3c7; color: #d97706; }
+/* Updated Activity Icon Colors - Using Palette */
+.color-purple { 
+  /* Updated: Light Navy background with Navy icon */
+  background-color: rgba(24, 47, 77, 0.1) !important; 
+  color: #182F4D !important; 
+}
+
+.color-blue { 
+  /* Updated: Light Terracotta background with Terracotta icon */
+  background-color: rgba(223, 105, 78, 0.1) !important; 
+  color: #DF694E !important; 
+}
+
+.color-pink { 
+  /* Updated: Light Sand background with Sand icon */
+  background-color: rgba(235, 180, 121, 0.15) !important; 
+  color: #EBB479 !important; 
+}
+
+.color-yellow { 
+  /* Updated: Off-White background with Navy icon */
+  background-color: #F5F5F2 !important; 
+  color: #182F4D !important;
+  border: 1px solid #EBB479;
+}
 
 .activity-card h3 {
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
 
 .activity-card p {
-  color: #4b5563;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
 }
 
-/* ========== 5. GET IN TOUCH SECTION ========== */
+/* ========================================
+   GET IN TOUCH SECTION
+   ======================================== */
 .get-in-touch {
   padding: 0;
   margin: 0 auto 5rem auto;
@@ -300,14 +388,17 @@
 }
 
 .get-in-touch-header h2 {
-  color: #111827;
+  /* Updated: Navy */
+  color: #182F4D !important;
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
 
 .get-in-touch-header p {
-  color: #6b7280;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.7;
   font-size: 1.1rem;
   max-width: 600px;
   margin: 0 auto;
@@ -316,9 +407,9 @@
 
 .contact-info-card {
   background: white;
-  border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
   padding: 3rem 2rem;
   margin: 0 1rem;
 }
@@ -347,30 +438,57 @@
   margin-bottom: 1rem;
 }
 
-/* Contact Icon Colors */
-.icon-purple { background-color: #f3e8ff; color: #9333ea; }
-.icon-blue { background-color: #dbeafe; color: #2563eb; }
-.icon-pink { background-color: #fce7f3; color: #db2777; }
+/* Updated Contact Icon Colors - Using Palette */
+.icon-purple { 
+  /* Updated: Light Navy with Navy icon */
+  background-color: rgba(24, 47, 77, 0.1) !important; 
+  color: #182F4D !important; 
+}
+
+.icon-blue { 
+  /* Updated: Light Terracotta with Terracotta icon */
+  background-color: rgba(223, 105, 78, 0.1) !important; 
+  color: #DF694E !important; 
+}
+
+.icon-pink { 
+  /* Updated: Light Sand with Sand icon */
+  background-color: rgba(235, 180, 121, 0.15) !important; 
+  color: #EBB479 !important; 
+}
 
 .contact-item h3 {
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .contact-item p {
-  color: #4b5563;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   font-size: 1rem;
   line-height: 1.5;
   margin: 0;
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 @media (max-width: 768px) {
-  .about-hero { padding: 3rem 1rem; }
-  .about-hero h1 { font-size: 2rem; }
-  .about-hero p { font-size: 1.125rem; }
+  .about-hero { 
+    padding: 3.5rem 1rem; 
+  }
+  
+  .about-hero h1 { 
+    font-size: 2.25rem; 
+  }
+  
+  .about-hero p { 
+    font-size: 1.1rem; 
+  }
 
   /* Stack Grids on Mobile */
   .about-nav-cards, 
@@ -387,5 +505,25 @@
 
   .contact-grid {
     gap: 2.5rem;
+  }
+  
+  .what-we-do-header h2,
+  .get-in-touch-header h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero h1 { 
+    font-size: 1.75rem; 
+  }
+  
+  .about-hero p { 
+    font-size: 1rem; 
+  }
+  
+  .what-we-do-header h2,
+  .get-in-touch-header h2 {
+    font-size: 1.75rem;
   }
 }
