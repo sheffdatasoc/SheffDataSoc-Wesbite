@@ -12,7 +12,6 @@ import {
   Menu,
   X
 } from 'lucide-react';
-// IMPORT THE NEW LOGO
 import logoImg from '../assets/datasoc-logo.png'; 
 import './NavBar.css';
 
@@ -20,8 +19,6 @@ function NavBar() {
   // -- State Management --
   const [activeDropdown, setActiveDropdown] = useState(null); // 'learning' | 'about' | null
   const [isOpen, setIsOpen] = useState(false); // Mobile Menu State
-  
-  // To track active pages for the gradient styling
   const location = useLocation();
 
   // Close mobile menu automatically when route changes
@@ -58,7 +55,7 @@ function NavBar() {
     <nav className="navbar">
       <div className="nav-container">
 
-        {/* --- UPDATED LOGO SECTION --- */}
+        {/* --- LOGO SECTION --- */}
         <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
           <img src={logoImg} alt="SheffDataSoc Logo" className="navbar-logo-img" />
           <div className="logo-text">
@@ -76,28 +73,28 @@ function NavBar() {
         <ul className={isOpen ? "nav-menu active" : "nav-menu"}>
 
           <li>
-            <Link to="/" className={getLinkClass('/')}>
+            <Link to="/" className={getLinkClass('/')} onClick={handleChildClick}>
               <Home size={18} />
               <span>Home</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/events" className={getLinkClass('/events')}>
+            <Link to="/events" className={getLinkClass('/events')} onClick={handleChildClick}>
               <Calendar size={18} />
               <span>Events</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/blog" className={getLinkClass('/blog')}>
+            <Link to="/blog" className={getLinkClass('/blog')} onClick={handleChildClick}>
               <BookOpen size={18} />
               <span>The Blog</span>
             </Link>
           </li>
 
           <li>
-            <Link to="/sandbox" className={getLinkClass('/sandbox')}>
+            <Link to="/sandbox" className={getLinkClass('/sandbox')} onClick={handleChildClick}>
               <Code size={18} />
               <span>The Sandbox</span>
             </Link>
@@ -114,7 +111,8 @@ function NavBar() {
               <ChevronDown size={16} />
             </button>
 
-            {(activeDropdown === 'learning' || isOpen) && (
+            {/* FIX: Only show if this specific section is open */}
+            {activeDropdown === 'learning' && (
               <ul className={`dropdown-menu ${isOpen ? 'mobile-expanded' : ''}`}>
                 <li>
                   <Link to="/guides" onClick={handleChildClick}>Guides</Link>
@@ -130,7 +128,7 @@ function NavBar() {
           </li>
 
           <li>
-            <Link to="/gallery" className={getLinkClass('/gallery')}>
+            <Link to="/gallery" className={getLinkClass('/gallery')} onClick={handleChildClick}>
               <ImageIcon size={18} />
               <span>Gallery</span>
             </Link>
@@ -147,7 +145,8 @@ function NavBar() {
               <ChevronDown size={16} />
             </button>
 
-            {(activeDropdown === 'about' || isOpen) && (
+            {/* FIX: Only show if this specific section is open */}
+            {activeDropdown === 'about' && (
               <ul className={`dropdown-menu ${isOpen ? 'mobile-expanded' : ''}`}>
                 <li>
                   <Link to="/about" onClick={handleChildClick}>About Us</Link>

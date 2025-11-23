@@ -1,33 +1,43 @@
 /* ========================================
-   GuideCard.css (COMPLETE FIX)
+   GuideCard.css - ENFORCED PALETTE VERSION
    ======================================== */
+
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
 
 .guide-card {
   background: white;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
-  /* Fixed height for all cards */
   height: 100%;
   max-height: 480px;
+  cursor: pointer;
 }
 
-/* Hover */
 .guide-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/* IMAGE SECTION */
+/* ========================================
+   IMAGE SECTION
+   ======================================== */
 .image-wrapper {
   position: relative;
   width: 100%;
   height: 200px;
   flex-shrink: 0;
-  background: #f5f5f5;
+  /* Updated: Off-White placeholder */
+  background: #F5F5F2 !important;
   overflow: hidden;
 }
 
@@ -35,10 +45,17 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.guide-card:hover .guide-image {
+  transform: scale(1.05);
 }
 
 .placeholder {
-  background: #e6e6e6;
+  /* Updated: Slightly darker Off-White for empty state */
+  background: rgba(245, 245, 242, 0.8) !important;
 }
 
 /* Difficulty badge */
@@ -46,8 +63,10 @@
   position: absolute;
   top: 12px;
   left: 12px;
-  background: #eef2f6;
-  color: #333;
+  /* Updated: Navy background */
+  background: #182F4D !important;
+  /* Updated: Off-White text */
+  color: #F5F5F2 !important;
   font-size: 0.75rem;
   padding: 4px 10px;
   border-radius: 12px;
@@ -55,7 +74,9 @@
   text-transform: lowercase;
 }
 
-/* CONTENT AREA */
+/* ========================================
+   CONTENT AREA
+   ======================================== */
 .guide-content {
   padding: 1.25rem 1.5rem;
   flex: 1;
@@ -66,26 +87,33 @@
 }
 
 .guide-card .guide-title {
-  color: #1a1a2e;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0 0 0.75rem 0;
   line-height: 1.3;
-  /* Limit title to 2 lines max */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-wrap: break-word;
+  transition: color 0.2s ease;
+}
+
+.guide-card:hover .guide-title {
+  /* Updated: Terracotta on hover */
+  color: #DF694E !important;
 }
 
 .guide-excerpt {
-  color: #666;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  opacity: 0.7;
   font-size: 0.9rem;
   line-height: 1.5;
   margin: 0 0 1rem 0;
   flex: 1;
-  /* Limit to 3 lines */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -95,56 +123,151 @@
 .read-more-wrapper {
   margin-top: auto;
   padding-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.btn-read-more {
-  background: transparent;
-  color: #4f46e5;
-  border: 1.5px solid #4f46e5;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
+/* ========================================
+   🎯 BUTTON - ENFORCED PALETTE
+   ======================================== */
+.btn-read-more,
+.guide-card .btn-read-more,
+button.btn-read-more,
+.read-more-wrapper .btn-read-more {
+  background: transparent !important;
+  background-color: transparent !important;
+  /* Updated: Navy text and border */
+  color: #182F4D !important;
+  border: 1px solid #182F4D !important;
+  border-color: #182F4D !important;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 8px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-block;
 }
 
-.btn-read-more:hover {
-  background: #4f46e5;
-  color: white;
+.btn-read-more:hover,
+.guide-card .btn-read-more:hover,
+button.btn-read-more:hover {
+  /* Updated: Navy background on hover */
+  background: #182F4D !important;
+  background-color: #182F4D !important;
+  color: white !important;
+  border-color: #182F4D !important;
+  transform: translateY(-1px);
 }
 
-/* FOOTER */
+/* Nuclear option: Override ANY purple/blurple colors */
+.btn-read-more[style*="rgb(79, 70, 229)"],
+.btn-read-more[style*="#4f46e5"],
+.btn-read-more[style*="rgb(99, 102, 241)"],
+.btn-read-more[style*="#6366f1"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #182F4D !important;
+  border-color: #182F4D !important;
+}
+
+/* ========================================
+   FOOTER - HORIZONTAL LAYOUT
+   ======================================== */
 .guide-footer {
   padding: 1rem 1.5rem;
-  border-top: 1px solid #eee;
+  /* Updated: Sand border */
+  border-top: 1px solid #EBB479 !important;
+  opacity: 0.5;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   flex-shrink: 0;
   background: white;
+  margin-top: auto;
 }
 
 .guide-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 1rem;
   font-size: 0.85rem;
-  color: #666;
+  /* Updated: Neutral gray */
+  color: #4b5563 !important;
+  width: 100%;
 }
 
-.guide-author {
+.guide-contributors {
+  display: flex;
+  align-items: center;
+}
+
+.contributor-count {
   font-weight: 500;
-  color: #333;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 0.85rem;
 }
 
+.guide-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.guide-date-wrapper,
 .guide-readtime {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.guide-date,
+.guide-readtime span {
+  color: #6b7280 !important;
+  font-size: 0.85rem;
 }
 
 .clock-icon {
   flex-shrink: 0;
+  /* Updated: Terracotta accent */
+  color: #DF694E !important;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  .guide-card {
+    max-height: none;
+  }
+
+  .guide-card .guide-title {
+    font-size: 1.1rem;
+  }
+
+  .guide-excerpt {
+    font-size: 0.85rem;
+  }
+
+  .guide-meta {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .guide-content {
+    padding: 1rem 1.25rem;
+  }
+
+  .guide-footer {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .guide-card .guide-title {
+    font-size: 1rem;
+  }
 }

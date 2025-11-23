@@ -95,21 +95,39 @@
 }
 
 /* ========================================
-   MOBILE RESPONSIVENESS
+   MOBILE RESPONSIVENESS FIX
    ======================================== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+
+  /* 1. DISABLE THE SCROLL "TRAP" CONTAINER */
   .home-page {
-    scroll-snap-type: none; /* Disable snapping on mobile for smoother scrolling */
-  }
-  
-  .home-page section {
-    height: auto; /* Allow sections to grow naturally */
-    min-height: calc(var(--vh, 1vh) * 100);
+    /* Stop forcing the page to be the height of the window */
+    height: auto !important; 
+    
+    /* Let the browser handle scrolling naturally */
+    overflow-y: visible !important; 
+    
+    /* Turn off the "magnet" snapping effect */
+    scroll-snap-type: none !important; 
   }
 
-  /* Ensure the hero takes up full screen on mobile too */
+  /* 2. UNLOCK SECTION HEIGHTS */
+  /* This ensures sections can grow as tall as they need to fit your content */
+  .home-page section,
   .home-page .hero-modern {
-      height: auto;
-      min-height: 90vh;
+    height: auto !important; 
+    min-height: auto !important; /* Allow them to shrink or grow */
+    scroll-snap-align: none !important; /* Stop trying to snap to top */
+    
+    /* Add natural spacing between sections */
+    padding-top: 4rem;
+    padding-bottom: 4rem; 
+  }
+  
+  /* 3. ENSURE HERO FITS CONTENT */
+  .home-page .hero-modern {
+     /* Usually needs less padding on mobile than other sections */
+     padding-top: 6rem; /* Account for navbar */
+     padding-bottom: 3rem;
   }
 }

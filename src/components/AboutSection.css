@@ -1,13 +1,13 @@
 .about-section {
   scroll-snap-align: start;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Changed from center to flex-start */
   align-items: center;
   background: #f9fafb;
   color: #1a1a1a;
-  padding: 6rem 2rem 2rem;
+  padding: 4rem 2rem 2rem; /* Reduced from 8rem to 4rem */
   overflow-y: auto;
 }
 
@@ -15,20 +15,21 @@
   max-width: 1400px;
   width: 100%;
   text-align: center;
+  padding-top: 0; /* Remove any top padding */
 }
 
 .about-title {
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  margin-top: -3rem;
+  margin-top: 0;
   color: #1a1a1a;
 }
 
 .about-subtitle {
   font-size: 1.1rem;
   color: #6b7280;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* Reduced from 1.5rem to 1rem */
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -271,4 +272,3 @@
     line-height: 1.3;
   }
 }
-

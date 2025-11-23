@@ -5,7 +5,8 @@ import './Events.css';
 
 function Events() {
   const { events, loading } = useEvents();
-  const [filter, setFilter] = useState('all');
+  // 1. Set initial state to 'upcoming' to show them first on load
+  const [filter, setFilter] = useState('upcoming');
 
   // --- Sorting function ---
   const sortEvents = (eventsList) => {
@@ -46,7 +47,7 @@ function Events() {
         {/* Filters */}
         <div className="filter-container">
           <div className="events-filters-control">
-            {['all', 'upcoming', 'ongoing', 'past'].map(f => (
+            {['upcoming', 'ongoing', 'past', 'all'].map(f => (
               <button
                 key={f}
                 className={`filter-tab-btn ${filter === f ? 'active' : ''}`}

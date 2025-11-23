@@ -1,5 +1,5 @@
 /* ========================================
-   BlogCard.jsx
+   BlogCard.jsx - FIXED
    ======================================== */
 import React from 'react';
 import { Clock } from 'lucide-react';
@@ -27,7 +27,8 @@ function BlogCard({ title, excerpt, author, date, image, category, onReadMore })
 
         {onReadMore && (
           <div className="read-more-wrapper">
-            <button className="btn btn-read-more" onClick={onReadMore}>
+            {/* ✅ FIXED: Removed "btn" class that was applying purple styles */}
+            <button className="btn-read-more" onClick={onReadMore}>
               Read More
             </button>
           </div>
