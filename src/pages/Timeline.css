@@ -1,89 +1,34 @@
 /* ========================================
-   /pages/Timeline.css
+   /pages/Timeline.css - ENFORCED PALETTE (Updated Version)
    ======================================== */
+
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
 
 :root {
   --card-gap: 25px;
 }
 
-/* PAGE WRAPPER */
-.timeline-page {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background: #f9fafb;
-}
-
-/* HERO SECTION */
-.timeline-hero {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: white;
-  text-align: center;
-  padding: 5rem 2rem;
-  margin-bottom: 3rem;
-  width: 100%;
-  position: relative;
-}
-
-.timeline-hero .hero-badge {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  padding: 0.5rem 1.5rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.timeline-hero h1 {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.timeline-hero p {
-  font-size: 1.25rem;
-  opacity: 0.95;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-/* FILTERS */
-.timeline-filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 1rem;
-}
-
+/* ========================================
+   FILTER WRAPPER & CLEAR BUTTONS
+   ======================================== */
 .filter-wrapper {
   position: relative;
 }
 
-.timeline-filters select {
-  padding: 0.75rem 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background-color: white;
-  color: #374151;
-  font-size: 0.95rem;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  cursor: pointer;
-  appearance: none;
-}
-
-/* Clear button for filters */
+/* Clear button for individual filters */
 .clear-btn {
   position: absolute;
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
-  background: #ef4444;
+  /* Updated: Terracotta background */
+  background: #DF694E !important;
   color: white;
   border: none;
   border-radius: 50%;
@@ -94,13 +39,147 @@
   text-align: center;
   cursor: pointer;
   padding: 0;
+  transition: all 0.2s ease;
 }
 
 .clear-btn:hover {
-  background: #dc2626;
+  /* Updated: Darker Terracotta on hover */
+  background: #c55a3e !important;
+  transform: translateY(-50%) scale(1.1);
 }
 
-/* TIMELINE STRUCTURE */
+/* Clear All button */
+.clear-all-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  /* Updated: Navy background */
+  background-color: #182F4D !important;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-all-btn:hover {
+  /* Updated: Terracotta on hover */
+  background-color: #DF694E !important;
+  transform: translateY(-1px);
+}
+
+/* ========================================
+   PAGE WRAPPER
+   ======================================== */
+.timeline-page {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
+}
+
+/* ========================================
+   HERO SECTION - Matching Events Page
+   ======================================== */
+.timeline-hero {
+  position: relative;
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
+  color: white;
+  text-align: center;
+  padding: 5rem 2rem;
+  margin-bottom: 3rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.timeline-hero::after { 
+  display: none; 
+}
+
+/* Hero Badge - Off-White Glass Effect */
+.timeline-hero .hero-badge {
+  display: inline-block;
+  /* Subtle White Glass Background */
+  background: rgba(245, 245, 242, 0.15) !important;
+  backdrop-filter: blur(4px);
+  /* Text: Official Off-White */
+  color: #F5F5F2 !important;
+  /* Border: Removed */
+  border: none !important;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.timeline-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: white;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.timeline-hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  /* Updated: Off-White */
+  color: #F5F5F2 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   FILTERS
+   ======================================== */
+.timeline-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.timeline-filters select {
+  padding: 0.75rem 1.5rem;
+  /* Updated: Navy border */
+  border: 1px solid #182F4D !important;
+  border-radius: 8px;
+  background-color: white;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  font-size: 0.95rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  outline: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.timeline-filters select:hover {
+  /* Updated: Light Navy background on hover */
+  background-color: rgba(24, 47, 77, 0.05) !important;
+}
+
+.timeline-filters select:focus {
+  /* Updated: Sand border on focus */
+  border-color: #EBB479 !important;
+  box-shadow: 0 0 0 3px rgba(235, 180, 121, 0.1);
+}
+
+/* ========================================
+   TIMELINE STRUCTURE
+   ======================================== */
 .timeline {
   position: relative;
   max-width: 900px;
@@ -110,6 +189,7 @@
   flex-direction: column;
 }
 
+/* Vertical center line */
 .timeline::after {
   content: '';
   position: absolute;
@@ -117,43 +197,57 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: #6366f1;
+  /* Updated: Navy line */
+  background: #182F4D !important;
   transform: translateX(-50%);
   z-index: 1;
   border-radius: 2px;
 }
 
+/* ========================================
+   YEAR & MONTH HEADERS
+   ======================================== */
 .timeline-year-header {
   font-size: 2.8rem;
   font-weight: 700;
   margin: 3rem 0 1.5rem;
-  color: #1f2937;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   text-align: left;
   padding-left: 1rem;
 }
 
 .timeline-month-header {
-  font-size: 2rem;
+  font-size: 2.0rem;
   font-weight: 600;
   margin: 1.5rem 0 1rem;
-  color: #6366f1;
-  border-bottom: 1px dashed #e5e7eb;
+  /* Updated: Terracotta */
+  color: #DF694E !important;
+  /* Updated: Sand dashed border */
+  border-bottom: 2px dashed #EBB479 !important;
+  padding-bottom: 0.5rem;
   text-align: center;
-  background: #f9fafb;
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
+  position: relative;
+  z-index: 2;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 1rem;
-  z-index: 2;
-  position: relative;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
+/* ========================================
+   TIMELINE ITEM
+   ======================================== */
 .timeline-item {
   position: relative;
   width: 100%;
   margin: 3rem 0;
 }
 
+/* Marker */
 .timeline-marker {
   position: absolute;
   left: 50%;
@@ -162,63 +256,104 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #6366f1;
+  /* Updated: Terracotta marker */
+  background: #DF694E !important;
   border: 3px solid white;
-  box-shadow: 0 0 0 2px #e5e7eb;
+  /* Updated: Sand shadow ring */
+  box-shadow: 0 0 0 2px #EBB479 !important;
   z-index: 3;
 }
 
+/* Branch connector */
 .timeline-connector {
   position: absolute;
   top: 8px;
   width: 50px;
   height: 3px;
-  background: #e5e7eb;
+  /* Updated: Sand connector */
+  background: #EBB479 !important;
   z-index: 1;
 }
 
-.timeline-item.left .timeline-connector { left: calc(50% - 50px); }
-.timeline-item.right .timeline-connector { left: 50%; }
+.timeline-item.left .timeline-connector { 
+  left: calc(50% - 50px); 
+}
 
+.timeline-item.right .timeline-connector { 
+  left: 50%; 
+}
+
+/* ========================================
+   EVENT CARD
+   ======================================== */
 .timeline-event-card {
   display: flex;
-  background: white;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-  border-radius: 0.75rem;
+  background: white !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
   padding: 1.25rem;
   gap: 1rem;
   width: 40%;
   min-height: 140px;
   position: relative;
   z-index: 2;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
 }
 
-.timeline-item.left .timeline-event-card { margin-left: calc(50% - 40% - var(--card-gap)); }
-.timeline-item.right .timeline-event-card { margin-left: calc(50% + var(--card-gap)); }
+.timeline-event-card:hover {
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12) !important;
+  transform: translateY(-2px);
+}
 
+.timeline-item.left .timeline-event-card { 
+  margin-left: calc(50% - 40% - var(--card-gap)); 
+}
+
+.timeline-item.right .timeline-event-card { 
+  margin-left: calc(50% + var(--card-gap)); 
+}
+
+/* Icon */
 .timeline-icon {
   position: absolute;
   top: -5px;
   font-size: 1.8rem;
   z-index: 4;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
-.timeline-item.left .timeline-icon { right: calc(50% + 40% + 30px); }
-.timeline-item.right .timeline-icon { left: calc(50% + 40% + 30px); }
+.timeline-item.left .timeline-icon { 
+  right: calc(50% + 40% + 30px); 
+}
 
-/* Card Content */
-.card-text { width: 65%; }
+.timeline-item.right .timeline-icon { 
+  left: calc(50% + 40% + 30px); 
+}
+
+/* ========================================
+   CARD CONTENT
+   ======================================== */
+.card-text { 
+  width: 65%; 
+}
 
 .card-text h4 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   font-size: 1.1rem;
+  font-weight: 700;
 }
 
 .card-text p {
   margin: 0 0 0.5rem 0;
-  color: #4b5563;
+  /* Updated: Navy text with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -229,7 +364,7 @@
   min-width: 100px;
   max-height: 140px;
   overflow: hidden;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,7 +374,7 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   transition: transform 0.3s ease;
   cursor: pointer;
 }
@@ -248,7 +383,9 @@
   transform: scale(1.05);
 }
 
-/* Tags */
+/* ========================================
+   TAGS (BADGES)
+   ======================================== */
 .tags-container {
   display: flex;
   flex-wrap: wrap;
@@ -257,23 +394,30 @@
 }
 
 .tag-badge {
-  background-color: #f3f4f6;
-  color: #4b5563;
+  /* Updated: Off-White background */
+  background-color: #F5F5F2 !important;
+  /* Updated: Navy text */
+  color: #182F4D !important;
   font-size: 0.75rem;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 9999px;
-  border: 1px solid #e5e7eb;
+  /* Updated: Sand border */
+  border: 1px solid #EBB479 !important;
 }
 
-/* MODAL FOR FULL IMAGE */
+/* ========================================
+   MODAL FOR FULL IMAGE
+   ======================================== */
 .image-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.8);
+  /* Updated: Navy background with opacity */
+  background: rgba(24, 47, 77, 0.85) !important;
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -285,45 +429,101 @@
 .image-modal img {
   max-width: 60%;
   max-height: 60%;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   object-fit: contain;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
 }
 
-/* RESPONSIVE */
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 768px) {
-  .timeline-hero { padding: 3rem 1rem; }
-  .timeline-hero h1 { font-size: 2rem; }
+  /* Hero adjustments */
+  .timeline-hero {
+    padding: 3.5rem 1rem;
+  }
+  
+  .timeline-hero h1 {
+    font-size: 2.25rem;
+  }
+  
+  .timeline-hero p {
+    font-size: 1.1rem;
+  }
 
-  .timeline::after { left: 20px; }
-  .timeline-item { padding-left: 40px; }
-  .timeline-event-card { width: 100%; margin-left: 0 !important; flex-direction: column; gap: 0.75rem; }
-  .card-image-container { width: 100%; max-height: 200px; }
-
-  .timeline-icon { left: -10px !important; right: auto !important; }
-  .timeline-connector { width: 30px; left: 20px !important; }
-
-  .timeline-year-header { font-size: 2rem; padding-left: 50px; }
-  .timeline-month-header { font-size: 1.5rem; }
-
+  /* Timeline adjustments */
+  .timeline::after { 
+    left: 20px; 
+  }
+  
+  .timeline-item { 
+    padding-left: 40px; 
+  }
+  
+  .timeline-event-card { 
+    width: 100%; 
+    margin-left: 0 !important;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .card-text {
+    width: 100%;
+  }
+  
+  .card-image-container {
+    width: 100%;
+    max-height: 200px;
+  }
+  
+  .timeline-icon { 
+    left: -10px !important; 
+    right: auto !important; 
+  }
+  
+  .timeline-connector { 
+    width: 30px; 
+    left: 20px !important; 
+  }
+  
+  .timeline-year-header {
+    font-size: 2rem;
+    padding-left: 50px;
+  }
+  
+  .timeline-month-header {
+    font-size: 1.5rem;
+  }
+  
   /* Modal image for mobile */
   .image-modal img {
     max-width: 90%;
     max-height: 70%;
   }
 }
-.clear-all-btn {
-  padding: 0.6rem 1rem;
-  border: none;
-  background-color: #6366f1;
-  color: white;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
 
-.clear-all-btn:hover {
-  background-color: #4f46e5;
+@media (max-width: 480px) {
+  .timeline-hero h1 {
+    font-size: 1.75rem;
+  }
+  
+  .timeline-hero p {
+    font-size: 1rem;
+  }
+  
+  .timeline-year-header {
+    font-size: 1.75rem;
+  }
+  
+  .timeline-month-header {
+    font-size: 1.25rem;
+  }
+  
+  .card-text h4 {
+    font-size: 1rem;
+  }
+  
+  .card-text p {
+    font-size: 0.875rem;
+  }
 }
-

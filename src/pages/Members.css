@@ -1,16 +1,30 @@
 /* ========================================
-   /pages/Members.css
+   /pages/Members.css - ENFORCED PALETTE
    ======================================== */
 
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
+
+/* ========================================
+   PAGE LAYOUT
+   ======================================== */
 .members-page {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 4rem 2rem;
-  background: #f9fafb;
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
 }
 
-/* Header */
+/* ========================================
+   HEADER
+   ======================================== */
 .members-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -19,22 +33,28 @@
 .members-header h1 {
   font-size: 3rem;
   font-weight: 700;
-  color: #111827;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   margin-bottom: 1rem;
 }
 
 .members-header p {
   font-size: 1.25rem;
-  color: #6b7280;
+  /* Updated: Navy with opacity */
+  color: #182F4D !important;
+  opacity: 0.7;
   max-width: 600px;
   margin: 0 auto;
 }
 
-/* Search Bar */
+/* ========================================
+   SEARCH BAR
+   ======================================== */
 .members-search {
   max-width: 700px;
   width: 100%;
   margin: 0 auto 2.5rem auto;
+  padding: 0 1rem;
 }
 
 .search-container {
@@ -46,7 +66,9 @@
 .search-icon {
   position: absolute;
   left: 1.25rem;
-  color: #9ca3af;
+  /* Updated: Navy icon */
+  color: #182F4D !important;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -54,55 +76,80 @@
 .search-input {
   width: 100%;
   padding: 1.1rem 1rem 1.1rem 3rem;
-  border: 1px solid #e5e7eb;
+  border: none !important;
   border-radius: 12px;
   font-size: 1rem;
   background: white;
   transition: all 0.2s ease;
-  color: #1f2937;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  /* Updated: Sand border on focus */
+  border: 1px solid #EBB479 !important;
 }
 
 .search-input::placeholder {
   color: #9ca3af;
 }
 
-/* Tabs */
+/* ========================================
+   TABS - Matching Events Style
+   ======================================== */
 .members-tabs {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 4px;
   margin-bottom: 3rem;
+  background: #ffffff;
+  padding: 6px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tab-button {
-  padding: 0.75rem 2rem;
+  padding: 10px 28px;
   border: none;
-  background: #f3f4f6;
-  border-radius: 10px;
-  font-size: 1rem;
+  background: transparent !important;
+  border-radius: 8px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #6b7280;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
+  text-shadow: none;
+  white-space: nowrap;
 }
 
 .tab-button:hover {
-  background: #e5e7eb;
-  color: #374151;
+  /* Updated: Off-White hover */
+  background: #F5F5F2 !important;
+  /* Updated: Terracotta on hover */
+  color: #DF694E !important;
 }
 
 .tab-button.active {
-  background: #111827;
-  color: white;
+  /* Updated: Semi-transparent Navy */
+  background-color: rgba(24, 47, 77, 0.6) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px -1px rgba(24, 47, 77, 0.1);
+  backdrop-filter: blur(2px);
 }
 
-/* Members by Year */
+/* ========================================
+   MEMBERS BY YEAR
+   ======================================== */
 .members-by-year {
   display: flex;
   flex-direction: column;
@@ -118,28 +165,46 @@
 .year-heading {
   font-size: 2rem;
   font-weight: 700;
-  color: #111827;
+  /* Updated: Navy text */
+  color: #182F4D !important;
   margin: 0;
   padding-bottom: 1rem;
-  border-bottom: 3px solid #8b5cf6;
+  /* Updated: Terracotta border */
+  border-bottom: 3px solid #DF694E !important;
+  display: inline-block;
+  width: fit-content;
 }
 
-/* Members Grid */
+/* ========================================
+   MEMBERS GRID
+   ======================================== */
 .members-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
 }
 
-/* Empty State */
+/* ========================================
+   EMPTY STATE
+   ======================================== */
 .empty-state {
   text-align: center;
-  padding: 3rem 1rem;
-  color: #6b7280;
+  padding: 4rem 2rem;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  opacity: 0.7;
   font-size: 1.1rem;
+  background: white;
+  border-radius: 16px;
+  /* Updated: Sand dashed border */
+  border: 2px dashed #EBB479 !important;
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
-/* Responsive */
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 768px) {
   .members-page {
     padding: 2rem 1rem;
@@ -154,12 +219,16 @@
   }
 
   .members-tabs {
-    flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   .tab-button {
-    width: 100%;
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    text-align: center;
   }
 
   .year-heading {
@@ -177,6 +246,12 @@
 }
 
 @media (max-width: 480px) {
+  .tab-button {
+    flex: 1 1 100%;
+    padding: 10px 0;
+    font-size: 0.85rem;
+  }
+
   .members-grid {
     grid-template-columns: 1fr;
   }

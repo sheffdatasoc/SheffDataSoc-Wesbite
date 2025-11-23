@@ -1,61 +1,94 @@
 /* ========================================
-   /pages/Sandbox.css - FIXED VERSION
-   Using CSS variables from components.css
+   /pages/Sandbox.css - ENFORCED PALETTE
    ======================================== */
 
-/* ========== PAGE WRAPPER ========== */
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
+
+/* ========================================
+   PAGE WRAPPER
+   ======================================== */
 .sandbox-page {
   width: 100%;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f9fafb;
-  overflow-x: hidden; /* Prevents any accidental horizontal scroll */
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
+  overflow-x: hidden;
 }
 
-/* ========== HERO SECTION ========== */
+/* ========================================
+   HERO SECTION - Matching Events Page
+   ======================================== */
 .sandbox-hero {
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: var(--white);
+  position: relative;
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
+  color: white;
   text-align: center;
   padding: 5rem 2rem;
   margin: 0;
   width: 100%;
-  position: relative;
+  box-sizing: border-box;
 }
 
+.sandbox-hero::after { 
+  display: none; 
+}
+
+/* Hero Badge - Off-White Glass Effect */
 .sandbox-hero .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  /* Subtle White Glass Background */
+  background: rgba(245, 245, 242, 0.15) !important;
+  backdrop-filter: blur(4px);
+  /* Text: Official Off-White */
+  color: #F5F5F2 !important;
+  /* Border: Removed */
+  border: none !important;
   padding: 0.5rem 1.5rem;
-  border-radius: var(--radius-2xl);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-md);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .sandbox-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: white;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .sandbox-hero p {
-  font-size: var(--font-size-xl);
-  opacity: 0.95;
+  font-size: 1.25rem;
+  opacity: 0.9;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
-  color: rgba(219, 234, 254, 1);
+  /* Updated: Off-White */
+  color: #F5F5F2 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* ========== SEARCH BAR ========== */
+/* ========================================
+   SEARCH BAR
+   ======================================== */
 .sandbox-search {
   max-width: 700px;
   margin: 2rem auto 3rem auto;
-  padding: 0 var(--spacing-lg);
+  padding: 0 1.5rem;
   position: relative;
   z-index: 10;
 }
@@ -69,7 +102,9 @@
 .search-icon {
   position: absolute;
   left: 1.25rem;
-  color: var(--text-secondary);
+  /* Updated: Navy icon */
+  color: #182F4D !important;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -78,29 +113,35 @@
   width: 100%;
   padding: 1.1rem 1rem 1.1rem 3rem;
   border: none;
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
+  border-radius: 12px;
+  font-size: 1rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-  background: var(--white);
-  transition: all var(--transition-normal);
+  background: white;
+  transition: all 0.2s ease;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
 }
 
 .search-input:focus {
   outline: none;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
+  /* Updated: Sand border on focus */
+  border: 1px solid #EBB479 !important;
 }
 
 .search-input::placeholder {
-  color: var(--text-secondary);
+  color: #9ca3af;
 }
 
-/* ========== TABS (Segmented Control Style) ========== */
+/* ========================================
+   TABS - Matching Events Page Style
+   ======================================== */
 .sandbox-tabs {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--spacing-xl);
-  padding: 0 var(--spacing-lg);
+  margin-bottom: 3rem;
+  padding: 0 1.5rem;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
@@ -108,22 +149,27 @@
 
 .sandbox-tabs-container {
   display: inline-flex;
-  background: #e5e7eb;
-  padding: 0.4rem;
-  border-radius: 14px;
-  gap: 0.3rem;
+  /* Updated: White background with border */
+  background: #ffffff !important;
+  padding: 6px !important;
+  border-radius: 12px !important;
+  gap: 4px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e5e7eb !important;
 }
 
 .tab-button {
-  padding: 0.9rem 2rem;
-  border: none;
-  background: transparent;
-  border-radius: 10px;
-  font-size: 1rem;
-  font-weight: var(--font-weight-semibold);
+  padding: 10px 28px !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #6b7280;
+  transition: all 0.2s ease;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
+  text-shadow: none !important;
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
@@ -133,13 +179,19 @@
 }
 
 .tab-button:hover:not(.active) {
-  color: #4b5563;
+  /* Updated: Off-White hover */
+  background: #F5F5F2 !important;
+  /* Updated: Terracotta on hover */
+  color: #DF694E !important;
 }
 
 .tab-button.active {
-  background: white;
-  color: #1f2937;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Updated: Semi-transparent Navy */
+  background-color: rgba(24, 47, 77, 0.6) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px -1px rgba(24, 47, 77, 0.1) !important;
+  backdrop-filter: blur(2px);
 }
 
 .tab-button svg {
@@ -148,96 +200,109 @@
   stroke-width: 2;
 }
 
-/* ========== FEATURED SECTION ========== */
+/* ========================================
+   FEATURED SECTION
+   ======================================== */
 .sandbox-featured-section {
-  margin-bottom: var(--spacing-xl);
-  padding: 0 var(--spacing-lg);
+  margin-bottom: 3rem;
+  padding: 0 1.5rem;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .sandbox-featured-title {
-  font-size: var(--font-size-2xl);
-  color: var(--text-primary);
-  margin-bottom: var(--spacing-md);
-  font-weight: var(--font-weight-bold);
+  font-size: 2rem;
+  /* Updated: Navy */
+  color: #182F4D !important;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
 }
 
-/* Use the featured-grid from components.css but override for Sandbox */
 .sandbox-featured-section .featured-grid {
   margin-bottom: 0;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
 }
 
-/* Featured card styling - applies to ProjectCard when featured */
+/* Featured card styling */
 .sandbox-featured-section .project-card {
-  border: 3px solid #fbbf24;
-  background: linear-gradient(to bottom, #fffbeb 0%, #fef3c7 100%);
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.15);
+  /* Updated: Sand border */
+  border: 3px solid #EBB479 !important;
+  /* Updated: Off-White to light Sand gradient */
+  background: linear-gradient(to bottom, #F5F5F2 0%, rgba(235, 180, 121, 0.1) 100%) !important;
+  box-shadow: 0 4px 15px rgba(235, 180, 121, 0.15);
 }
 
-/* Override any hover effects for featured cards */
 .sandbox-featured-section .project-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.25);
+  box-shadow: 0 8px 25px rgba(235, 180, 121, 0.25);
 }
 
-/* ========== MAIN CONTENT ========== */
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
 .sandbox-content {
-  padding: 0 var(--spacing-lg) var(--spacing-2xl) var(--spacing-lg);
+  padding: 0 1.5rem 4rem 1.5rem;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ========== EMPTY STATE ========== */
+/* ========================================
+   EMPTY STATE
+   ======================================== */
 .sandbox-content .empty-state {
   text-align: center;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  padding: 4rem 2rem;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 16px;
+  /* Updated: Sand dashed border */
+  border: 2px dashed #EBB479 !important;
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
 .sandbox-content .empty-state p {
   margin: 0;
 }
 
-/* ========== RESPONSIVE DESIGN ========== */
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 @media (max-width: 768px) {
-  /* FIX: Corrected Hero Layout */
   .sandbox-hero {
     width: 100%;
-    /* Removed negative margins that caused overflow */
-    margin: 0 0 var(--spacing-lg) 0; 
-    /* Added padding bottom to accommodate search bar overlap */
-    padding: var(--spacing-xl) var(--spacing-md) 4rem var(--spacing-md);
+    margin: 0 0 2rem 0; 
+    padding: 3rem 1rem 4rem 1rem;
     border-radius: 0;
   }
 
   .sandbox-hero h1 {
-    font-size: var(--font-size-3xl);
+    font-size: 2rem;
   }
 
   .sandbox-hero p {
-    font-size: var(--font-size-base);
-    padding: 0 0.5rem; /* Prevent text touching edges */
+    font-size: 1rem;
+    padding: 0 0.5rem;
   }
 
-  /* FIX: Search Bar Overlap */
+  /* Search Bar Overlap */
   .sandbox-search {
-    padding: 0 var(--spacing-md);
-    /* Pull the search bar up with negative margin */
-    margin: -3.5rem auto var(--spacing-lg) auto;
+    padding: 0 1rem;
+    margin: -3.5rem auto 2rem auto;
     position: relative;
     z-index: 20;
   }
 
   .sandbox-featured-section,
   .sandbox-content {
-    padding-left: var(--spacing-md);
-    padding-right: var(--spacing-md);
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
   
   /* Stack featured grid on mobile */
@@ -247,12 +312,19 @@
   }
 
   .sandbox-tabs {
-    padding: 0 var(--spacing-md);
+    padding: 0 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .sandbox-tabs-container {
+    width: 100%;
   }
 
   .tab-button {
-    padding: 0.75rem 1.5rem;
-    font-size: var(--font-size-sm);
+    flex: 1;
+    padding: 12px 0 !important;
+    font-size: 0.9rem !important;
+    text-align: center;
   }
 
   .sandbox-hero .hero-badge {
@@ -263,10 +335,15 @@
 
 @media (max-width: 480px) {
   .sandbox-hero h1 {
-    font-size: var(--font-size-2xl);
+    font-size: 1.75rem;
   }
 
   .sandbox-hero p {
-    font-size: var(--font-size-sm);
+    font-size: 0.9rem;
+  }
+  
+  .tab-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
   }
 }

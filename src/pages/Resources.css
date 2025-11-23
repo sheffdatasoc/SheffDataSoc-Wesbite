@@ -1,62 +1,94 @@
 /* ========================================
-   /pages/Resources.css
+   /pages/Resources.css - ENFORCED PALETTE
    ======================================== */
 
-/* ========== PAGE WRAPPER ========== */
+/* --- PALETTE REFERENCE ---
+   Navy: #182F4D
+   Terracotta: #DF694E
+   Off-White: #F5F5F2 
+   Darkest Text: #1A1A1A
+   Sand: #EBB479
+*/
+
+/* ========================================
+   PAGE WRAPPER
+   ======================================== */
 .resources-page {
   width: 100%;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: #f9fafb;
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
   overflow-x: hidden;
 }
 
-/* ========== HERO SECTION ========== */
+/* ========================================
+   HERO SECTION - Matching Events Page
+   ======================================== */
 .resources-hero {
-  /* UPDATED: Exact gradient match from Events/Sandbox page */
-  background: linear-gradient(to right, #a855f7, #6366f1, #3b82f6);
-  color: var(--white);
+  position: relative;
+  /* Official Gradient: Navy -> Sand -> Terracotta */
+  background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
+  color: white;
   text-align: center;
   padding: 5rem 2rem;
   margin: 0;
   width: 100%;
-  position: relative;
+  box-sizing: border-box;
 }
 
+.resources-hero::after { 
+  display: none; 
+}
+
+/* Hero Badge - Off-White Glass Effect */
 .resources-hero .hero-badge {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+  /* Subtle White Glass Background */
+  background: rgba(245, 245, 242, 0.15) !important;
+  backdrop-filter: blur(4px);
+  /* Text: Official Off-White */
+  color: #F5F5F2 !important;
+  /* Border: Removed */
+  border: none !important;
   padding: 0.5rem 1.5rem;
-  border-radius: var(--radius-2xl);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-md);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .resources-hero h1 {
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: white;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .resources-hero p {
-  font-size: var(--font-size-xl);
-  opacity: 0.95;
+  font-size: 1.25rem;
+  opacity: 0.9;
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.95); /* Slightly lighter opacity to match the lighter blue bg */
+  /* Updated: Off-White */
+  color: #F5F5F2 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-/* ========== SEARCH SECTION ========== */
+/* ========================================
+   SEARCH SECTION
+   ======================================== */
 .resources-search {
   max-width: 700px;
   margin: 2rem auto 3rem auto; 
-  padding: 0 var(--spacing-lg);
+  padding: 0 1.5rem;
   position: relative;
   z-index: 10;
 }
@@ -70,7 +102,9 @@
 .resources-search .search-icon {
   position: absolute;
   left: 1.25rem;
-  color: var(--text-secondary);
+  /* Updated: Navy icon */
+  color: #182F4D !important;
+  opacity: 0.6;
   pointer-events: none;
   z-index: 1;
 }
@@ -79,28 +113,40 @@
   width: 100%;
   padding: 1.1rem 1rem 1.1rem 3rem;
   border: none;
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  background: var(--white);
-  transition: all var(--transition-normal);
+  border-radius: 12px;
+  font-size: 1rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: white;
+  transition: all 0.2s ease;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
 }
 
 .resources-search .search-input:focus {
   outline: none;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
+  /* Updated: Sand border on focus */
+  border: 1px solid #EBB479 !important;
 }
 
-/* ========== MAIN CONTENT ========== */
+.resources-search .search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* ========================================
+   MAIN CONTENT
+   ======================================== */
 .resources-content {
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 var(--spacing-lg) var(--spacing-2xl) var(--spacing-lg);
+  padding: 0 1.5rem 4rem 1.5rem;
 }
 
-/* ========== FILTER SLIDER ========== */
+/* ========================================
+   FILTER SLIDER - Matching Events Style
+   ======================================== */
 .filter-container {
   display: flex;
   justify-content: center;
@@ -108,92 +154,113 @@
 }
 
 .resources-filters-control {
-  background: #f3f4f6;
-  padding: 4px;
-  border-radius: 12px;
+  background: #ffffff !important;
+  padding: 6px !important;
+  border-radius: 12px !important;
   display: inline-flex;
-  gap: 4px;
+  gap: 4px !important;
   flex-wrap: wrap; 
   justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e5e7eb !important;
 }
 
 .filter-tab-btn {
-  padding: 8px 24px;
-  border: none;
-  background: transparent;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #6b7280;
+  padding: 10px 28px !important;
+  border: none !important;
+  background: transparent !important;
+  border-radius: 8px !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  text-shadow: none !important;
 }
 
 .filter-tab-btn:hover {
-  color: #111827;
-  background: rgba(255, 255, 255, 0.5);
+  /* Updated: Off-White hover */
+  background: #F5F5F2 !important;
+  /* Updated: Terracotta on hover */
+  color: #DF694E !important;
 }
 
 .filter-tab-btn.active {
-  background: white;
-  color: #667eea; 
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  /* Updated: Semi-transparent Navy */
+  background-color: rgba(24, 47, 77, 0.6) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px -1px rgba(24, 47, 77, 0.1) !important;
+  backdrop-filter: blur(2px);
 }
 
-/* ========== GRID LAYOUT ========== */
+/* ========================================
+   GRID LAYOUT
+   ======================================== */
 .resources-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-/* ========== CARD STYLING ========== */
+/* ========================================
+   CARD STYLING
+   ======================================== */
 .resource-card {
-  background: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-md);
-  transition: all var(--transition-normal);
+  background: white !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .resource-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+  /* Updated: Sand border on hover */
+  border-color: #EBB479 !important;
+  box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12) !important;
   transform: translateY(-4px);
 }
 
 .resource-header {
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 1rem;
 }
 
 .resource-type {
   display: inline-block;
   padding: 0.3rem 0.8rem;
   border-radius: 50px;
-  color: var(--white);
+  /* Updated: Navy background */
+  background-color: #182F4D !important;
+  /* Updated: Off-White text */
+  color: #F5F5F2 !important;
   font-size: 0.75rem;
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .resource-card h3 {
-  color: var(--dark-bg);
+  /* Updated: Darkest text */
+  color: #1A1A1A !important;
   font-size: 1.25rem;
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-bold);
+  margin-bottom: 1rem;
+  font-weight: 700;
   line-height: 1.4;
 }
 
 .resource-description {
-  color: var(--text-secondary);
+  /* Updated: Navy text with opacity */
+  color: #182F4D !important;
+  opacity: 0.8;
   line-height: 1.6;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1.5rem;
   flex-grow: 1;
   font-size: 0.95rem;
 }
@@ -202,12 +269,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: var(--spacing-md);
+  margin-bottom: 1.5rem;
 }
 
 .resource-tags .tag {
-  background: #f3f4f6;
-  color: #4b5563;
+  /* Updated: Off-White background */
+  background: #F5F5F2 !important;
+  /* Updated: Navy text */
+  color: #182F4D !important;
   padding: 0.25rem 0.6rem;
   border-radius: 6px;
   font-size: 0.8rem;
@@ -216,18 +285,20 @@
 
 .resource-footer {
   margin-top: auto;
-  padding-top: var(--spacing-md);
-  border-top: 1px solid #f3f4f6;
+  padding-top: 1rem;
+  /* Updated: Sand border */
+  border-top: 1px solid #EBB479 !important;
 }
 
 .resource-link {
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: transparent !important;
+  /* Updated: Navy text and border */
+  color: #182F4D !important;
+  border: 2px solid #182F4D !important;
   padding: 0.6rem 1.2rem;
-  border-radius: var(--radius-lg);
+  border-radius: 8px;
   text-decoration: none;
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -236,31 +307,48 @@
 }
 
 .resource-link:hover {
-  background: #667eea;
-  color: white;
+  /* Updated: Navy background on hover */
+  background: #182F4D !important;
+  color: white !important;
+  border-color: #182F4D !important;
+  transform: translateY(-1px);
 }
 
 .empty-state {
   text-align: center;
-  padding: var(--spacing-2xl);
-  color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  padding: 4rem 2rem;
+  /* Updated: Navy text */
+  color: #182F4D !important;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 16px;
+  /* Updated: Sand dashed border */
+  border: 2px dashed #EBB479 !important;
+  max-width: 600px;
+  margin: 2rem auto;
 }
 
-/* ========== RESPONSIVE ========== */
+/* ========================================
+   RESPONSIVE
+   ======================================== */
 @media (max-width: 768px) {
   .resources-hero {
-    padding: 4rem 1.5rem;
+    padding: 3.5rem 1rem;
   }
   
   .resources-hero h1 {
-    font-size: var(--font-size-3xl);
+    font-size: 2.25rem;
+  }
+  
+  .resources-hero p {
+    font-size: 1.1rem;
   }
 
   .resources-search {
     margin-top: 1rem;
     margin-bottom: 2rem;
-    padding: 0 var(--spacing-md);
+    padding: 0 1rem;
   }
 
   .resources-filters-control {
@@ -270,12 +358,27 @@
   
   .filter-tab-btn {
     flex: 1;
-    padding: 10px 0;
-    font-size: 0.85rem;
+    padding: 12px 0 !important;
+    font-size: 0.9rem !important;
     text-align: center;
   }
   
   .resources-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .resources-hero h1 {
+    font-size: 1.75rem;
+  }
+  
+  .resources-hero p {
+    font-size: 1rem;
+  }
+  
+  .filter-tab-btn {
+    padding: 10px 0 !important;
+    font-size: 0.85rem !important;
   }
 }
