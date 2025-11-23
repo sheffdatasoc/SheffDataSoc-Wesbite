@@ -1,5 +1,5 @@
 /* ==============================
-   WorkshopCard.css - UPDATED VERSION
+   WorkshopCard.css - GitHub-style button
    ============================== */
 
 .workshop-card {
@@ -17,14 +17,14 @@
 .workshop-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  border-color: #3b82f6; /* light blue border on hover */
+  border-color: #3b82f6;
 }
 
 .workshop-card:hover .workshop-title {
-  color: #3b82f6; /* title color changes to match border */
+  color: #3b82f6;
 }
 
-/* Featured card styling - yellow gradient */
+/* Featured card styling */
 .workshop-card.featured-card {
   border: 3px solid #fbbf24;
   background: linear-gradient(to bottom, #fffbeb 0%, #fef3c7 100%);
@@ -59,7 +59,7 @@
   font-weight: 700;
   margin-bottom: 1rem;
   line-height: 1.3;
-  transition: color 0.3s ease; /* smooth color change on hover */
+  transition: color 0.3s ease;
 }
 
 .workshop-description {
@@ -97,7 +97,8 @@
   padding-top: 1rem;
 }
 
-.btn-materials {
+/* GitHub-style Materials button */
+.btn-github {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -114,18 +115,22 @@
   color: white;
 }
 
-.btn-materials:hover {
+.btn-github:hover {
   background: #2d2d44;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(26, 26, 46, 0.3);
 }
 
-.project-buttons .full-width,
-.btn-materials.full-width {
+.btn-github svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-github.full-width {
   flex: 1 1 100%;
-  display: inline-flex;       /* ensures flex properties work */
-  justify-content: center;    /* center text */
-  width: 100%;                /* fallback in case flex doesn’t apply */
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
   margin-top: 1rem;
 }
 
@@ -149,8 +154,9 @@
     font-size: 1.3rem;
   }
 
-  .btn-materials {
+  .btn-github {
     width: 100%;
+    min-width: auto;
   }
 }
 
