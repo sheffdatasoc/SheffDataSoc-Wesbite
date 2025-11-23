@@ -5,14 +5,15 @@ import './Events.css';
 
 function Events() {
   const { events, loading } = useEvents();
-  const [filter, setFilter] = useState('all');
+  // 1. Set initial state to 'upcoming' to show them first on load
+  const [filter, setFilter] = useState('upcoming');
 
   // 1. Create separate buckets for each status
   const upcomingEvents = events.filter(e => e.status?.toLowerCase() === 'upcoming');
   const ongoingEvents = events.filter(e => e.status?.toLowerCase() === 'ongoing');
   const pastEvents = events.filter(e => e.status?.toLowerCase() === 'past');
 
-  // 2. Updated Logic: Handle all 4 distinct cases
+  // 2. Logic to determine which events to display based on the current filter
   let displayEvents = events;
   if (filter === 'upcoming') {
     displayEvents = upcomingEvents;
@@ -21,6 +22,7 @@ function Events() {
   } else if (filter === 'past') {
     displayEvents = pastEvents;
   }
+  // Note: If filter is 'all', displayEvents remains the default 'events' array, which is correct.
 
   return (
     <div className="events-page">
@@ -35,18 +37,33 @@ function Events() {
         {/* Filters */}
         <div className="filter-container">
           <div className="events-filters-control">
-            <button className={`filter-tab-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
-              All
-            </button>
-            <button className={`filter-tab-btn ${filter === 'upcoming' ? 'active' : ''}`} onClick={() => setFilter('upcoming')}>
+            
+            {/* 3. Reorder buttons to put 'Upcoming', 'Ongoing', 'Past', and then 'All' at the end */}
+            <button 
+              className={`filter-tab-btn ${filter === 'upcoming' ? 'active' : ''}`} 
+              onClick={() => setFilter('upcoming')}
+            >
               Upcoming
             </button>
-            <button className={`filter-tab-btn ${filter === 'ongoing' ? 'active' : ''}`} onClick={() => setFilter('ongoing')}>
+            <button 
+              className={`filter-tab-btn ${filter === 'ongoing' ? 'active' : ''}`} 
+              onClick={() => setFilter('ongoing')}
+            >
               Ongoing
             </button>
-            <button className={`filter-tab-btn ${filter === 'past' ? 'active' : ''}`} onClick={() => setFilter('past')}>
+            <button 
+              className={`filter-tab-btn ${filter === 'past' ? 'active' : ''}`} 
+              onClick={() => setFilter('past')}
+            >
               Past
             </button>
+            <button 
+              className={`filter-tab-btn ${filter === 'all' ? 'active' : ''}`} 
+              onClick={() => setFilter('all')}
+            >
+              All
+            </button>
+            
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 /* ========================================
-   GuideCard.jsx (FIXED)
+   GuideCard.jsx (FIXED - Removed "btn" class)
    ======================================== */
 
 import React from 'react';
@@ -7,7 +7,7 @@ import { Clock } from 'lucide-react';
 import './GuideCard.css';
 
 function GuideCard({ guide, onReadMore }) {
-  // --- Match BlogCard’s formatted date ---
+  // --- Match BlogCard's formatted date ---
   const formattedDate = guide.published_date
     ? new Date(guide.published_date).toLocaleDateString('en-GB', {
         day: '2-digit',
@@ -15,6 +15,11 @@ function GuideCard({ guide, onReadMore }) {
         year: 'numeric',
       })
     : null;
+
+  // Count contributors from comma-separated author field
+  const contributorCount = guide.author 
+    ? guide.author.split(',').map(a => a.trim()).filter(a => a.length > 0).length 
+    : 0;
 
   return (
     <div className="guide-card">
@@ -39,37 +44,43 @@ function GuideCard({ guide, onReadMore }) {
 
         {onReadMore && (
           <div className="read-more-wrapper">
-            <button className="btn btn-read-more" onClick={onReadMore}>
+            {/* ✅ FIXED: Removed "btn" class */}
+            <button className="btn-read-more" onClick={onReadMore}>
               Read Guide
             </button>
           </div>
         )}
       </div>
 
-      {/* Footer - structured like BlogCard */}
+      {/* Footer - Horizontal layout with contributor count */}
       <div className="guide-footer">
         <div className="guide-meta">
 
-          {/* Author */}
-          {guide.author && (
-            <span className="guide-author">{guide.author}</span>
-          )}
-
-          {/* Date - same style as BlogCard */}
-          {formattedDate && (
-            <div className="guide-date-wrapper">
-              <Clock size={16} className="clock-icon" />
-              <span className="guide-date">{formattedDate}</span>
+          {/* Contributor Count */}
+          {contributorCount > 0 && (
+            <div className="guide-contributors">
+              <span className="contributor-count">
+                {contributorCount} {contributorCount === 1 ? 'Catalyst' : 'Catalysts'}
+              </span>
             </div>
           )}
 
-          {/* Read time */}
-          {guide.read_time && (
-            <div className="guide-readtime">
-              <Clock size={16} className="clock-icon" />
-              <span>{guide.read_time} min</span>
-            </div>
-          )}
+          {/* Date and Read Time - Side by Side */}
+          <div className="guide-meta-right">
+            {formattedDate && (
+              <div className="guide-date-wrapper">
+                <Clock size={16} className="clock-icon" />
+                <span className="guide-date">{formattedDate}</span>
+              </div>
+            )}
+
+            {guide.read_time && (
+              <div className="guide-readtime">
+                <Clock size={16} className="clock-icon" />
+                <span>{guide.read_time} min</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
