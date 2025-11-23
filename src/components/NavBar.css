@@ -10,7 +10,6 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  /* Add a subtle top border in Brand Navy */
   border-top: 4px solid #182F4D;
 }
 
@@ -41,7 +40,6 @@
 }
 
 .logo-text h1 {
-  /* BRAND: Official Navy */
   color: #182F4D;
   font-size: 1.3rem;
   margin: 0;
@@ -50,7 +48,6 @@
 }
 
 .logo-text p {
-  /* BRAND: Official Black (Softened) */
   color: #4a4a4a;
   font-size: 0.85rem;
   margin: 0;
@@ -61,7 +58,7 @@
 .menu-icon {
   display: none;
   cursor: pointer;
-  color: #182F4D; /* Navy */
+  color: #182F4D;
   z-index: 1001; 
 }
 
@@ -84,16 +81,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
-  /* BRAND: Default text is Navy */
   color: #182F4D;
-  
   text-decoration: none;
   padding: 0.7rem 1rem;
-  border-radius: 8px; /* Soft Rectangle */
+  border-radius: 8px;
   transition: all 0.2s;
   font-size: 0.95rem;
-  font-weight: 600; /* Slightly bolder for readability */
+  font-weight: 600;
   background: none;
   border: none;
   cursor: pointer;
@@ -102,7 +96,6 @@
 
 /* Hover for non-active links */
 .nav-link:hover {
-  /* BRAND: Hover bg is Off-White, Text is Terracotta */
   background: #F5F5F2;
   color: #DF694E;
 }
@@ -116,10 +109,7 @@
 .nav-link.active {
   font-weight: 700;
   color: white;
-  
-  /* BRAND: Active State is Navy Gradient (Matches Filters) */
   background: linear-gradient(135deg, #374B66 0%, #182F4D 100%);
-  
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(24, 47, 77, 0.2);
 }
@@ -129,7 +119,6 @@
 }
 
 .nav-link.active:hover {
-  /* Slightly lighter navy on hover */
   background: linear-gradient(135deg, #4a5d7e 0%, #2a4066 100%);
   transform: translateY(-1px);
 }
@@ -173,7 +162,6 @@
 .dropdown-menu a {
   display: block;
   padding: 0.7rem 1.2rem;
-  /* BRAND: Dropdown items are Navy */
   color: #182F4D;
   text-decoration: none;
   transition: all 0.2s;
@@ -182,12 +170,11 @@
 
 .dropdown-menu a:hover {
   background: #F5F5F2;
-  color: #DF694E; /* Terracotta Hover */
+  color: #DF694E;
 }
 
 /* =========================================
    2. MEDIUM SCREENS (Tablets)
-   Range: < 1024px
    ========================================= */
 @media (max-width: 1024px) {
   .nav-menu {
@@ -213,21 +200,20 @@
 }
 
 /* =========================================
-   3. SMALL SCREENS (Mobile)
-   Range: < 768px
+   3. SMALL SCREENS (Mobile) - FINAL FIXES
    ========================================= */
 @media (max-width: 768px) {
   .nav-container {
-    flex-direction: row;
-    justify-content: space-between;
+    padding: 0 1rem;
+    height: 70px;
   }
 
   .navbar-logo-img {
-    height: 40px;
+    height: 35px;
   }
 
   .logo-text h1 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .menu-icon {
@@ -239,10 +225,10 @@
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
-    top: 80px;
+    top: 70px;
     left: -100%; 
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 70px);
     background: white;
     transition: left 0.3s ease-in-out;
     padding: 1rem 0;
@@ -256,7 +242,7 @@
 
   .nav-menu > li {
     width: 100%;
-    margin: 0;
+    padding: 0.25rem 1rem; /* Add horizontal padding to the li instead */
   }
 
   .nav-link span {
@@ -264,30 +250,79 @@
     margin-left: 1rem;
   }
 
+  /* FIX: Chevron alignment */
   .dropdown-toggle svg:last-child {
     display: block;
-    margin-left: auto;
+    margin-left: 0.5rem; 
   }
 
+  /* Link Base Style - KEY FIX: Remove width: 100% */
   .nav-link {
-    width: 100%;
+    display: inline-flex; /* Changed from flex to inline-flex */
+    align-items: center;
+    gap: 0.5rem;
+    
+    width: auto; /* Changed from 100% to auto */
     justify-content: flex-start;
     padding: 1rem 1.5rem;
+    margin: 0; /* Remove margin from link itself */
+    border-radius: 8px;
   }
 
-  /* Mobile Dropdowns */
-  .dropdown-menu {
-    position: relative;
-    top: 0;
-    box-shadow: none;
-    background: #F5F5F2; /* Off-White for nested menu */
-    border: none;
-    
-    /* BRAND: Terracotta accent line for mobile menus */
-    border-left: 4px solid #DF694E; 
-    
-    width: 100%;
-    padding-left: 1rem;
-    animation: none;
-  }
+/* Mobile Dropdowns Container */
+.dropdown-menu {
+  position: relative;
+  top: 0;
+  box-shadow: none;
+  background: transparent;
+  border: none; /* Remove the border */
+  width: auto;
+  
+  padding: 0.5rem 0 0.5rem 2rem; /* Just use padding for indent */
+  list-style: none;
+  margin-left: 1rem;
+  
+  animation: none;
+}
+
+/* Dropdown list items */
+.dropdown-menu li {
+  width: auto;
+  display: block;
+}
+
+/* Dropdown Links (Submenu Items) */
+.dropdown-menu a {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  padding: 0.65rem 1.2rem;
+  margin: 0.15rem 0;
+  background: white;
+  color: #182F4D;
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-menu a:hover {
+  background: #DF694E;
+  color: white;
+  border-color: #DF694E;
+  transform: translateX(4px);
+  box-shadow: 0 2px 4px rgba(223, 105, 78, 0.2);
+}
+
+/* Active state for sub-links */
+.dropdown-menu a.active {
+  background: linear-gradient(135deg, #DF694E 0%, #c55a3e 100%);
+  color: white;
+  border-color: #DF694E;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(223, 105, 78, 0.3);
+}
 }

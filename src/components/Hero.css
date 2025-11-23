@@ -302,10 +302,10 @@
     
     /* 2. PULL THE IMAGES UP */
     /* Negative margin pulls the carousel up into the gap */
-    margin-top: -5rem; 
+    margin-top: 11rem; 
     
     /* Optional: margin-bottom to ensure space after images */
-    margin-bottom: 2rem; 
+    margin-bottom: 9rem; 
   }
   
   .carousel-card {
