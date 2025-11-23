@@ -8,21 +8,31 @@ function Events() {
   // 1. Set initial state to 'upcoming' to show them first on load
   const [filter, setFilter] = useState('upcoming');
 
-  // 1. Create separate buckets for each status
-  const upcomingEvents = events.filter(e => e.status?.toLowerCase() === 'upcoming');
-  const ongoingEvents = events.filter(e => e.status?.toLowerCase() === 'ongoing');
-  const pastEvents = events.filter(e => e.status?.toLowerCase() === 'past');
+  // --- Sorting function ---
+  const sortEvents = (eventsList) => {
+    return [...eventsList].sort((a, b) => {
+      // 1. Featured first
+      if (a.is_featured && !b.is_featured) return -1;
+      if (!a.is_featured && b.is_featured) return 1;
 
-  // 2. Logic to determine which events to display based on the current filter
-  let displayEvents = events;
-  if (filter === 'upcoming') {
-    displayEvents = upcomingEvents;
-  } else if (filter === 'ongoing') {
-    displayEvents = ongoingEvents;
-  } else if (filter === 'past') {
-    displayEvents = pastEvents;
-  }
-  // Note: If filter is 'all', displayEvents remains the default 'events' array, which is correct.
+      // 2. Status order: upcoming -> ongoing -> past
+      const statusOrder = { upcoming: 0, ongoing: 1, past: 2 };
+      const aStatus = statusOrder[a.status?.toLowerCase()] ?? 3;
+      const bStatus = statusOrder[b.status?.toLowerCase()] ?? 3;
+      if (aStatus !== bStatus) return aStatus - bStatus;
+
+      // 3. Sort by date descending (most recent first)
+      const aDate = new Date(a.date || a.start_date);
+      const bDate = new Date(b.date || b.start_date);
+      return bDate - aDate;
+    });
+  };
+
+  const filteredEvents = filter === 'all'
+    ? events
+    : events.filter(e => e.status?.toLowerCase() === filter);
+
+  const displayEvents = sortEvents(filteredEvents);
 
   return (
     <div className="events-page">
@@ -37,33 +47,15 @@ function Events() {
         {/* Filters */}
         <div className="filter-container">
           <div className="events-filters-control">
-            
-            {/* 3. Reorder buttons to put 'Upcoming', 'Ongoing', 'Past', and then 'All' at the end */}
-            <button 
-              className={`filter-tab-btn ${filter === 'upcoming' ? 'active' : ''}`} 
-              onClick={() => setFilter('upcoming')}
-            >
-              Upcoming
-            </button>
-            <button 
-              className={`filter-tab-btn ${filter === 'ongoing' ? 'active' : ''}`} 
-              onClick={() => setFilter('ongoing')}
-            >
-              Ongoing
-            </button>
-            <button 
-              className={`filter-tab-btn ${filter === 'past' ? 'active' : ''}`} 
-              onClick={() => setFilter('past')}
-            >
-              Past
-            </button>
-            <button 
-              className={`filter-tab-btn ${filter === 'all' ? 'active' : ''}`} 
-              onClick={() => setFilter('all')}
-            >
-              All
-            </button>
-            
+            {['upcoming', 'ongoing', 'past', 'all'].map(f => (
+              <button
+                key={f}
+                className={`filter-tab-btn ${filter === f ? 'active' : ''}`}
+                onClick={() => setFilter(f)}
+              >
+                {f.charAt(0).toUpperCase() + f.slice(1)}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -90,3 +82,5 @@ function Events() {
 }
 
 export default Events;
+
+
