@@ -254,67 +254,149 @@
 @media (max-width: 1024px) {
   .hero-modern {
     flex-direction: column; 
-    justify-content: center; /* Keeps content centered vertically */
+    justify-content: flex-start; /* Changed from center */
     text-align: center; 
-    padding: 3rem 1.5rem; /* Slightly reduced side padding */
-    
-    /* 1. DRASTICALLY REDUCE GAP */
-    /* We set this very low because the image container below has internal spacing */
-    gap: 0.5rem; 
-    
+    padding: 5rem 1.5rem 2rem; /* Reduced top padding */
+    gap: 1.5rem; /* Smaller gap */
     background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
-    
-    /* Ensure height is dynamic on mobile so it doesn't stretch empty space */
-    min-height: auto; 
+    min-height: 100vh;
   }
 
   .hero-text-content {
-    flex: 1;
+    flex: none; /* Changed from flex: 1 */
     align-items: center; 
     max-width: 100%;
     margin-bottom: 0; 
   }
   
+  .hero-badge {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+  
   .hero-text-content h1 { 
-    font-size: 2.25rem; 
+    font-size: 1.85rem; /* Smaller */
+    line-height: 1.2;
+    margin-bottom: 0.75rem; /* Reduced margin */
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    max-width: 100%;
+    margin-bottom: 1.25rem; /* Reduced margin */
   }
 
   .hero-buttons {
     justify-content: center;
     width: 100%;
-    flex-wrap: wrap; 
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem; /* Reduced margin */
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding: 0.7rem 1.25rem; /* Slightly smaller */
+    font-size: 0.95rem;
   }
 
   .hero-stats {
-    justify-content: center;
-    gap: 1.5rem;
-    /* Reduce padding here too */
+    justify-content: center; /* Center instead of space-between */
+    gap: 2.5rem; /* Fixed gap */
     padding-top: 1rem; 
-    padding-bottom: 0;
+    padding-bottom: 1rem;
+    width: 100%;
+    max-width: 400px; /* Limit width */
+    margin: 0 auto; /* Center the stats */
   }
 
-  /* --- THE MAIN FIX --- */
+  .stat-item {
+    flex: 0 0 auto; /* Don't grow */
+  }
+
+  .stat-item h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-item p {
+    font-size: 0.7rem;
+  }
+
+  /* --- IMAGE CONTAINER FIX --- */
   .hero-image-container {
-    flex: 1;
+    flex: none; /* Changed from flex: 1 */
     width: 100%;
-    height: 300px; /* Fixed height for the stage */
+    height: 250px; /* Fixed height */
     perspective: 800px;
-    
-    /* 2. PULL THE IMAGES UP */
-    /* Negative margin pulls the carousel up into the gap */
-    margin-top: 11rem; 
-    
-    /* Optional: margin-bottom to ensure space after images */
-    margin-bottom: 9rem; 
+    margin-top: 1rem; /* Small top margin */
+    margin-bottom: 0;
+    order: 10; /* Push to bottom */
   }
   
   .carousel-card {
-    /* Make cards slightly smaller on mobile to fit nicely */
-    width: 200px; 
-    height: 280px;
+    width: 160px;
+    height: 220px;
   }
   
-  /* Tighter spread on mobile */
-  .card-left { transform: translateX(-50%) scale(0.85); }
-  .card-right { transform: translateX(50%) scale(0.85); }
+  .card-center {
+    transform: translateX(0) scale(0.95); /* Slightly smaller */
+  }
+  
+  .card-left { 
+    transform: translateX(-50%) scale(0.75);
+  }
+  .card-right { 
+    transform: translateX(50%) scale(0.75);
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  .hero-modern {
+    padding: 4.5rem 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .hero-text-content h1 { 
+    font-size: 1.6rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .hero-stats {
+    gap: 2rem; /* Closer together */
+    max-width: 350px;
+  }
+
+  .stat-item h3 {
+    font-size: 1.5rem;
+  }
+
+  .stat-item p {
+    font-size: 0.65rem;
+  }
+
+  .hero-image-container {
+    height: 200px;
+    margin-top: 0.5rem;
+  }
+
+  .carousel-card {
+    width: 130px;
+    height: 180px;
+  }
+
+  .card-left { 
+    transform: translateX(-45%) scale(0.7);
+  }
+  .card-right { 
+    transform: translateX(45%) scale(0.7);
+  }
 }

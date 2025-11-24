@@ -17,7 +17,7 @@
 /* Standard centered sections (About, Projects, etc.) */
 .home-page section:not(.hero-modern):not(.hero-sandbox) {
   scroll-snap-align: start;
-  height: calc(var(--vh, 1vh) * 100); /* Full viewport height */
+  min-height: 100vh; /* ← Changed from height to min-height */
   
   /* Center content in these sections */
   display: flex;
@@ -31,11 +31,12 @@
 /* HERO SECTION OVERRIDE */
 .home-page .hero-modern {
   scroll-snap-align: start;
-  height: auto; 
-  min-height: 80vh; /* This allows the next section to "peek" through at the bottom */
+  height: 100vh; /* ← Changed from auto to 100vh */
+  min-height: 100vh; /* ← Ensure it fills the viewport */
   width: 100%;
-  display: flex; /* Re-enable flex here if Home.css was stripping it */
+  display: flex;
   align-items: center;
+  margin-bottom: 0; /* ← Add this */
 }
 
 
