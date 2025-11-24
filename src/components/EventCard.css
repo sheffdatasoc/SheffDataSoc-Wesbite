@@ -1,13 +1,13 @@
 /* ========================================
-   /components/EventCard.css - FINAL UNIFIED BADGES
+   /components/EventCard.css - UPDATED SAFE VERSION
    ======================================== */
 
-/* Container */
+/* Card Container */
 .photo-event-card {
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #e2e8f0; 
+  border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -17,22 +17,29 @@
 
 .photo-event-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 25px -5px rgba(24, 47, 77, 0.1), 0 8px 10px -6px rgba(24, 47, 77, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(24, 47, 77, 0.1),
+              0 8px 10px -6px rgba(24, 47, 77, 0.1);
   border-color: #cbd5e1;
 }
 
-/* Image Area */
-.card-image-container {
+/* =============================== */
+/*  IMAGE AREA — RENAMED TO AVOID CONFLICTS */
+/* =============================== */
+.event-card-image {
   position: relative;
   width: 100%;
   height: 200px;
   background: #182F4D;
+
+  /* ensures image never shrinks */
+  flex-shrink: 0;
 }
 
 .card-img {
-  width: 100%;          /* Ensures it fills horizontally */
-  height: 100%;         /* Keeps your set height (200px) */
-  object-fit: cover;    /* Crops nicely to fill the space */
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 0.5s ease;
 }
 
@@ -40,7 +47,8 @@
   transform: scale(1.05);
 }
 
-.card-img-placeholder {
+/* Placeholder — RENAMED */
+.event-card-img-placeholder {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, #182F4D 0%, #EBB479 100%);
@@ -49,55 +57,35 @@
   justify-content: center;
 }
 
-/* --- BADGES (UNIFIED GLASS STYLE) --- */
+/* =============================== */
+/* BADGE */
+/* =============================== */
 .card-badge {
   position: absolute;
   top: 12px;
   right: 12px;
   padding: 6px 14px;
-  border-radius: 8px; /* Soft Rectangle */
+  border-radius: 8px;
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  z-index: 2;
-  
-  /* White Text */
+  z-index: 10;
   color: #ffffff;
-  
-  /* Glass Look: No border, No shadow, Blur background */
-  box-shadow: none;
-  border: none;
   backdrop-filter: blur(4px);
 }
 
-/* BADGE COLORS mapped to OFFICIAL PALETTE 
-   All set to 0.6 (60%) opacity for "Glass" look 
-*/
+.badge-blue { background-color: #1D4ED8; }
+.badge-orange { background-color: #F97316; }
+.badge-purple { background-color: #9333EA; }
+.badge-green { background-color: #10B981; }
+.badge-yellow { background-color: #FACC15; }
+.badge-red { background-color: #EF4444; }
+.badge-gray { background-color: #6B7280; }
 
-.badge-blue { 
-  background-color: #1D4ED8;
-}
-
-.badge-orange { 
-  background-color: #F97316;
-}
-
-.badge-purple { 
-  background-color: #9333EA; 
-}
-
-.badge-green { 
-  background-color: #10B981;
-}
-
-.badge-yellow { background-color: #FACC15; }  
-
-.badge-red { background-color: #EF4444; } 
-
-.badge-gray { background-color: #6B7280; } 
-
-/* Content Body */
+/* =============================== */
+/* CONTENT */
+/* =============================== */
 .card-body {
   padding: 1.5rem;
   display: flex;
@@ -144,12 +132,14 @@
 }
 
 .meta-icon {
-  color: #182F4D; 
+  color: #182F4D;
   opacity: 0.9;
   flex-shrink: 0;
 }
 
-/* Button Styling */
+/* =============================== */
+/* BUTTON */
+/* =============================== */
 .card-btn {
   margin-top: auto;
   width: 100%;
@@ -175,10 +165,6 @@
   filter: brightness(105%);
 }
 
-.card-btn:active {
-  transform: translateY(0);
-}
-
 .card-btn.btn-disabled {
   background: #f1f5f9;
   color: #94a3b8;
@@ -187,17 +173,13 @@
   border: 1px solid #e2e8f0;
 }
 
-.card-btn.btn-disabled:hover {
-  transform: none;
-  filter: none;
-}
-
-/* --- Featured Event Highlight --- */
+/* =============================== */
+/* FEATURED */
+/* =============================== */
 .photo-event-card.featured-card {
-  border: 2px solid #FFCC00;       /* Gold border */
-  background-color: #FFFBEB;       /* Light yellow background */
+  border: 2px solid #FFCC00;
+  background-color: #FFFBEB;
   box-shadow: 0 10px 20px rgba(255, 204, 0, 0.15);
-  transition: all 0.3s ease;
 }
 
 .photo-event-card.featured-card:hover {

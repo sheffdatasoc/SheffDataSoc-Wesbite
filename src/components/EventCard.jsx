@@ -63,22 +63,22 @@ function EventCard({
 
   return (
     <div className={`photo-event-card ${is_featured ? 'featured-card' : ''}`}>
+
       {/* IMAGE */}
-      <div className="card-image-container">
+      <div className="event-card-image">
         {image_url ? (
           <img src={image_url} alt={title} className="card-img" />
         ) : (
-          <div className="card-img-placeholder" />
+          <div className="event-card-img-placeholder" />
         )}
+
+        <span className={`card-badge ${getBadgeClass(type)}`}>{type}</span>
       </div>
 
       {/* CARD BODY */}
       <div className="card-body">
-        <div className="card-text-wrapper">
-          <h3 className="card-title">{title}</h3>
-          <p className="card-desc">{description}</p>
-          <span className={`card-badge ${getBadgeClass(type)}`}>{type}</span>
-        </div>
+        <h3 className="card-title">{title}</h3>
+        <p className="card-desc">{description}</p>
 
         <div className="card-meta-list">
           <div className="meta-row">
@@ -121,6 +121,3 @@ function EventCard({
 }
 
 export default EventCard;
-
-
-
