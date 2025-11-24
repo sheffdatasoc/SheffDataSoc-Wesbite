@@ -19,7 +19,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Gradient from off-white to sand */
+  /* Gradient from off-white to sand - using official Sand #EBB479 */
   background: linear-gradient(180deg, #F5F5F2 0%, #EBB479 20%, #EBB479 100%) !important;
   color: #1A1A1A !important;
   padding: 2rem 2rem 2rem;
