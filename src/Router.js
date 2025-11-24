@@ -11,7 +11,7 @@ import Members from './pages/Members';
 import About from './pages/About';
 import Timeline from './pages/Timeline';
 import Guides from './pages/Guides';
-import GuideDetail from './pages/GuideDetail';  // <-- ADD THIS
+import GuideDetail from './pages/GuideDetail';
 import Glossary from './pages/Glossary';
 import Gallery from './pages/Gallery';
 import Resources from './pages/Resources';
@@ -28,7 +28,7 @@ function AppRouter() {
           <Route path="/blog/:id" element={<BlogDetail />} />
 
           <Route path="/guides" element={<Guides />} />
-          <Route path="/guides/:id" element={<GuideDetail />} /> {/* <-- FIX */}
+          <Route path="/guides/:id" element={<GuideDetail />} />
 
           <Route path="/members" element={<Members />} />
           <Route path="/about" element={<About />} />

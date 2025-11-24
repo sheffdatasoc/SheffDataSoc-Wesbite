@@ -1,7 +1,13 @@
-require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
 const { NotionToMarkdown } = require("notion-to-md");
+
+require('dotenv').config();
+
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? '✓ Set' : '✗ Missing');
+console.log('SUPABASE_SERVICE_KEY:', process.env.SUPABASE_SERVICE_KEY ? '✓ Set' : '✗ Missing');
+console.log('NOTION_TOKEN:', process.env.NOTION_TOKEN ? '✓ Set' : '✗ Missing');
+console.log('---');
 
 
 // Initialize clients
@@ -739,12 +745,12 @@ async function syncGallery() {
 
 
     if (errors.length > 0) {
-      console.warn(`⚠️ ${errors.length} gallery items failed to process.`);
+      console.warn(`${errors.length} gallery items failed to process.`);
     }
 
 
     if (galleryItems.length === 0) {
-      console.log('⚠️ No valid gallery items found.');
+      console.log('No valid gallery items found.');
       return { count: 0, data: null, errors };
     }
 
@@ -765,7 +771,7 @@ async function syncGallery() {
 
 
   } catch (error) {
-    console.error('❌ Error syncing gallery items:', error.message);
+    console.error('Error syncing gallery items:', error.message);
     return { count: 0, error: error.message };
   }
 }

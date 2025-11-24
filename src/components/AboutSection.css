@@ -12,14 +12,12 @@
 
 .about-section {
   scroll-snap-align: start;
-  min-height: calc(var(--vh, 1vh) * 100);
+  min-height: auto; /* ← Changed from 100vh to auto */
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  /* Updated: Off-White background */
   background: #F5F5F2 !important;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   padding: 4rem 2rem 2rem;
   overflow-y: auto;

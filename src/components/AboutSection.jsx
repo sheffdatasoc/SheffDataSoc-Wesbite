@@ -40,7 +40,14 @@ function AboutSection() {
         </div>
 
         <div className="about-buttons">
-          <a href="/join" className="btn btn-primary">Join Now →</a>
+          <a 
+            href="https://su.sheffield.ac.uk/activities/view/data-science-society" 
+            className="btn btn-primary"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Join Now →
+          </a>
           <a href="/about" className="btn btn-secondary">Learn More About Us</a>
         </div>
 
