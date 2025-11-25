@@ -4,7 +4,6 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer'; 
 import AboutSection from '../components/AboutSection';
 import './Home.css';
-import HomeProjects from '../components/HomeProjects';
 
 // Initialize Supabase
 const supabase = createClient(
@@ -82,8 +81,11 @@ function Home() {
       {/* 2. ABOUT SECTION (Component) */}
       <AboutSection />
 
-      {/* 3. PROJECTS SECTION (Component) */}
-      <HomeProjects />
+      {/* 3. PROJECTS PREVIEW (Restored from old commit) */}
+      <section className="projects-preview">
+        <h2>Our Projects</h2>
+        <p>Check out some of the data science projects our members are working on.</p>
+      </section>
 
       {/* 4. EVENTS PREVIEW (Restored from old commit) */}
       <section className="events-preview">
@@ -94,7 +96,7 @@ function Home() {
       {/* 5. SOCIAL PREVIEW (Restored from old commit) */}
       <section className="social-preview">
         <h2>Follow Us on Social Media</h2>
-        <p>Stay connected and see what we're up to!</p>
+        <p>Stay connected and see what we’re up to!</p>
       </section>
 
       {/* 6. CONTACT & FOOTER (Restored Split Layout) */}

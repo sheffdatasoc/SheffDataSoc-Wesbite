@@ -1,18 +1,8 @@
-/* ========================================
-   Global Reset (Updated)
-   ======================================== */
-
 /* CSS Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-/* Ensure all images behave correctly */
-img {
-  display: block;        /* ← FIX: prevents images collapsing into the corner */
-  max-width: 100%;       /* ← Common safe default */
 }
 
 /* Base body styles */
