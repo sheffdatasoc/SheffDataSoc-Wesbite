@@ -65,11 +65,11 @@ function EventCard({
     <div className={`photo-event-card ${is_featured ? 'featured-card' : ''}`}>
 
       {/* IMAGE */}
-      <div className="event-card-image">
+      <div className="eventcard-image">
         {image_url ? (
           <img src={image_url} alt={title} className="card-img" />
         ) : (
-          <div className="event-card-img-placeholder" />
+          <div className="eventcard-img-placeholder" />
         )}
 
         <span className={`card-badge ${getBadgeClass(type)}`}>{type}</span>
