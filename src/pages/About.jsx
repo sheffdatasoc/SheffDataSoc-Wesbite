@@ -1,60 +1,13 @@
 /* ========================================
-   /pages/About.jsx - With PartnerCard Component
+   /pages/About.jsx
    ======================================== */
 
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Target, Eye, Heart, Clock, Users, ArrowRight, Mail, MapPin, Phone } from 'lucide-react';
-import PartnerCard from '../components/PartnerCard';
 import './About.css';
 
 function About() {
-  // Partners data
-  const partners = [
-    {
-      name: 'Microsoft',
-      description: 'Cloud computing and AI platform partner',
-      tier: 'Platinum',
-      logo: '/images/partners/microsoft.png',
-      website: 'https://www.microsoft.com'
-    },
-    {
-      name: 'Google',
-      description: 'Technology and innovation partner',
-      tier: 'Platinum',
-      logo: '/images/partners/google.png',
-      website: 'https://www.google.com'
-    },
-    {
-      name: 'Amazon Web Services',
-      description: 'Cloud infrastructure partner',
-      tier: 'Gold',
-      logo: '/images/partners/aws.png',
-      website: 'https://aws.amazon.com'
-    },
-    {
-      name: 'IBM',
-      description: 'Enterprise AI solutions partner',
-      tier: 'Gold',
-      logo: '/images/partners/ibm.png',
-      website: 'https://www.ibm.com'
-    },
-    {
-      name: 'DataCamp',
-      description: 'Educational platform partner',
-      tier: 'Silver',
-      logo: '/images/partners/datacamp.png',
-      website: 'https://www.datacamp.com'
-    },
-    {
-      name: 'Kaggle',
-      description: 'Data science competition platform',
-      tier: 'Silver',
-      logo: '/images/partners/kaggle.png',
-      website: 'https://www.kaggle.com'
-    }
-  ];
-
   return (
     <div className="about-page">
       {/* Hero Section */}
@@ -64,7 +17,7 @@ function About() {
         <p>We're a passionate community of students dedicated to fostering growth, connection, and unforgettable experiences on campus.</p>
       </div>
 
-      {/* Navigation Cards */}
+      {/* --- NEW CLEANER NAVIGATION CARDS --- */}
       <div className="about-nav-cards">
         <Link to="/timeline" className="nav-card">
           <div className="nav-icon-box gradient-purple">
@@ -93,7 +46,7 @@ function About() {
         </Link>
       </div>
 
-      {/* Mission Cards */}
+      {/* --- NEW CLEANER MISSION CARDS --- */}
       <div className="about-cards-grid">
         <div className="clean-card">
           <div className="card-icon-box gradient-indigo">
@@ -160,35 +113,6 @@ function About() {
             <h3>Community Service</h3>
             <p>Give back to the community through volunteer opportunities, fundraisers, and social impact initiatives.</p>
           </div>
-        </div>
-      </section>
-
-      {/* Partners Section */}
-      <section className="partners-section">
-        <div className="partners-header">
-          <span className="partners-badge">🏆 Proudly Supported By</span>
-          <h2>Our Partners</h2>
-          <p>We're grateful to work with industry-leading organizations who support our mission</p>
-        </div>
-
-        <div className="partners-grid">
-          {partners.map((partner, index) => (
-            <PartnerCard 
-              key={index}
-              name={partner.name}
-              description={partner.description}
-              tier={partner.tier}
-              logo={partner.logo}
-              website={partner.website}
-            />
-          ))}
-        </div>
-
-        <div className="partners-cta">
-          <p>Interested in partnering with us?</p>
-          <a href="mailto:sheffdatasoc@sheffield.ac.uk" className="btn-partner-inquiry">
-            Become a Partner
-          </a>
         </div>
       </section>
 
