@@ -4,27 +4,35 @@
 
 /* 1. Main Container */
 .hero-modern {
-  min-height: 65vh; /* Slightly taller for better vertical breathing room */
+  min-height: auto;
   width: 100%;
   
-  /* Layout: Center content */
   display: flex;
-  align-items: center; 
-  justify-content: center; 
-  gap: 10rem; 
-  padding: 3rem 2rem; 
+  flex-direction: column; /* Stack wrapper and carousel vertically */
+  align-items: center;
+  gap: 3rem; /* Gap between content and carousel */
+  padding: 6rem 2rem 3rem; /* Increased top padding from 5rem to 6rem */
   
   position: relative;
   overflow: hidden;
 
-  /* Official Gradient: Navy -> Sand -> Terracotta */
   background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%);
   color: #ffffff; 
 }
 
+/* New wrapper for the two-column layout */
+.hero-content-wrapper {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 8rem;
+}
+
 /* 2. Left Side: Text Content */
 .hero-text-content {
-  flex: 0 1 550px; /* Don't grow, allow shrink, target 550px */
+  flex: 0 1 550px;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -39,20 +47,20 @@
   backdrop-filter: blur(4px);
   border: none; 
   color: #F5F5F2; 
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.9rem; /* Reduced from 0.5rem 1rem */
   border-radius: 50px;
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* Reduced from 0.85rem */
   font-weight: 700; 
-  margin-bottom: 1rem; 
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
   letter-spacing: 0.5px;
 }
 
 /* Heading Typography */
 .hero-text-content h1 {
-  font-size: 3rem; 
+  font-size: 2.75rem; /* Reduced from 3rem */
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 1rem; 
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
   letter-spacing: -0.02em;
   color: #ffffff; 
   text-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -60,18 +68,18 @@
 
 /* Highlights */
 .highlight {
-  color: #EBB479; /* Sand Color */
+  color: #EBB479;
   position: relative;
   display: inline-block;
 }
 
 /* Subtitle */
 .hero-subtitle {
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: 1.0625rem; /* Slightly reduced from 1.125rem */
+  line-height: 1.5; /* Reduced from 1.6 */
   color: #F5F5F2; 
   opacity: 0.95;
-  margin-bottom: 1.5rem; 
+  margin-bottom: 1.25rem; /* Reduced from 1.5rem */
   max-width: 90%;
   font-weight: 400;
 }
@@ -80,16 +88,16 @@
 .hero-buttons {
   display: flex;
   gap: 1rem; 
-  margin-bottom: 2rem; 
+  margin-bottom: 1.5rem; /* Reduced from 2rem */
   align-items: center;
 }
 
 /* Primary Button */
 .btn-primary {
   background: #ffffff; 
-  color: #182F4D; /* Navy Text */
-  padding: 0.75rem 1.5rem; 
-  font-size: 1rem;
+  color: #182F4D;
+  padding: 0.65rem 1.4rem; /* Reduced from 0.75rem 1.5rem */
+  font-size: 0.95rem; /* Reduced from 1rem */
   font-weight: 700;
   border-radius: 8px;
   border: none;
@@ -111,13 +119,14 @@
 .btn-secondary {
   background-color: transparent;
   color: #ffffff; 
-  padding: 0.75rem 1.5rem; 
-  font-size: 1rem;
+  padding: 0.65rem 1.4rem; /* Reduced from 0.75rem 1.5rem */
+  font-size: 0.95rem; /* Reduced from 1rem */
   font-weight: 600;
   border-radius: 8px;
   border: 2px solid rgba(245, 245, 242, 0.3); 
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .btn-secondary:hover {
@@ -129,22 +138,22 @@
 .hero-stats {
   display: flex;
   gap: 3rem; 
-  padding-top: 1.5rem;
+  padding-top: 1.25rem;
   border-top: 1px solid rgba(245, 245, 242, 0.2); 
   width: 100%;
 }
 
 .stat-item h3 {
-  font-size: 1.5rem; 
+  font-size: 2rem; /* Increased from 1.4rem */
   font-weight: 800;
   color: #ffffff; 
   margin: 0;
 }
 
 .stat-item p {
-  font-size: 0.875rem;
+  font-size: 0.95rem; /* Increased from 0.8rem */
   color: #EBB479; 
-  margin-top: 0.25rem;
+  margin-top: 0.3rem; /* Increased from 0.2rem */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -155,15 +164,14 @@
    ======================================== */
 
 .hero-image-container {
-  flex: 0 0 550px; 
-  height: 450px;
+  flex: 0 0 520px; /* Reduced from 550px */
+  height: 420px; /* Reduced from 450px */
   
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   
-  /* Perspective creates the depth */
   perspective: 1000px; 
 }
 
@@ -179,21 +187,19 @@
 /* Shared Card Styles */
 .carousel-card {
   position: absolute;
-  width: 300px;  /* Card Width */
-  height: 400px; /* Card Height */
+  width: 280px; /* Reduced from 300px */
+  height: 375px; /* Reduced from 400px */
   object-fit: cover;
-  border-radius: 20px; /* Smooth corners */
+  border-radius: 20px;
   
-  /* Smooth glide transition */
   transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
   
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   cursor: pointer;
   
-  /* REMOVED HARD BORDER */
   border: none; 
   
-  background-color: #182F4D; /* Fallback color */
+  background-color: #182F4D;
 }
 
 /* --- POSITION LOGIC --- */
@@ -204,7 +210,6 @@
   opacity: 1;
   transform: translateX(0) scale(1);
   
-  /* Stronger shadow to pop */
   box-shadow: 0 30px 60px rgba(0,0,0,0.6);
   filter: brightness(1);
 }
@@ -214,10 +219,8 @@
   z-index: 5;
   opacity: 0.7;
   
-  /* Move Left and Push Back */
   transform: translateX(-60%) scale(0.85);
   
-  /* Blur for depth */
   filter: blur(1px) brightness(0.7); 
 }
 .card-left:hover {
@@ -230,7 +233,6 @@
   z-index: 5;
   opacity: 0.7;
   
-  /* Move Right and Push Back */
   transform: translateX(60%) scale(0.85);
   
   filter: blur(1px) brightness(0.7);
@@ -249,21 +251,102 @@
 }
 
 /* ========================================
+   6. PARTNER CAROUSEL (Full Width Below)
+   ======================================== */
+
+.hero-partner-carousel {
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.partner-carousel-label {
+  text-align: center;
+  font-size: 0.8rem; /* Reduced from 0.85rem */
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+}
+
+.partner-carousel-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+}
+
+.partner-carousel-track {
+  display: flex;
+  gap: 20px;
+  will-change: transform;
+}
+
+.partner-logo-card {
+  flex: 0 0 200px; /* Reduced from 220px */
+  height: 110px; /* Reduced from 120px */
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem; /* Reduced from 1.5rem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.partner-logo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.partner-logo-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(20%);
+  transition: filter 0.3s ease;
+}
+
+.partner-logo-card:hover .partner-logo-img {
+  filter: grayscale(0%);
+}
+
+/* ========================================
    MOBILE RESPONSIVENESS
    ======================================== */
 @media (max-width: 1024px) {
   .hero-modern {
-    flex-direction: column; 
-    justify-content: flex-start; /* Changed from center */
+    flex-direction: column;
     text-align: center; 
-    padding: 5rem 1.5rem 2rem; /* Reduced top padding */
-    gap: 1.5rem; /* Smaller gap */
+    padding: 5rem 1.5rem 2rem;
+    gap: 2rem;
     background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
     min-height: 100vh;
   }
 
+  .hero-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
   .hero-text-content {
-    flex: none; /* Changed from flex: 1 */
+    flex: none;
     align-items: center; 
     max-width: 100%;
     margin-bottom: 0; 
@@ -276,15 +359,15 @@
   }
   
   .hero-text-content h1 { 
-    font-size: 1.85rem; /* Smaller */
+    font-size: 1.85rem;
     line-height: 1.2;
-    margin-bottom: 0.75rem; /* Reduced margin */
+    margin-bottom: 0.75rem;
   }
 
   .hero-subtitle {
     font-size: 0.95rem;
     max-width: 100%;
-    margin-bottom: 1.25rem; /* Reduced margin */
+    margin-bottom: 1.25rem;
   }
 
   .hero-buttons {
@@ -292,7 +375,7 @@
     width: 100%;
     flex-direction: column;
     gap: 0.75rem;
-    margin-bottom: 1.5rem; /* Reduced margin */
+    margin-bottom: 1.5rem;
   }
 
   .btn-primary,
@@ -300,22 +383,22 @@
     width: 100%;
     max-width: 280px;
     justify-content: center;
-    padding: 0.7rem 1.25rem; /* Slightly smaller */
+    padding: 0.7rem 1.25rem;
     font-size: 0.95rem;
   }
 
   .hero-stats {
-    justify-content: center; /* Center instead of space-between */
-    gap: 2.5rem; /* Fixed gap */
+    justify-content: center;
+    gap: 2.5rem;
     padding-top: 1rem; 
     padding-bottom: 1rem;
     width: 100%;
-    max-width: 400px; /* Limit width */
-    margin: 0 auto; /* Center the stats */
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .stat-item {
-    flex: 0 0 auto; /* Don't grow */
+    flex: 0 0 auto;
   }
 
   .stat-item h3 {
@@ -327,15 +410,14 @@
     font-size: 0.7rem;
   }
 
-  /* --- IMAGE CONTAINER FIX --- */
   .hero-image-container {
-    flex: none; /* Changed from flex: 1 */
+    flex: none;
     width: 100%;
-    height: 250px; /* Fixed height */
+    height: 250px;
     perspective: 800px;
-    margin-top: 1rem; /* Small top margin */
+    margin-top: 1rem;
     margin-bottom: 0;
-    order: 10; /* Push to bottom */
+    order: 10;
   }
   
   .carousel-card {
@@ -344,7 +426,7 @@
   }
   
   .card-center {
-    transform: translateX(0) scale(0.95); /* Slightly smaller */
+    transform: translateX(0) scale(0.95);
   }
   
   .card-left { 
@@ -353,12 +435,28 @@
   .card-right { 
     transform: translateX(50%) scale(0.75);
   }
+
+  /* Partner Carousel Mobile */
+  .hero-partner-carousel {
+    bottom: 1.5rem;
+    padding: 0;
+  }
+
+  .partner-logo-card {
+    flex: 0 0 180px;
+    height: 100px;
+    padding: 1rem;
+  }
+
+  .partner-carousel-label {
+    margin-bottom: 1rem;
+  }
 }
 
 /* Extra small phones */
 @media (max-width: 480px) {
   .hero-modern {
-    padding: 4.5rem 1rem 1.5rem;
+    padding: 4.5rem 1rem 10rem;
     gap: 1rem;
   }
 
@@ -371,7 +469,7 @@
   }
 
   .hero-stats {
-    gap: 2rem; /* Closer together */
+    gap: 2rem;
     max-width: 350px;
   }
 
@@ -398,5 +496,21 @@
   }
   .card-right { 
     transform: translateX(45%) scale(0.7);
+  }
+
+  /* Partner Carousel Extra Small */
+  .hero-partner-carousel {
+    bottom: 1rem;
+  }
+
+  .partner-logo-card {
+    flex: 0 0 160px;
+    height: 90px;
+    padding: 0.75rem;
+  }
+
+  .partner-carousel-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
   }
 }

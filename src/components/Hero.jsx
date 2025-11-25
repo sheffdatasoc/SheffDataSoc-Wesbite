@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // 1. Import Link
+import { Link } from 'react-router-dom';
 import './Hero.css'; 
 
 const Hero = ({ 
@@ -12,35 +12,29 @@ const Hero = ({
   badgeText, 
   highlightWord, 
   images = [], 
-  fallbackImage 
+  fallbackImage,
+  partners = [] // Add partners prop
 }) => {
   
-  // --- FIX: Force the array to always have at least 3 items ---
+  // --- IMAGE CAROUSEL LOGIC ---
   const getDisplayImages = () => {
     if (!images || images.length === 0) {
-      // 0 Images: Use 3 fallbacks
       return [fallbackImage, fallbackImage, fallbackImage];
     }
     if (images.length === 1) {
-      // 1 Image: Repeat it 3 times (Left, Center, Right)
       return [images[0], images[0], images[0]];
     }
     if (images.length === 2) {
-      // 2 Images: Duplicate the first one to fill the 3rd slot
       return [images[0], images[1], images[0]];
     }
-    // 3+ Images: We are good to go
     return images;
   };
 
   const displayImages = getDisplayImages();
-  // -----------------------------------------------------------
-
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Auto-rotate timer
+  // Auto-rotate timer for images
   useEffect(() => {
-    // Only rotate if we have more than 1 *unique* image origin
     if (images.length < 2) return; 
 
     const interval = setInterval(() => {
@@ -50,11 +44,8 @@ const Hero = ({
     return () => clearInterval(interval);
   }, [images, displayImages.length]);
 
-  // Determine class logic
   const getCardClass = (index) => {
     const total = displayImages.length;
-    
-    // Calculate circular indices
     const prevIndex = (activeIndex - 1 + total) % total;
     const nextIndex = (activeIndex + 1) % total;
 
@@ -69,6 +60,32 @@ const Hero = ({
     setActiveIndex(index);
   };
 
+  // --- PARTNER CAROUSEL LOGIC ---
+  const [offset, setOffset] = useState(0);
+  
+  const partnersWithLogos = partners.filter(p => p.logo);
+  const extendedPartners = partnersWithLogos.length > 0 
+    ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos] 
+    : [];
+
+  useEffect(() => {
+    if (partnersWithLogos.length === 0) return;
+
+    const interval = setInterval(() => {
+      setOffset((prevOffset) => {
+        const cardWidth = 220; // Updated to match new card width (200px) + gap (20px)
+        const newOffset = prevOffset + 1;
+        
+        if (newOffset >= cardWidth * partnersWithLogos.length) {
+          return 0;
+        }
+        return newOffset;
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [partnersWithLogos.length]);
+
   const renderTitle = () => {
     if (!highlightWord) return title;
     const parts = title.split(highlightWord);
@@ -77,53 +94,81 @@ const Hero = ({
 
   return (
     <section className="hero-modern">
-      {/* Left Column */}
-      <div className="hero-text-content">
-        {showBadge && <div className="hero-badge">{badgeText}</div>}
-        
-        <h1>{renderTitle()}</h1>
-        <p className="hero-subtitle">{subtitle}</p>
+      <div className="hero-content-wrapper">
+        {/* Left Column */}
+        <div className="hero-text-content">
+          {showBadge && <div className="hero-badge">{badgeText}</div>}
+          
+          <h1>{renderTitle()}</h1>
+          <p className="hero-subtitle">{subtitle}</p>
 
-        {showButtons && (
-          <div className="hero-buttons">
-            {/* 2. Updated to use Link components for routing */}
-            <Link to="/events" className="btn-primary">
-              Explore Events &rarr;
-            </Link>
-            
-            <Link to="/about" className="btn-secondary">
-              Learn More
-            </Link>
-          </div>
-        )}
+          {showButtons && (
+            <div className="hero-buttons">
+              <Link to="/events" className="btn-primary">
+                Explore Events &rarr;
+              </Link>
+              
+              <Link to="/about" className="btn-secondary">
+                Learn More
+              </Link>
+            </div>
+          )}
 
-        {showStats && stats && (
-          <div className="hero-stats">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-item">
-                <h3>{stat.value}</h3>
-                <p>{stat.title}</p>
-              </div>
+          {showStats && stats && (
+            <div className="hero-stats">
+              {stats.map((stat, index) => (
+                <div key={index} className="stat-item">
+                  <h3>{stat.value}</h3>
+                  <p>{stat.title}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Right Column: Image Carousel */}
+        <div className="hero-image-container">
+          <div className="carousel-stage">
+            {displayImages.map((imgSrc, index) => (
+              <img 
+                key={index}
+                src={imgSrc} 
+                className={`carousel-card ${getCardClass(index)}`}
+                alt={`Gallery ${index}`} 
+                onError={(e) => e.target.src = fallbackImage}
+                onClick={() => handleCardClick(index)}
+              />
             ))}
           </div>
-        )}
-      </div>
-
-      {/* Right Column: Carousel */}
-      <div className="hero-image-container">
-        <div className="carousel-stage">
-          {displayImages.map((imgSrc, index) => (
-            <img 
-              key={index}
-              src={imgSrc} 
-              className={`carousel-card ${getCardClass(index)}`}
-              alt={`Gallery ${index}`} 
-              onError={(e) => e.target.src = fallbackImage}
-              onClick={() => handleCardClick(index)}
-            />
-          ))}
         </div>
       </div>
+
+      {/* Partner Logo Carousel - Full Width Below Both Columns */}
+      {partnersWithLogos.length > 0 && (
+        <div className="hero-partner-carousel">
+          <p className="partner-carousel-label">Trusted by Industry Leaders</p>
+          
+          <div className="partner-carousel-wrapper">
+            <div 
+              className="partner-carousel-track"
+              style={{ transform: `translateX(-${offset}px)` }}
+            >
+              {extendedPartners.map((partner, index) => (
+                <div
+                  key={`${partner.id}-${index}`}
+                  className="partner-logo-card"
+                >
+                  <img 
+                    src={partner.logo} 
+                    alt={partner.name}
+                    className="partner-logo-img"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

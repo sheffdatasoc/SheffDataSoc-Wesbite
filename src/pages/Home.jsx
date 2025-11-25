@@ -25,6 +25,9 @@ function Home() {
   // --- HERO IMAGE LOGIC ---
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
 
+  // --- PARTNERS LOGIC ---
+  const [partners, setPartners] = useState([]);
+
   useEffect(() => {
     async function fetchHeroImages() {
       try {
@@ -54,7 +57,26 @@ function Home() {
       }
     }
 
+    async function fetchPartners() {
+      try {
+        const { data, error } = await supabase
+          .from('partners')
+          .select('*')
+          .eq('active', true)
+          .order('tier', { ascending: true });
+
+        if (error) throw error;
+
+        if (data) {
+          setPartners(data);
+        }
+      } catch (err) {
+        console.error("Error fetching partners:", err.message);
+      }
+    }
+
     fetchHeroImages();
+    fetchPartners();
   }, []);
 
   const stats = [
@@ -78,11 +100,11 @@ function Home() {
         highlightWord="Data Science"
         images={heroImages}
         fallbackImage={FALLBACK_IMAGE}
+        partners={partners}
       />
 
       {/* 2. ABOUT SECTION */}
       <AboutSection />
-
 
       {/* 3 PROJECTS SECTION*/}
       <HomeProjects />
@@ -96,7 +118,7 @@ function Home() {
       {/* 5. SOCIAL PREVIEW */}
       <section className="social-preview">
         <h2>Follow Us on Social Media</h2>
-        <p>Stay connected and see what we’re up to!</p>
+        <p>Stay connected and see what we're up to!</p>
       </section>
 
       {/* 6. CONTACT + FOOTER */}

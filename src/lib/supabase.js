@@ -557,7 +557,8 @@ export async function getPartners() {
   const { data, error } = await supabase
     .from('partners')
     .select('*')
-    .order('tier', { ascending: true }); // Platinum > Gold > Silver
+    .eq('active', true)  // Add this line to only get active partners
+    .order('tier', { ascending: true });
 
   if (error) {
     console.error("Error fetching partners:", error);
@@ -566,9 +567,6 @@ export async function getPartners() {
 
   return data || [];
 }
-
-
-
 
 // ============================================================================
 // UTILITY FUNCTIONS
