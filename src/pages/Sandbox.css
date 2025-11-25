@@ -248,6 +248,33 @@
   margin-left: auto;
   margin-right: auto;
 }
+/* Workshops grid - max 3 cards per row */
+.workshops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .workshops-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .workshops-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .workshops-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* ========================================
    EMPTY STATE

@@ -18,9 +18,10 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
-  height: 480px;         
-  width: 335px;          
-  margin: 0 auto;        
+  height: 480px;         /* keep fixed height */
+  width: 100%;            /* fill grid column */
+  max-width: none;        /* remove fixed max width */
+  margin: 0;              /* remove auto centering */
   cursor: pointer;       
 }
 

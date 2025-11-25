@@ -1,21 +1,16 @@
 /* ========================================
-   Guides.css - ENFORCED PALETTE VERSION
+   Guides.css - ENFORCED PALETTE VERSION (Updated for Mobile)
    ======================================== */
 
-/* --- PALETTE REFERENCE ---
-   Navy: #182F4D
-   Terracotta: #DF694E
-   Off-White: #F5F5F2 
-   Darkest Text: #1A1A1A
-   Sand: #EBB479
-*/
+/* ========================================
+   Guides.css - ENFORCED PALETTE VERSION
+   ======================================== */
 
 .guides-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 4rem 1.5rem;
-  /* Updated: Off-White background */
   background-color: #F5F5F2 !important;
 }
 
@@ -27,20 +22,18 @@
 .guides-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   margin-bottom: 0.5rem;
 }
 
 .guides-header p {
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.7;
   font-size: 1.1rem;
 }
 
 /* ========================================
-   Search Bar - Matching Blog Style
+   Search Bar
    ======================================== */
 .guides-search {
   max-width: 700px;
@@ -58,7 +51,6 @@
 .search-icon {
   position: absolute;
   left: 1.25rem;
-  /* Updated: Navy icon */
   color: #182F4D !important;
   opacity: 0.6;
   pointer-events: none;
@@ -71,18 +63,16 @@
   border: none;
   border-radius: 12px;
   font-size: 1rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   background: white;
-  transition: all 0.2s ease;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
+  transition: all 0.2s ease;
 }
 
 .search-input:focus {
   outline: none;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
   transform: translateY(-1px);
-  /* Updated: Sand border on focus */
   border: 1px solid #EBB479;
 }
 
@@ -91,9 +81,8 @@
 }
 
 /* ========================================
-   Filter Sliders - Matching Events Page Style
+   Category Slider
    ======================================== */
-
 .slider-background {
   display: flex;
   justify-content: center;
@@ -107,7 +96,7 @@
   display: inline-flex;
   gap: 4px !important;
   flex-wrap: wrap;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05) !important;
   border: 1px solid #e5e7eb !important;
 }
 
@@ -120,102 +109,44 @@
   font-weight: 600 !important;
   cursor: pointer;
   transition: all 0.2s ease;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
-  text-shadow: none !important;
 }
 
 .slider-button:hover {
-  /* Updated: Off-White hover */
   background: #F5F5F2 !important;
-  /* Updated: Terracotta on hover */
   color: #DF694E !important;
 }
 
-/* Active State - Soft Transparent Navy (0.6 Opacity) */
 .slider-button.active {
   background-color: rgba(24, 47, 77, 0.6) !important;
-  background-image: none !important;
   color: #ffffff !important;
-  box-shadow: 0 2px 4px -1px rgba(24, 47, 77, 0.1) !important;
+  box-shadow: 0 2px 4px -1px rgba(24,47,77,0.1) !important;
   backdrop-filter: blur(2px);
 }
 
 /* ========================================
-   Filters (if still needed)
-   ======================================== */
-.guides-filters {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.filter-select {
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  /* Updated: Navy border */
-  border: 1px solid #182F4D !important;
-  background: white;
-  font-size: 1rem;
-  /* Updated: Navy text */
-  color: #182F4D !important;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.filter-select:hover {
-  /* Updated: Light Navy background on hover */
-  background: rgba(24, 47, 77, 0.05) !important;
-}
-
-.filter-select:focus {
-  outline: none;
-  /* Updated: Terracotta border on focus */
-  border-color: #DF694E !important;
-  box-shadow: 0 0 0 3px rgba(223, 105, 78, 0.1);
-}
-
-/* ========================================
-   Guide Grid
+   Guide Grid (4 cards max per row desktop)
    ======================================== */
 .guides-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4 cards per row by default */
   gap: 2rem;
-  align-items: stretch;
   width: 100%;
   max-width: 1400px;
 }
 
-.guides-grid > * {
-  height: 100%;
+@media (max-width: 1024px) {
+  .guides-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row for tablets */
+    gap: 1.5rem;
+  }
 }
 
-.featured-guides {
-  margin-bottom: 3rem;
-}
-
-.featured-guides h2 {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-  text-align: center;
-  /* Updated: Navy text */
-  color: #182F4D !important;
-}
-
-section h2 {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-  /* Updated: Navy text */
-  color: #182F4D !important;
+@media (max-width: 768px) {
+  .guides-grid {
+    grid-template-columns: 1fr; /* 1 card per row for mobile */
+    gap: 1.5rem;
+  }
 }
 
 /* ========================================
@@ -223,7 +154,6 @@ section h2 {
    ======================================== */
 .empty-state {
   text-align: center;
-  /* Updated: Navy text */
   color: #182F4D !important;
   opacity: 0.7;
   margin-top: 2rem;
@@ -231,13 +161,12 @@ section h2 {
 }
 
 .error-message {
-  /* Updated: Terracotta for errors */
   color: #DF694E !important;
   font-weight: 500;
 }
 
 /* ========================================
-   Responsive
+   Responsive - Mobile Adjustments
    ======================================== */
 @media (max-width: 768px) {
   .guides-page {
@@ -254,36 +183,42 @@ section h2 {
 
   .guides-search {
     padding: 0 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .search-input {
-    padding: 1rem 1rem 1rem 2.75rem;
+    padding: 0.9rem 1rem 0.9rem 2.5rem;
+    font-size: 0.9rem;
   }
 
-  .search-icon {
-    left: 1rem;
-  }
-
-  .guides-filters {
-    gap: 1rem;
-  }
-
-  .guides-grid {
-    gap: 1.5rem;
-  }
-
+  /* Category slider like Events - horizontal scroll */
   .slider-container {
-    width: 100%;
-    border-radius: 12px !important;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding: 6px 0;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
   }
-  
+
+  /* Hide scrollbar */
+  .slider-container::-webkit-scrollbar {
+    display: none;
+  }
+  .slider-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   .slider-button {
-    flex: 1;
+    flex: 0 0 auto; /* buttons do not wrap */
+    padding: 10px 20px !important;
+    font-size: 0.85rem !important;
     border-radius: 8px !important;
-    padding: 12px 0 !important;
-    font-size: 0.9rem !important;
     text-align: center;
+    white-space: nowrap;
   }
 }
 
@@ -292,12 +227,8 @@ section h2 {
     font-size: 1.75rem;
   }
 
-  .guides-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .slider-button {
-    padding: 10px 0 !important;
-    font-size: 0.85rem !important;
+  .search-input {
+    padding: 0.8rem 0.75rem 0.8rem 2.25rem;
+    font-size: 0.85rem;
   }
 }

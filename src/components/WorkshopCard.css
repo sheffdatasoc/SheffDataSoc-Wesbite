@@ -1,39 +1,30 @@
-/* ==============================
-   WorkshopCard.css - UPDATED VERSION
-   ============================== */
-
 .workshop-card {
   background: white;
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 320px;
   border: 1px solid #e5e7eb;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .workshop-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
   border-color: #3b82f6;
 }
 
-.workshop-card:hover .workshop-title {
-  color: #3b82f6;
-}
-
-/* Featured card styling */
 .workshop-card.featured-card {
   border: 3px solid #fbbf24;
   background: linear-gradient(to bottom, #fffbeb 0%, #fef3c7 100%);
-  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.15);
+  box-shadow: 0 4px 15px rgba(251,191,36,0.15);
 }
 
 .workshop-card.featured-card:hover {
-  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.25);
+  box-shadow: 0 8px 25px rgba(251,191,36,0.25);
 }
 
 .workshop-card-header {
@@ -50,8 +41,7 @@
   font-size: 0.8rem;
   font-weight: 700;
   text-transform: lowercase;
-  white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .workshop-title {
@@ -68,9 +58,8 @@
   line-height: 1.5rem;
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
-
   display: -webkit-box;
-  -webkit-line-clamp: 4;    /* <-- maximum 4 lines */
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -103,19 +92,16 @@
   padding-top: 1rem;
 }
 
-/* NEW — Matches project card button container */
 .workshop-buttons {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-/* NEW — Auto-expand like project GitHub button */
 .workshop-buttons .btn-materials {
   flex: 1;
 }
 
-/* Button styling */
 .btn-materials {
   display: inline-flex;
   align-items: center;
@@ -126,16 +112,16 @@
   font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: all 0.2s ease;
   min-width: 140px;
   background: #1a1a2e;
   color: white;
+  transition: all 0.2s ease;
 }
 
 .btn-materials:hover {
   background: #2d2d44;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.3);
+  box-shadow: 0 4px 12px rgba(26,26,46,0.3);
 }
 
 .workshop-host,
@@ -147,17 +133,17 @@
   font-weight: 500;
 }
 
-/* Responsive adjustments */
+/* --- Responsive adjustments --- */
+@media (max-width: 1024px) {
+  .workshop-card {
+    min-height: auto;
+  }
+}
+
 @media (max-width: 768px) {
   .workshop-card {
     padding: 1.5rem;
-    min-height: 280px;
   }
-
-  .workshop-title {
-    font-size: 1.3rem;
-  }
-
   .btn-materials {
     width: 100%;
   }
@@ -167,18 +153,8 @@
   .workshop-card {
     padding: 1.25rem;
   }
-
   .workshop-title {
     font-size: 1.2rem;
-  }
-
-  .workshop-description {
-    font-size: 0.9rem;
-  }
-
-  .workshop-tag {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.7rem;
   }
 }
 
