@@ -1,13 +1,13 @@
 /* ========================================
-   /components/EventCard.css - UPDATED SAFE VERSION
+   /components/EventCard.css - FINAL UNIFIED BADGES
    ======================================== */
 
-/* Card Container */
+/* Container */
 .photo-event-card {
   background: white;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e2e8f0; 
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -17,26 +17,19 @@
 
 .photo-event-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 25px -5px rgba(24, 47, 77, 0.1),
-              0 8px 10px -6px rgba(24, 47, 77, 0.1);
+  box-shadow: 0 20px 25px -5px rgba(24, 47, 77, 0.1), 0 8px 10px -6px rgba(24, 47, 77, 0.1);
   border-color: #cbd5e1;
 }
 
-/* =============================== */
-/*  IMAGE AREA — RENAMED TO AVOID CONFLICTS */
-/* =============================== */
-.event-card-image {
+/* Image Area */
+.card-image-container {
   position: relative;
   width: 100%;
   height: 200px;
   background: #182F4D;
-
-  /* ensures image never shrinks */
-  flex-shrink: 0;
 }
 
 .card-img {
-  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -47,8 +40,7 @@
   transform: scale(1.05);
 }
 
-/* Placeholder — RENAMED */
-.event-card-img-placeholder {
+.card-img-placeholder {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, #182F4D 0%, #EBB479 100%);
@@ -57,35 +49,59 @@
   justify-content: center;
 }
 
-/* =============================== */
-/* BADGE */
-/* =============================== */
+/* --- BADGES (UNIFIED GLASS STYLE) --- */
 .card-badge {
   position: absolute;
   top: 12px;
   right: 12px;
   padding: 6px 14px;
-  border-radius: 8px;
+  border-radius: 8px; /* Soft Rectangle */
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  z-index: 10;
+  z-index: 2;
+  
+  /* White Text */
   color: #ffffff;
+  
+  /* Glass Look: No border, No shadow, Blur background */
+  box-shadow: none;
+  border: none;
   backdrop-filter: blur(4px);
 }
 
-.badge-blue { background-color: #1D4ED8; }
-.badge-orange { background-color: #F97316; }
-.badge-purple { background-color: #9333EA; }
-.badge-green { background-color: #10B981; }
-.badge-yellow { background-color: #FACC15; }
-.badge-red { background-color: #EF4444; }
-.badge-gray { background-color: #6B7280; }
+/* BADGE COLORS mapped to OFFICIAL PALETTE 
+   All set to 0.6 (60%) opacity for "Glass" look 
+*/
 
-/* =============================== */
-/* CONTENT */
-/* =============================== */
+.badge-blue { 
+  /* Official Navy (#182F4D) */
+  background-color: rgba(24, 47, 77, 0.6); 
+}
+
+.badge-orange { 
+  /* Official Terracotta (#DF694E) */
+  background-color: rgba(223, 105, 78, 0.6); 
+}
+
+.badge-purple { 
+  /* Official Black (#1A1A1A) - Replaces non-brand Purple */
+  background-color: rgba(26, 26, 26, 0.6); 
+}
+
+.badge-green { 
+  /* Reusing Terracotta (#DF694E) to stay on brand */
+  background-color: rgba(223, 105, 78, 0.6); 
+}
+
+.badge-gray { 
+  /* Official Black (#1A1A1A) */
+  background-color: rgba(26, 26, 26, 0.6); 
+}
+
+
+/* Content Body */
 .card-body {
   padding: 1.5rem;
   display: flex;
@@ -132,14 +148,12 @@
 }
 
 .meta-icon {
-  color: #182F4D;
+  color: #182F4D; 
   opacity: 0.9;
   flex-shrink: 0;
 }
 
-/* =============================== */
-/* BUTTON */
-/* =============================== */
+/* Button Styling */
 .card-btn {
   margin-top: auto;
   width: 100%;
@@ -166,6 +180,10 @@
   filter: brightness(105%);
 }
 
+.card-btn:active {
+  transform: translateY(0);
+}
+
 .card-btn.btn-disabled {
   background: #f1f5f9;
   color: #94a3b8;
@@ -174,16 +192,7 @@
   border: 1px solid #e2e8f0;
 }
 
-/* =============================== */
-/* FEATURED */
-/* =============================== */
-.photo-event-card.featured-card {
-  border: 2px solid #FFCC00;
-  background-color: #FFFBEB;
-  box-shadow: 0 10px 20px rgba(255, 204, 0, 0.15);
-}
-
-.photo-event-card.featured-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 15px 25px rgba(255, 204, 0, 0.25);
+.card-btn.btn-disabled:hover {
+  transform: none;
+  filter: none;
 }
