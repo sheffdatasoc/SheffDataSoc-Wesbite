@@ -52,6 +52,11 @@
   color: white;
 }
 
+.tier-bronze {
+  background: #CD7F32;
+  color: white;
+}
+
 /* Logo Container */
 .partner-logo-container {
   width: 100%;

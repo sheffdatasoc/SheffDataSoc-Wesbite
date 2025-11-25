@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 import PartnerCard from '../components/PartnerCard';
-import { getPartners } from '../lib/supabase';   // <-- Correct path
+import { getPartners } from '../lib/supabase';
 import './About.css';
 
 function About() {
@@ -18,7 +18,7 @@ function About() {
   useEffect(() => {
     async function load() {
       const data = await getPartners();
-      setPartners(data);
+      setPartners(data || []);
       setLoading(false);
     }
     load();
@@ -64,7 +64,6 @@ function About() {
 
       {/* MISSION / VALUES */}
       <div className="about-cards-grid">
-
         <div className="clean-card">
           <div className="card-icon-box gradient-indigo">
             <Target size={28} />
@@ -72,7 +71,7 @@ function About() {
           <h2>Our Mission</h2>
           <p>
             To empower students through data science education, fostering a
-            community of learners and innovators who will shape the future of technology.
+            community of learners and innovators.
           </p>
         </div>
 
@@ -82,8 +81,7 @@ function About() {
           </div>
           <h2>Our Vision</h2>
           <p>
-            To be the leading student organization in data science, creating
-            opportunities for growth, collaboration, and real-world impact.
+            To be the leading student organization in data science.
           </p>
         </div>
 
@@ -93,11 +91,9 @@ function About() {
           </div>
           <h2>Our Values</h2>
           <p>
-            Innovation, collaboration, inclusivity, and continuous learning drive
-            everything we do as a community.
+            Innovation, collaboration, inclusivity, and continuous learning drive us.
           </p>
         </div>
-
       </div>
 
       {/* WHAT WE DO */}
@@ -111,33 +107,25 @@ function About() {
           <div className="activity-card">
             <div className="activity-icon-box color-purple"><span>🎓</span></div>
             <h3>Workshops & Training</h3>
-            <p>
-              Hands-on workshops covering Python, ML, data viz and more.
-            </p>
+            <p>Hands-on workshops covering Python, ML, data viz and more.</p>
           </div>
 
           <div className="activity-card">
             <div className="activity-icon-box color-blue"><span>🏆</span></div>
             <h3>Competitions</h3>
-            <p>
-              Join hackathons and solve real-world problems.
-            </p>
+            <p>Join hackathons and solve real-world problems.</p>
           </div>
 
           <div className="activity-card">
             <div className="activity-icon-box color-pink"><span>🤝</span></div>
             <h3>Networking Events</h3>
-            <p>
-              Meet professionals, alumni and build connections.
-            </p>
+            <p>Meet professionals, alumni and build connections.</p>
           </div>
 
           <div className="activity-card">
             <div className="activity-icon-box color-yellow"><span>💻</span></div>
             <h3>Projects</h3>
-            <p>
-              Build your portfolio by working on real-world data science projects.
-            </p>
+            <p>Build your portfolio working on real-world data science projects.</p>
           </div>
         </div>
       </section>
@@ -176,7 +164,6 @@ function About() {
             Become a Partner
           </a>
         </div>
-
       </section>
 
       {/* CONTACT */}

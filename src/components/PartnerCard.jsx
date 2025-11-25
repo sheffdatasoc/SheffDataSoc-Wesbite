@@ -1,40 +1,49 @@
-/* ========================================
-   PartnerCard Component
-   /components/PartnerCard.jsx
-   ======================================== */
-
+// /components/PartnerCard.jsx
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import './PartnerCard.css';
 
 function PartnerCard({ name, description, tier, logo, website }) {
+
+  const safeTier = (tier || "Bronze").toLowerCase();
+  const safeName = name || "Partner";
+  const safeDescription = description && description !== "EMPTY" ? description : "";
+  const safeWebsite = website || "#";
+  const safeLogo = logo || "";
+
   return (
     <div className="partner-card">
-      <span className={`partner-tier tier-${tier.toLowerCase()}`}>
-        {tier} Partner
+      <span className={`partner-tier tier-${safeTier}`}>
+        {(tier || "Bronze")} Partner
       </span>
       
       <div className="partner-logo-container">
-        <img 
-          src={logo} 
-          alt={name}
-          className="partner-logo"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="partner-logo-fallback" style={{display: 'none'}}>
-          {name}
+        {safeLogo ? (
+          <img 
+            src={safeLogo}
+            alt={safeName}
+            className="partner-logo"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+        ) : null}
+
+        <div className="partner-logo-fallback" style={{display: safeLogo ? "none" : "flex"}}>
+          {safeName}
         </div>
       </div>
 
-      <h3 className="partner-name">{name}</h3>
-      <p className="partner-description">{description}</p>
+      <h3 className="partner-name">{safeName}</h3>
+
+      {safeDescription && (
+        <p className="partner-description">{safeDescription}</p>
+      )}
       
       <a 
-        href={website} 
-        target="_blank" 
+        href={safeWebsite}
+        target="_blank"
         rel="noopener noreferrer"
         className="partner-link"
       >
