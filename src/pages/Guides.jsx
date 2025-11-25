@@ -1,7 +1,3 @@
-/* ========================================
-   /pages/Guides.jsx
-   ======================================== */
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGuides } from '../hooks/useSupabase';
@@ -15,34 +11,26 @@ function Guides() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
   const categories = [
-    { value: 'all', label: 'All' },
     { value: 'technical', label: 'Technical' },
     { value: 'career', label: 'Career' },
-    { value: 'society', label: 'Society' }
+    { value: 'society', label: 'Society' },
+    { value: 'all', label: 'All' }
   ];
 
-  const difficulties = [
-    { value: 'all', label: 'All' },
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' }
-  ];
-
+  // Filter guides by category + search query only
   const filteredGuides = guides.filter(guide => {
     const categoryMatch =
       selectedCategory === 'all' || guide.category === selectedCategory;
-    const difficultyMatch =
-      selectedDifficulty === 'all' || guide.difficulty === selectedDifficulty;
+
     const searchMatch =
       searchQuery === '' ||
       guide.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guide.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       guide.category?.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return categoryMatch && difficultyMatch && searchMatch;
+
+    return categoryMatch && searchMatch;
   });
 
   const featuredGuides = filteredGuides.filter(g => g.featured);
@@ -106,23 +94,6 @@ function Guides() {
         </div>
       </div>
 
-
-      {/* Difficulty Slider */}
-      <div className="slider-background">
-        <div className="slider-container">
-          {difficulties.map(diff => (
-            <button
-              key={diff.value}
-              onClick={() => setSelectedDifficulty(diff.value)}
-              className={`slider-button ${selectedDifficulty === diff.value ? 'active' : ''}`}
-            >
-              {diff.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-
       {/* Featured Guides */}
       {featuredGuides.length > 0 && (
         <section className="featured-guides">
@@ -160,7 +131,7 @@ function Guides() {
           <p>
             {searchQuery
               ? `No guides found matching "${searchQuery}"`
-              : 'No guides found for the selected filters.'}
+              : 'No guides found for the selected category.'}
           </p>
         </div>
       )}
@@ -169,3 +140,4 @@ function Guides() {
 }
 
 export default Guides;
+
