@@ -67,7 +67,7 @@ function Members() {
     return (
       <div className="members-page">
         <div className="members-header">
-          <h1>Our Community</h1>
+          <h1>Our Team</h1>
           <p>Loading members...</p>
         </div>
       </div>
