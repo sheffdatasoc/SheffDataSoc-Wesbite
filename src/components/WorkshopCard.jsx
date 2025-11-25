@@ -1,7 +1,3 @@
-/* ========================================
-   WorkshopCard.jsx - Updated with flex button container
-   ======================================== */
-
 import React from 'react';
 import './WorkshopCard.css';
 
@@ -34,7 +30,6 @@ function WorkshopCard({ workshop, featured }) {
     if (!minutes) return '';
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-
     if (hours > 0 && mins === 0) return `${hours}hr`;
     return hours > 0 ? `${hours}hr ${mins}min` : `${mins}min`;
   };
@@ -47,8 +42,6 @@ function WorkshopCard({ workshop, featured }) {
 
   return (
     <article className={`workshop-card ${featured ? 'featured-card' : ''}`}>
-      
-      {/* Title + Status */}
       <header className="workshop-card-header">
         <h3 className="workshop-title">{title}</h3>
         {status && (
@@ -61,10 +54,8 @@ function WorkshopCard({ workshop, featured }) {
         )}
       </header>
 
-      {/* Description */}
       <p className="workshop-description">{description}</p>
 
-      {/* Tags */}
       {tags.length > 0 && (
         <div className="workshop-tags">
           {tags.map((tag, index) => (
@@ -73,7 +64,6 @@ function WorkshopCard({ workshop, featured }) {
         </div>
       )}
 
-      {/* Footer */}
       <footer className="workshop-footer">
         {date && <p className="workshop-date">📅 {formatDate(date)}</p>}
         {duration_minutes && (
@@ -85,7 +75,6 @@ function WorkshopCard({ workshop, featured }) {
           </p>
         )}
 
-        {/* Button container - NEW */}
         {materials_url && (
           <div className="workshop-buttons">
             <a
@@ -107,6 +96,7 @@ function WorkshopCard({ workshop, featured }) {
 }
 
 export default WorkshopCard;
+
 
 
 
