@@ -1,6 +1,6 @@
 # SheffDataSoc Wesbite
 
-## 📋 Understanding the Architecture
+## 📋 trying the Architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
