@@ -35,7 +35,8 @@ const DATABASES = {
   glossary: process.env.NOTION_GLOSSARY_DB_ID,
   resources: process.env.NOTION_RESOURCES_DB_ID,
   timeline: process.env.NOTION_TIMELINE_DB_ID,
-  gallery: process.env.NOTION_GALLERY_DB_ID
+  gallery: process.env.NOTION_GALLERY_DB_ID,
+  partners: process.env.NOTION_PARTNERS_DB_ID
 };
 
 
@@ -776,6 +777,53 @@ async function syncGallery() {
   }
 }
 
+// Sync Partners
+async function syncPartners() {
+  try {
+    console.log('Syncing partners...');
+    
+    // Check if database ID is configured
+    if (!DATABASES.partners) {
+      console.log('⚠️  NOTION_PARTNERS_DB_ID not configured in .env file');
+      return { count: 0, data: null, error: 'Database ID not configured' };
+    }
+
+    const pages = await getAllPages(DATABASES.partners);
+
+    const partners = pages
+      .map(page => ({
+        notion_id: page.id,
+        name: extractText(page.properties.Name?.title),
+        description: extractText(page.properties.Description?.rich_text),
+        tier: page.properties.Tier?.select?.name || 'Bronze',
+        logo: extractImageUrl(page.properties.Logo) || extractUrl(page.properties.Logo?.url),
+        website: extractUrl(page.properties.Website?.url),
+        active: page.properties.Active?.checkbox !== false,
+        created_at: page.created_time,
+        updated_at: page.last_edited_time
+      }))
+      .filter(partner => partner.name);
+
+    if (partners.length === 0) {
+      console.log('⚠️  No valid partners found');
+      return { count: 0, data: null };
+    }
+
+    const { data, error } = await supabase
+      .from('partners')
+      .upsert(partners, {
+        onConflict: 'notion_id',
+        ignoreDuplicates: false
+      });
+
+    if (error) throw error;
+    console.log(`✓ Synced ${partners.length} partners`);
+    return { count: partners.length, data };
+  } catch (error) {
+    console.error('Error syncing partners:', error.message);
+    return { count: 0, error: error.message };
+  }
+}
 
 // Main Sync
 async function syncAllData() {
@@ -793,6 +841,7 @@ async function syncAllData() {
     resources: null,
     timeline: null,
     gallery: null,
+    partners: null,
     timestamp: new Date().toISOString()
   };
 
@@ -839,6 +888,10 @@ async function syncAllData() {
       console.log('');
     }
 
+    if (DATABASES.partners) {
+      results.partners = await syncPartners();
+      console.log('');
+    }
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     const totalSynced = Object.values(results)
@@ -868,7 +921,8 @@ module.exports = {
   syncGlossary,
   syncResources,
   syncTimeline,
-  syncGallery
+  syncGallery,
+  syncPartners
 };
 
 
