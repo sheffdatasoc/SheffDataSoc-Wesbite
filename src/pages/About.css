@@ -18,16 +18,14 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  /* Updated: Off-White background */
   background: #F5F5F2 !important;
 }
 
 /* ========================================
-   HERO SECTION - Matching Events Page
+   HERO SECTION
    ======================================== */
 .about-hero {
   position: relative;
-  /* Official Gradient: Navy -> Sand -> Terracotta */
   background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
   color: white;
   text-align: center;
@@ -41,15 +39,11 @@
   display: none; 
 }
 
-/* Hero Badge - Off-White Glass Effect */
 .about-hero .hero-badge {
   display: inline-block;
-  /* Subtle White Glass Background */
   background: rgba(245, 245, 242, 0.15) !important;
   backdrop-filter: blur(4px);
-  /* Text: Official Off-White */
   color: #F5F5F2 !important;
-  /* Border: Removed */
   border: none !important;
   padding: 0.5rem 1.5rem;
   border-radius: 9999px;
@@ -76,7 +70,6 @@
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
-  /* Updated: Off-White */
   color: #F5F5F2 !important;
   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
@@ -109,11 +102,9 @@
 .nav-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
-  /* Updated: Sand border on hover */
   border-color: #EBB479 !important;
 }
 
-/* Gradient Icon Box for Nav */
 .nav-icon-box {
   width: 56px;
   height: 56px;
@@ -135,21 +126,18 @@
 .nav-card-content h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   margin: 0 0 4px 0;
 }
 
 .nav-card-content p {
   font-size: 0.9rem;
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.7;
   margin: 0;
 }
 
 .nav-arrow {
-  /* Updated: Navy */
   color: #182F4D !important;
   opacity: 0.5;
   transition: all 0.2s ease;
@@ -157,7 +145,6 @@
 
 .nav-card:hover .nav-arrow {
   transform: translateX(4px);
-  /* Updated: Terracotta on hover */
   color: #DF694E !important;
   opacity: 1;
 }
@@ -190,11 +177,9 @@
 .clean-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
-  /* Updated: Sand border on hover */
   border-color: #EBB479 !important;
 }
 
-/* Icon Box for Mission Cards */
 .card-icon-box {
   width: 64px;
   height: 64px;
@@ -209,13 +194,11 @@
 .clean-card h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   margin-bottom: 1rem;
 }
 
 .clean-card p {
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.8;
   font-size: 1rem;
@@ -224,34 +207,29 @@
 }
 
 /* ========================================
-   GRADIENT UTILITIES - Updated Palette
+   GRADIENT UTILITIES
    ======================================== */
 .gradient-purple {
-  /* Updated: Navy gradient */
   background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%) !important;
   box-shadow: 0 4px 12px rgba(24, 47, 77, 0.2);
 }
 
 .gradient-blue {
-  /* Updated: Terracotta gradient */
   background: linear-gradient(135deg, #DF694E 0%, #c55a3e 100%) !important;
   box-shadow: 0 4px 12px rgba(223, 105, 78, 0.2);
 }
 
 .gradient-indigo {
-  /* Updated: Sand gradient */
   background: linear-gradient(135deg, #EBB479 0%, #d9a063 100%) !important;
   box-shadow: 0 4px 12px rgba(235, 180, 121, 0.2);
 }
 
 .gradient-cyan {
-  /* Updated: Navy to Terracotta */
   background: linear-gradient(135deg, #182F4D 0%, #DF694E 100%) !important;
   box-shadow: 0 4px 12px rgba(24, 47, 77, 0.2);
 }
 
 .gradient-pink {
-  /* Updated: Terracotta to Sand */
   background: linear-gradient(135deg, #DF694E 0%, #EBB479 100%) !important;
   box-shadow: 0 4px 12px rgba(223, 105, 78, 0.2);
 }
@@ -274,7 +252,6 @@
 }
 
 .what-we-do-header h2 {
-  /* Updated: Navy */
   color: #182F4D !important;
   font-size: 2.5rem;
   font-weight: 700;
@@ -282,7 +259,6 @@
 }
 
 .what-we-do-header p {
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.7;
   font-size: 1.1rem;
@@ -314,7 +290,6 @@
 .activity-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
-  /* Updated: Sand border on hover */
   border-color: #EBB479 !important;
 }
 
@@ -329,34 +304,28 @@
   margin-bottom: 1.5rem;
 }
 
-/* Updated Activity Icon Colors - Using Palette */
 .color-purple { 
-  /* Updated: Light Navy background with Navy icon */
   background-color: rgba(24, 47, 77, 0.1) !important; 
   color: #182F4D !important; 
 }
 
 .color-blue { 
-  /* Updated: Light Terracotta background with Terracotta icon */
   background-color: rgba(223, 105, 78, 0.1) !important; 
   color: #DF694E !important; 
 }
 
 .color-pink { 
-  /* Updated: Light Sand background with Sand icon */
   background-color: rgba(235, 180, 121, 0.15) !important; 
   color: #EBB479 !important; 
 }
 
 .color-yellow { 
-  /* Updated: Off-White background with Navy icon */
   background-color: #F5F5F2 !important; 
   color: #182F4D !important;
   border: 1px solid #EBB479;
 }
 
 .activity-card h3 {
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   font-size: 1.25rem;
   font-weight: 700;
@@ -364,12 +333,100 @@
 }
 
 .activity-card p {
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.8;
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
+}
+
+/* ========================================
+   PARTNERS SECTION
+   ======================================== */
+.partners-section {
+  padding: 0;
+  margin: 0 auto 5rem auto;
+  max-width: 1100px;
+}
+
+.partners-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.partners-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(235, 180, 121, 0.15) 0%, rgba(223, 105, 78, 0.15) 100%);
+  color: #182F4D !important;
+  border: 1px solid rgba(235, 180, 121, 0.3);
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.partners-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1A1A1A !important;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.partners-header p {
+  font-size: 1.1rem;
+  color: #182F4D !important;
+  opacity: 0.7;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.partners-cta {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(24, 47, 77, 0.15);
+  margin: 0 1rem;
+}
+
+.partners-cta p {
+  font-size: 1.15rem;
+  color: #F5F5F2 !important;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.btn-partner-inquiry {
+  display: inline-block;
+  background: white;
+  color: #182F4D !important;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-partner-inquiry:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: #F5F5F2;
 }
 
 /* ========================================
@@ -379,38 +436,35 @@
   padding: 0;
   margin: 0 auto 5rem auto;
   max-width: 1100px;
-  text-align: center;
 }
 
 .get-in-touch-header {
+  text-align: center;
   margin-bottom: 3rem;
   padding: 0 1rem;
 }
 
 .get-in-touch-header h2 {
-  /* Updated: Navy */
-  color: #182F4D !important;
   font-size: 2.5rem;
   font-weight: 700;
+  color: #1A1A1A !important;
   margin-bottom: 1rem;
 }
 
 .get-in-touch-header p {
-  /* Updated: Navy with opacity */
+  font-size: 1.1rem;
   color: #182F4D !important;
   opacity: 0.7;
-  font-size: 1.1rem;
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
-  line-height: 1.5;
 }
 
 .contact-info-card {
   background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   border: 1px solid #e5e7eb;
+  border-radius: 16px;
   padding: 3rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   margin: 0 1rem;
 }
 
@@ -418,84 +472,72 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  align-items: start;
 }
 
 .contact-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
 }
 
 .contact-icon-box {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem auto;
+  color: white;
 }
 
-/* Updated Contact Icon Colors - Using Palette */
-.icon-purple { 
-  /* Updated: Light Navy with Navy icon */
-  background-color: rgba(24, 47, 77, 0.1) !important; 
-  color: #182F4D !important; 
+.icon-purple {
+  background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%);
 }
 
-.icon-blue { 
-  /* Updated: Light Terracotta with Terracotta icon */
-  background-color: rgba(223, 105, 78, 0.1) !important; 
-  color: #DF694E !important; 
+.icon-blue {
+  background: linear-gradient(135deg, #DF694E 0%, #c55a3e 100%);
 }
 
-.icon-pink { 
-  /* Updated: Light Sand with Sand icon */
-  background-color: rgba(235, 180, 121, 0.15) !important; 
-  color: #EBB479 !important; 
+.icon-pink {
+  background: linear-gradient(135deg, #EBB479 0%, #d9a063 100%);
 }
 
 .contact-item h3 {
-  /* Updated: Darkest text */
-  color: #1A1A1A !important;
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: #1A1A1A !important;
   margin-bottom: 0.5rem;
 }
 
 .contact-item p {
-  /* Updated: Navy with opacity */
+  font-size: 0.95rem;
   color: #182F4D !important;
-  opacity: 0.8;
-  font-size: 1rem;
-  line-height: 1.5;
+  opacity: 0.7;
   margin: 0;
+  line-height: 1.6;
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
+   RESPONSIVE
    ======================================== */
 @media (max-width: 768px) {
-  .about-hero { 
-    padding: 3.5rem 1rem; 
-  }
-  
-  .about-hero h1 { 
-    font-size: 2.25rem; 
-  }
-  
-  .about-hero p { 
-    font-size: 1.1rem; 
+  .about-hero h1 {
+    font-size: 2.25rem;
   }
 
-  /* Stack Grids on Mobile */
+  .about-hero p {
+    font-size: 1.1rem;
+  }
+
   .about-nav-cards, 
   .about-cards-grid, 
   .activities-grid, 
+  .partners-grid,
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .partners-grid {
+    gap: 1.25rem;
   }
 
   .contact-info-card {
@@ -503,27 +545,50 @@
     margin: 0 1rem;
   }
 
-  .contact-grid {
-    gap: 2.5rem;
+  .activity-card {
+    padding: 2rem 1.5rem;
   }
-  
+
   .what-we-do-header h2,
+  .partners-header h2,
   .get-in-touch-header h2 {
     font-size: 2rem;
+  }
+
+  .partners-cta {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .partners-cta p {
+    font-size: 1rem;
+  }
+
+  .btn-partner-inquiry {
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 480px) {
-  .about-hero h1 { 
-    font-size: 1.75rem; 
+  .about-hero h1 {
+    font-size: 1.75rem;
   }
-  
-  .about-hero p { 
-    font-size: 1rem; 
+
+  .about-hero p {
+    font-size: 1rem;
   }
-  
+
   .what-we-do-header h2,
+  .partners-header h2,
   .get-in-touch-header h2 {
     font-size: 1.75rem;
+  }
+
+  .partners-header p {
+    font-size: 0.95rem;
+  }
+
+  .partners-cta {
+    padding: 2rem 1rem;
   }
 }

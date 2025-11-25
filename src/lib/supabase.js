@@ -545,6 +545,28 @@ export async function getTimelineEvents() {
   return timelineEvents;
 }
 
+// ============================================================================
+// PARTNERS
+// ============================================================================
+export async function getPartners() {
+  if (!supabase) {
+    console.warn("Supabase not configured, returning empty partners array");
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('partners')
+    .select('*')
+    .order('tier', { ascending: true }); // Platinum > Gold > Silver
+
+  if (error) {
+    console.error("Error fetching partners:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
 
 
 
