@@ -130,6 +130,7 @@ async function syncEvents() {
         max_attendees: page.properties['Max Attendees']?.number || null,
         image_url: extractImageUrl(page.properties.Image),
         registration_url: page.properties['Registration URL']?.url || null,
+        is_featured: page.properties.Featured?.checkbox || false,
         created_at: page.created_time,
         updated_at: page.last_edited_time
       }))
