@@ -24,12 +24,19 @@ function TheSandbox() {
   };
 
 
-  // ⭐ NEW LOGIC: Sort featured first
   const sortItems = (items) => {
     return [...items].sort((a, b) => {
+      // 1️⃣ Featured items first
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;
-      return 0
+
+      // 2️⃣ Workshops (or any item with dates): newest → oldest
+      if (a.date && b.date) {
+        return new Date(b.date) - new Date(a.date);
+      }
+
+      // 3️⃣ No date → leave original order
+      return 0;
     });
   };
 
