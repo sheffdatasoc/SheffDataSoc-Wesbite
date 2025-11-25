@@ -373,6 +373,98 @@
 }
 
 /* ========================================
+   PARTNERS SECTION
+   ======================================== */
+.partners-section {
+  padding: 0;
+  margin: 0 auto 5rem auto;
+  max-width: 1100px;
+}
+
+/* Partners Header */
+.partners-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+.partners-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(235, 180, 121, 0.15) 0%, rgba(223, 105, 78, 0.15) 100%);
+  color: #182F4D !important;
+  border: 1px solid rgba(235, 180, 121, 0.3);
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.partners-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1A1A1A !important;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.partners-header p {
+  font-size: 1.1rem;
+  color: #182F4D !important;
+  opacity: 0.7;
+  max-width: 650px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Partners Grid */
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  padding: 0 1rem;
+}
+
+/* Partners CTA */
+.partners-cta {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(24, 47, 77, 0.15);
+  margin: 0 1rem;
+}
+
+.partners-cta p {
+  font-size: 1.15rem;
+  color: #F5F5F2 !important;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.btn-partner-inquiry {
+  display: inline-block;
+  background: white;
+  color: #182F4D !important;
+  padding: 0.85rem 2rem;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-partner-inquiry:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  background: #F5F5F2;
+}
+
+/* ========================================
    GET IN TOUCH SECTION
    ======================================== */
 .get-in-touch {
@@ -494,8 +586,13 @@
   .about-nav-cards, 
   .about-cards-grid, 
   .activities-grid, 
+  .partners-grid,
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .partners-grid {
+    gap: 1.25rem;
   }
 
   .contact-info-card {
@@ -508,8 +605,22 @@
   }
   
   .what-we-do-header h2,
+  .partners-header h2,
   .get-in-touch-header h2 {
     font-size: 2rem;
+  }
+
+  .partners-cta {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .partners-cta p {
+    font-size: 1rem;
+  }
+
+  .btn-partner-inquiry {
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
   }
 }
 
@@ -523,7 +634,16 @@
   }
   
   .what-we-do-header h2,
+  .partners-header h2,
   .get-in-touch-header h2 {
     font-size: 1.75rem;
+  }
+
+  .partners-header p {
+    font-size: 0.95rem;
+  }
+
+  .partners-cta {
+    padding: 2rem 1rem;
   }
 }

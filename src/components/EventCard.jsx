@@ -72,19 +72,17 @@ function EventCard({
   };
 
   return (
-    <div className="photo-event-card">
-      {/* 1. Image Header */}
-      <div className="card-image-container">
-        {effectiveImage ? (
-          <img src={effectiveImage} alt={title} className="card-img" />
+    <div className={`photo-event-card ${is_featured ? 'featured-card' : ''}`}>
+
+      {/* IMAGE */}
+      <div className="event-card-image">
+        {image_url ? (
+          <img src={image_url} alt={title} className="card-img" />
         ) : (
-          <div className="card-img-placeholder" />
+          <div className="event-card-img-placeholder" />
         )}
-        
-        {/* Type Badge */}
-        <span className={`card-badge ${getBadgeClass(effectiveType)}`}>
-          {effectiveType}
-        </span>
+
+        <span className={`card-badge ${getBadgeClass(type)}`}>{type}</span>
       </div>
 
       {/* 2. Content Body */}
