@@ -2,71 +2,61 @@ import React from 'react';
 import './EventCard.css';
 import { Calendar, Clock, MapPin, Users, Check } from 'lucide-react';
 
-function EventCard({ 
-  // We accept the raw database row props here
-  title, 
-  description, 
-  status, // <--- We need this to check if it's 'past'
-  
-  // Handle Date
-  event_date, 
-  date, 
-  
-  // Handle Time
-  time, 
-  
-  // Handle Location
-  location, 
-  
-  // Handle Type
-  category,
+function EventCard({
+  title,
+  description,
+  status,
+  date,
+  end_date,
+  location,
   type,
-  
-  // Handle Attendees
-  attendees, 
-  
-  // Handle Max Attendees
-  max_attendees, 
-  maxAttendees,
-  
-  // Handle Image URL
-  image_url, 
-  imageUrl,
-  
-  onRegister 
+  attendees,
+  max_attendees,
+  is_featured,      // ✅ FIXED: now defined
+  image_url,
+  registration_url
 }) {
-  
-  // --- 1. NORMALIZE DATA ---
-  const effectiveDate = event_date || date;
-  const effectiveImage = image_url || imageUrl;
-  const effectiveMaxAttendees = max_attendees || maxAttendees;
-  const effectiveType = category || type || 'Event'; 
-
-  // --- 2. LOGIC: CHECK IF EVENT IS PAST ---
-  // We check for 'past' because that is the new rule we added to your database
+  const effectiveMaxAttendees = max_attendees || '∞';
   const isCompleted = status?.toLowerCase() === 'past';
 
-  // --- 3. FORMATTING HELPERS ---
-  const formatDate = (dateString) => {
-    if (!dateString) return 'TBA';
-    try {
-      return new Date(dateString).toLocaleDateString('en-US', { 
-        weekday: 'short', 
-        month: 'short', 
-        day: 'numeric', 
-        year: 'numeric' 
-      });
-    } catch (e) {
-      return dateString;
-    }
+  const formatDate = (dateStr) =>
+    dateStr
+      ? new Date(dateStr).toLocaleDateString('en-GB', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        })
+      : 'TBA';
+
+  const formatTime = (dateStr) => {
+    if (!dateStr || dateStr.length === 10) return null;
+    const d = new Date(dateStr);
+    if (d.getHours() === 0 && d.getMinutes() === 0) return null;
+    return d.toLocaleTimeString("en-GB", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+  const getTimeRange = (start, end) => {
+    const startTime = formatTime(start);
+    const endTime = formatTime(end);
+
+    if (!startTime && !endTime) return "Time TBA";
+    if (startTime && endTime) return `${startTime} – ${endTime}`;
+    if (startTime && !endTime) return `${startTime} – TBA`;
+    if (!startTime && endTime) return `TBA – ${endTime}`;
   };
 
   const getBadgeClass = (eventType) => {
     switch (eventType?.toLowerCase()) {
-      case 'volunteering': return 'badge-green';
+      case 'talk': return 'badge-red';
       case 'competition': return 'badge-orange';
       case 'networking': return 'badge-purple';
       case 'workshop': return 'badge-blue';
+      case 'social': return 'badge-yellow';
       default: return 'badge-gray';
     }
   };
@@ -81,46 +71,46 @@ function EventCard({
         ) : (
           <div className="eventcard-img-placeholder" />
         )}
-        
-        {/* Type Badge */}
-        <span className={`card-badge ${getBadgeClass(effectiveType)}`}>
-          {effectiveType}
+
+        {/* Badge */}
+        <span className={`card-badge ${getBadgeClass(type)}`}>
+          {type}
         </span>
       </div>
 
-      {/* 2. Content Body */}
+      {/* CARD BODY */}
       <div className="card-body">
         <h3 className="card-title">{title}</h3>
         <p className="card-desc">{description}</p>
 
-        {/* Metadata List */}
         <div className="card-meta-list">
           <div className="meta-row">
             <Calendar className="meta-icon" size={18} />
-            <span>{formatDate(effectiveDate)}</span>
+            <span>{formatDate(date)}</span>
           </div>
-          
+
           <div className="meta-row">
             <Clock className="meta-icon" size={18} />
-            <span>{time || 'Time TBA'}</span>
+            <span>{getTimeRange(date, end_date)}</span>
           </div>
-          
+
           <div className="meta-row">
             <MapPin className="meta-icon" size={18} />
             <span>{location || 'Location TBA'}</span>
           </div>
-          
+
           <div className="meta-row">
             <Users className="meta-icon" size={18} />
-            <span>{attendees || 0} / {effectiveMaxAttendees || '∞'} registered</span>
+            <span>{attendees || 0} / {effectiveMaxAttendees} registered</span>
           </div>
         </div>
 
-        {/* 3. Register Button (Updated Logic) */}
-        <button 
-          className={`card-btn ${isCompleted ? 'btn-disabled' : ''}`} 
-          onClick={!isCompleted ? onRegister : undefined}
-          disabled={isCompleted}
+        <button
+          className={`card-btn ${isCompleted ? 'btn-disabled' : ''}`}
+          onClick={() =>
+            !isCompleted && registration_url && window.open(registration_url, '_blank')
+          }
+          disabled={isCompleted || !registration_url}
         >
           {isCompleted ? (
             'Event Ended'
