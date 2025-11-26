@@ -110,24 +110,28 @@
   overflow: hidden;
 }
 
+/* CONTACT & FOOTER ADJUSTMENTS */
 .contact-content {
-  height: 50vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  width: 100%;
+height: auto;       /* remove fixed height */
+min-height: auto;   /* remove min-height restriction */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 2rem;
+width: 100%;
 }
 
 .footer-content {
-  height: 50vh;
-  width: 100%;
-  background: #1a202c; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+height: auto;      /* let content determine height */
+width: 100%;
+background: #1a202c;
+display: flex;
+justify-content: center;
+align-items: flex-start;
+padding: 1rem 0 2rem;   /* optional padding for spacing */
 }
+
 
 /* ========================================
    4. RESPONSIVENESS

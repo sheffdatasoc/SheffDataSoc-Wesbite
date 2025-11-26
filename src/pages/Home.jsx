@@ -7,6 +7,8 @@ import AboutSection from '../components/AboutSection';
 import HomeProjects from '../components/HomeProjects';
 import HomeEvents from '../components/HomeEvents';
 import HomeSocial from '../components/HomeSocial';
+import NewsletterSignup from '../components/NewsletterSignup';
+import HomeContact from '../components/HomeContact';
 import './Home.css';
 
 // Initialize Supabase
@@ -153,17 +155,15 @@ function Home() {
       {/* 5. SOCIAL PREVIEW */}
       <HomeSocial />
 
-      {/* 6. CONTACT + FOOTER */}
-      <section className="contact-preview">
-        <div className="contact-content">
-          <h2>Contact Us</h2>
-          <p>Reach out if you want to join or collaborate!</p>
-        </div>
+      {/* 5. NEWSLETTER SIGNUP */}
+      <NewsletterSignup />
 
-        <div className="footer-content">
-          <Footer />
-        </div>
-      </section>
+      {/* 6. CONTACT + FOOTER */}
+      <HomeContact />
+
+      <div className="footer-content">
+        <Footer />
+      </div>
     </div>
   );
 }
