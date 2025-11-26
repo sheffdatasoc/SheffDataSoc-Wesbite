@@ -12,7 +12,7 @@ function EventCard({
   type,
   attendees,
   max_attendees,
-  is_featured,      // ✅ FIXED: now defined
+  is_featured,
   image_url,
   registration_url
 }) {
@@ -63,7 +63,6 @@ function EventCard({
 
   return (
     <div className={`photo-event-card ${is_featured ? 'featured-card' : ''}`}>
-
       {/* IMAGE */}
       <div className="eventcard-image">
         {image_url ? (
@@ -126,3 +125,4 @@ function EventCard({
 }
 
 export default EventCard;
+

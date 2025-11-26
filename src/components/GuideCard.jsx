@@ -1,13 +1,8 @@
-/* ========================================
-   GuideCard.jsx (FIXED - Removed "btn" class)
-   ======================================== */
-
 import React from 'react';
 import { Clock } from 'lucide-react';
 import './GuideCard.css';
 
 function GuideCard({ guide, onReadMore }) {
-  // --- Match BlogCard's formatted date ---
   const formattedDate = guide.published_date
     ? new Date(guide.published_date).toLocaleDateString('en-GB', {
         day: '2-digit',
@@ -16,15 +11,28 @@ function GuideCard({ guide, onReadMore }) {
       })
     : null;
 
-  // Count contributors from comma-separated author field
-  const contributorCount = guide.author 
-    ? guide.author.split(',').map(a => a.trim()).filter(a => a.length > 0).length 
+  const contributorCount = guide.author
+    ? guide.author.split(',').map(a => a.trim()).filter(a => a.length > 0).length
     : 0;
+
+  // Difficulty color function
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty?.toLowerCase()) {
+      case 'beginner':
+        return '#10b981';
+      case 'intermediate':
+        return '#f59e0b';
+      case 'advanced':
+        return '#ef4444';
+      default:
+        return '#6b7280';
+    }
+  };
 
   return (
     <div className="guide-card">
 
-      {/* Image */}
+      {/* Image with floating difficulty badge */}
       <div className="image-wrapper">
         {guide.image ? (
           <img src={guide.image} alt={guide.title} className="guide-image" />
@@ -33,7 +41,12 @@ function GuideCard({ guide, onReadMore }) {
         )}
 
         {guide.difficulty && (
-          <span className="guide-tag">{guide.difficulty}</span>
+          <span
+            className="guide-difficulty-badge"
+            style={{ backgroundColor: getDifficultyColor(guide.difficulty) }}
+          >
+            {guide.difficulty.toLowerCase()}
+          </span>
         )}
       </div>
 
@@ -44,7 +57,6 @@ function GuideCard({ guide, onReadMore }) {
 
         {onReadMore && (
           <div className="read-more-wrapper">
-            {/* ✅ FIXED: Removed "btn" class */}
             <button className="btn-read-more" onClick={onReadMore}>
               Read Guide
             </button>
@@ -52,11 +64,9 @@ function GuideCard({ guide, onReadMore }) {
         )}
       </div>
 
-      {/* Footer - Horizontal layout with contributor count */}
+      {/* Footer */}
       <div className="guide-footer">
         <div className="guide-meta">
-
-          {/* Contributor Count */}
           {contributorCount > 0 && (
             <div className="guide-contributors">
               <span className="contributor-count">
@@ -65,7 +75,6 @@ function GuideCard({ guide, onReadMore }) {
             </div>
           )}
 
-          {/* Date and Read Time - Side by Side */}
           <div className="guide-meta-right">
             {formattedDate && (
               <div className="guide-date-wrapper">
@@ -73,7 +82,6 @@ function GuideCard({ guide, onReadMore }) {
                 <span className="guide-date">{formattedDate}</span>
               </div>
             )}
-
             {guide.read_time && (
               <div className="guide-readtime">
                 <Clock size={16} className="clock-icon" />
@@ -83,7 +91,6 @@ function GuideCard({ guide, onReadMore }) {
           </div>
         </div>
       </div>
-
     </div>
   );
 }

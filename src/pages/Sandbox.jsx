@@ -5,15 +5,12 @@ import { useProjects, useWorkshops } from '../hooks/useSupabase';
 import { Search, GitBranch, Code2 } from 'lucide-react';
 import './Sandbox.css';
 
-
 function TheSandbox() {
   const { projects, loading: loadingProjects } = useProjects();
   const { workshops, loading: loadingWorkshops } = useWorkshops();
 
-
   const [activeTab, setActiveTab] = useState('projects');
   const [searchQuery, setSearchQuery] = useState('');
-
 
   const filterItems = (items) => {
     if (!searchQuery) return items;
@@ -23,32 +20,27 @@ function TheSandbox() {
     );
   };
 
-
   const sortItems = (items) => {
     return [...items].sort((a, b) => {
       // 1️⃣ Featured items first
       if (a.featured && !b.featured) return -1;
       if (!a.featured && b.featured) return 1;
 
-      // 2️⃣ Workshops (or any item with dates): newest → oldest
+      // 2️⃣ Items with date: newest → oldest
       if (a.date && b.date) {
         return new Date(b.date) - new Date(a.date);
       }
 
-      // 3️⃣ No date → leave original order
       return 0;
     });
   };
 
-
-  // Apply filter + sort to either projects or workshops
+  // Apply filter + sort
   const baseItems = activeTab === 'projects' ? (projects || []) : (workshops || []);
   const filtered = filterItems(baseItems);
   const sorted = sortItems(filtered);
 
-
   const loading = activeTab === 'projects' ? loadingProjects : loadingWorkshops;
-
 
   if (loading) {
     return (
@@ -62,11 +54,8 @@ function TheSandbox() {
     );
   }
 
-
   return (
     <div className="sandbox-page">
-
-
       {/* HERO */}
       <div className="sandbox-hero">
         <span className="hero-badge">💻 Learn by Building</span>
@@ -75,7 +64,6 @@ function TheSandbox() {
           Explore our community projects and workshop materials – all open source and connected to GitHub
         </p>
       </div>
-
 
       {/* SEARCH BAR */}
       <div className="sandbox-search">
@@ -91,7 +79,6 @@ function TheSandbox() {
         </div>
       </div>
 
-
       {/* TABS */}
       <div className="sandbox-tabs">
         <div className="sandbox-tabs-container">
@@ -102,8 +89,6 @@ function TheSandbox() {
             <GitBranch size={20} />
             Projects
           </button>
-
-
           <button
             className={`tab-button ${activeTab === 'workshops' ? 'active' : ''}`}
             onClick={() => setActiveTab('workshops')}
@@ -114,41 +99,39 @@ function TheSandbox() {
         </div>
       </div>
 
-
-      {/* UNIFIED LIST — FEATURED FIRST */}
+      {/* CONTENT */}
       <div className="sandbox-content">
         {sorted.length === 0 ? (
           <div className="empty-state">
             <p>No {activeTab} found {searchQuery && `matching "${searchQuery}"`}</p>
           </div>
-        ) : (
+        ) : activeTab === 'projects' ? (
           <div className="projects-grid">
-            {sorted.map(item =>
-              activeTab === 'projects' ? (
-                <ProjectCard
-                  key={item.id}
-                  project={item}
-                  featured={item.featured}
-                  isSandbox={true}
-                />
-              ) : (
-                <WorkshopCard
-                  key={item.id}
-                  workshop={item}
-                  featured={item.featured}
-                  isSandbox={true}
-                />
-              )
-            )}
+            {sorted.map(project => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                featured={project.featured}
+                isSandbox={true}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="workshops-grid">
+            {sorted.map(workshop => (
+              <WorkshopCard
+                key={workshop.id}
+                workshop={workshop}
+                featured={workshop.featured}
+                isSandbox={true}
+              />
+            ))}
           </div>
         )}
       </div>
-
-
     </div>
   );
 }
-
 
 export default TheSandbox;
 

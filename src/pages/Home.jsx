@@ -5,6 +5,7 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer'; 
 import AboutSection from '../components/AboutSection';
 import HomeProjects from '../components/HomeProjects';
+import HomeEvents from '../components/HomeEvents';
 import './Home.css';
 
 // Initialize Supabase
@@ -146,10 +147,7 @@ function Home() {
       <HomeProjects />
 
       {/* 4. EVENTS PREVIEW */}
-      <section className="events-preview">
-        <h2>Upcoming Events</h2>
-        <p>Workshops, talks, and networking events happening soon.</p>
-      </section>
+      <HomeEvents />
 
       {/* 5. SOCIAL PREVIEW */}
       <section className="social-preview">
