@@ -181,11 +181,53 @@
   transform: translateY(-1px);
 }
 
-/* PAST EVENTS */
+/* -----------------------
+   PAST EVENTS GRID
+   ----------------------- */
 .past-events-grid {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.85rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.65rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
 }
+
+/* Past events cards (gray + dimmed images) */
+.past-events-grid .preview-card {
+  background: #d9d9d9; /* light gray background */
+  border: 1px solid #b0b0b0;
+  min-height: 120px;
+  max-height: 230px;
+  color: #1A1A1A;
+}
+
+/* Gray out the images */
+.past-events-grid .preview-card .preview-image {
+  filter: grayscale(100%) brightness(85%);
+  transition: none; /* optional: disable hover zoom for past events */
+}
+
+.past-events-grid .preview-card:hover .preview-image {
+  transform: none; /* remove hover zoom for past events */
+}
+
+/* Keep text readable */
+.past-events-grid .preview-card .preview-title,
+.past-events-grid .preview-card .preview-date-time,
+.past-events-grid .preview-card .preview-tag {
+  color: #203A5C;
+}
+
+/* Optional: reduce hover effect */
+.past-events-grid .preview-card:hover {
+  transform: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border-color: #b0b0b0;
+}
+
+
 
 /* BUTTONS */
 .events-buttons {

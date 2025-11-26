@@ -7,7 +7,7 @@ const supabase = createClient(
   process.env.REACT_APP_SUPABASE_ANON_KEY
 );
 
-function EventPreviewCard({ event, isOngoing }) {
+function EventPreviewCard({ event, isOngoing, showDescription }) {
   const startDate = new Date(event.date);
   const endDate = event.end_date ? new Date(event.end_date) : null;
 
@@ -35,10 +35,14 @@ function EventPreviewCard({ event, isOngoing }) {
   }
 
   return (
-    <div className="preview-card">
+    <div className={`preview-card ${!isOngoing ? 'past-card' : ''}`}>
       {event.image_url && (
         <div className="preview-image-container">
-          <img src={event.image_url} alt={event.title} className="preview-image" />
+          <img
+            src={event.image_url}
+            alt={event.title}
+            className={`preview-image ${!isOngoing ? 'past-image' : ''}`}
+          />
         </div>
       )}
 
@@ -46,9 +50,15 @@ function EventPreviewCard({ event, isOngoing }) {
 
       <p className="preview-date-time">{displayDate}</p>
 
-      <p className="preview-description">{event.description}</p>
+      {showDescription && (
+        <p className="preview-description">{event.description}</p>
+      )}
 
-      {isOngoing && <span className="preview-tag" style={{ background: '#FFAA33', color: '#1A1A1A' }}>Ongoing</span>}
+      {isOngoing && (
+        <span className="preview-tag" style={{ background: '#FFAA33', color: '#1A1A1A' }}>
+          Ongoing
+        </span>
+      )}
 
       {event.tags && event.tags.length > 0 && (
         <div className="preview-tags">
@@ -116,7 +126,6 @@ function HomeEvents() {
     }
   });
 
-  // Sort past events from most recent to oldest and limit to 3
   past.sort((a, b) => new Date(b.end_date || b.date) - new Date(a.end_date || a.date));
   const recentPast = past.slice(0, 3);
 
@@ -144,7 +153,14 @@ function HomeEvents() {
                     const startDate = new Date(event.date);
                     const endDate = event.end_date ? new Date(event.end_date) : startDate;
                     const isOngoing = startDate <= today && today <= endDate;
-                    return <EventPreviewCard key={event.id} event={event} isOngoing={isOngoing} />;
+                    return (
+                      <EventPreviewCard
+                        key={event.id}
+                        event={event}
+                        isOngoing={isOngoing}
+                        showDescription={true} // Show description only for ongoing/upcoming
+                      />
+                    );
                   })}
                 </div>
               </div>
@@ -153,9 +169,14 @@ function HomeEvents() {
             {recentPast.length > 0 && (
               <div className="content-section">
                 <h3 className="section-subtitle">Past Events</h3>
-                <div className="events-grid">
+                <div className="past-events-grid">
                   {recentPast.map(event => (
-                    <EventPreviewCard key={event.id} event={event} />
+                    <EventPreviewCard
+                      key={event.id}
+                      event={event}
+                      isOngoing={false}
+                      showDescription={false} // Hide description for past
+                    />
                   ))}
                 </div>
               </div>
@@ -177,6 +198,9 @@ function HomeEvents() {
 }
 
 export default HomeEvents;
+
+
+
 
 
 
