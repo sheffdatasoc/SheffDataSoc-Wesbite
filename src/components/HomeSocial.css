@@ -1,0 +1,32 @@
+.home-social {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.social-icons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.social-icons a {
+  font-size: 2rem;
+  transition: transform 0.2s ease;
+  display: inline-flex;
+}
+
+.social-icons a:hover {
+  transform: scale(1.15);
+}
+
+.filled-icon {
+  fill: currentColor;
+}
+
+/* Brand colors */
+.social-icons a.instagram { color: #E1306C; }
+.social-icons a.linkedin { color: #0077B5; }
+.social-icons a.github { color: #333; }
+.social-icons a.twitter { color: #1DA1F2; }
+.social-icons a.facebook { color: #1877F2; }
