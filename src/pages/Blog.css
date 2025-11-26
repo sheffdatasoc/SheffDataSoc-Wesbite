@@ -7,8 +7,57 @@
   flex-direction: column;
   align-items: center;
   padding: 4rem 1.5rem;
-  /* Updated: Use Off-White Background */
   background-color: #F5F5F2; 
+  position: relative;
+}
+
+/* ========================================
+   Scroll to Top Button
+   ======================================== */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #182F4D; /* Navy */
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  z-index: 999;
+  margin-bottom: 0;
+}
+
+/* Stop before footer - adjust when close to bottom */
+@media (min-width: 769px) {
+  .scroll-to-top-btn {
+    bottom: max(2rem, calc(2rem + var(--footer-offset, 0px)));
+  }
+}
+
+.scroll-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top-btn:hover {
+  background: #DF694E; /* Terracotta */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(223, 105, 78, 0.4);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(-2px);
 }
 
 /* Header Section */
@@ -20,13 +69,11 @@
 .blog-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  /* Updated: Use darkest text color from events page */
   color: #1A1A1A; 
   margin-bottom: 0.5rem;
 }
 
 .blog-header p {
-  /* Updated: Use a slightly darker neutral color */
   color: #182F4D; 
   opacity: 0.7;
   font-size: 1.1rem;
@@ -49,7 +96,6 @@
 .search-icon {
   position: absolute;
   left: 1.25rem;
-  /* Updated: Use Navy for subtle icon color */
   color: #182F4D; 
   opacity: 0.6;
   pointer-events: none;
@@ -62,29 +108,24 @@
   border: none;
   border-radius: 12px;
   font-size: 1rem;
-  /* Shadow remains clean white box-shadow */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   background: white;
   transition: all 0.2s ease;
-  /* Updated: Use darkest text color */
   color: #1A1A1A; 
 }
 
 .search-input:focus {
   outline: none;
-  /* Keep shadow effects */
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
-  /* Optional: Add a light highlight border on focus */
   border: 1px solid #EBB479;
 }
 
 .search-input::placeholder {
-  /* Updated: Use a neutral color */
   color: #9ca3af;
 }
 
-/* Blog Grid (No color changes needed here) */
+/* Blog Grid */
 .blog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -96,7 +137,6 @@
 
 .empty-state {
   text-align: center;
-  /* Updated: Use Navy/Dark text for empty state */
   color: #182F4D; 
   margin-top: 2rem;
   font-size: 1.1rem;
@@ -127,6 +167,13 @@
   .search-icon {
     left: 1rem;
   }
+
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -136,5 +183,12 @@
 
   .blog-grid {
     grid-template-columns: 1fr;
+  }
+
+  .scroll-to-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
   }
 }

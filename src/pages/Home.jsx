@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import { ArrowUp } from 'lucide-react';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer'; 
 import AboutSection from '../components/AboutSection';
@@ -12,22 +13,55 @@ const supabase = createClient(
   process.env.REACT_APP_SUPABASE_ANON_KEY
 );
 
-// --- DISTINCT TEST IMAGES ---
 const TEST_IMAGES = [
   "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=1000&auto=format&fit=crop"
 ];
-
 const FALLBACK_IMAGE = TEST_IMAGES[0];
 
 function Home() {
-  // --- HERO IMAGE LOGIC ---
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
-
-  // --- PARTNERS LOGIC ---
   const [partners, setPartners] = useState([]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // Scroll listener with mobile/desktop detection
+  useEffect(() => {
+    const homePageElement = document.querySelector('.home-page');
+    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
+
+    const handleScroll = () => {
+      const scrollTop = isMobile
+        ? window.pageYOffset
+        : homePageElement?.scrollTop || 0;
+
+      setShowScrollTop(scrollTop > 400);
+    };
+
+    const target = isMobile ? window : homePageElement;
+
+    if (target) {
+      target.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial check
+    }
+
+    return () => {
+      if (target) target.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    const homePageElement = document.querySelector('.home-page');
+    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
+
+    if (!isMobile && homePageElement) {
+      homePageElement.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Fetch data
   useEffect(() => {
     async function fetchHeroImages() {
       try {
@@ -43,11 +77,8 @@ function Home() {
           const dbImages = data.map(item => item.image_url);
           const combinedImages = [...dbImages];
 
-          // Ensure at least 3 images
-          let i = 0;
           while (combinedImages.length < 3) {
-            combinedImages.push(TEST_IMAGES[i % TEST_IMAGES.length]);
-            i++;
+            combinedImages.push(TEST_IMAGES[combinedImages.length % TEST_IMAGES.length]);
           }
 
           setHeroImages(combinedImages);
@@ -66,10 +97,7 @@ function Home() {
           .order('tier', { ascending: true });
 
         if (error) throw error;
-
-        if (data) {
-          setPartners(data);
-        }
+        if (data) setPartners(data);
       } catch (err) {
         console.error("Error fetching partners:", err.message);
       }
@@ -87,6 +115,14 @@ function Home() {
 
   return (
     <div className="home-page">
+      {/* Scroll to Top Button */}
+      <button
+        className={`scroll-to-top-btn ${showScrollTop ? 'visible' : ''}`}
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp size={24} />
+      </button>
 
       {/* 1. HERO SECTION */}
       <Hero 
@@ -106,7 +142,7 @@ function Home() {
       {/* 2. ABOUT SECTION */}
       <AboutSection />
 
-      {/* 3 PROJECTS SECTION*/}
+      {/* 3. PROJECTS SECTION */}
       <HomeProjects />
 
       {/* 4. EVENTS PREVIEW */}
@@ -132,7 +168,6 @@ function Home() {
           <Footer />
         </div>
       </section>
-
     </div>
   );
 }

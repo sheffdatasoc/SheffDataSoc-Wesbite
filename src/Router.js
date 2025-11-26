@@ -26,10 +26,8 @@ function AppRouter() {
           <Route path="/events" element={<Events />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
-
           <Route path="/guides" element={<Guides />} />
           <Route path="/guides/:id" element={<GuideDetail />} />
-
           <Route path="/members" element={<Members />} />
           <Route path="/about" element={<About />} />
           <Route path="/timeline" element={<Timeline />} />

@@ -8,18 +8,55 @@
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  position: relative;
 }
 
-/* 2. SCROLL SNAP LOGIC
-   We apply this to ALL sections so they snap to the viewport.
-*/
+/* ========================================
+   SCROLL TO TOP BUTTON
+   ======================================== */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #182F4D; /* Navy */
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, visibility 0.3s ease, background 0.3s ease, transform 0.2s ease;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  z-index: 10000;
+}
 
-/* Standard centered sections (About, Projects, etc.) */
+.scroll-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top-btn:hover {
+  background: #DF694E; /* Terracotta */
+  box-shadow: 0 6px 16px rgba(223, 105, 78, 0.4);
+}
+
+.scroll-to-top-btn:active {
+  transform: scale(0.95);
+}
+
+/* ========================================
+   2. SCROLL SNAP LOGIC
+   ======================================== */
 .home-page section:not(.hero-modern):not(.hero-sandbox) {
   scroll-snap-align: start;
-  min-height: 100vh; /* ← Changed from height to min-height */
-  
-  /* Center content in these sections */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -28,56 +65,53 @@
   padding: 2rem;
 }
 
-/* HERO SECTION OVERRIDE */
 .home-page .hero-modern {
   scroll-snap-align: start;
-  height: 100vh; /* ← Changed from auto to 100vh */
-  min-height: 100vh; /* ← Ensure it fills the viewport */
+  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 0; /* ← Add this */
+  margin-bottom: 0;
+  padding: 6rem 2rem 3rem;
+  background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
+  color: #fff;
 }
-
 
 /* ========================================
    3. INDIVIDUAL SECTION STYLES
    ======================================== */
-
 .about-preview {
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 50%, #ffffff 100%);
+  background: #fff;
   color: #1a1a1a;
 }
 
 .projects-preview {
-  background: linear-gradient(180deg, #FBFCFE 0%, #FBFCFE 50%, #FBFCFE 100%);
-  color: #000000;
+  background: #FBFCFE;
+  color: #000;
 }
 
 .events-preview {
   background: linear-gradient(180deg, #312e81 0%, #1e1b4b 60%, #1e3a8a 100%);
-  color: #ffffff;
+  color: #fff;
 }
 
 .social-preview {
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 40%, #ffffff 100%);
-  color: #000000;
+  background: #fff;
+  color: #000;
 }
 
-/* Contact Section Split Layout */
 .contact-preview {
   background: linear-gradient(180deg, #1e3a8a 0%, #4338ca 60%, #7c3aed 100%);
-  color: #ffffff;
-  
-  /* Split content top/bottom */
+  color: #fff;
   justify-content: space-between; 
-  padding: 0 !important; /* Override default section padding */
+  padding: 0; 
   gap: 0; 
   overflow: hidden;
 }
 
 .contact-content {
-  height: 50vh; /* Top half */
+  height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -87,7 +121,7 @@
 }
 
 .footer-content {
-  height: 50vh; /* Bottom half */
+  height: 50vh;
   width: 100%;
   background: #1a202c; 
   display: flex;
@@ -96,39 +130,54 @@
 }
 
 /* ========================================
-   MOBILE RESPONSIVENESS FIX
+   4. RESPONSIVENESS
    ======================================== */
 @media (max-width: 1024px) {
-
-  /* 1. DISABLE THE SCROLL "TRAP" CONTAINER */
   .home-page {
-    /* Stop forcing the page to be the height of the window */
-    height: auto !important; 
-    
-    /* Let the browser handle scrolling naturally */
-    overflow-y: visible !important; 
-    
-    /* Turn off the "magnet" snapping effect */
-    scroll-snap-type: none !important; 
+    height: auto !important;
+    overflow-y: visible !important;
+    scroll-snap-type: none !important;
   }
 
-  /* 2. UNLOCK SECTION HEIGHTS */
-  /* This ensures sections can grow as tall as they need to fit your content */
   .home-page section,
   .home-page .hero-modern {
-    height: auto !important; 
-    min-height: auto !important; /* Allow them to shrink or grow */
-    scroll-snap-align: none !important; /* Stop trying to snap to top */
-    
-    /* Add natural spacing between sections */
+    height: auto !important;
+    min-height: auto !important;
+    scroll-snap-align: none !important;
     padding-top: 4rem;
-    padding-bottom: 4rem; 
+    padding-bottom: 4rem;
   }
-  
-  /* 3. ENSURE HERO FITS CONTENT */
+
   .home-page .hero-modern {
-     /* Usually needs less padding on mobile than other sections */
-     padding-top: 6rem; /* Account for navbar */
-     padding-bottom: 3rem;
+    padding-top: 6rem;
+    padding-bottom: 3rem;
+  }
+
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+  }
+
+  .home-page section {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .contact-content,
+  .footer-content {
+    height: auto;
+    min-height: 40vh;
+    padding: 1rem;
   }
 }
