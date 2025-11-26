@@ -50,7 +50,7 @@ function About() {
           <ArrowRight size={20} className="nav-arrow" />
         </Link>
 
-        <Link to="/team" className="nav-card">
+        <Link to="/members" className="nav-card">
           <div className="nav-icon-box gradient-blue">
             <Users size={24} />
           </div>

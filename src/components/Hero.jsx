@@ -146,7 +146,7 @@ const Hero = ({
       {/* Partner Logo Carousel - Full Width Below Both Columns */}
       {partnersWithLogos.length > 0 && (
         <div className="hero-partner-carousel">
-          <p className="partner-carousel-label">Trusted by Industry Leaders</p>
+          <p className="partner-carousel-label" style={{ marginBottom: '30px' }}>Our Trusted Partners</p>
           
           <div className="partner-carousel-wrapper">
             <div 
