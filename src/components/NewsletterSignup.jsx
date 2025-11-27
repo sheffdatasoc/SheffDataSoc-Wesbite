@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
-import './NewsletterSignup.css';
+// ❌ REMOVE: Supabase code is deleted.
 
-// Initialize Supabase
-const supabase = createClient(
-process.env.REACT_APP_SUPABASE_URL,
-process.env.REACT_APP_SUPABASE_ANON_KEY
-);
+// 💡 FIX: Changed './lib/mailchimp' to '../lib/mailchimp'
+// The component moves up one directory (../) to find the 'lib' folder inside 'src/'.
+import { subscribeUser } from '../lib/mailchimp'; 
+import './NewsletterSignup.css';
 
 function NewsletterSignup() {
 const [email, setEmail] = useState('');
@@ -17,50 +15,64 @@ const handleSubmit = async (e) => {
 e.preventDefault();
 
 if (!email) {
-  setStatus('Please enter a valid email.');
-  return;
+    setStatus('Please enter a valid email.');
+    return;
 }
 
 setLoading(true);
 setStatus(null);
 
 try {
-  const { data, error } = await supabase
-    .from('newsletter')
-    .insert([{ email }]);
+    // Calling the abstracted API function.
+    const result = await subscribeUser(email); 
 
-  if (error) {
-    if (error.code === '23505') {
-      setStatus('This email is already subscribed.');
-    } else {
-      console.error('Supabase error:', error);
-      setStatus('Error subscribing. Please try again.');
-    }
-  } else {
-    setStatus('Thank you for subscribing!');
-    setEmail('');
-    console.log('Inserted data:', data);
-  }
+    if (result.success) {
+        // The message is now reliably coming from the backend.
+        
+        // 1. Handle the custom 'Already Subscribed' message for better UX
+        if (result.message.includes('already subscribed')) {
+            setStatus('👋 You are already subscribed!');
+        } else {
+            // 2. Handle the successful creation/update message
+            setStatus('✅ Thank you for subscribing!');
+            setEmail('');
+        }
+    } else {
+        // Handle failure message returned from the API gateway
+        console.error('API Subscription Error:', result.message);
+        setStatus(`❌ Error subscribing: ${result.message}`);
+    }
 } catch (err) {
-  console.error('Unexpected error:', err);
-  setStatus('Error subscribing. Please try again.');
+    console.error('Unexpected frontend error:', err);
+    setStatus('⚠️ An unexpected error occurred. Please try again.');
 } finally {
-  setLoading(false);
+    setLoading(false);
 }
 
 };
 
-return ( <section className="newsletter-signup"> <div className="newsletter-content"> <h2>✉️ Stay in the Loop</h2> <p>Subscribe to our newsletter for the latest updates on events, workshops, and opportunities in the data science community.</p> <form onSubmit={handleSubmit} className="newsletter-form">
-<input
-type="email"
-placeholder="Enter your email"
-value={email}
-onChange={(e) => setEmail(e.target.value)}
-required
-disabled={loading}
-/> <button type="submit" disabled={loading}>
-{loading ? 'Submitting...' : 'Subscribe'} </button> </form>
-{status && <p className="newsletter-status">{status}</p>} <p className="newsletter-note">We respect your privacy. Unsubscribe at any time.</p> </div> </section>
+return ( 
+    <section className="newsletter-signup"> 
+        <div className="newsletter-content"> 
+            <h2>✉️ Stay in the Loop</h2> 
+            <p>Subscribe to our newsletter for the latest updates on events, workshops, and opportunities in the data science community.</p> 
+            <form onSubmit={handleSubmit} className="newsletter-form">
+                <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                /> 
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Subscribe'} 
+                </button> 
+            </form>
+            {status && <p className="newsletter-status">{status}</p>} 
+            <p className="newsletter-note">We respect your privacy. Unsubscribe at any time.</p> 
+        </div> 
+    </section>
 );
 }
 
