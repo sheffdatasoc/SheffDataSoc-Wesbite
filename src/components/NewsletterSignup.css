@@ -1,60 +1,147 @@
+/* ========================================
+   FULL-WIDTH NEWSLETTER WITH PURPLE-PINK GRADIENT BACKGROUND
+   ======================================== */
+/* --- PALETTE REFERENCE ---
+   Light Purple: #CE93D8
+   Medium Purple: #BA68C8
+   Soft Pink: #F48FB1
+   Text: #1A1A1A
+*/
+.newsletter-signup-section {
+  scroll-snap-align: start;
+  min-height: 60vh; /* using main's better min-height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Purple → Pink Gradient Background */
+  background: linear-gradient(
+    180deg,
+    #CE93D8 0%,   /* Light purple */
+    #BA68C8 50%,  /* Medium purple */
+    #F48FB1 100%  /* Soft pink */
+  ) !important;
+  color: #1A1A1A !important;
+  padding: 4rem 2rem 2rem;
+  width: 100%;
+  position: relative;
+}
+
 .newsletter-signup {
-display: flex;
-justify-content: center;
-align-items: center; /* vertically center content */
-min-height: 60vh; /* adjusts height on large screens */
-padding: 2rem 1rem;
-background-color: #f8f9fa;
-text-align: center;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent; /* keep gradient visible */
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
 }
 
 .newsletter-content {
-max-width: 600px;
-width: 100%;
-border-radius: 12px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 12px;
 }
 
-.newsletter-signup h2 {
-font-size: 1.8rem;
-margin-bottom: 1rem;
+.newsletter-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #1A1A1A; /* Dark text over gradient */
 }
 
-.newsletter-signup p {
-margin-bottom: 1rem;
+.newsletter-content p {
+  font-size: 1rem;
+  color: #1A1A1A; /* Dark text over gradient */
+  margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
+/* Form styling */
 .newsletter-form {
-display: flex;
-justify-content: center;
-gap: 0.5rem;
-flex-wrap: wrap;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
-.newsletter-form input {
-padding: 0.75rem 1.25rem; /* taller input */
-border-radius: 6px;
-border: 1px solid #ccc;
-flex: 1 1 300px; /* wider on larger screens */
-font-size: 1.1rem; /* larger text */
+/* Email input - combining both approaches */
+.newsletter-form input[type="email"] {
+  flex: 1 1 450px; /* Maya's longer width */
+  padding: 0.75rem 1.25rem; /* main's better padding */
+  font-size: 1.1rem; /* main's larger text */
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
+.newsletter-form input[type="email"]:focus {
+  border-color: #0056b3;
+}
+
+/* Buttons */
 .newsletter-form button {
-padding: 0.75rem 2rem; /* taller and wider button */
-border-radius: 6px;
-border: none;
-background-color: #007bff;
-color: white;
-cursor: pointer;
-font-size: 1.1rem; /* larger text */
+  padding: 0.75rem 2rem; /* main's better padding */
+  font-size: 1.1rem; /* main's larger text */
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.newsletter-form button:not(.unsubscribe-btn) {
+  background-color: #007bff;
+  color: white;
+}
+
+.newsletter-form button:not(.unsubscribe-btn):hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.unsubscribe-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.unsubscribe-btn:hover:not(:disabled) {
+  background-color: #a71d2a;
+}
+
+.newsletter-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
 }
 
 .newsletter-status {
-margin-top: 0.5rem;
-font-weight: bold;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.newsletter-status.success {
+  color: #28a745;
+  background-color: #d4edda;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.newsletter-status.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  padding: 0.5rem;
+  border-radius: 6px;
 }
 
 .newsletter-note {
-margin-top: 0.5rem;
-font-size: 0.85rem;
-color: #666;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #1A1A1A;
 }

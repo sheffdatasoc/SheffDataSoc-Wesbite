@@ -1,6 +1,23 @@
+/* ========================================
+   HOME SOCIAL MEDIA SECTION - LIGHT COLOR SCHEME
+   ======================================== */
+
 .home-social {
   text-align: center;
   padding: 2rem 1rem;
+
+  /* Soft pastel gradient background */
+  background: linear-gradient(
+    180deg,
+    #D9CAB3 0%,   /* Warm Beige */
+    #B5CBB7 50%,  /* Sage Green */
+    #A3BFD9 100%  /* Muted Blue-Grey */
+
+  );
+
+  /* Rounded edges and subtle shadow for style */
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
 .social-icons {
@@ -12,12 +29,14 @@
 
 .social-icons a {
   font-size: 2rem;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
   display: inline-flex;
 }
 
+/* Hover effect: subtle scale and glow */
 .social-icons a:hover {
   transform: scale(1.15);
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.2));
 }
 
 .filled-icon {
@@ -30,3 +49,4 @@
 .social-icons a.github { color: #333; }
 .social-icons a.twitter { color: #1DA1F2; }
 .social-icons a.facebook { color: #1877F2; }
+
