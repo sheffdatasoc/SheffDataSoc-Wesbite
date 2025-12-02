@@ -1,22 +1,19 @@
 /* ========================================
    FULL-WIDTH NEWSLETTER WITH PURPLE-PINK GRADIENT BACKGROUND
    ======================================== */
-
 /* --- PALETTE REFERENCE ---
    Light Purple: #CE93D8
    Medium Purple: #BA68C8
    Soft Pink: #F48FB1
    Text: #1A1A1A
 */
-
 .newsletter-signup-section {
   scroll-snap-align: start;
-  min-height: 50vh;
+  min-height: 60vh; /* using main's better min-height */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   /* Purple → Pink Gradient Background */
   background: linear-gradient(
     180deg,
@@ -24,9 +21,7 @@
     #BA68C8 50%,  /* Medium purple */
     #F48FB1 100%  /* Soft pink */
   ) !important;
-
   color: #1A1A1A !important;
-
   padding: 4rem 2rem 2rem;
   width: 100%;
   position: relative;
@@ -43,15 +38,19 @@
   padding: 2rem 1rem;
   margin: 0 auto;
   font-family: 'Arial', sans-serif;
+  text-align: center;
 }
 
 .newsletter-content {
   text-align: center;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 12px;
 }
 
 .newsletter-content h2 {
   font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   color: #1A1A1A; /* Dark text over gradient */
 }
 
@@ -71,11 +70,11 @@
   margin-bottom: 1rem;
 }
 
-/* Slightly longer search bar */
+/* Email input - combining both approaches */
 .newsletter-form input[type="email"] {
-  flex: 0 1 450px;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
+  flex: 1 1 450px; /* Maya's longer width */
+  padding: 0.75rem 1.25rem; /* main's better padding */
+  font-size: 1.1rem; /* main's larger text */
   border: 1px solid #007bff;
   border-radius: 8px;
   outline: none;
@@ -88,8 +87,8 @@
 
 /* Buttons */
 .newsletter-form button {
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.75rem 2rem; /* main's better padding */
+  font-size: 1.1rem; /* main's larger text */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -122,7 +121,9 @@
 
 .newsletter-status {
   font-size: 0.95rem;
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 .newsletter-status.success {
@@ -140,6 +141,7 @@
 }
 
 .newsletter-note {
+  margin-top: 0.5rem;
   font-size: 0.85rem;
   color: #1A1A1A;
 }

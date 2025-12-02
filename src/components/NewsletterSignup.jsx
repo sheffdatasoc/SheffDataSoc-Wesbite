@@ -8,19 +8,20 @@ function NewsletterSignup() {
   const [loading, setLoading] = useState(false);
   const [exists, setExists] = useState(false);
 
-  // Optional: Debounce email checking (can add your logic here)
+  // Optional: Debounce email checking
   useEffect(() => {
     if (!email) {
       setExists(false);
       return;
     }
-    // Example: simple status reset
+    // Simple status reset when email changes
     setStatus(null);
   }, [email]);
 
-  // ✅ Async form submission handler
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent page reload
+  // Async form submission handler
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload
+    
     if (!email) {
       setStatus('Please enter a valid email.');
       return;
@@ -32,13 +33,15 @@ function NewsletterSignup() {
     try {
       // Call the Mailchimp API function
       const result = await subscribeUser(email);
-
+      
       if (result.success) {
         if (result.message.includes('already subscribed')) {
           setStatus('👋 You are already subscribed!');
+          setExists(true);
         } else {
           setStatus('✅ Thank you for subscribing!');
           setEmail(''); // Clear the input
+          setExists(false);
         }
       } else {
         console.error('API Subscription Error:', result.message);
