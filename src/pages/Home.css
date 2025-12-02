@@ -1,187 +1,246 @@
 /* ========================================
-   /pages/Home.css
+   /pages/Home.css – Balanced sections & visible footer with fade-in
    ======================================== */
 
-/* 1. Main Scroll Container */
+/* ----------------------------------------
+   Main home page scroll container
+   ---------------------------------------- */
 .home-page {
-  height: calc(var(--vh, 1vh) * 100);
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
-  position: relative;
+  scroll-behavior: smooth;          /* smooth scroll between sections */
+  overflow-y: auto;
+  min-height: 100vh;
+  scroll-padding-top: 0;
+  -webkit-overflow-scrolling: touch; /* momentum scroll for iOS */
 }
 
-/* ========================================
-   SCROLL TO TOP BUTTON
-   ======================================== */
-.scroll-to-top-btn {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #182F4D; /* Navy */
-  color: #fff;
-  border: none;
-  box-shadow: 0 4px 12px rgba(24, 47, 77, 0.3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.3s ease, visibility 0.3s ease, background 0.3s ease, transform 0.2s ease;
+/* ----------------------------------------
+   Section fade-in on scroll
+   ---------------------------------------- */
+/* Sections start invisible and slide up */
+.home-page section {
   opacity: 0;
-  visibility: hidden;
   transform: translateY(20px);
-  z-index: 10000;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-.scroll-to-top-btn.visible {
+/* Fade-in when visible */
+.home-page section.visible {
   opacity: 1;
-  visibility: visible;
   transform: translateY(0);
 }
 
-.scroll-to-top-btn:hover {
-  background: #DF694E; /* Terracotta */
-  box-shadow: 0 6px 16px rgba(223, 105, 78, 0.4);
+
+/* ----------------------------------------
+   Hero & About sections – still prominent
+   ---------------------------------------- */
+.hero-modern,
+.about-preview {
+  height: 90vh;
+  min-height: 90vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 
-.scroll-to-top-btn:active {
-  transform: scale(0.95);
+/* ----------------------------------------
+   Projects & Events – slightly smaller
+   ---------------------------------------- */
+.projects-preview,
+.events-preview {
+  height: 55vh;       /* smaller to give space to Contact */
+  min-height: 55vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
 }
 
-/* ========================================
-   2. SCROLL SNAP LOGIC
-   ======================================== */
-.home-page section:not(.hero-modern):not(.hero-sandbox) {
-  scroll-snap-align: start;
-  min-height: 100vh;
+/* ----------------------------------------
+   Social & Newsletter – auto-fit content
+   ---------------------------------------- */
+.social-preview,
+.newsletter-signup {
+  min-height: fit-content;
+  padding: 3rem 1.5rem;
+}
+
+/* ----------------------------------------
+   Contact – larger for visibility
+   ---------------------------------------- */
+.contact-preview {
+  min-height: 70vh;      /* focus on Contact section */
+  padding: 4rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
+  color: #ffffff;
   text-align: center;
-  padding: 2rem;
 }
 
-.home-page .hero-modern {
-  scroll-snap-align: start;
-  height: 100vh;
-  min-height: 100vh;
+.contact-content {
+  max-width: 1400px;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  margin-bottom: 0;
-  padding: 6rem 2rem 3rem;
-  background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
-  color: #fff;
+  gap: 1rem;
+  z-index: 1;
+  text-align: center;
 }
 
-/* ========================================
-   3. INDIVIDUAL SECTION STYLES
-   ======================================== */
-.about-preview {
-  background: #fff;
-  color: #1a1a1a;
+.contact-content h2 {
+  font-size: 2.3rem;
+  margin-bottom: 1rem;
+  color: #FFD966; /* golden highlight for heading */
 }
 
-.projects-preview {
-  background: #FBFCFE;
-  color: #000;
+.contact-content p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #f0f0f0;
 }
 
-.events-preview {
-  background: linear-gradient(180deg, #312e81 0%, #1e1b4b 60%, #1e3a8a 100%);
-  color: #fff;
+.contact-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
-.social-preview {
-  background: #fff;
-  color: #000;
+.contact-buttons a,
+.contact-buttons button {
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  text-decoration: none;
+  font-weight: bold;
 }
 
-.contact-preview {
-  background: linear-gradient(180deg, #1e3a8a 0%, #4338ca 60%, #7c3aed 100%);
-  color: #fff;
-  justify-content: space-between; 
-  padding: 0; 
-  gap: 0; 
-  overflow: hidden;
+.join-button {
+  background-color: #ffffff;
+  color: #6f42c1;
+  border: none;
 }
 
-/* CONTACT & FOOTER ADJUSTMENTS */
-.contact-content {
-height: auto;       /* remove fixed height */
-min-height: auto;   /* remove min-height restriction */
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-padding: 2rem;
-width: 100%;
+.join-button:hover {
+  background-color: #f0f0f0;
 }
 
+.contact-button {
+  background-color: #4A90E2;
+  color: #ffffff;
+  border: none;
+}
+
+.contact-button:hover {
+  background-color: #357ABD;
+}
+
+/* ----------------------------------------
+   Footer – slim & structured
+   ---------------------------------------- */
 .footer-content {
-height: auto;      /* let content determine height */
-width: 100%;
-background: #1a202c;
-display: flex;
-justify-content: center;
-align-items: flex-start;
-padding: 1rem 0 2rem;   /* optional padding for spacing */
+  scroll-snap-align: none;
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+  background: #1a202c;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 120px;
+}
 
-/* ========================================
-   4. RESPONSIVENESS
-   ======================================== */
+.footer-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.footer-logo-section img {
+  width: 100px;
+  height: auto;
+}
+
+.footer-column h4 {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-column a {
+  color: #fff;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+
+/* ----------------------------------------
+   Responsive adjustments
+   ---------------------------------------- */
 @media (max-width: 1024px) {
-  .home-page {
-    height: auto !important;
-    overflow-y: visible !important;
-    scroll-snap-type: none !important;
-  }
-
-  .home-page section,
-  .home-page .hero-modern {
-    height: auto !important;
-    min-height: auto !important;
-    scroll-snap-align: none !important;
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-  }
-
-  .home-page .hero-modern {
-    padding-top: 6rem;
-    padding-bottom: 3rem;
-  }
-
-  .scroll-to-top-btn {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 50px;
-    height: 50px;
-  }
-}
-
-@media (max-width: 480px) {
-  .scroll-to-top-btn {
-    bottom: 1rem;
-    right: 1rem;
-    width: 48px;
-    height: 48px;
-  }
-
   .home-page section {
-    padding: 1rem;
+    min-height: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 1.5rem;
     gap: 1rem;
   }
 
-  .contact-content,
-  .footer-content {
-    height: auto;
-    min-height: 40vh;
-    padding: 1rem;
+  .footer-logo-section img {
+    width: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-content h2 {
+    font-size: 2rem;
+  }
+  .contact-content p {
+    font-size: 1rem;
+  }
+  .contact-buttons a,
+  .contact-buttons button {
+    font-size: 1rem;
+    padding: 0.65rem 1.8rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .contact-content h2 {
+    font-size: 1.7rem;
+  }
+  .contact-content p {
+    font-size: 0.95rem;
+  }
+  .contact-buttons a,
+  .contact-buttons button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.6rem;
   }
 }
