@@ -1,6 +1,6 @@
 .home-contact {
   background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
-  min-height: 70vh;             /* larger so content/buttons are not cut off */
+  min-height: 30vh;             /* larger so content/buttons are not cut off */
   display: flex;
   flex-direction: column;
   justify-content: center;      /* vertically center content */
@@ -18,7 +18,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;                 /* more spacing between elements */
   z-index: 1;
   text-align: center;
 }

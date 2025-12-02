@@ -1,55 +1,43 @@
 /* ========================================
-   /pages/Home.css – Balanced sections & visible footer with fade-in
+   /pages/Home.css – Balanced sections & fade-in
    ======================================== */
 
-/* ----------------------------------------
-   Main home page scroll container
-   ---------------------------------------- */
+/* Main page scroll */
 .home-page {
-  scroll-behavior: smooth;          /* smooth scroll between sections */
+  scroll-behavior: smooth;
   overflow-y: auto;
   min-height: 100vh;
   scroll-padding-top: 0;
-  -webkit-overflow-scrolling: touch; /* momentum scroll for iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
-/* ----------------------------------------
-   Section fade-in on scroll
-   ---------------------------------------- */
-/* Sections start invisible and slide up */
+/* Fade-in animation */
 .home-page section {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-/* Fade-in when visible */
 .home-page section.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-
-/* ----------------------------------------
-   Hero & About sections – still prominent
-   ---------------------------------------- */
+/* Hero & About */
 .hero-modern,
 .about-preview {
   height: 90vh;
   min-height: 90vh;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
 }
 
-/* ----------------------------------------
-   Projects & Events – slightly smaller
-   ---------------------------------------- */
+/* Projects & Events */
 .projects-preview,
 .events-preview {
-  height: 55vh;       /* smaller to give space to Contact */
+  height: 55vh;
   min-height: 55vh;
   display: flex;
   justify-content: center;
@@ -57,9 +45,7 @@
   padding: 2rem;
 }
 
-/* ----------------------------------------
-   Social & Newsletter – auto-fit content
-   ---------------------------------------- */
+/* Social & Newsletter */
 .social-preview,
 .newsletter-signup {
   min-height: fit-content;
@@ -67,61 +53,55 @@
 }
 
 /* ----------------------------------------
-   Contact – larger for visibility
+   CONTACT SECTION (same height as social/newsletter)
    ---------------------------------------- */
 .contact-preview {
-  min-height: 70vh;      /* focus on Contact section */
-  padding: 4rem 2rem;
+  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
+  min-height: fit-content;     /* unified height */
+  padding: 3rem 1.5rem;        /* same as social/newsletter */
+
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
-  color: #ffffff;
   text-align: center;
+  color: #ffffff;
 }
 
 .contact-content {
-  max-width: 1400px;
+  max-width: 1000px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  gap: 1rem;
-  z-index: 1;
-  text-align: center;
+  gap: 1.25rem;
 }
 
 .contact-content h2 {
-  font-size: 2.3rem;
-  margin-bottom: 1rem;
-  color: #FFD966; /* golden highlight for heading */
+  font-size: 2.2rem;
+  color: #FFD966;
 }
 
 .contact-content p {
   font-size: 1.1rem;
-  margin-bottom: 1.5rem;
-  color: #f0f0f0;
+  line-height: 1.4;
 }
 
 .contact-buttons {
   display: flex;
-  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  justify-content: center;
 }
 
 .contact-buttons a,
 .contact-buttons button {
-  padding: 0.75rem 2rem;
+  padding: 0.7rem 2rem;
   border-radius: 6px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  text-decoration: none;
+  font-size: 1.05rem;
   font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  text-decoration: none;
 }
 
 .join-button {
@@ -144,103 +124,21 @@
   background-color: #357ABD;
 }
 
-/* ----------------------------------------
-   Footer – slim & structured
-   ---------------------------------------- */
-.footer-content {
-  scroll-snap-align: none;
-  height: auto;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.5rem 2rem;
-  background: #1a202c;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.footer-column {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-width: 120px;
-}
-
-.footer-logo-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-.footer-logo-section img {
-  width: 100px;
-  height: auto;
-}
-
-.footer-column h4 {
-  color: #fff;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.footer-column a {
-  color: #fff;
-  font-size: 0.9rem;
-  text-decoration: none;
-}
-
-.footer-column a:hover {
-  text-decoration: underline;
-}
-
-/* ----------------------------------------
-   Responsive adjustments
-   ---------------------------------------- */
+/* Responsiveness */
 @media (max-width: 1024px) {
   .home-page section {
     min-height: auto;
     padding-top: 2rem;
     padding-bottom: 2rem;
   }
-
-  .footer-content {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem 1.5rem;
-    gap: 1rem;
-  }
-
-  .footer-logo-section img {
-    width: 80px;
-  }
 }
 
 @media (max-width: 768px) {
-  .contact-content h2 {
-    font-size: 2rem;
-  }
-  .contact-content p {
-    font-size: 1rem;
-  }
-  .contact-buttons a,
-  .contact-buttons button {
-    font-size: 1rem;
-    padding: 0.65rem 1.8rem;
-  }
+  .contact-content h2 { font-size: 2rem; }
+  .contact-content p { font-size: 1rem; }
 }
 
 @media (max-width: 375px) {
-  .contact-content h2 {
-    font-size: 1.7rem;
-  }
-  .contact-content p {
-    font-size: 0.95rem;
-  }
-  .contact-buttons a,
-  .contact-buttons button {
-    font-size: 0.95rem;
-    padding: 0.6rem 1.6rem;
-  }
+  .contact-content h2 { font-size: 1.7rem; }
+  .contact-content p { font-size: 0.95rem; }
 }

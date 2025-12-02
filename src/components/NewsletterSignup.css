@@ -1,62 +1,92 @@
-/* Page should take only half the screen height */
-.newsletter-signup {
-  min-height: 50vh;       /* <<< KEY FIX */
-  height: auto;
+/* ========================================
+   FULL-WIDTH NEWSLETTER WITH PURPLE-PINK GRADIENT BACKGROUND
+   ======================================== */
 
+/* --- PALETTE REFERENCE ---
+   Light Purple: #CE93D8
+   Medium Purple: #BA68C8
+   Soft Pink: #F48FB1
+   Text: #1A1A1A
+*/
+
+.newsletter-signup-section {
+  scroll-snap-align: start;
+  min-height: 50vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  /* Purple → Pink Gradient Background */
+  background: linear-gradient(
+    180deg,
+    #CE93D8 0%,   /* Light purple */
+    #BA68C8 50%,  /* Medium purple */
+    #F48FB1 100%  /* Soft pink */
+  ) !important;
+
+  color: #1A1A1A !important;
+
+  padding: 4rem 2rem 2rem;
+  width: 100%;
+  position: relative;
+}
+
+.newsletter-signup {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
   flex-direction: column;
-
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-  max-width: 600px;
-  margin: 2rem auto;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent; /* keep gradient visible */
+  padding: 2rem 1rem;
+  margin: 0 auto;
   font-family: 'Arial', sans-serif;
 }
 
-
 .newsletter-content {
-  width: 100%;
   text-align: center;
 }
 
 .newsletter-content h2 {
   font-size: 1.8rem;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #1A1A1A; /* Dark text over gradient */
 }
 
 .newsletter-content p {
   font-size: 1rem;
-  color: #555;
+  color: #1A1A1A; /* Dark text over gradient */
   margin-bottom: 1rem;
+  line-height: 1.5;
 }
 
+/* Form styling */
 .newsletter-form {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 }
 
+/* Slightly longer search bar */
 .newsletter-form input[type="email"] {
-  flex: 1;
+  flex: 0 1 450px;
   padding: 0.6rem 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #007bff;
   border-radius: 8px;
   outline: none;
   transition: border-color 0.2s;
 }
 
 .newsletter-form input[type="email"]:focus {
-  border-color: #007bff;
+  border-color: #0056b3;
 }
 
+/* Buttons */
 .newsletter-form button {
   padding: 0.6rem 1.5rem;
   font-size: 1rem;
@@ -66,7 +96,6 @@
   transition: background-color 0.2s;
 }
 
-/* Subscribe button default blue */
 .newsletter-form button:not(.unsubscribe-btn) {
   background-color: #007bff;
   color: white;
@@ -76,7 +105,6 @@
   background-color: #0056b3;
 }
 
-/* Unsubscribe button red */
 .unsubscribe-btn {
   background-color: #dc3545;
   color: white;
@@ -97,7 +125,6 @@
   margin-bottom: 0.5rem;
 }
 
-/* Status colors */
 .newsletter-status.success {
   color: #28a745;
   background-color: #d4edda;
@@ -114,5 +141,5 @@
 
 .newsletter-note {
   font-size: 0.85rem;
-  color: #888;
+  color: #1A1A1A;
 }
