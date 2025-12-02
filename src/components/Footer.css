@@ -1,11 +1,176 @@
-/* ========================================
-   Footer.css
-   ======================================== */
+.footer-container {
+  width: 100%;
+  background: #0f172a; /* Darker, matching hero */
+  color: #e2e8f0;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 
-.footer {
-  background: #1a1a2e;
-  color: white;
+/* Centered max-width like hero section */
+.footer-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* Horizontal layout */
+  flex-wrap: wrap;               /* Wrap on smaller widths */
+  gap: 2rem;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 180px; /* ensures columns don't get too narrow */
+}
+
+/* Brand Section */
+.footer-brand {
+  max-width: 270px;
+}
+
+.footer-logo {
+  width: 80px;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.footer-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.footer-description {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #cbd5e1;
+}
+
+/* Headings */
+.footer-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.3px;
+}
+
+/* Links */
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-col a {
+  text-decoration: none;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  transition: 0.2s ease;
+}
+
+.footer-col a:hover {
+  color: #ffffff;
+}
+
+/* Social links */
+.footer-socials a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Join Button */
+.footer-join-btn {
+  background: #df694e;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
   text-align: center;
-  padding: 2rem;
-  margin-top: 4rem;
+  color: white;
+  text-decoration: none;
+  margin-top: 0.3rem;
+  transition: 0.2s;
+  box-shadow: 0 4px 12px rgba(223, 105, 78, 0.35);
+}
+
+.footer-join-btn:hover {
+  background: #c7573f;
+  box-shadow: 0 6px 18px rgba(223, 105, 78, 0.45);
+}
+
+/* Bottom area */
+.footer-bottom {
+  border-top: 1px solid #1e293b;
+  padding-top: 1rem;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* =================================
+   HALF SCREEN & MOBILE ADJUSTMENTS
+================================= */
+@media (max-width: 1024px) {
+  .footer-content-wrapper {
+    justify-content: space-around; /* still horizontal but spaced nicely */
+    gap: 1.5rem;
+  }
+
+  .footer-col {
+    min-width: 150px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-logo {
+    width: 70px;
+  }
+
+  .footer-title {
+    font-size: 1.4rem;
+  }
+
+  .footer-heading {
+    font-size: 1.1rem;
+  }
+
+  .footer-col a {
+    font-size: 0.9rem;
+  }
+
+  .footer-join-btn {
+    padding: 0.6rem 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content-wrapper {
+    flex-direction: column; /* stack vertically only on very small screens */
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    width: 60px;
+  }
+
+  .footer-title {
+    font-size: 1.2rem;
+  }
+
+  .footer-heading {
+    font-size: 1rem;
+  }
+
+  .footer-col a {
+    font-size: 0.85rem;
+  }
+
+  .footer-join-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }

@@ -1,123 +1,110 @@
 .home-contact {
-background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
-min-height: auto;
-height: auto;
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-padding: 40px 20px;
-text-align: center;
-color: #ffffff;
-position: relative;
+  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
+  min-height: 70vh;             /* larger so content/buttons are not cut off */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;      /* vertically center content */
+  align-items: center;
+  padding: 60px 20px;           /* more top/bottom padding */
+  text-align: center;
+  color: #ffffff;
+  position: relative;
 }
 
 .contact-content {
-max-width: 1400px;
-width: 100%;
-display: flex;
-flex-direction: column;
-justify-content: flex-start;
-align-items: center;
-gap: 1rem;
-z-index: 1;
-text-align: center;
+  max-width: 1000px;           /* restrict width for readability */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;                 /* more spacing between elements */
+  z-index: 1;
+  text-align: center;
 }
 
 .contact-content h2 {
-font-size: 2.3rem;
-margin-bottom: 1rem;
-color: #FFD966; /* golden highlight for heading */
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #FFD966;               /* golden highlight for heading */
 }
 
 .contact-content p {
-font-size: 1.1rem;
-margin-bottom: 1.5rem;
-color: #f0f0f0;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #f0f0f0;
+  line-height: 1.5;
 }
 
 .contact-buttons {
-display: flex;
-justify-content: center;
-gap: 1rem;
-flex-wrap: wrap;
-margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
 .contact-buttons a,
 .contact-buttons button {
-padding: 0.75rem 2rem;
-border-radius: 6px;
-font-size: 1.1rem;
-cursor: pointer;
-transition: all 0.2s ease-in-out;
-text-decoration: none;
-font-weight: bold;
+  padding: 0.85rem 2.25rem;   /* slightly bigger for easy click */
+  border-radius: 8px;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .join-button {
-background-color: #ffffff;
-color: #6f42c1;
-border: none;
+  background-color: #ffffff;
+  color: #6f42c1;
+  border: none;
 }
 
 .join-button:hover {
-background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .contact-button {
-background-color: #4A90E2;
-color: #ffffff;
-border: none;
+  background-color: #4A90E2;
+  color: #ffffff;
+  border: none;
 }
 
 .contact-button:hover {
-background-color: #357ABD;
+  background-color: #357ABD;
 }
 
 /* Footer overlay adjustments */
 .footer-content {
-position: relative;
-z-index: 10;
-margin-top: -3rem;
+  position: relative;
+  z-index: 10;
+  margin-top: -2rem;   /* slight overlap to maintain visual continuity */
 }
 
 .site-footer {
-background: linear-gradient(180deg, #6B5B95 0%, #1A4758 100%);
-color: white;
-text-align: center;
-padding: 1.5rem 2rem;
-border-radius: 12px 12px 0 0;
+  background: linear-gradient(180deg, #6B5B95 0%, #1A4758 100%);
+  color: white;
+  text-align: center;
+  padding: 1.5rem 2rem;
+  border-radius: 12px 12px 0 0;
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 768px) {
-.contact-content h2 {
-font-size: 2rem;
-}
-.contact-content p {
-font-size: 1rem;
-}
-.contact-buttons a,
-.contact-buttons button {
-font-size: 1rem;
-padding: 0.65rem 1.8rem;
-}
+  .contact-content h2 { font-size: 2rem; }
+  .contact-content p { font-size: 1rem; }
+  .contact-buttons a, .contact-buttons button {
+    font-size: 1rem;
+    padding: 0.75rem 2rem;
+  }
 }
 
 @media (max-width: 375px) {
-.contact-content h2 {
-font-size: 1.7rem;
+  .contact-content h2 { font-size: 1.7rem; }
+  .contact-content p { font-size: 0.95rem; }
+  .contact-buttons a, .contact-buttons button {
+    font-size: 0.9rem;
+    padding: 0.65rem 1.6rem;
+  }
 }
-.contact-content p {
-font-size: 0.95rem;
-}
-.contact-buttons a,
-.contact-buttons button {
-font-size: 0.95rem;
-padding: 0.6rem 1.6rem;
-}
-}
-
-
-
