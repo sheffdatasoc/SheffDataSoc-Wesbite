@@ -10,6 +10,7 @@ import HomeSocial from '../components/HomeSocial';
 import NewsletterSignup from '../components/NewsletterSignup';
 import HomeContact from '../components/HomeContact';
 import './Home.css';
+import useSectionFadeIn from '../hooks/useSectionFadeIn';
 
 // Initialize Supabase
 const supabase = createClient(
@@ -25,6 +26,8 @@ const TEST_IMAGES = [
 const FALLBACK_IMAGE = TEST_IMAGES[0];
 
 function Home() {
+  useSectionFadeIn();
+  
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
   const [partners, setPartners] = useState([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
