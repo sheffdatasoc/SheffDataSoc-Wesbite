@@ -1,7 +1,3 @@
-/* ========================================
-   /pages/GuideDetail.jsx
-   ======================================== */
-
 import React, { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Clock, Tag, Menu, X, ArrowUp, List } from "lucide-react";
@@ -14,6 +10,8 @@ import remarkParse from "remark-parse";
 import { supabase } from "../lib/supabase";
 import "./GuideDetail.css";
 import "prismjs/themes/prism-tomorrow.css";
+
+import GiscusThemeSwitcher from "../components/GiscusTheme"; // Add theme switcher
 
 function GuideDetail() {
   const { id } = useParams();
@@ -45,7 +43,7 @@ function GuideDetail() {
     fetchGuide();
   }, [id]);
 
-  /* Format published date (same as BlogDetail) */
+  /* Format published date */
   const formattedDate = guide?.published_date
     ? new Date(guide.published_date).toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -140,7 +138,9 @@ function GuideDetail() {
       return (
         <h1 id={id} className="markdown-heading">
           {children}
-          <a href={`#${id}`} className="header-anchor">#</a>
+          <a href={`#${id}`} className="header-anchor">
+            #
+          </a>
         </h1>
       );
     },
@@ -150,7 +150,9 @@ function GuideDetail() {
       return (
         <h2 id={id} className="markdown-heading">
           {children}
-          <a href={`#${id}`} className="header-anchor">#</a>
+          <a href={`#${id}`} className="header-anchor">
+            #
+          </a>
         </h2>
       );
     },
@@ -160,11 +162,39 @@ function GuideDetail() {
       return (
         <h3 id={id} className="markdown-heading">
           {children}
-          <a href={`#${id}`} className="header-anchor">#</a>
+          <a href={`#${id}`} className="header-anchor">
+            #
+          </a>
         </h3>
       );
     },
   };
+
+  /* Inject Giscus comments */
+  useEffect(() => {
+    if (!guide) return;
+    const container = document.getElementById("giscus-container");
+    if (!container) return;
+
+    if (!container.querySelector("iframe")) {
+      const script = document.createElement("script");
+      script.src = "https://giscus.app/client.js";
+      script.async = true;
+      script.crossOrigin = "anonymous";
+      script.setAttribute("data-repo", "sheffdatasoc/SheffDataSoc-Wesbite");
+      script.setAttribute("data-repo-id", "R_kgDOP3f9TQ");
+      script.setAttribute("data-category", "Announcements");
+      script.setAttribute("data-category-id", "DIC_kwDOP3f9Tc4CzUdv");
+      script.setAttribute("data-mapping", "pathname");
+      script.setAttribute("data-strict", "0");
+      script.setAttribute("data-reactions-enabled", "1");
+      script.setAttribute("data-emit-metadata", "0");
+      script.setAttribute("data-input-position", "bottom");
+      script.setAttribute("data-theme", "light");
+      script.setAttribute("data-lang", "en");
+      container.appendChild(script);
+    }
+  }, [guide]);
 
   if (loading) return <div className="guide-detail-page">Loading...</div>;
   if (!guide) return <div className="guide-detail-page">Guide not found.</div>;
@@ -242,7 +272,7 @@ function GuideDetail() {
           <article className="guide-detail-container">
             <h1 className="guide-title">{guide.title}</h1>
 
-            {/* UPDATED META SECTION WITH DATE */}
+            {/* META SECTION */}
             <div className="guide-meta">
               {guide.author && <span>{guide.author}</span>}
               {guide.difficulty && <span>{guide.difficulty}</span>}
@@ -280,6 +310,13 @@ function GuideDetail() {
                 {guide.content}
               </ReactMarkdown>
             </div>
+
+            {/* COMMENTS SECTION */}
+            <div className="comments-section">
+              <h2>Comments</h2>
+              <GiscusThemeSwitcher />
+              <div id="giscus-container"></div>
+            </div>
           </article>
         </div>
       </div>
@@ -288,4 +325,5 @@ function GuideDetail() {
 }
 
 export default GuideDetail;
+
 

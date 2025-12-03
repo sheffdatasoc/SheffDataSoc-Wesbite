@@ -438,6 +438,47 @@
   color: #182F4D !important;
 }
 
+/* ========================================
+   COMMENTS SECTION
+======================================== */
+.comments-section {
+  margin-top: 4rem;
+  padding: 2rem;
+  background: #f9fafb; /* Light background to separate from content */
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.comments-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #182F4D; /* Navy heading */
+}
+
+/* Giscus container */
+#giscus-container {
+  width: 100%;
+  min-height: 200px;
+}
+
+/* Make sure iframe fills container */
+#giscus-container iframe {
+  width: 100% !important;
+  border-radius: 12px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .comments-section {
+    padding: 1.5rem;
+  }
+
+  .comments-section h2 {
+    font-size: 1.5rem;
+  }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .guide-detail-container {
