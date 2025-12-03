@@ -11,7 +11,6 @@ import { supabase } from "../lib/supabase";
 import "./GuideDetail.css";
 import "prismjs/themes/prism-tomorrow.css";
 
-import GiscusThemeSwitcher from "../components/GiscusTheme"; // Add theme switcher
 
 function GuideDetail() {
   const { id } = useParams();
@@ -314,7 +313,6 @@ function GuideDetail() {
             {/* COMMENTS SECTION */}
             <div className="comments-section">
               <h2>Comments</h2>
-              <GiscusThemeSwitcher />
               <div id="giscus-container"></div>
             </div>
           </article>

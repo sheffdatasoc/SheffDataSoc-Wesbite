@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm';
 import rehypePrism from 'rehype-prism-plus';
 import { unified } from "unified";
 import remarkParse from "remark-parse";
-import GiscusThemeSwitcher from '../components/GiscusTheme';
 
 import { getBlogPostById } from '../lib/supabase';
 import './BlogDetail.css';
@@ -207,7 +206,6 @@ function BlogDetail() {
 
         <div className="comments-section">
           <h2>Comments</h2>
-          <GiscusThemeSwitcher />
           <div id="giscus-container"></div>
         </div>
       </article>
