@@ -368,6 +368,43 @@
 .markdown-heading:hover .header-anchor { opacity: 0.5; color: #DF694E; }
 .header-anchor:hover { opacity: 1 !important; color: #182F4D !important; }
 
+/* ========================================
+   Comments Section (Clean Card Style)
+======================================== */
+.comments-section {
+  margin-top: 4rem;
+  padding: 2.5rem 2rem;
+  background: #f8f9fb;              /* soft grey-blue background */
+  border-radius: 14px;               /* subtle rounding */
+  border: 1px solid #e5e7eb;         /* faint outline */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);  /* very soft elevation */
+}
+
+.comments-section h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #182F4D;                    /* navy brand color */
+  border-bottom: 2px solid #e0e0e0;  /* line under heading */
+  padding-bottom: 0.6rem;
+}
+
+.giscus-theme-switcher {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.giscus-theme-switcher select {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .blog-detail-container {

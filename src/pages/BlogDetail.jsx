@@ -204,8 +204,10 @@ function BlogDetail() {
           {post.content && <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypePrism]} components={components}>{post.content}</ReactMarkdown>}
         </div>
 
-        {/* --- Giscus Comments --- */}
-        <div id="giscus-container"></div>
+        <div className="comments-section">
+          <h2>Comments</h2>
+          <div id="giscus-container"></div>
+        </div>
       </article>
     </div>
   );
