@@ -11,7 +11,9 @@ import rehypePrism from 'rehype-prism-plus';
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 
-import { getBlogPostById } from '../lib/supabase';
+import { getBlogPostById, getCommentsByPostId, addComment } from '../lib/supabase';
+import CommentForm from '../components/CommentForm';
+import CommentsList from '../components/CommentsList';
 import './BlogDetail.css';
 import "prismjs/themes/prism-tomorrow.css";
 
@@ -22,6 +24,10 @@ function BlogDetail() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Comments state
+  const [comments, setComments] = useState([]);
+  const [commentsLoading, setCommentsLoading] = useState(true);
   
   // FAB & TOC State
   const [tocOpen, setTocOpen] = useState(false);
@@ -51,6 +57,36 @@ function BlogDetail() {
 
     fetchBlogPost();
   }, [id]);
+
+  /* Fetch Comments */
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        setCommentsLoading(true);
+        const data = await getCommentsByPostId(id);
+        setComments(data);
+      } catch (err) {
+        console.error('Error fetching comments:', err);
+      } finally {
+        setCommentsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchComments();
+    }
+  }, [id]);
+
+  /* Handle new comment */
+  const handleCommentAdded = async (commentData) => {
+    const newComment = {
+      ...commentData,
+      blog_post_id: id
+    };
+    
+    const addedComment = await addComment(newComment);
+    setComments([addedComment, ...comments]);
+  };
 
   /* --- TOC LOGIC START --- */
 
@@ -278,6 +314,12 @@ function BlogDetail() {
               {post.content}
             </ReactMarkdown>
           )}
+        </div>
+
+        {/* Comments Section */}
+        <div className="comments-section">
+          <CommentForm onCommentAdded={handleCommentAdded} />
+          <CommentsList comments={comments} loading={commentsLoading} />
         </div>
       </article>
     </div>

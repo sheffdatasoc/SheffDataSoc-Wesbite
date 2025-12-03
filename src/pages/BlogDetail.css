@@ -368,6 +368,15 @@
 .markdown-heading:hover .header-anchor { opacity: 0.5; color: #DF694E; }
 .header-anchor:hover { opacity: 1 !important; color: #182F4D !important; }
 
+/* ========================================
+   Comments Section
+======================================== */
+.comments-section {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 2px solid #e5e7eb;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .blog-detail-container {

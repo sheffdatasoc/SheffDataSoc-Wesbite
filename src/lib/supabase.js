@@ -103,6 +103,53 @@ export async function getBlogPostBySlug(slug) {
 
 
 // ============================================================================
+// COMMENTS
+// ============================================================================
+
+
+export async function getCommentsByPostId(postId) {
+  if (!supabase) {
+    console.warn('Supabase not configured, returning empty array');
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('comments')
+    .select('*')
+    .eq('blog_post_id', postId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching comments:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+
+export async function addComment(commentData) {
+  if (!supabase) {
+    console.warn('Supabase not configured, cannot add comment');
+    throw new Error('Supabase not configured');
+  }
+
+  const { data, error } = await supabase
+    .from('comments')
+    .insert([commentData])
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error adding comment:', error);
+    throw error;
+  }
+
+  return data;
+}
+
+
+// ============================================================================
 // EVENTS
 // ============================================================================
 
