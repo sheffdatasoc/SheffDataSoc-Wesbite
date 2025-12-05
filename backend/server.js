@@ -78,6 +78,7 @@ const SYNC_SCHEDULE = process.env.SYNC_SCHEDULE || '*/5 * * * *';
 console.log(`\n⏰ Setting up automatic sync: ${SYNC_SCHEDULE}`);
 console.log('   (Every 5 minutes)\n');
 
+/*
 cron.schedule(SYNC_SCHEDULE, async () => {
   console.log(`\n⏰ Scheduled sync triggered at ${new Date().toISOString()}`);
   try {
@@ -86,6 +87,7 @@ cron.schedule(SYNC_SCHEDULE, async () => {
     console.error('Scheduled sync failed:', error);
   }
 });
+*/
 
 // --- Server Startup ---
 
