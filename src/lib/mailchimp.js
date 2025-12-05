@@ -1,7 +1,8 @@
 // src/lib/mailchimp.js
+import config from '../config';
 
 // Define the public API endpoint URL exposed by your Express server (server.js)
-const MAILCHIMP_ENDPOINT = '/api/mailchimp'; 
+const MAILCHIMP_ENDPOINT = `${config.apiUrl}/api/mailchimp`; 
 
 /**
  * Executes a subscription or unsubscription action by calling the secure backend endpoint.
