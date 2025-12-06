@@ -58,23 +58,20 @@ async function getMailchimpMemberStatus(email) {
  * Core function to perform the UPSERT (add or update status) operation on Mailchimp.
  */
 async function processMailchimpAction(email, action, mergeFields = {}) {
-    // Read environment variables
     const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY;
     const MAILCHIMP_AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
     const MAILCHIMP_DATA_CENTER = MAILCHIMP_API_KEY ? MAILCHIMP_API_KEY.split('-')[1] : null;
     const MAILCHIMP_API_URL = MAILCHIMP_DATA_CENTER ? `https://${MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0` : null;
 
-    // Check configuration
     if (!MAILCHIMP_API_URL || !MAILCHIMP_AUDIENCE_ID || !MAILCHIMP_API_KEY) {
         throw new Error("Mailchimp configuration error: API Key or Audience ID missing.");
     }
 
-    // --- 1. CHECK EXISTENCE FIRST ---
+    // --- STEP 1: Check Current Status ---
     const currentStatus = await getMailchimpMemberStatus(email);
     
-    // --- 2. VALIDATION LOGIC (NEW: Catch Unsubscribe Edge Cases) ---
+    // --- STEP 2: Validation Logic ---
     if (action === 'unsubscribe') {
-        // CASE A: Email does not exist
         if (!currentStatus) {
             return { 
                 success: false, 
@@ -82,8 +79,6 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
                 code: 404 
             };
         }
-
-        // CASE B: Email exists, but is ALREADY unsubscribed
         if (currentStatus === 'unsubscribed' || currentStatus === 'cleaned') {
             return { 
                 success: false, 
@@ -93,25 +88,33 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
         }
     }
 
-    // CASE C: Already Subscribed check (Existing Logic)
-    if (currentStatus === 'subscribed' && action === 'subscribe') {
-        return { 
-            success: true, 
-            message: "You are already subscribed!", 
-            code: 200 
-        };
+    if (action === 'subscribe') {
+        if (currentStatus === 'subscribed') {
+            return { 
+                success: true, 
+                message: "You are already subscribed!", 
+                code: 200 
+            };
+        }
     }
 
-    // --- 3. DETERMINE TARGET STATUS ---
+    // --- STEP 3: Determine Target Status (THE FIX IS HERE) ---
     let targetStatus;
     if (action === 'subscribe') {
-        // If currently unsubscribed, use 'pending' to trigger double opt-in
-        targetStatus = (currentStatus === 'unsubscribed') ? 'pending' : 'subscribed';
+        // FIX: If they are 'unsubscribed' OR 'pending', we must set them to 'pending'.
+        // This prevents 'pending' users from bypassing the email check by clicking twice.
+        if (currentStatus === 'unsubscribed' || currentStatus === 'pending') {
+            targetStatus = 'pending';
+        } else {
+            // New users: Default to 'subscribed' (Single Opt-in).
+            // (If you want Double Opt-in for everyone, change this to 'pending')
+            targetStatus = 'subscribed';
+        }
     } else {
         targetStatus = 'unsubscribed';
     }
 
-    // --- 4. PERFORM PUT (Create or Update Status) ---
+    // --- STEP 4: Send PUT Request ---
     const emailHash = hashEmail(email);
     const url = `${MAILCHIMP_API_URL}/lists/${MAILCHIMP_AUDIENCE_ID}/members/${emailHash}`;
     
@@ -132,7 +135,6 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
 
         const data = response.data;
         
-        // Success messages
         let message;
         if (data.status === 'subscribed') {
             message = "Subscription successful!";
@@ -151,15 +153,11 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
     } catch (error) {
         const errorDetail = error.response?.data?.detail || error.message;
         console.error("Mailchimp API Error:", errorDetail);
-        throw new Error(`Mailchimp failed to process request. Error: ${errorDetail}`);
+        throw new Error(`Mailchimp action failed: ${errorDetail}`);
     }
 }
 
-
-// --- Module Exports ---
-module.exports = {
-    processMailchimpAction
-};
+module.exports = { processMailchimpAction };
 
 // ----------------------------------------------------------------------
 // STANDALONE EXECUTION BLOCK (Runs with 'npm run sync:mailchimp')

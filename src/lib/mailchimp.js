@@ -1,16 +1,8 @@
 // src/lib/mailchimp.js
 import config from '../config';
 
-// Define the public API endpoint URL exposed by your Express server
 const MAILCHIMP_ENDPOINT = `${config.apiUrl}/api/mailchimp`; 
 
-/**
- * Executes a subscription or unsubscription action by calling the secure backend endpoint.
- * @param {string} email - The user's email address.
- * @param {'subscribe' | 'unsubscribe'} action - The action to perform.
- * @param {object} [mergeFields={}] - Optional data like { FNAME: '...', LNAME: '...' }.
- * @returns {Promise<{success: boolean, message: string}>}
- */
 async function mailchimpApiRequest(email, action, mergeFields = {}) {
     try {
         const response = await fetch(MAILCHIMP_ENDPOINT, {
@@ -18,7 +10,6 @@ async function mailchimpApiRequest(email, action, mergeFields = {}) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            // The body sends the necessary data to your secure Express endpoint
             body: JSON.stringify({ 
                 email: email, 
                 action: action, 
@@ -26,52 +17,42 @@ async function mailchimpApiRequest(email, action, mergeFields = {}) {
             }),
         });
 
-        // Handle network errors (e.g., server down, 500 error)
-        if (!response.ok) {
+        // 1. Attempt to parse the JSON response first, regardless of status code.
+        //    (Because your backend sends useful JSON even on 404 or 409 errors).
+        let result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            // If parsing fails (e.g. server crashed and sent HTML), fallback to status text
             throw new Error(`Server connection failed with status: ${response.status}`);
         }
 
-        const result = await response.json();
-        
-        // CHECK: If the backend says success: false (e.g. "Email not found"),
-        // we throw an error here so it goes to the catch block below.
-        if (!result.success) {
-            throw new Error(result.message);
+        // 2. Now check if the request failed (HTTP error OR logical error)
+        if (!response.ok || !result.success) {
+            // Prefer the specific message from the backend (e.g., "You are already unsubscribed")
+            if (result && result.message) {
+                throw new Error(result.message);
+            }
+            // Fallback if no message exists
+            throw new Error(`Request failed with status: ${response.status}`);
         }
 
         return result;
 
     } catch (error) {
-        // Log the error and return a standardized failure object to the UI
         console.error(`Mailchimp API Error for ${action}:`, error.message);
-        
-        // This message will be displayed to the user (e.g. "Error: This email address was not found...")
         return { success: false, message: error.message };
     }
 }
 
-
 // --- Exported Functions ---
 
-/**
- * Subscribes a user to Mailchimp.
- * Sends empty strings for FNAME/LNAME to satisfy Mailchimp requirements without user input.
- */
 export async function subscribeUser(email) {
-    // Collect the merge fields, sending empty strings to satisfy Mailchimp's 'Required' settings
-    const mergeFields = {
-        FNAME: '', 
-        LNAME: '' 
-    };
+    const mergeFields = { FNAME: '', LNAME: '' };
     return mailchimpApiRequest(email, 'subscribe', mergeFields);
 }
 
-/**
- * Unsubscribes a user from Mailchimp.
- */
 export async function unsubscribeUser(email) {
-    // Backend handles the specific lookup logic now.
-    // We pass empty mergeFields to match the expected API signature.
     const mergeFields = {}; 
     return mailchimpApiRequest(email, 'unsubscribe', mergeFields);
 }
