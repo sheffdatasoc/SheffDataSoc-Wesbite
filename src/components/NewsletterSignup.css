@@ -9,23 +9,21 @@
 */
 .newsletter-signup-section {
   scroll-snap-align: start;
-  min-height: 60vh; /* using main's better min-height */
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* Purple → Pink Gradient Background */
-  background: linear-gradient(
-    180deg,
-    #CE93D8 0%,   /* Light purple */
-    #BA68C8 50%,  /* Medium purple */
-    #F48FB1 100%  /* Soft pink */
-  ) !important;
+  
+  /* Plain white background */
+  background-color: #ffffff !important;
+  
   color: #1A1A1A !important;
   padding: 4rem 2rem 2rem;
   width: 100%;
   position: relative;
 }
+
 
 .newsletter-signup {
   width: 100%;
@@ -144,4 +142,65 @@
   margin-top: 0.5rem;
   font-size: 0.85rem;
   color: #1A1A1A;
+}
+
+.unsubscribe-link {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #dc3545; /* red */
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.modal-buttons button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+}
+
+.modal-buttons button:first-child:hover {
+  background-color: #a71d2a;
+}
+
+.modal-buttons button:last-child {
+  background-color: #ccc;
+  color: #333;
+  border: none;
+}
+
+.modal-buttons button:last-child:hover {
+  background-color: #999;
 }

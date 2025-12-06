@@ -1,17 +1,17 @@
-// /pages/About.jsx
 import React, { useEffect, useState } from 'react';
+
 import { Link } from 'react-router-dom';
-
-import { 
+import {
   Target, Eye, Heart, Clock, Users, ArrowRight,
-  Mail, MapPin, Phone
+  Mail, MapPin, Instagram
 } from 'lucide-react';
-
 import PartnerCard from '../components/PartnerCard';
-import { getPartners } from '../lib/supabase';
-import './About.css';
 
+import { getPartners } from '../lib/supabase';
+
+import './About.css';
 function About() {
+
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,8 +25,7 @@ function About() {
   }, []);
 
   return (
-    <div className="about-page">
-
+    <div className='About'>
       {/* HERO */}
       <div className="about-hero">
         <span className="hero-badge">About Us</span>
@@ -160,7 +159,12 @@ function About() {
 
         <div className="partners-cta">
           <p>Interested in partnering with us?</p>
-          <a href="mailto:sheffdatasoc@sheffield.ac.uk" className="btn-partner-inquiry">
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=datascience@sheffield.ac.uk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-partner-inquiry"
+          >
             Become a Partner
           </a>
         </div>
@@ -179,7 +183,7 @@ function About() {
             <div className="contact-item">
               <div className="contact-icon-box icon-purple"><Mail size={24} /></div>
               <h3>Email</h3>
-              <p>sheffdatasoc@sheffield.ac.uk</p>
+              <p>datascience@sheffield.ac.uk</p>
             </div>
 
             <div className="contact-item">
@@ -189,9 +193,9 @@ function About() {
             </div>
 
             <div className="contact-item">
-              <div className="contact-icon-box icon-pink"><Phone size={24} /></div>
-              <h3>Phone</h3>
-              <p>(555) 123-4567</p>
+              <div className="contact-icon-box icon-pink"><Instagram size={24} /></div>
+              <h3>Instagram</h3>
+              <p>@sheffdatasoc</p>
             </div>
 
           </div>
@@ -201,5 +205,4 @@ function About() {
     </div>
   );
 }
-
 export default About;

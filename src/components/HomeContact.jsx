@@ -9,7 +9,7 @@ return ( <section className="home-contact"> <div className="contact-content"> <h
          className="join-button"
        >
 Join Now </a> <a
-         href="https://mail.google.com/mail/?view=cm&fs=1&to=sheffdatasoc@sheffield.ac.uk"
+         href="https://mail.google.com/mail/?view=cm&fs=1&to=datascience@sheffield.ac.uk"
          target="_blank"
          rel="noopener noreferrer"
          className="contact-button"

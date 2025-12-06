@@ -1,18 +1,23 @@
 .home-contact {
-  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
-  min-height: 30vh;             /* larger so content/buttons are not cut off */
+  background: linear-gradient(
+    180deg,
+    #EBB479 0%,   /* gold */
+    #F0C28D 50%,  /* light gold */
+    #182F4D 100%  /* dark blue */
+  );
+  color: #182F4D;          /* base dark text for readability */
+  min-height: 30vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;      /* vertically center content */
+  justify-content: center;
   align-items: center;
-  padding: 60px 20px;           /* more top/bottom padding */
+  padding: 60px 20px;
   text-align: center;
-  color: #ffffff;
   position: relative;
 }
 
 .contact-content {
-  max-width: 1000px;           /* restrict width for readability */
+  max-width: 1000px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -25,13 +30,13 @@
 .contact-content h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #FFD966;               /* golden highlight for heading */
+  color: #DF694E;  /* Society accent red-orange for headings */
 }
 
 .contact-content p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
-  color: #f0f0f0;
+  color: #000000;  /* dark blue for main paragraph text for contrast */
   line-height: 1.5;
 }
 
@@ -45,7 +50,7 @@
 
 .contact-buttons a,
 .contact-buttons button {
-  padding: 0.85rem 2.25rem;   /* slightly bigger for easy click */
+  padding: 0.85rem 2.25rem;
   border-radius: 8px;
   font-size: 1.15rem;
   cursor: pointer;
@@ -55,30 +60,30 @@
 }
 
 .join-button {
-  background-color: #ffffff;
-  color: #6f42c1;
+  background-color: #DF694E;  /* accent red-orange button */
+  color: #ffffff;
   border: none;
 }
 
 .join-button:hover {
-  background-color: #f0f0f0;
+  background-color: #EB7B5B;  /* lighter red-orange on hover */
 }
 
 .contact-button {
-  background-color: #4A90E2;
+  background-color: #182F4D;  /* dark blue button */
   color: #ffffff;
   border: none;
 }
 
 .contact-button:hover {
-  background-color: #357ABD;
+  background-color: #2A4970;  /* medium blue on hover */
 }
 
 /* Footer overlay adjustments */
 .footer-content {
   position: relative;
   z-index: 10;
-  margin-top: -2rem;   /* slight overlap to maintain visual continuity */
+  margin-top: -2rem;
 }
 
 .site-footer {
@@ -107,3 +112,4 @@
     padding: 0.65rem 1.6rem;
   }
 }
+
