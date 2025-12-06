@@ -7,7 +7,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* Global Center */
   background: linear-gradient(180deg, #203A5C 0%, #5979A6 50%, #B0C7E8 100%);
   color: #1A1A1A;
   padding: 2rem 1.5rem 1rem;
@@ -21,6 +21,9 @@
   text-align: center;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Ensures children (grid, buttons) are centered */
 }
 
 .events-title {
@@ -33,7 +36,7 @@
 
 .events-subtitle {
   font-size: 1.05rem;
-  color: #A0B8D0; /* slightly darker */
+  color: #A0B8D0; 
   opacity: 0.95;
   margin-bottom: 0.4rem;
   max-width: 800px;
@@ -53,6 +56,7 @@
   margin-left: auto;
   margin-right: auto;
   opacity: 0.95;
+  width: 100%; /* Ensure it spans full width */
 }
 
 .events-grid {
@@ -60,6 +64,7 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 0.65rem;
   max-width: 1200px;
+  width: 100%; /* Full width */
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1rem;
@@ -150,7 +155,7 @@
   line-height: 1.45;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* more lines like HomeProjects */
+  -webkit-line-clamp: 1; 
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex-grow: 1;
@@ -189,59 +194,62 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 0.65rem;
   max-width: 1200px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1rem;
 }
 
-/* Past events cards (gray + dimmed images) */
 .past-events-grid .preview-card {
-  background: #d9d9d9; /* light gray background */
+  background: #d9d9d9; 
   border: 1px solid #b0b0b0;
   min-height: 120px;
   max-height: 230px;
   color: #1A1A1A;
 }
 
-/* Gray out the images */
-.past-events-grid .preview-card .preview-image {
+.past-events-grid .preview-image {
   filter: grayscale(100%) brightness(85%);
-  transition: none; /* optional: disable hover zoom for past events */
+  transition: none; 
 }
 
 .past-events-grid .preview-card:hover .preview-image {
-  transform: none; /* remove hover zoom for past events */
+  transform: none; 
 }
 
-/* Keep text readable */
-.past-events-grid .preview-card .preview-title,
-.past-events-grid .preview-card .preview-date-time,
-.past-events-grid .preview-card .preview-tag {
+.past-events-grid .preview-title,
+.past-events-grid .preview-date-time,
+.past-events-grid .preview-tag {
   color: #203A5C;
 }
 
-/* Optional: reduce hover effect */
 .past-events-grid .preview-card:hover {
   transform: none;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   border-color: #b0b0b0;
 }
 
-
-
-/* BUTTONS */
+/* BUTTONS (FIXED: Centered) */
 .events-buttons {
   display: flex;
   gap: 0.6rem;
-  justify-content: center;
-  margin: 0.3rem 0;
+  justify-content: center; /* Desktop Center */
+  margin: 2rem 0 0.5rem; /* Added top margin */
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .events-buttons .btn.btn-primary {
   background-color: #203A5C;
   color: #ffffff;
   border: none;
+  padding: 0.8rem 2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .events-buttons .btn.btn-primary:hover {
@@ -255,6 +263,7 @@
   margin-top:0.3rem;
   opacity: 0.65;
   line-height: 1.45;
+  text-align: center;
 }
 
 /* ========================================
@@ -265,12 +274,29 @@
   .events-title { font-size: 1.8rem; }
   .events-subtitle { font-size: 0.95rem; }
   .section-subtitle { font-size: 1.1rem; }
-  .events-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+  
+  .events-grid, .past-events-grid { 
+    grid-template-columns: 1fr; 
+    gap: 0.75rem; 
+  }
+  
   .preview-card { padding: 0.85rem; min-height: 140px; max-height: 220px; }
   .preview-title { font-size: 0.95rem; }
   .preview-description { font-size: 0.78rem; -webkit-line-clamp: 4; }
   .preview-tag { font-size: 0.65rem; padding: 0.15rem 0.4rem; }
-  .events-buttons { flex-direction: column; gap: 0.65rem; }
+  
+  /* BUTTON FIX MOBILE */
+  .events-buttons { 
+    flex-direction: column; 
+    align-items: center; /* Center Stack */
+    gap: 0.75rem; 
+  }
+  
+  .events-buttons .btn.btn-primary {
+    width: 100%;
+    max-width: 300px; /* Limits width */
+  }
+  
   .events-footer-text { font-size: 0.75rem; }
 }
 
@@ -286,8 +312,3 @@
   .events-buttons .btn { padding: 0.55rem 1.2rem; font-size: 0.85rem; }
   .events-footer-text { font-size: 0.7rem; }
 }
-
-
-
-
-

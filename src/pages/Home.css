@@ -1,17 +1,14 @@
 /* ========================================
-   /pages/Home.css – Balanced sections & fade-in
+   /pages/Home.css 
    ======================================== */
 
-/* Main page scroll */
 .home-page {
-  scroll-behavior: smooth;
-  overflow-y: auto;
+  width: 100%;
   min-height: 100vh;
-  scroll-padding-top: 0;
-  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
-/* Fade-in animation */
+/* FADE-IN ANIMATIONS */
 .home-page section {
   opacity: 0;
   transform: translateY(20px);
@@ -23,7 +20,8 @@
   transform: translateY(0);
 }
 
-/* Hero & About */
+/* SECTION SIZING - DESKTOP */
+/* We keep fixed height on desktop for that "Full Screen" look */
 .hero-modern,
 .about-preview {
   height: 90vh;
@@ -34,7 +32,6 @@
   padding: 2rem;
 }
 
-/* Projects & Events */
 .projects-preview,
 .events-preview {
   height: 55vh;
@@ -45,109 +42,67 @@
   padding: 2rem;
 }
 
-/* Social & Newsletter */
 .social-preview,
 .newsletter-signup {
   min-height: fit-content;
   padding: 3rem 1.5rem;
 }
 
-/* ----------------------------------------
-   CONTACT SECTION (same height as social/newsletter)
-   ---------------------------------------- */
-.contact-preview {
-  background: linear-gradient(
-    180deg,
-    #182F4D 0%,   /* dark blue base */
-    #5979A6 50%,  /* medium blue */
-    #EBB479 100%  /* gold accent */
-  );
-  min-height: fit-content;     
-  padding: 3rem 1.5rem;       
-
+/* SCROLL TO TOP BUTTON */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #DF694E 0%, #EBB479 100%);
+  color: white;
   display: flex;
-  justify-content: center;
   align-items: center;
-  text-align: center;
-  color: #ffffff;  /* base text color for contrast */
-}
-
-.contact-content {
-  max-width: 1000px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.contact-content h2 {
-  font-size: 2.2rem;
-  color: #000000;  /* Society accent red-orange for headings */
-}
-
-.contact-content p {
-  font-size: 1.1rem;
-  line-height: 1.4;
-  color: #ffffff;  /* white text for readability on gradient */
-}
-
-.contact-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
   justify-content: center;
-}
-
-.contact-buttons a,
-.contact-buttons button {
-  padding: 0.7rem 2rem;
-  border-radius: 6px;
-  font-size: 1.05rem;
-  font-weight: bold;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
-  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(223, 105, 78, 0.4);
+  z-index: 9999;
 }
 
-/* Join button - accent color */
-.join-button {
-  background-color: #DF694E;  /* red-orange */
-  color: #ffffff;
-  border: none;
+.scroll-to-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
-.join-button:hover {
-  background-color: #EB7B5B;  /* lighter red-orange on hover */
+.scroll-to-top-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(223, 105, 78, 0.6);
+  background: linear-gradient(135deg, #c5533a 0%, #d89f63 100%);
 }
 
-/* Contact button - dark blue */
-.contact-button {
-  background-color: #182F4D;  
-  color: #ffffff;
-  border: none;
-}
-
-.contact-button:hover {
-  background-color: #2A4970;  /* medium blue on hover */
-}
-
-/* Responsiveness */
+/* RESPONSIVENESS */
 @media (max-width: 1024px) {
-  .home-page section {
-    min-height: auto;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+  /* CRITICAL FIX: Reset height to auto so mobile content isn't cut off */
+  .home-page section,
+  .hero-modern, 
+  .about-preview,
+  .projects-preview,
+  .events-preview {
+    height: auto !important; /* Force override of the 90vh */
+    min-height: auto !important;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 }
 
 @media (max-width: 768px) {
-  .contact-content h2 { font-size: 2rem; }
-  .contact-content p { font-size: 1rem; }
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+  }
 }
-
-@media (max-width: 375px) {
-  .contact-content h2 { font-size: 1.7rem; }
-  .contact-content p { font-size: 0.95rem; }
-}
-

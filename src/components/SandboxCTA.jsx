@@ -14,7 +14,7 @@ const SandboxCTA = () => {
       </p>
 
       <a
-        href="https://tr.ee/ZJHyPXI9IE"
+        href="https://tr.ee/IZtk7cLvOk"
         target="_blank"
         rel="noopener noreferrer"
         className="cta-button"

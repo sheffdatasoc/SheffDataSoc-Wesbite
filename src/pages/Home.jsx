@@ -32,40 +32,30 @@ function Home() {
   const [partners, setPartners] = useState([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Scroll listener with mobile/desktop detection
+  // 1. Simplified Scroll Listener (Listens to Window directly)
   useEffect(() => {
-    const homePageElement = document.querySelector('.home-page');
-    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
-
     const handleScroll = () => {
-      const scrollTop = isMobile
-        ? window.pageYOffset
-        : homePageElement?.scrollTop || 0;
-
+      // Check vertical scroll position of the window
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
       setShowScrollTop(scrollTop > 400);
     };
 
-    const target = isMobile ? window : homePageElement;
-
-    if (target) {
-      target.addEventListener('scroll', handleScroll);
-      handleScroll(); // Initial check
-    }
+    window.addEventListener('scroll', handleScroll);
+    
+    // Initial check
+    handleScroll();
 
     return () => {
-      if (target) target.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
+  // 2. Simplified Scroll Action
   const scrollToTop = () => {
-    const homePageElement = document.querySelector('.home-page');
-    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
-
-    if (!isMobile && homePageElement) {
-      homePageElement.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   // Fetch data
