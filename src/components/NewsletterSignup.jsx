@@ -1,78 +1,128 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { subscribeUser, unsubscribeUser } from '../lib/mailchimp';
 import './NewsletterSignup.css';
 
 function NewsletterSignup() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState({ message: '', type: '' });
   const [loading, setLoading] = useState(false);
+  
+  const [showUnsubModal, setShowUnsubModal] = useState(false);
 
-  // Reset status when email changes
-  useEffect(() => {
-    if (email) setStatus(null);
-  }, [email]);
+  const handleInputChange = (e) => {
+    setEmail(e.target.value);
+    if (status.message) setStatus({ message: '', type: '' });
+  };
 
-  // Subscribe handler
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!email) {
-      setStatus('Please enter a valid email.');
+      setStatus({ message: 'Please enter a valid email.', type: 'error' });
       return;
     }
 
     setLoading(true);
-    setStatus(null);
+    setStatus({ message: '', type: '' });
 
     try {
       const result = await subscribeUser(email);
 
       if (result.success) {
-        if (result.message.includes('already subscribed')) {
-          setStatus('👋 You are already subscribed!');
+        if (result.message.includes('check your email')) {
+          setStatus({ 
+            message: '📧 Almost there! Please check your email to confirm.', 
+            type: 'success' 
+          });
+        } else if (result.message.includes('already subscribed')) {
+          setStatus({ 
+            message: '👋 You are already subscribed!', 
+            type: 'success' 
+          });
         } else {
-          setStatus('✅ Thank you for subscribing!');
+          setStatus({ 
+            message: '✅ Thank you for subscribing!', 
+            type: 'success' 
+          });
           setEmail('');
         }
       } else {
-        setStatus(`❌ Error subscribing: ${result.message}`);
+        setStatus({ 
+          message: `❌ Error: ${result.message}`, 
+          type: 'error' 
+        });
       }
     } catch (err) {
       console.error(err);
-      setStatus('⚠️ An unexpected error occurred. Please try again.');
+      setStatus({ 
+        message: '⚠️ An unexpected error occurred.', 
+        type: 'error' 
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  // Unsubscribe handler
-  const handleUnsubscribe = async () => {
+  // 1. Triggered when clicking "Unsubscribe"
+  const requestUnsubscribe = () => {
     if (!email) {
-      setStatus('Please enter your email to unsubscribe.');
+      setStatus({ 
+        message: 'Please enter your email above to unsubscribe.', 
+        type: 'error' 
+      });
       return;
     }
+    setShowUnsubModal(true);
+  };
 
-    const confirmUnsub = window.confirm(
-      `Are you sure you want to unsubscribe ${email}?`
-    );
-
-    if (!confirmUnsub) return;
-
+  // 2. Triggered by "Yes" in modal
+  const confirmUnsubscribe = async () => {
+    setShowUnsubModal(false);
     setLoading(true);
-    setStatus(null);
+    setStatus({ message: '', type: '' });
 
     try {
       const result = await unsubscribeUser(email);
 
+      // --- NEW LOGIC STARTS HERE ---
       if (result.success) {
-        setStatus('✅ You have been unsubscribed.');
+        // CASE: Successfully Unsubscribed
+        setStatus({ 
+          message: '👋 Hope to see you again!', 
+          type: 'success' 
+        });
         setEmail('');
       } else {
-        setStatus(`❌ Error unsubscribing: ${result.message}`);
+        // CASE: Error or Info returned from Backend
+        const msg = result.message.toLowerCase();
+
+        if (msg.includes('not found')) {
+          // Specific message for non-existent emails
+          setStatus({ 
+            message: '⚠️ We couldn\'t find that email in our list.', 
+            type: 'error' 
+          });
+        } else if (msg.includes('already unsubscribed')) {
+          // Specific message for already unsubscribed
+          setStatus({ 
+            message: 'ℹ️ You are already unsubscribed.', 
+            type: 'info' // You can style .newsletter-status.info in CSS
+          });
+        } else {
+          // Fallback for other errors
+          setStatus({ 
+            message: `❌ ${result.message}`, 
+            type: 'error' 
+          });
+        }
       }
+      // --- NEW LOGIC ENDS HERE ---
+
     } catch (err) {
       console.error(err);
-      setStatus('⚠️ An unexpected error occurred. Please try again.');
+      setStatus({ 
+        message: '⚠️ An unexpected error occurred.', 
+        type: 'error' 
+      });
     } finally {
       setLoading(false);
     }
@@ -93,7 +143,7 @@ function NewsletterSignup() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleInputChange}
               required
               disabled={loading}
             />
@@ -102,13 +152,20 @@ function NewsletterSignup() {
             </button>
           </form>
 
-          {status && <p className="newsletter-status">{status}</p>}
+          {/* This displays the status message */}
+          {status.message && (
+            <p className={`newsletter-status ${status.type}`}>
+              {status.message}
+            </p>
+          )}
 
           <p className="newsletter-note">
             We respect your privacy.{' '}
             <span
               className="unsubscribe-link"
-              onClick={handleUnsubscribe}
+              onClick={requestUnsubscribe}
+              role="button"
+              tabIndex="0"
             >
               Unsubscribe
             </span>{' '}
@@ -116,6 +173,24 @@ function NewsletterSignup() {
           </p>
         </div>
       </div>
+
+      {showUnsubModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Unsubscribe?</h3>
+            <p>Are you sure you want to remove <strong>{email}</strong> from our list?</p>
+            
+            <div className="modal-buttons">
+              <button onClick={confirmUnsubscribe}>
+                Yes, Unsubscribe
+              </button>
+              <button onClick={() => setShowUnsubModal(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

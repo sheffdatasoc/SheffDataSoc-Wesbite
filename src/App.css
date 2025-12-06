@@ -1,17 +1,22 @@
 /* App.css - Application structure */
 
+/* ADD THIS AT THE TOP */
+html {
+  scroll-behavior: smooth;
+}
+
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden; /* Prevent horizontal scroll from full-width sections */
+  overflow-x: hidden; 
 }
 
 .main-content {
   flex: 1;
   width: 100%;
-  padding: 0; /* Remove any default padding */
-  margin: 0;  /* Remove any default margin */
+  padding: 0; 
+  margin: 0;  
 }
 
 /* Responsive */

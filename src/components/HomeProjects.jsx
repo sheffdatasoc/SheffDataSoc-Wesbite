@@ -152,7 +152,7 @@ function HomeProjects() {
           >
             View All Projects & Workshops →
           </a>
-          <a href="/about#contact" className="btn btn-secondary">Propose a Project</a>
+          <a href="/sandbox#propose-idea" className="btn btn-secondary">Submit your idea</a>
         </div>
 
         <div className="projects-footer-text">

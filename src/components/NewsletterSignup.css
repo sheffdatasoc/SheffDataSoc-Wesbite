@@ -1,12 +1,7 @@
 /* ========================================
-   FULL-WIDTH NEWSLETTER WITH PURPLE-PINK GRADIENT BACKGROUND
+   FULL-WIDTH NEWSLETTER
    ======================================== */
-/* --- PALETTE REFERENCE ---
-   Light Purple: #CE93D8
-   Medium Purple: #BA68C8
-   Soft Pink: #F48FB1
-   Text: #1A1A1A
-*/
+
 .newsletter-signup-section {
   scroll-snap-align: start;
   min-height: 60vh;
@@ -17,13 +12,11 @@
   
   /* Plain white background */
   background-color: #ffffff !important;
-  
   color: #1A1A1A !important;
   padding: 4rem 2rem 2rem;
   width: 100%;
   position: relative;
 }
-
 
 .newsletter-signup {
   width: 100%;
@@ -32,7 +25,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* keep gradient visible */
+  background-color: transparent;
   padding: 2rem 1rem;
   margin: 0 auto;
   font-family: 'Arial', sans-serif;
@@ -49,12 +42,12 @@
 .newsletter-content h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
-  color: #1A1A1A; /* Dark text over gradient */
+  color: #1A1A1A;
 }
 
 .newsletter-content p {
   font-size: 1rem;
-  color: #1A1A1A; /* Dark text over gradient */
+  color: #1A1A1A;
   margin-bottom: 1rem;
   line-height: 1.5;
 }
@@ -65,14 +58,17 @@
   gap: 0.5rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Reduced bottom margin slightly */
 }
 
-/* Email input - combining both approaches */
+/* Email input */
 .newsletter-form input[type="email"] {
-  flex: 1 1 450px; /* Maya's longer width */
-  padding: 0.75rem 1.25rem; /* main's better padding */
-  font-size: 1.1rem; /* main's larger text */
+  /* Using 'auto' allows it to fit on the same line if space permits */
+  flex: 1 1 auto;
+  min-width: 250px; 
+  
+  padding: 0.75rem 1.25rem;
+  font-size: 1.1rem;
   border: 1px solid #007bff;
   border-radius: 8px;
   outline: none;
@@ -83,32 +79,20 @@
   border-color: #0056b3;
 }
 
-/* Buttons */
+/* Subscribe Button */
 .newsletter-form button {
-  padding: 0.75rem 2rem; /* main's better padding */
-  font-size: 1.1rem; /* main's larger text */
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-}
-
-.newsletter-form button:not(.unsubscribe-btn) {
   background-color: #007bff;
   color: white;
 }
 
-.newsletter-form button:not(.unsubscribe-btn):hover:not(:disabled) {
+.newsletter-form button:hover:not(:disabled) {
   background-color: #0056b3;
-}
-
-.unsubscribe-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.unsubscribe-btn:hover:not(:disabled) {
-  background-color: #a71d2a;
 }
 
 .newsletter-form button:disabled {
@@ -117,39 +101,54 @@
   color: #666;
 }
 
+/* ========================================
+   STATUS MESSAGES (CLEAN VERSION)
+   ======================================== */
 .newsletter-status {
-  font-size: 0.95rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  margin-top: 1rem;      /* Gives it space from the form */
+  margin-bottom: 0.5rem; /* Gives it space from the footer note */
   font-weight: bold;
 }
 
+/* No background, just green text */
 .newsletter-status.success {
   color: #28a745;
-  background-color: #d4edda;
-  padding: 0.5rem;
-  border-radius: 6px;
+  background: none;
+  padding: 0;
+  border: none;
 }
 
+/* No background, just red text */
 .newsletter-status.error {
   color: #dc3545;
-  background-color: #f8d7da;
-  padding: 0.5rem;
-  border-radius: 6px;
+  background: none;
+  padding: 0;
+  border: none;
 }
 
+/* Footer Note */
 .newsletter-note {
   margin-top: 0.5rem;
   font-size: 0.85rem;
   color: #1A1A1A;
 }
 
+/* Unsubscribe Text Link */
 .unsubscribe-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  
   text-decoration: underline;
   cursor: pointer;
   color: #dc3545; /* red */
 }
 
+/* ========================================
+   MODAL STYLING
+   ======================================== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -169,6 +168,7 @@
   border-radius: 12px;
   text-align: center;
   max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .modal-buttons {
@@ -185,6 +185,7 @@
   cursor: pointer;
 }
 
+/* "Yes" button (first child) */
 .modal-buttons button:first-child {
   background-color: #dc3545;
   color: white;
@@ -195,6 +196,7 @@
   background-color: #a71d2a;
 }
 
+/* "Cancel" button (last child) */
 .modal-buttons button:last-child {
   background-color: #ccc;
   color: #333;

@@ -4,20 +4,22 @@ import "./SandboxCTA.css";
 
 const SandboxCTA = () => {
   return (
-    <div className="blog-cta">
-      <h2>Help Shape DataSoc: Share Your Project/Workshop Ideas</h2>
+    // 👇 ADD THIS ID HERE
+    <div className="blog-cta" id="propose-idea">
+      <h2>Help Shape DataSoc</h2>
+      
+      <p>
+        Share your project ideas. <br className="mobile-break" />
+        <strong>Fill out our interest form to bring them to life.</strong>
+      </p>
 
-      <p>Share a topic you’re passionate about!</p>
-      <p><strong>Fill out our interest form to make that idea to life.</strong></p>
-
-      {/* External link (100% reliable) */}
       <a
-        href="https://tr.ee/ZJHyPXI9IE"// replace with actual link
+        href="https://tr.ee/ZJHyPXI9IE"
         target="_blank"
         rel="noopener noreferrer"
         className="cta-button"
       >
-        Submit Your Sandbox
+        Submit Your Idea
       </a>
     </div>
   );

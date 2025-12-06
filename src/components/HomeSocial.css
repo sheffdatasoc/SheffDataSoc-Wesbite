@@ -1,52 +1,73 @@
 /* ========================================
-   HOME SOCIAL MEDIA SECTION - LIGHT COLOR SCHEME
+   HOME SOCIAL MEDIA SECTION
    ======================================== */
 
 .home-social {
   text-align: center;
-  padding: 2rem 1rem;
+  /* Add vertical spacing to separate from Newsletter */
+  margin: 3rem auto 4rem auto; 
+  padding: 2.5rem 2rem;
+  max-width: 800px; /* Constrain width so it looks like a card */
+  width: 90%;
 
-  background: linear-gradient(
-  180deg,
-  #182F4D 0%,   /* dark blue */
-  #5979A6 50%,  /* medium blue */
-  #EBB479 100%  /* gold */
-  );
-  color: #ffffff;
+  /* THE FIX: A clean, light grey background */
+  background-color: #F4F4F5; 
+  /* Optional: Use your palette Off-White #F5F5F2 if you prefer warmer grey */
 
+  /* Navy text for high contrast against the grey */
+  color: #182F4D;
 
-  /* Rounded edges and subtle shadow for style */
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  /* Modern Card Styling */
+  border-radius: 16px;
+  /* A subtle border ensures it doesn't blend into the white newsletter section */
+  border: 1px solid #e5e7eb; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.home-social h3, 
+.home-social h2 {
+  /* Ensure the title is Navy so it stands out */
+  color: #182F4D;
+  margin-top: 0;
+  font-weight: 700;
+}
+
+.home-social p {
+  color: #555; /* Slightly softer text for the subtitle */
+  margin-bottom: 1.5rem;
 }
 
 .social-icons {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 2rem; /* More breathing room between icons */
 }
 
 .social-icons a {
-  font-size: 2rem;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  font-size: 2.2rem; /* Slightly larger */
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
   display: inline-flex;
+  
+  /* Reset any default link underlines */
+  text-decoration: none;
 }
 
-/* Hover effect: subtle scale and glow */
+/* Hover effect: Pop up and glow */
 .social-icons a:hover {
-  transform: scale(1.15);
-  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.2));
+  transform: translateY(-4px) scale(1.1);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
 }
 
 .filled-icon {
   fill: currentColor;
 }
 
-/* Brand colors */
+/* BRAND COLORS - distinct against light grey */
 .social-icons a.instagram { color: #E1306C; }
 .social-icons a.linkedin { color: #0077B5; }
-.social-icons a.github { color: #333; }
+/* GitHub needs to be pure black or Navy to pop on grey */
+.social-icons a.github { color: #182F4D; } 
 .social-icons a.twitter { color: #1DA1F2; }
 .social-icons a.facebook { color: #1877F2; }
-
