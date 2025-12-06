@@ -8,10 +8,11 @@
   width: 100%;
   
   display: flex;
-  flex-direction: column; /* Stack wrapper and carousel vertically */
+  flex-direction: column; 
   align-items: center;
-  gap: 3rem; /* Gap between content and carousel */
-  padding: 6rem 2rem 3rem; /* Increased top padding from 5rem to 6rem */
+  gap: 3rem; 
+  /* Added significant bottom padding to make room for carousel */
+  padding: 6rem 2rem 4rem; 
   
   position: relative;
   overflow: hidden;
@@ -20,7 +21,7 @@
   color: #ffffff; 
 }
 
-/* New wrapper for the two-column layout */
+/* Content Wrapper (Text + Images) */
 .hero-content-wrapper {
   width: 100%;
   max-width: 1400px;
@@ -28,6 +29,12 @@
   align-items: flex-start;
   justify-content: center;
   gap: 8rem;
+  
+  /* Ensure this takes up necessary space but allows carousel below */
+  flex: 1 0 auto; 
+  
+  /* SHIFT DESKTOP CONTENT LOWER */
+  margin-top: 4rem; 
 }
 
 /* 2. Left Side: Text Content */
@@ -47,39 +54,37 @@
   backdrop-filter: blur(4px);
   border: none; 
   color: #F5F5F2; 
-  padding: 0.4rem 0.9rem; /* Reduced from 0.5rem 1rem */
+  padding: 0.4rem 0.9rem; 
   border-radius: 50px;
-  font-size: 0.8rem; /* Reduced from 0.85rem */
+  font-size: 0.8rem; 
   font-weight: 700; 
-  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; 
   letter-spacing: 0.5px;
 }
 
 /* Heading Typography */
 .hero-text-content h1 {
-  font-size: 2.75rem; /* Reduced from 3rem */
+  font-size: 2.75rem; 
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; 
   letter-spacing: -0.02em;
   color: #ffffff; 
   text-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-/* Highlights */
 .highlight {
   color: #EBB479;
   position: relative;
   display: inline-block;
 }
 
-/* Subtitle */
 .hero-subtitle {
-  font-size: 1.0625rem; /* Slightly reduced from 1.125rem */
-  line-height: 1.5; /* Reduced from 1.6 */
+  font-size: 1.0625rem; 
+  line-height: 1.5; 
   color: #F5F5F2; 
   opacity: 0.95;
-  margin-bottom: 1.25rem; /* Reduced from 1.5rem */
+  margin-bottom: 1.25rem; 
   max-width: 90%;
   font-weight: 400;
 }
@@ -88,16 +93,15 @@
 .hero-buttons {
   display: flex;
   gap: 1rem; 
-  margin-bottom: 1.5rem; /* Reduced from 2rem */
+  margin-bottom: 1.5rem; 
   align-items: center;
 }
 
-/* Primary Button */
 .btn-primary {
   background: #ffffff; 
   color: #182F4D;
-  padding: 0.65rem 1.4rem; /* Reduced from 0.75rem 1.5rem */
-  font-size: 0.95rem; /* Reduced from 1rem */
+  padding: 0.65rem 1.4rem; 
+  font-size: 0.95rem; 
   font-weight: 700;
   border-radius: 8px;
   border: none;
@@ -115,12 +119,11 @@
   background-color: #F5F5F2; 
 }
 
-/* Secondary Button */
 .btn-secondary {
   background-color: transparent;
   color: #ffffff; 
-  padding: 0.65rem 1.4rem; /* Reduced from 0.75rem 1.5rem */
-  font-size: 0.95rem; /* Reduced from 1rem */
+  padding: 0.65rem 1.4rem; 
+  font-size: 0.95rem; 
   font-weight: 600;
   border-radius: 8px;
   border: 2px solid rgba(245, 245, 242, 0.3); 
@@ -144,16 +147,16 @@
 }
 
 .stat-item h3 {
-  font-size: 2rem; /* Increased from 1.4rem */
+  font-size: 2rem; 
   font-weight: 800;
   color: #ffffff; 
   margin: 0;
 }
 
 .stat-item p {
-  font-size: 0.95rem; /* Increased from 0.8rem */
+  font-size: 0.95rem; 
   color: #EBB479; 
-  margin-top: 0.3rem; /* Increased from 0.2rem */
+  margin-top: 0.3rem; 
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -164,14 +167,12 @@
    ======================================== */
 
 .hero-image-container {
-  flex: 0 0 520px; /* Reduced from 550px */
-  height: 420px; /* Reduced from 450px */
-  
+  flex: 0 0 520px; 
+  height: 420px; 
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  
   perspective: 1000px; 
 }
 
@@ -184,65 +185,44 @@
   align-items: center;
 }
 
-/* Shared Card Styles */
 .carousel-card {
   position: absolute;
-  width: 280px; /* Reduced from 300px */
-  height: 375px; /* Reduced from 400px */
+  width: 280px; 
+  height: 375px; 
   object-fit: cover;
   border-radius: 20px;
-  
   transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-  
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   cursor: pointer;
-  
   border: none; 
-  
   background-color: #182F4D;
 }
 
 /* --- POSITION LOGIC --- */
-
-/* 1. CENTER CARD (Active) */
 .card-center {
   z-index: 10;
   opacity: 1;
   transform: translateX(0) scale(1);
-  
   box-shadow: 0 30px 60px rgba(0,0,0,0.6);
   filter: brightness(1);
 }
 
-/* 2. LEFT CARD (Behind) */
 .card-left {
   z-index: 5;
   opacity: 0.7;
-  
   transform: translateX(-60%) scale(0.85);
-  
   filter: blur(1px) brightness(0.7); 
 }
-.card-left:hover {
-  filter: blur(0px) brightness(0.9);
-  opacity: 0.9;
-}
+.card-left:hover { filter: blur(0px) brightness(0.9); opacity: 0.9; }
 
-/* 3. RIGHT CARD (Behind) */
 .card-right {
   z-index: 5;
   opacity: 0.7;
-  
   transform: translateX(60%) scale(0.85);
-  
   filter: blur(1px) brightness(0.7);
 }
-.card-right:hover {
-  filter: blur(0px) brightness(0.9);
-  opacity: 0.9;
-}
+.card-right:hover { filter: blur(0px) brightness(0.9); opacity: 0.9; }
 
-/* 4. HIDDEN CARDS */
 .card-hidden {
   z-index: 0;
   opacity: 0;
@@ -257,23 +237,30 @@
 .hero-partner-carousel {
   width: 100%;
   padding: 0;
-  overflow: hidden;
+  overflow: visible; /* Prevent clipping */
+  margin-top: auto; /* Push to bottom if space allows */
+  
+  /* CRITICAL: Prevent it from shrinking to 0 height */
+  flex-shrink: 0;
 }
 
 .partner-carousel-label {
   text-align: center;
-  font-size: 0.8rem; /* Reduced from 0.85rem */
+  font-size: 0.8rem; 
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; 
 }
 
 .partner-carousel-wrapper {
   width: 100%;
   overflow: hidden;
   position: relative;
+  /* CRITICAL: Ensure container has height */
+  min-height: 140px; 
+  
   mask-image: linear-gradient(
     to right,
     transparent 0%,
@@ -294,14 +281,17 @@
   display: flex;
   gap: 20px;
   will-change: transform;
+  /* Ensure track takes height of children */
+  height: 100%;
+  align-items: center;
 }
 
 .partner-logo-card {
-  flex: 0 0 200px; /* Reduced from 220px */
-  height: 110px; /* Reduced from 120px */
+  flex: 0 0 200px; 
+  height: 110px; 
   background: white;
   border-radius: 16px;
-  padding: 1.25rem; /* Reduced from 1.5rem */
+  padding: 1.25rem; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,9 +312,7 @@
   transition: filter 0.3s ease;
 }
 
-.partner-logo-card:hover .partner-logo-img {
-  filter: grayscale(0%);
-}
+.partner-logo-card:hover .partner-logo-img { filter: grayscale(0%); }
 
 /* ========================================
    MOBILE RESPONSIVENESS
@@ -333,41 +321,36 @@
   .hero-modern {
     flex-direction: column;
     text-align: center; 
-    padding: 5rem 1.5rem 2rem;
+    padding: 6rem 1.5rem 2rem; 
     gap: 2rem;
-    background: linear-gradient(180deg, #182F4D 30%, #EBB479 90%, #DF694E 100%);
-    min-height: 100vh;
+    min-height: auto; 
+    justify-content: flex-start;
   }
 
   .hero-content-wrapper {
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    flex: 0 0 auto;
+    /* RESET MARGIN ON MOBILE */
+    margin-top: 0;
   }
 
   .hero-text-content {
     flex: none;
     align-items: center; 
     max-width: 100%;
-    margin-bottom: 0; 
-  }
-  
-  .hero-badge {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.8rem;
-    margin-bottom: 0.75rem;
   }
   
   .hero-text-content h1 { 
-    font-size: 1.85rem;
-    line-height: 1.2;
-    margin-bottom: 0.75rem;
+    font-size: 2rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
   }
 
   .hero-subtitle {
-    font-size: 0.95rem;
-    max-width: 100%;
-    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .hero-buttons {
@@ -378,46 +361,30 @@
     margin-bottom: 1.5rem;
   }
 
-  .btn-primary,
-  .btn-secondary {
+  .btn-primary, .btn-secondary {
     width: 100%;
     max-width: 280px;
     justify-content: center;
-    padding: 0.7rem 1.25rem;
-    font-size: 0.95rem;
   }
 
   .hero-stats {
     justify-content: center;
-    gap: 2.5rem;
-    padding-top: 1rem; 
-    padding-bottom: 1rem;
+    gap: 1.5rem;
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
   }
+  
+  .stat-item h3 { font-size: 1.5rem; }
+  .stat-item p { font-size: 0.75rem; }
 
-  .stat-item {
-    flex: 0 0 auto;
-  }
-
-  .stat-item h3 {
-    font-size: 1.75rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-item p {
-    font-size: 0.7rem;
-  }
-
+  /* Image Container */
   .hero-image-container {
     flex: none;
     width: 100%;
-    height: 250px;
-    perspective: 800px;
+    height: 240px; 
     margin-top: 1rem;
-    margin-bottom: 0;
-    order: 10;
+    order: 2;
   }
   
   .carousel-card {
@@ -425,92 +392,39 @@
     height: 220px;
   }
   
-  .card-center {
-    transform: translateX(0) scale(0.95);
-  }
-  
-  .card-left { 
-    transform: translateX(-50%) scale(0.75);
-  }
-  .card-right { 
-    transform: translateX(50%) scale(0.75);
+  .card-center { transform: translateX(0) scale(0.95); }
+  .card-left { transform: translateX(-50%) scale(0.75); }
+  .card-right { transform: translateX(50%) scale(0.75); }
+
+  /* --- PARTNER CAROUSEL --- */
+  .hero-partner-carousel {
+    order: 3;
+    margin-top: 2rem;
+    margin-bottom: 0;
+    width: 100%;
+    
+    /* Force display */
+    display: block !important;
+    min-height: 120px;
+    opacity: 1;
+    z-index: 20;
+    
+    overflow: visible;
+    flex-shrink: 0;
   }
 
-  /* Partner Carousel Mobile */
-  .hero-partner-carousel {
-    bottom: 1.5rem;
-    padding: 0;
+  .partner-carousel-wrapper {
+    min-height: 100px;
   }
 
   .partner-logo-card {
-    flex: 0 0 180px;
-    height: 100px;
-    padding: 1rem;
-  }
-
-  .partner-carousel-label {
-    margin-bottom: 1rem;
-  }
-}
-
-/* Extra small phones */
-@media (max-width: 480px) {
-  .hero-modern {
-    padding: 4.5rem 1rem 10rem;
-    gap: 1rem;
-  }
-
-  .hero-text-content h1 { 
-    font-size: 1.6rem;
-  }
-
-  .hero-subtitle {
-    font-size: 0.85rem;
-  }
-
-  .hero-stats {
-    gap: 2rem;
-    max-width: 350px;
-  }
-
-  .stat-item h3 {
-    font-size: 1.5rem;
-  }
-
-  .stat-item p {
-    font-size: 0.65rem;
-  }
-
-  .hero-image-container {
-    height: 200px;
-    margin-top: 0.5rem;
-  }
-
-  .carousel-card {
-    width: 130px;
-    height: 180px;
-  }
-
-  .card-left { 
-    transform: translateX(-45%) scale(0.7);
-  }
-  .card-right { 
-    transform: translateX(45%) scale(0.7);
-  }
-
-  /* Partner Carousel Extra Small */
-  .hero-partner-carousel {
-    bottom: 1rem;
-  }
-
-  .partner-logo-card {
-    flex: 0 0 160px;
-    height: 90px;
+    flex: 0 0 140px;
+    height: 80px;
     padding: 0.75rem;
   }
-
-  .partner-carousel-label {
-    font-size: 0.75rem;
-    margin-bottom: 0.75rem;
+  
+  .partner-logo-img {
+    max-width: 90%;
+    max-height: 90%;
   }
 }

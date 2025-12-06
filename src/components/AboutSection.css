@@ -12,7 +12,7 @@
 
 .about-section {
   scroll-snap-align: start;
-  min-height: auto; /* ← Changed from 100vh to auto */
+  min-height: auto; 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -35,13 +35,11 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
   margin-top: 0;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
 }
 
 .about-subtitle {
   font-size: 1.1rem;
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.7;
   margin-bottom: 1rem;
@@ -72,7 +70,6 @@
 .feature-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(223, 105, 78, 0.12);
-  /* Updated: Sand border on hover */
   border-color: #EBB479 !important;
 }
 
@@ -84,18 +81,15 @@
   align-items: center;
   justify-content: center;
   border-radius: 16px;
-  /* Updated: Navy gradient */
   background: linear-gradient(135deg, #182F4D 0%, #2a4a6f 100%) !important;
   color: white;
 }
 
 .feature-card:nth-child(2) .feature-icon {
-  /* Updated: Terracotta gradient */
   background: linear-gradient(135deg, #DF694E 0%, #c55a3e 100%) !important;
 }
 
 .feature-card:nth-child(3) .feature-icon {
-  /* Updated: Sand gradient */
   background: linear-gradient(135deg, #EBB479 0%, #d9a063 100%) !important;
 }
 
@@ -103,24 +97,24 @@
   font-size: 1.4rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
 }
 
 .feature-description {
   font-size: 0.95rem;
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.8;
   line-height: 1.6;
 }
 
+/* BUTTONS */
 .about-buttons {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: center; /* Desktop Center */
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .about-buttons .btn {
@@ -132,11 +126,11 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
 .about-buttons .btn-primary {
-  /* Updated: Navy to Terracotta gradient */
   background: linear-gradient(135deg, #182F4D 0%, #DF694E 100%) !important;
   color: white;
   border: none;
@@ -149,23 +143,18 @@
 
 .about-buttons .btn-secondary {
   background: white;
-  /* Updated: Navy text */
   color: #182F4D !important;
-  /* Updated: Sand border */
   border: 2px solid #EBB479 !important;
 }
 
 .about-buttons .btn-secondary:hover {
-  /* Updated: Navy border on hover */
   border-color: #182F4D !important;
-  /* Updated: Light Navy background */
   background: rgba(24, 47, 77, 0.05) !important;
   transform: translateY(-2px);
 }
 
 .about-footer-text {
   font-size: 0.85rem;
-  /* Updated: Navy with opacity */
   color: #182F4D !important;
   opacity: 0.6;
   line-height: 1.5;
@@ -226,14 +215,18 @@
     line-height: 1.4;
   }
   
+  /* BUTTON FIX MOBILE */
   .about-buttons {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center; /* Center Stack */
     gap: 0.75rem;
     margin-bottom: 0.75rem;
+    width: 100%;
   }
   
   .about-buttons .btn {
+    width: 100%;
+    max-width: 300px; /* Limit width */
     padding: 0.7rem 1.5rem;
     font-size: 0.9rem;
   }

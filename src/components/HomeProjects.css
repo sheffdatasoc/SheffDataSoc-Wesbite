@@ -29,10 +29,7 @@
   ) !important;
 
   color: #1A1A1A !important;
-
-  /* SHIFT CONTENT DOWN */
   padding: 6rem 2rem 2rem;
-
   overflow-y: auto;
   position: relative;
 }
@@ -44,8 +41,6 @@
   padding-top: 0;
   position: relative;
   z-index: 1;
-
-  /* Original gentle upward shift removed */
   transform: translateY(0%);
 }
 
@@ -205,13 +200,13 @@
   margin: 0;
 }
 
-/* Buttons */
+/* Buttons (FIXED: Centered) */
 .projects-buttons {
   display: flex;
+  justify-content: center; /* Desktop Center */
   gap: 1rem;
-  justify-content: center;
   margin-bottom: 0.7rem;
-  margin-top: 0.5rem;
+  margin-top: 2rem; /* Added space above buttons */
   flex-wrap: wrap;
 }
 
@@ -225,6 +220,7 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center; /* Ensures text inside button is centered */
   gap: 0.5rem;
 }
 
@@ -313,13 +309,17 @@
     padding: 0.15rem 0.4rem;
   }
 
+  /* BUTTON FIX MOBILE */
   .projects-buttons {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center; /* Centers the stack */
     gap: 0.75rem;
+    width: 100%;
   }
 
   .projects-buttons .btn {
+    width: 100%;
+    max-width: 300px; /* Limits width so they look nice */
     padding: 0.7rem 1.5rem;
     font-size: 0.9rem;
   }
