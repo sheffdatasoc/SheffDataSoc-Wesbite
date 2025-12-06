@@ -32,9 +32,11 @@ function NewsletterSignup() {
       const result = await subscribeUser(email);
       
       if (result.success) {
-        if (result.message.includes('already subscribed')) {
+        // ✅ NEW: Handle different response messages
+        if (result.message.includes('check your email')) {
+          setStatus('📧 Almost there! Please check your email to confirm your subscription.');
+        } else if (result.message.includes('already subscribed')) {
           setStatus('👋 You are already subscribed!');
-
         } else {
           setStatus('✅ Thank you for subscribing!');
           setEmail('');

@@ -58,18 +58,26 @@ async function getMailchimpMemberStatus(email) {
  * Core function to perform the UPSERT (add or update status) operation on Mailchimp.
  */
 async function processMailchimpAction(email, action, mergeFields = {}) {
-    // Read environment variables (replicated from above for access)
+    // Read environment variables
     const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY;
     const MAILCHIMP_AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
     const MAILCHIMP_DATA_CENTER = MAILCHIMP_API_KEY ? MAILCHIMP_API_KEY.split('-')[1] : null;
     const MAILCHIMP_API_URL = MAILCHIMP_DATA_CENTER ? `https://${MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0` : null;
 
-    // --- 1. CHECK EXISTENCE FIRST (New Logic) ---
+    // --- 1. CHECK EXISTENCE FIRST ---
     const currentStatus = await getMailchimpMemberStatus(email);
-    const targetStatus = (action === 'subscribe') ? 'subscribed' : 'unsubscribed';
+    
+    // ✅ NEW: Determine target status based on current state
+    let targetStatus;
+    if (action === 'subscribe') {
+        // If currently unsubscribed, use 'pending' to trigger double opt-in
+        targetStatus = (currentStatus === 'unsubscribed') ? 'pending' : 'subscribed';
+    } else {
+        targetStatus = 'unsubscribed';
+    }
 
-    if (currentStatus === targetStatus && currentStatus === 'subscribed') {
-        // User already exists and is subscribed—return custom message instantly
+    // Check if already subscribed
+    if (currentStatus === 'subscribed' && action === 'subscribe') {
         return { 
             success: true, 
             message: "You are already subscribed!", 
@@ -77,13 +85,12 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
         };
     }
     
-    // Check if configuration is available before proceeding with PUT request
+    // Check configuration
     if (!MAILCHIMP_API_URL || !MAILCHIMP_AUDIENCE_ID || !MAILCHIMP_API_KEY) {
         throw new Error("Mailchimp configuration error: API Key or Audience ID missing.");
     }
 
     // --- 2. PERFORM PUT (Create or Update Status) ---
-    
     const emailHash = hashEmail(email);
     const url = `${MAILCHIMP_API_URL}/lists/${MAILCHIMP_AUDIENCE_ID}/members/${emailHash}`;
     
@@ -99,16 +106,24 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
                 'Authorization': `Basic ${Buffer.from(`any_username:${MAILCHIMP_API_KEY}`).toString('base64')}`,
                 'Content-Type': 'application/json',
             },
-            // Accept 200, 201, 400 (for "Member Exists")
             validateStatus: (status) => status >= 200 && status < 300 || status === 400,
         });
 
         const data = response.data;
         
-        // Final success response when status was updated or user was created
+        // ✅ NEW: Better success messages based on status
+        let message;
+        if (data.status === 'subscribed') {
+            message = "Subscription successful!";
+        } else if (data.status === 'pending') {
+            message = "Please check your email to confirm your subscription!";
+        } else {
+            message = "Unsubscribed successfully.";
+        }
+        
         return { 
             success: true, 
-            message: data.status === 'subscribed' ? "Subscription successful!" : "Unsubscribed successfully.",
+            message: message,
             code: response.status 
         };
         
