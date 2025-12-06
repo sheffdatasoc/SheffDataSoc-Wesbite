@@ -18,17 +18,16 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  /* Updated: Off-White background */
-  background: #F5F5F2 !important;
+  background: #F5F5F2 !important; /* Off-White */
   overflow-x: hidden;
 }
 
 /* ========================================
-   HERO SECTION - Matching Events Page
+   HERO SECTION
    ======================================== */
 .sandbox-hero {
   position: relative;
-  /* Official Gradient: Navy -> Sand -> Terracotta */
+  /* Gradient: Navy -> Sand -> Terracotta */
   background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
   color: white;
   text-align: center;
@@ -42,15 +41,12 @@
   display: none; 
 }
 
-/* Hero Badge - Off-White Glass Effect */
+/* Hero Badge */
 .sandbox-hero .hero-badge {
   display: inline-block;
-  /* Subtle White Glass Background */
   background: rgba(245, 245, 242, 0.15) !important;
   backdrop-filter: blur(4px);
-  /* Text: Official Off-White */
   color: #F5F5F2 !important;
-  /* Border: Removed */
   border: none !important;
   padding: 0.5rem 1.5rem;
   border-radius: 9999px;
@@ -77,7 +73,6 @@
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
-  /* Updated: Off-White */
   color: #F5F5F2 !important;
   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
@@ -102,8 +97,7 @@
 .search-icon {
   position: absolute;
   left: 1.25rem;
-  /* Updated: Navy icon */
-  color: #182F4D !important;
+  color: #182F4D !important; /* Navy */
   opacity: 0.6;
   pointer-events: none;
   z-index: 1;
@@ -118,7 +112,6 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   background: white;
   transition: all 0.2s ease;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
 }
 
@@ -126,16 +119,11 @@
   outline: none;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
-  /* Updated: Sand border on focus */
-  border: 1px solid #EBB479 !important;
-}
-
-.search-input::placeholder {
-  color: #9ca3af;
+  border: 1px solid #EBB479 !important; /* Sand focus */
 }
 
 /* ========================================
-   TABS - Matching Events Page Style
+   TABS
    ======================================== */
 .sandbox-tabs {
   display: flex;
@@ -149,7 +137,6 @@
 
 .sandbox-tabs-container {
   display: inline-flex;
-  /* Updated: White background with border */
   background: #ffffff !important;
   padding: 6px !important;
   border-radius: 12px !important;
@@ -167,7 +154,6 @@
   font-weight: 600 !important;
   cursor: pointer;
   transition: all 0.2s ease;
-  /* Updated: Darkest text */
   color: #1A1A1A !important;
   text-shadow: none !important;
   display: inline-flex;
@@ -179,19 +165,15 @@
 }
 
 .tab-button:hover:not(.active) {
-  /* Updated: Off-White hover */
   background: #F5F5F2 !important;
-  /* Updated: Terracotta on hover */
-  color: #DF694E !important;
+  color: #DF694E !important; /* Terracotta hover */
 }
 
 .tab-button.active {
-  /* Updated: Semi-transparent Navy */
-  background-color: rgba(24, 47, 77, 0.6) !important;
-  background-image: none !important;
+  background-color: rgba(24, 47, 77, 0.6) !important; /* Navy Semi-transparent */
+  backdrop-filter: blur(2px);
   color: #ffffff !important;
   box-shadow: 0 2px 4px -1px rgba(24, 47, 77, 0.1) !important;
-  backdrop-filter: blur(2px);
 }
 
 .tab-button svg {
@@ -213,8 +195,7 @@
 
 .sandbox-featured-title {
   font-size: 2rem;
-  /* Updated: Navy */
-  color: #182F4D !important;
+  color: #182F4D !important; /* Navy */
   margin-bottom: 1.5rem;
   font-weight: 700;
 }
@@ -225,11 +206,10 @@
   gap: 2rem;
 }
 
-/* Featured card styling */
+/* Featured card styling - Matches Society Card */
 .sandbox-featured-section .project-card {
-  /* Updated: Sand border */
-  border: 3px solid #EBB479 !important;
-  /* Updated: Off-White to light Sand gradient */
+  border: 3px solid #EBB479 !important; /* Sand */
+  /* Gradient: Off-White to Light Sand */
   background: linear-gradient(to bottom, #F5F5F2 0%, rgba(235, 180, 121, 0.1) 100%) !important;
   box-shadow: 0 4px 15px rgba(235, 180, 121, 0.15);
 }
@@ -240,7 +220,7 @@
 }
 
 /* ========================================
-   MAIN CONTENT
+   MAIN CONTENT GRID
    ======================================== */
 .sandbox-content {
   padding: 0 1.5rem 4rem 1.5rem;
@@ -248,7 +228,7 @@
   margin-left: auto;
   margin-right: auto;
 }
-/* Workshops grid - max 3 cards per row */
+
 .workshops-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -275,20 +255,17 @@
   }
 }
 
-
 /* ========================================
    EMPTY STATE
    ======================================== */
 .sandbox-content .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  /* Updated: Navy text */
   color: #182F4D !important;
   opacity: 0.7;
   font-size: 1.1rem;
   background: white;
   border-radius: 16px;
-  /* Updated: Sand dashed border */
   border: 2px dashed #EBB479 !important;
   max-width: 600px;
   margin: 2rem auto;
@@ -296,6 +273,18 @@
 
 .sandbox-content .empty-state p {
   margin: 0;
+}
+
+/* ========================================
+   CTA CENTERING WRAPPER
+   ======================================== */
+.sandbox-cta-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 3rem;       
+  margin-bottom: 2rem;    
 }
 
 /* ========================================
@@ -318,7 +307,7 @@
     padding: 0 0.5rem;
   }
 
-  /* Search Bar Overlap */
+  /* Search Bar Overlap Mobile */
   .sandbox-search {
     padding: 0 1rem;
     margin: -3.5rem auto 2rem auto;
@@ -332,7 +321,6 @@
     padding-right: 1rem;
   }
   
-  /* Stack featured grid on mobile */
   .sandbox-featured-section .featured-grid {
     grid-template-columns: 1fr; 
     gap: 1rem;
@@ -353,22 +341,12 @@
     font-size: 0.9rem !important;
     text-align: center;
   }
-
-  .sandbox-hero .hero-badge {
-    font-size: 0.8rem;
-    padding: 0.4rem 1.2rem;
-  }
 }
 
 @media (max-width: 480px) {
   .sandbox-hero h1 {
     font-size: 1.75rem;
   }
-
-  .sandbox-hero p {
-    font-size: 0.9rem;
-  }
-  
   .tab-button {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;

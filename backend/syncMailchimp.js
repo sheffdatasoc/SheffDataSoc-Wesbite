@@ -64,10 +64,45 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
     const MAILCHIMP_DATA_CENTER = MAILCHIMP_API_KEY ? MAILCHIMP_API_KEY.split('-')[1] : null;
     const MAILCHIMP_API_URL = MAILCHIMP_DATA_CENTER ? `https://${MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0` : null;
 
+    // Check configuration
+    if (!MAILCHIMP_API_URL || !MAILCHIMP_AUDIENCE_ID || !MAILCHIMP_API_KEY) {
+        throw new Error("Mailchimp configuration error: API Key or Audience ID missing.");
+    }
+
     // --- 1. CHECK EXISTENCE FIRST ---
     const currentStatus = await getMailchimpMemberStatus(email);
     
-    // ✅ NEW: Determine target status based on current state
+    // --- 2. VALIDATION LOGIC (NEW: Catch Unsubscribe Edge Cases) ---
+    if (action === 'unsubscribe') {
+        // CASE A: Email does not exist
+        if (!currentStatus) {
+            return { 
+                success: false, 
+                message: "Error: This email address was not found in our list.", 
+                code: 404 
+            };
+        }
+
+        // CASE B: Email exists, but is ALREADY unsubscribed
+        if (currentStatus === 'unsubscribed' || currentStatus === 'cleaned') {
+            return { 
+                success: false, 
+                message: "You are already unsubscribed from our newsletter.", 
+                code: 409 
+            };
+        }
+    }
+
+    // CASE C: Already Subscribed check (Existing Logic)
+    if (currentStatus === 'subscribed' && action === 'subscribe') {
+        return { 
+            success: true, 
+            message: "You are already subscribed!", 
+            code: 200 
+        };
+    }
+
+    // --- 3. DETERMINE TARGET STATUS ---
     let targetStatus;
     if (action === 'subscribe') {
         // If currently unsubscribed, use 'pending' to trigger double opt-in
@@ -76,21 +111,7 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
         targetStatus = 'unsubscribed';
     }
 
-    // Check if already subscribed
-    if (currentStatus === 'subscribed' && action === 'subscribe') {
-        return { 
-            success: true, 
-            message: "You are already subscribed!", 
-            code: 200 
-        };
-    }
-    
-    // Check configuration
-    if (!MAILCHIMP_API_URL || !MAILCHIMP_AUDIENCE_ID || !MAILCHIMP_API_KEY) {
-        throw new Error("Mailchimp configuration error: API Key or Audience ID missing.");
-    }
-
-    // --- 2. PERFORM PUT (Create or Update Status) ---
+    // --- 4. PERFORM PUT (Create or Update Status) ---
     const emailHash = hashEmail(email);
     const url = `${MAILCHIMP_API_URL}/lists/${MAILCHIMP_AUDIENCE_ID}/members/${emailHash}`;
     
@@ -111,7 +132,7 @@ async function processMailchimpAction(email, action, mergeFields = {}) {
 
         const data = response.data;
         
-        // ✅ NEW: Better success messages based on status
+        // Success messages
         let message;
         if (data.status === 'subscribed') {
             message = "Subscription successful!";
@@ -142,7 +163,6 @@ module.exports = {
 
 // ----------------------------------------------------------------------
 // STANDALONE EXECUTION BLOCK (Runs with 'npm run sync:mailchimp')
-// ... (The execution block remains the same for testing)
 // ----------------------------------------------------------------------
 if (require.main === module) {
     // Load dotenv here only for local, standalone execution

@@ -1,11 +1,11 @@
+/* HomeContact.css - Sand Version */
+
 .home-contact {
-  background: linear-gradient(
-    180deg,
-    #EBB479 0%,   /* gold */
-    #F0C28D 50%,  /* light gold */
-    #182F4D 100%  /* dark blue */
-  );
-  color: #182F4D;          /* base dark text for readability */
+  /* BACKGROUND: Solid Sand (Distinct from footer) */
+  background-color: #EBB479;
+  /* Optional: A very subtle gradient to add depth without changing the color */
+  background: linear-gradient(to bottom, #EBB479, #f0c493);
+  
   min-height: 30vh;
   display: flex;
   flex-direction: column;
@@ -17,27 +17,30 @@
 }
 
 .contact-content {
-  max-width: 1000px;
+  max-width: 800px;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  z-index: 1;
-  text-align: center;
+  gap: 1.5rem; /* Consistent spacing */
 }
 
 .contact-content h2 {
   font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #DF694E;  /* Society accent red-orange for headings */
+  font-weight: 800;
+  margin: 0;
+  /* TEXT: Navy (#182F4D) provides the best contrast on Sand */
+  color: #182F4D; 
+  line-height: 1.1;
 }
 
 .contact-content p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  color: #000000;  /* dark blue for main paragraph text for contrast */
-  line-height: 1.5;
+  font-size: 1.25rem;
+  margin: 0;
+  /* TEXT: Darkest Text (#1A1A1A) for readability */
+  color: #1A1A1A;
+  font-weight: 500;
+  max-width: 600px;
 }
 
 .contact-buttons {
@@ -45,71 +48,54 @@
   justify-content: center;
   gap: 1.25rem;
   flex-wrap: wrap;
-  margin-top: 1rem;
+  width: 100%;
 }
 
-.contact-buttons a,
-.contact-buttons button {
-  padding: 0.85rem 2.25rem;
-  border-radius: 8px;
-  font-size: 1.15rem;
-  cursor: pointer;
-  transition: all 0.25s ease-in-out;
+/* --- BUTTONS --- */
+
+.contact-buttons a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  border-radius: 50px; /* Pill shape */
+  font-size: 1.1rem;
+  font-weight: 700;
   text-decoration: none;
-  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
+/* JOIN: Terracotta (Warm accent) */
 .join-button {
-  background-color: #DF694E;  /* accent red-orange button */
+  background-color: #DF694E;
   color: #ffffff;
-  border: none;
+  border: 2px solid #DF694E;
 }
 
 .join-button:hover {
-  background-color: #EB7B5B;  /* lighter red-orange on hover */
+  background-color: #c5533a;
+  border-color: #c5533a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(223, 105, 78, 0.3);
 }
 
+/* CONTACT: Navy (Strong contrast against the Sand background) */
 .contact-button {
-  background-color: #182F4D;  /* dark blue button */
+  background-color: #182F4D; 
   color: #ffffff;
-  border: none;
+  border: 2px solid #182F4D;
 }
 
 .contact-button:hover {
-  background-color: #2A4970;  /* medium blue on hover */
-}
-
-/* Footer overlay adjustments */
-.footer-content {
-  position: relative;
-  z-index: 10;
-  margin-top: -2rem;
-}
-
-.site-footer {
-  background: linear-gradient(180deg, #6B5B95 0%, #1A4758 100%);
-  color: white;
-  text-align: center;
-  padding: 1.5rem 2rem;
-  border-radius: 12px 12px 0 0;
+  background-color: #234269;
+  border-color: #234269;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(24, 47, 77, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .contact-content h2 { font-size: 2rem; }
-  .contact-content p { font-size: 1rem; }
-  .contact-buttons a, .contact-buttons button {
-    font-size: 1rem;
-    padding: 0.75rem 2rem;
-  }
+  .contact-buttons a { padding: 10px 24px; width: 100%; max-width: 300px; }
 }
-
-@media (max-width: 375px) {
-  .contact-content h2 { font-size: 1.7rem; }
-  .contact-content p { font-size: 0.95rem; }
-  .contact-buttons a, .contact-buttons button {
-    font-size: 0.9rem;
-    padding: 0.65rem 1.6rem;
-  }
-}
-
