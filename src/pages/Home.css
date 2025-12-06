@@ -56,15 +56,20 @@
    CONTACT SECTION (same height as social/newsletter)
    ---------------------------------------- */
 .contact-preview {
-  background: linear-gradient(180deg, #1A4758 0%, #6B5B95 50%, #D9B44A 100%);
-  min-height: fit-content;     /* unified height */
-  padding: 3rem 1.5rem;        /* same as social/newsletter */
+  background: linear-gradient(
+    180deg,
+    #182F4D 0%,   /* dark blue base */
+    #5979A6 50%,  /* medium blue */
+    #EBB479 100%  /* gold accent */
+  );
+  min-height: fit-content;     
+  padding: 3rem 1.5rem;       
 
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  color: #ffffff;
+  color: #ffffff;  /* base text color for contrast */
 }
 
 .contact-content {
@@ -78,12 +83,13 @@
 
 .contact-content h2 {
   font-size: 2.2rem;
-  color: #FFD966;
+  color: #000000;  /* Society accent red-orange for headings */
 }
 
 .contact-content p {
   font-size: 1.1rem;
   line-height: 1.4;
+  color: #ffffff;  /* white text for readability on gradient */
 }
 
 .contact-buttons {
@@ -104,24 +110,26 @@
   text-decoration: none;
 }
 
+/* Join button - accent color */
 .join-button {
-  background-color: #ffffff;
-  color: #6f42c1;
+  background-color: #DF694E;  /* red-orange */
+  color: #ffffff;
   border: none;
 }
 
 .join-button:hover {
-  background-color: #f0f0f0;
+  background-color: #EB7B5B;  /* lighter red-orange on hover */
 }
 
+/* Contact button - dark blue */
 .contact-button {
-  background-color: #4A90E2;
+  background-color: #182F4D;  
   color: #ffffff;
   border: none;
 }
 
 .contact-button:hover {
-  background-color: #357ABD;
+  background-color: #2A4970;  /* medium blue on hover */
 }
 
 /* Responsiveness */
@@ -142,3 +150,4 @@
   .contact-content h2 { font-size: 1.7rem; }
   .contact-content p { font-size: 0.95rem; }
 }
+

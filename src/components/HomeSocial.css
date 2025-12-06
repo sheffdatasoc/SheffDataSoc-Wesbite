@@ -6,14 +6,14 @@
   text-align: center;
   padding: 2rem 1rem;
 
-  /* Soft pastel gradient background */
   background: linear-gradient(
-    180deg,
-    #D9CAB3 0%,   /* Warm Beige */
-    #B5CBB7 50%,  /* Sage Green */
-    #A3BFD9 100%  /* Muted Blue-Grey */
-
+  180deg,
+  #182F4D 0%,   /* dark blue */
+  #5979A6 50%,  /* medium blue */
+  #EBB479 100%  /* gold */
   );
+  color: #ffffff;
+
 
   /* Rounded edges and subtle shadow for style */
   border-radius: 12px;

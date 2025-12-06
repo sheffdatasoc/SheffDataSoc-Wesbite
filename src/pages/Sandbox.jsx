@@ -1,8 +1,10 @@
+// /pages/Sandbox.jsx
 import React, { useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import WorkshopCard from '../components/WorkshopCard';
 import { useProjects, useWorkshops } from '../hooks/useSupabase';
 import { Search, GitBranch, Code2 } from 'lucide-react';
+import SandboxCTA from "../components/SandboxCTA";
 import './Sandbox.css';
 
 function TheSandbox() {
@@ -35,7 +37,6 @@ function TheSandbox() {
     });
   };
 
-  // Apply filter + sort
   const baseItems = activeTab === 'projects' ? (projects || []) : (workshops || []);
   const filtered = filterItems(baseItems);
   const sorted = sortItems(filtered);
@@ -104,29 +105,39 @@ function TheSandbox() {
         {sorted.length === 0 ? (
           <div className="empty-state">
             <p>No {activeTab} found {searchQuery && `matching "${searchQuery}"`}</p>
+            {/* CTA for empty state */}
+            <SandboxCTA />
           </div>
         ) : activeTab === 'projects' ? (
-          <div className="projects-grid">
-            {sorted.map(project => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                featured={project.featured}
-                isSandbox={true}
-              />
-            ))}
-          </div>
+          <>
+            <div className="projects-grid">
+              {sorted.map(project => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  featured={project.featured}
+                  isSandbox={true}
+                />
+              ))}
+            </div>
+            {/* CTA below project cards */}
+            <SandboxCTA />
+          </>
         ) : (
-          <div className="workshops-grid">
-            {sorted.map(workshop => (
-              <WorkshopCard
-                key={workshop.id}
-                workshop={workshop}
-                featured={workshop.featured}
-                isSandbox={true}
-              />
-            ))}
-          </div>
+          <>
+            <div className="workshops-grid">
+              {sorted.map(workshop => (
+                <WorkshopCard
+                  key={workshop.id}
+                  workshop={workshop}
+                  featured={workshop.featured}
+                  isSandbox={true}
+                />
+              ))}
+            </div>
+            {/* CTA below workshop cards */}
+            <SandboxCTA />
+          </>
         )}
       </div>
     </div>
@@ -134,6 +145,7 @@ function TheSandbox() {
 }
 
 export default TheSandbox;
+
 
 
 
