@@ -83,6 +83,10 @@ function debugLog(...args) {
   }
 }
 
+function preserveImage(existingMap, notionId, newImageUrl) {
+  return existingMap.get(notionId) || newImageUrl || null;
+}
+
 
 // Get all pages from a database with pagination
 async function getAllPages(databaseId) {
@@ -113,9 +117,22 @@ async function getAllPages(databaseId) {
 async function syncEvents() {
   try {
     console.log('Syncing events...');
+
     const pages = await getAllPages(DATABASES.events);
 
+    // 1️⃣ Fetch existing events FIRST (only id + image)
+    const { data: existingEvents, error: fetchError } = await supabase
+      .from('events')
+      .select('notion_id, image_url');
 
+    if (fetchError) throw fetchError;
+
+    // 2️⃣ Create a lookup map: notion_id → image_url
+    const existingEventMap = new Map(
+      (existingEvents || []).map(e => [e.notion_id, e.image_url])
+    );
+
+    // 3️⃣ Build events array, protecting image_url
     const events = pages
       .map(page => ({
         notion_id: page.id,
@@ -128,22 +145,27 @@ async function syncEvents() {
         type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
         attendees: page.properties.Attendees?.number || 0,
         max_attendees: page.properties['Max Attendees']?.number || null,
-        image_url: extractImageUrl(page.properties.Image),
+
+        // 🔒 PROTECTED IMAGE FIELD
+        image_url: preserveImage(
+          existingEventMap,
+          page.id,
+          extractImageUrl(page.properties.Image)
+        ),
+
         registration_url: page.properties['Registration URL']?.url || null,
         is_featured: page.properties.Featured?.checkbox || false,
         created_at: page.created_time,
         updated_at: page.last_edited_time
       }))
-      .filter(event => event.title); // Skip events without titles
-
+      .filter(event => event.title);
 
     if (events.length === 0) {
-      console.log('⚠️  No valid events found');
+      console.log('⚠️ No valid events found');
       return { count: 0, data: null };
     }
 
-
-    // Upsert events
+    // 4️⃣ Upsert (unchanged)
     const { data, error } = await supabase
       .from('events')
       .upsert(events, {
@@ -151,10 +173,11 @@ async function syncEvents() {
         ignoreDuplicates: false
       });
 
-
     if (error) throw error;
+
     console.log(`✓ Synced ${events.length} events`);
     return { count: events.length, data };
+
   } catch (error) {
     console.error('Error syncing events:', error.message);
     return { count: 0, error: error.message };
@@ -168,7 +191,6 @@ async function syncBlogPosts() {
     console.log('Syncing blog posts...');
     const pages = await getAllPages(DATABASES.blog);
 
-
     const posts = [];
     const errors = [];
 
@@ -177,10 +199,16 @@ async function syncBlogPosts() {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const mdString = n2m.toMarkdownString(mdBlocks);
 
+        // Check if post already exists
+        const { data: existingPost } = await supabase
+          .from('blog_posts')
+          .select('content')
+          .eq('notion_id', page.id)
+          .single();
+
         // Map Notion status to appropriate status value
-        // Status is stored as rich_text, not select
         const notionStatus = extractText(page.properties.Status?.rich_text) || 'draft';
-        let status = 'draft'; // default
+        let status = 'draft';
 
         const statusLower = notionStatus.toLowerCase();
         if (statusLower === 'published') {
@@ -195,59 +223,47 @@ async function syncBlogPosts() {
           author: extractText(page.properties.Author?.rich_text),
           published_date: extractDate(page.properties['Published Date']?.date),
           excerpt: extractText(page.properties.Excerpt?.rich_text),
-          status: status,
+          status,
           image: extractImageUrl(page.properties.Image),
-          content: mdString.parent,
+
+          // 🔒 PROTECT CONTENT
+          content: existingPost?.content ?? mdString.parent,
+
           slug: extractText(page.properties.Slug?.rich_text) || page.id,
           created_at: page.created_time,
           updated_at: page.last_edited_time
         };
 
-
         if (post.title) {
           posts.push(post);
         }
-
         await delay(RATE_LIMIT_DELAY);
+
       } catch (err) {
         errors.push({
           pageId: page.id,
           title: extractText(page.properties.Title?.title),
           error: err.message
         });
-        debugLog(`Failed to process blog post ${page.id}:`, err.message);
       }
     }
 
-
-    if (errors.length > 0) {
-      console.warn(`⚠️  ${errors.length} blog posts failed to sync`);
-    }
-
-
-    if (posts.length === 0) {
-      console.log('⚠️  No valid blog posts found');
-      return { count: 0, data: null, errors };
-    }
-
-
-    // Upsert blog posts
     const { data, error } = await supabase
       .from('blog_posts')
-      .upsert(posts, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
+      .upsert(posts, { onConflict: 'notion_id' });
 
     if (error) throw error;
+
     console.log(`✓ Synced ${posts.length} blog posts`);
     return { count: posts.length, data, errors };
+
   } catch (error) {
     console.error('Error syncing blog posts:', error.message);
     return { count: 0, error: error.message };
   }
 }
+
+
 
 
 // Sync Projects
@@ -349,22 +365,29 @@ async function syncGuides() {
     console.log('Syncing guides...');
     const pages = await getAllPages(DATABASES.guides);
 
-
     const guides = [];
     const errors = [];
-
 
     for (const page of pages) {
       try {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const mdString = n2m.toMarkdownString(mdBlocks);
 
+        // Check existing guide
+        const { data: existingGuide } = await supabase
+          .from('guides')
+          .select('content')
+          .eq('notion_id', page.id)
+          .single();
 
         const guide = {
           notion_id: page.id,
           title: extractText(page.properties.Name?.title),
           description: extractText(page.properties.Description?.rich_text),
-          content: mdString.parent,
+
+          // 🔒 PROTECT CONTENT
+          content: existingGuide?.content ?? mdString.parent,
+
           published_date: extractDate(page.properties['Published Date']?.date),
           category: page.properties.Category?.select?.name || null,
           difficulty: page.properties.Difficulty?.select?.name || 'beginner',
@@ -378,51 +401,36 @@ async function syncGuides() {
           updated_at: page.last_edited_time
         };
 
-
         if (guide.title) {
           guides.push(guide);
         }
-
         await delay(RATE_LIMIT_DELAY);
+
       } catch (err) {
         errors.push({
           pageId: page.id,
           title: extractText(page.properties.Name?.title),
           error: err.message
         });
-        debugLog(`Failed to process guide ${page.id}:`, err.message);
       }
     }
 
-
-    if (errors.length > 0) {
-      console.warn(`⚠️  ${errors.length} guides failed to sync`);
-    }
-
-
-    if (guides.length === 0) {
-      console.log('⚠️  No valid guides found');
-      return { count: 0, data: null, errors };
-    }
-
-
-    // Upsert guides
     const { data, error } = await supabase
       .from('guides')
-      .upsert(guides, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
+      .upsert(guides, { onConflict: 'notion_id' });
 
     if (error) throw error;
+
     console.log(`✓ Synced ${guides.length} guides`);
     return { count: guides.length, data, errors };
+
   } catch (error) {
     console.error('Error syncing guides:', error.message);
     return { count: 0, error: error.message };
   }
 }
+
+
 
 // Sync Members
 async function syncMembers() {
@@ -637,11 +645,22 @@ async function syncTimeline() {
   try {
     console.log('Syncing timeline events...');
 
-
     const pages = await getAllPages(DATABASES.timeline);
+
+    // 🔒 1️⃣ Fetch existing timeline images
+    const { data: existingTimeline, error: fetchError } = await supabase
+      .from('timeline_events')
+      .select('notion_id, image_url');
+
+    if (fetchError) throw fetchError;
+
+    // 🔒 2️⃣ Create lookup map
+    const existingTimelineMap = new Map(
+      (existingTimeline || []).map(t => [t.notion_id, t.image_url])
+    );
+
     const timelineEvents = [];
     const errors = [];
-
 
     for (const page of pages) {
       try {
@@ -653,12 +672,19 @@ async function syncTimeline() {
           description: extractText(page.properties.Description?.rich_text),
           tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
           icon: extractText(page.properties.Icon?.rich_text) || null,
-          image_url: extractImageUrl(page.properties.Image),
+
+          // 🔒 IMAGE PROTECTION
+          image_url:
+            existingTimelineMap.get(page.id) ||
+            extractImageUrl(page.properties.Image),
+
           created_at: page.created_time
         };
+
         if (timeline.title) {
           timelineEvents.push(timeline);
         }
+
         await delay(RATE_LIMIT_DELAY);
       } catch (err) {
         errors.push({
@@ -666,21 +692,24 @@ async function syncTimeline() {
           title: extractText(page.properties.Title?.title),
           error: err.message
         });
-        debugLog(`Failed to process timeline event ${page.id}:`, err.message);
+
+        debugLog(
+          `Failed to process timeline event ${page.id}:`,
+          err.message
+        );
       }
     }
+
     if (errors.length > 0) {
       console.warn(`⚠️  ${errors.length} timeline events failed to sync`);
     }
-
 
     if (timelineEvents.length === 0) {
       console.log('⚠️  No valid timeline events found');
       return { count: 0, data: null, errors };
     }
 
-
-    // Upsert timeline events into Supabase
+    // Upsert timeline events
     const { data, error } = await supabase
       .from('timeline_events')
       .upsert(timelineEvents, {
@@ -688,12 +717,11 @@ async function syncTimeline() {
         ignoreDuplicates: false
       });
 
-
     if (error) throw error;
-
 
     console.log(`✓ Synced ${timelineEvents.length} timeline events`);
     return { count: timelineEvents.length, data, errors };
+
   } catch (error) {
     console.error('Error syncing timeline events:', error.message);
     return { count: 0, error: error.message };
@@ -701,16 +729,28 @@ async function syncTimeline() {
 }
 
 
+
 // Sync Gallery
 async function syncGallery() {
   try {
     console.log('Syncing gallery items...');
 
-
     const pages = await getAllPages(DATABASES.gallery);
+
+    // 🔒 1️⃣ Fetch existing gallery images
+    const { data: existingGallery, error: fetchError } = await supabase
+      .from('gallery_items')
+      .select('notion_id, image_url');
+
+    if (fetchError) throw fetchError;
+
+    // 🔒 2️⃣ Create lookup map
+    const existingGalleryMap = new Map(
+      (existingGallery || []).map(item => [item.notion_id, item.image_url])
+    );
+
     const galleryItems = [];
     const errors = [];
-
 
     for (const page of pages) {
       try {
@@ -720,19 +760,20 @@ async function syncGallery() {
           event_date: extractDate(page.properties['Event Date']?.date),
           description: extractText(page.properties.Description?.rich_text),
           category: page.properties.Category?.select?.name || 'Uncategorized',
-          image_url: extractImageUrl(page.properties.Image),
+
+          // 🔒 IMAGE PROTECTION
+          image_url:
+            existingGalleryMap.get(page.id) ||
+            extractImageUrl(page.properties.Image),
+
           created_at: page.created_time
         };
-
 
         if (gallery.title) {
           galleryItems.push(gallery);
         }
 
-
         await delay(RATE_LIMIT_DELAY);
-
-
       } catch (err) {
         errors.push({
           pageId: page.id,
@@ -740,23 +781,23 @@ async function syncGallery() {
           error: err.message
         });
 
-
-        debugLog(`Failed to process gallery item ${page.id}:`, err.message);
+        debugLog(
+          `Failed to process gallery item ${page.id}:`,
+          err.message
+        );
       }
     }
-
 
     if (errors.length > 0) {
       console.warn(`${errors.length} gallery items failed to process.`);
     }
-
 
     if (galleryItems.length === 0) {
       console.log('No valid gallery items found.');
       return { count: 0, data: null, errors };
     }
 
-
+    // Upsert gallery items
     const { data, error } = await supabase
       .from('gallery_items')
       .upsert(galleryItems, {
@@ -764,19 +805,17 @@ async function syncGallery() {
         ignoreDuplicates: false
       });
 
-
     if (error) throw error;
-
 
     console.log(`✓ Synced ${galleryItems.length} gallery items.`);
     return { count: galleryItems.length, data, errors };
-
 
   } catch (error) {
     console.error('Error syncing gallery items:', error.message);
     return { count: 0, error: error.message };
   }
 }
+
 
 // Sync Partners
 async function syncPartners() {
