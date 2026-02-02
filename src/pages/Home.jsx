@@ -30,33 +30,6 @@ function Home() {
 
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
   const [partners, setPartners] = useState([]);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  // 1. Simplified Scroll Listener (Listens to Window directly)
-  useEffect(() => {
-    const handleScroll = () => {
-      // Check vertical scroll position of the window
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      setShowScrollTop(scrollTop > 400);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Initial check
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // 2. Simplified Scroll Action
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
 
   // Fetch data
   useEffect(() => {
@@ -112,15 +85,6 @@ function Home() {
 
   return (
     <div className="home-page">
-      {/* Scroll to Top Button */}
-      <button
-        className={`scroll-to-top-btn ${showScrollTop ? 'visible' : ''}`}
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-      >
-        <ArrowUp size={24} />
-      </button>
-
       {/* 1. HERO SECTION */}
       <Hero
         title="Sheffield's Data Science Community"
