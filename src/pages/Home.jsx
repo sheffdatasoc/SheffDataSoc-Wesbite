@@ -84,7 +84,7 @@ function Home() {
     { value: '5+', title: 'Partners' }
   ];
 
-  const platinumPartner = partners.find(p => p.tier?.toLowerCase() === 'platinum');
+  const platinumPartner = partners.find(p => p.tier?.trim().toLowerCase() === 'platinum');
 
   return (
     <div className="home-page">
@@ -92,6 +92,10 @@ function Home() {
       <Hero
         title="Sheffield's Data Science Community"
         subtitle="Empowering students through data-driven innovation, community events, and collaborative projects."
+        showButtons={true}
+        showStats={true}
+        stats={stats}
+        showBadge={true}
         badgeText="Welcome to SheffDataSoc"
         highlightWord="Data Science"
         partners={partners}

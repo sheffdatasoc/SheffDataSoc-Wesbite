@@ -1,15 +1,15 @@
 import React from 'react';
-import { ExternalLink, Sparkles } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import './SponsorSpotlight.css';
 
 const SponsorSpotlight = ({ sponsor }) => {
     if (!sponsor) return null;
 
     return (
-        <section className="sponsor-spotlight">
+        <section className="sponsor-spotlight visible">
+            <div className="spotlight-arrow"></div>
             <div className="spotlight-container">
-                <div className="spotlight-badge">
-                    <Sparkles size={16} />
+                <div className="spotlight-badge" style={{ color: '#EBB479', fontWeight: 'bold' }}>
                     <span>Platinum Sponsor Spotlight</span>
                 </div>
 
@@ -18,10 +18,10 @@ const SponsorSpotlight = ({ sponsor }) => {
                         <div className="spotlight-logo-wrapper">
                             <img src={sponsor.logo} alt={sponsor.name} className="spotlight-logo" />
                         </div>
-                        <h2 className="spotlight-name">{sponsor.name}</h2>
+                        <h2 className="spotlight-name" style={{ color: '#182F4D' }}>{sponsor.name}</h2>
                         {sponsor.cta_link && (
                             <a
-                                href={sponsor.cta_link}
+                                href={sponsor.cta_link.trim()}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="spotlight-cta"
@@ -33,13 +33,13 @@ const SponsorSpotlight = ({ sponsor }) => {
 
                     <div className="spotlight-right">
                         <div className="spotlight-block">
-                            <h3>About {sponsor.name}</h3>
-                            <p>{sponsor.about_blurb}</p>
+                            <h3 style={{ color: '#182F4D' }}>About {sponsor.name}</h3>
+                            <p style={{ color: '#4a5568' }}>{sponsor.about_blurb || 'More information about our platinum sponsor is coming soon.'}</p>
                         </div>
 
                         <div className="spotlight-block">
-                            <h3>Why They Sponsor Data Science</h3>
-                            <p>{sponsor.why_sponsor}</p>
+                            <h3 style={{ color: '#182F4D' }}>Why They Sponsor Data Science</h3>
+                            <p style={{ color: '#4a5568' }}>{sponsor.why_sponsor || 'Statement on data science sponsorship is coming soon.'}</p>
                         </div>
                     </div>
                 </div>

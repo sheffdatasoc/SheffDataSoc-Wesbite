@@ -162,8 +162,11 @@ const Hero = ({
               {extendedPartners.map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
-                  className="partner-logo-card"
+                  className={`partner-logo-card ${partner.tier?.toLowerCase() === 'platinum' ? 'platinum-nudge' : ''}`}
                 >
+                  {partner.tier?.toLowerCase() === 'platinum' && (
+                    <span className="platinum-badge-nudge">Spotlight</span>
+                  )}
                   {brokenLogos.has(partner.id) ? (
                     <span className="partner-name-fallback">{partner.name}</span>
                   ) : (

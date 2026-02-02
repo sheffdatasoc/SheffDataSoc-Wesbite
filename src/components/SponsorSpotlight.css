@@ -1,21 +1,39 @@
 .sponsor-spotlight {
     width: 100%;
-    padding: 4rem 2rem;
+    padding: 6rem 2rem 4rem;
+    /* Increased top padding for the arrow */
     background: radial-gradient(circle at top left, #f8f9fa 0%, #e9ecef 100%);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    /* Allow arrow to be seen */
+}
+
+.spotlight-arrow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid #182F4D;
+    /* Matches Hero bottom color */
+    z-index: 5;
 }
 
 .spotlight-container {
     max-width: 1200px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: 24px;
     padding: 3rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: hidden;
+    z-index: 10;
 }
 
 /* Platinum Shine Effect */

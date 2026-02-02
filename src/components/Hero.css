@@ -6,19 +6,19 @@
 .hero-modern {
   min-height: auto;
   width: 100%;
-  
+
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
-  gap: 3rem; 
+  gap: 3rem;
   /* Added significant bottom padding to make room for carousel */
-  padding: 6rem 2rem 4rem; 
-  
+  padding: 6rem 2rem 4rem;
+
   position: relative;
   overflow: hidden;
 
   background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%);
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 /* Content Wrapper (Text + Images) */
@@ -29,12 +29,12 @@
   align-items: flex-start;
   justify-content: center;
   gap: 8rem;
-  
+
   /* Ensure this takes up necessary space but allows carousel below */
-  flex: 1 0 auto; 
-  
+  flex: 1 0 auto;
+
   /* SHIFT DESKTOP CONTENT LOWER */
-  margin-top: 4rem; 
+  margin-top: 4rem;
 }
 
 /* 2. Left Side: Text Content */
@@ -43,34 +43,34 @@
   z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: flex-start;
 }
 
 /* Badge Styling */
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  background: rgba(245, 245, 242, 0.15); 
+  background: rgba(245, 245, 242, 0.15);
   backdrop-filter: blur(4px);
-  border: none; 
-  color: #F5F5F2; 
-  padding: 0.4rem 0.9rem; 
+  border: none;
+  color: #F5F5F2;
+  padding: 0.4rem 0.9rem;
   border-radius: 50px;
-  font-size: 0.8rem; 
-  font-weight: 700; 
-  margin-bottom: 0.75rem; 
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
   letter-spacing: 0.5px;
 }
 
 /* Heading Typography */
 .hero-text-content h1 {
-  font-size: 2.75rem; 
+  font-size: 2.75rem;
   font-weight: 800;
   line-height: 1.1;
-  margin-bottom: 0.75rem; 
+  margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
-  color: #ffffff; 
-  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  color: #ffffff;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .highlight {
@@ -80,11 +80,11 @@
 }
 
 .hero-subtitle {
-  font-size: 1.0625rem; 
-  line-height: 1.5; 
-  color: #F5F5F2; 
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: #F5F5F2;
   opacity: 0.95;
-  margin-bottom: 1.25rem; 
+  margin-bottom: 1.25rem;
   max-width: 90%;
   font-weight: 400;
 }
@@ -92,21 +92,21 @@
 /* 3. Buttons Area */
 .hero-buttons {
   display: flex;
-  gap: 1rem; 
-  margin-bottom: 1.5rem; 
+  gap: 1rem;
+  margin-bottom: 1.5rem;
   align-items: center;
 }
 
 .btn-primary {
-  background: #ffffff; 
+  background: #ffffff;
   color: #182F4D;
-  padding: 0.65rem 1.4rem; 
-  font-size: 0.95rem; 
+  padding: 0.65rem 1.4rem;
+  font-size: 0.95rem;
   font-weight: 700;
   border-radius: 8px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
@@ -116,17 +116,17 @@
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  background-color: #F5F5F2; 
+  background-color: #F5F5F2;
 }
 
 .btn-secondary {
   background-color: transparent;
-  color: #ffffff; 
-  padding: 0.65rem 1.4rem; 
-  font-size: 0.95rem; 
+  color: #ffffff;
+  padding: 0.65rem 1.4rem;
+  font-size: 0.95rem;
   font-weight: 600;
   border-radius: 8px;
-  border: 2px solid rgba(245, 245, 242, 0.3); 
+  border: 2px solid rgba(245, 245, 242, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
@@ -140,23 +140,23 @@
 /* 4. Stats Area */
 .hero-stats {
   display: flex;
-  gap: 3rem; 
+  gap: 3rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(245, 245, 242, 0.2); 
+  border-top: 1px solid rgba(245, 245, 242, 0.2);
   width: 100%;
 }
 
 .stat-item h3 {
-  font-size: 2rem; 
+  font-size: 2rem;
   font-weight: 800;
-  color: #ffffff; 
+  color: #ffffff;
   margin: 0;
 }
 
 .stat-item p {
-  font-size: 0.95rem; 
-  color: #EBB479; 
-  margin-top: 0.3rem; 
+  font-size: 0.95rem;
+  color: #EBB479;
+  margin-top: 0.3rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -167,13 +167,13 @@
    ======================================== */
 
 .hero-image-container {
-  flex: 0 0 520px; 
-  height: 420px; 
+  flex: 0 0 520px;
+  height: 420px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  perspective: 1000px; 
+  perspective: 1000px;
 }
 
 .carousel-stage {
@@ -187,14 +187,14 @@
 
 .carousel-card {
   position: absolute;
-  width: 280px; 
-  height: 375px; 
+  width: 280px;
+  height: 375px;
   object-fit: cover;
   border-radius: 20px;
   transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   cursor: pointer;
-  border: none; 
+  border: none;
   background-color: #182F4D;
 }
 
@@ -203,7 +203,7 @@
   z-index: 10;
   opacity: 1;
   transform: translateX(0) scale(1);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
   filter: brightness(1);
 }
 
@@ -211,9 +211,13 @@
   z-index: 5;
   opacity: 0.7;
   transform: translateX(-60%) scale(0.85);
-  filter: blur(1px) brightness(0.7); 
+  filter: blur(1px) brightness(0.7);
 }
-.card-left:hover { filter: blur(0px) brightness(0.9); opacity: 0.9; }
+
+.card-left:hover {
+  filter: blur(0px) brightness(0.9);
+  opacity: 0.9;
+}
 
 .card-right {
   z-index: 5;
@@ -221,7 +225,11 @@
   transform: translateX(60%) scale(0.85);
   filter: blur(1px) brightness(0.7);
 }
-.card-right:hover { filter: blur(0px) brightness(0.9); opacity: 0.9; }
+
+.card-right:hover {
+  filter: blur(0px) brightness(0.9);
+  opacity: 0.9;
+}
 
 .card-hidden {
   z-index: 0;
@@ -237,21 +245,23 @@
 .hero-partner-carousel {
   width: 100%;
   padding: 0;
-  overflow: visible; /* Prevent clipping */
-  margin-top: auto; /* Push to bottom if space allows */
-  
+  overflow: visible;
+  /* Prevent clipping */
+  margin-top: auto;
+  /* Push to bottom if space allows */
+
   /* CRITICAL: Prevent it from shrinking to 0 height */
   flex-shrink: 0;
 }
 
 .partner-carousel-label {
   text-align: center;
-  font-size: 0.8rem; 
+  font-size: 0.8rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 0.75rem; 
+  margin-bottom: 0.75rem;
 }
 
 .partner-carousel-wrapper {
@@ -259,22 +269,18 @@
   overflow: hidden;
   position: relative;
   /* CRITICAL: Ensure container has height */
-  min-height: 140px; 
-  
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 10%,
-    black 90%,
-    transparent 100%
-  );
+  min-height: 140px;
+
+  mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 10%,
+      black 90%,
+      transparent 100%);
+  -webkit-mask-image: linear-gradient(to right,
+      transparent 0%,
+      black 10%,
+      black 90%,
+      transparent 100%);
 }
 
 .partner-carousel-track {
@@ -287,11 +293,11 @@
 }
 
 .partner-logo-card {
-  flex: 0 0 200px; 
-  height: 110px; 
+  flex: 0 0 200px;
+  height: 110px;
   background: white;
   border-radius: 16px;
-  padding: 1.25rem; 
+  padding: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -312,7 +318,9 @@
   transition: filter 0.3s ease;
 }
 
-.partner-logo-card:hover .partner-logo-img { filter: grayscale(0%); }
+.partner-logo-card:hover .partner-logo-img {
+  filter: grayscale(0%);
+}
 
 .partner-name-fallback {
   font-size: 1.1rem;
@@ -326,13 +334,39 @@
 /* ========================================
    MOBILE RESPONSIVENESS
    ======================================== */
+/* Platinum Partner Nudge in Carousel */
+.partner-logo-card.platinum-nudge {
+  border: 4px solid #DF694E;
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(223, 105, 78, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+.platinum-badge-nudge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #DF694E;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(223, 105, 78, 0.4);
+  white-space: nowrap;
+}
+
 @media (max-width: 1024px) {
   .hero-modern {
     flex-direction: column;
-    text-align: center; 
-    padding: 6rem 1.5rem 2rem; 
+    text-align: center;
+    padding: 6rem 1.5rem 2rem;
     gap: 2rem;
-    min-height: auto; 
+    min-height: auto;
     justify-content: flex-start;
   }
 
@@ -347,11 +381,11 @@
 
   .hero-text-content {
     flex: none;
-    align-items: center; 
+    align-items: center;
     max-width: 100%;
   }
-  
-  .hero-text-content h1 { 
+
+  .hero-text-content h1 {
     font-size: 2rem;
     line-height: 1.1;
     margin-bottom: 0.5rem;
@@ -370,7 +404,8 @@
     margin-bottom: 1.5rem;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary,
+  .btn-secondary {
     width: 100%;
     max-width: 280px;
     justify-content: center;
@@ -381,29 +416,42 @@
     gap: 1.5rem;
     width: 100%;
     padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
-  
-  .stat-item h3 { font-size: 1.5rem; }
-  .stat-item p { font-size: 0.75rem; }
+
+  .stat-item h3 {
+    font-size: 1.5rem;
+  }
+
+  .stat-item p {
+    font-size: 0.75rem;
+  }
 
   /* Image Container */
   .hero-image-container {
     flex: none;
     width: 100%;
-    height: 240px; 
+    height: 240px;
     margin-top: 1rem;
     order: 2;
   }
-  
+
   .carousel-card {
     width: 160px;
     height: 220px;
   }
-  
-  .card-center { transform: translateX(0) scale(0.95); }
-  .card-left { transform: translateX(-50%) scale(0.75); }
-  .card-right { transform: translateX(50%) scale(0.75); }
+
+  .card-center {
+    transform: translateX(0) scale(0.95);
+  }
+
+  .card-left {
+    transform: translateX(-50%) scale(0.75);
+  }
+
+  .card-right {
+    transform: translateX(50%) scale(0.75);
+  }
 
   /* --- PARTNER CAROUSEL --- */
   .hero-partner-carousel {
@@ -411,13 +459,13 @@
     margin-top: 2rem;
     margin-bottom: 0;
     width: 100%;
-    
+
     /* Force display */
     display: block !important;
     min-height: 120px;
     opacity: 1;
     z-index: 20;
-    
+
     overflow: visible;
     flex-shrink: 0;
   }
@@ -431,7 +479,7 @@
     height: 80px;
     padding: 0.75rem;
   }
-  
+
   .partner-logo-img {
     max-width: 90%;
     max-height: 90%;
