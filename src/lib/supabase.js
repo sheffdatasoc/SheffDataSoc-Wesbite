@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 
 // Initialize Supabase client
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
-const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 
 // Check if environment variables are set
@@ -112,8 +112,8 @@ export async function getEvents(options = {}) {
     console.warn('Supabase not configured, returning empty array');
     return [];
   }
-  
-  const { includeAll = true } = options; 
+
+  const { includeAll = true } = options;
 
   let query = supabase
     .from('events')

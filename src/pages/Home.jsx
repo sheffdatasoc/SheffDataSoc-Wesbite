@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { ArrowUp } from 'lucide-react';
 import Hero from '../components/Hero';
-import Footer from '../components/Footer'; 
+import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
 import HomeProjects from '../components/HomeProjects';
 import HomeEvents from '../components/HomeEvents';
@@ -14,8 +14,8 @@ import useSectionFadeIn from '../hooks/useSectionFadeIn';
 
 // Initialize Supabase
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 const TEST_IMAGES = [
@@ -27,7 +27,7 @@ const FALLBACK_IMAGE = TEST_IMAGES[0];
 
 function Home() {
   useSectionFadeIn();
-  
+
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
   const [partners, setPartners] = useState([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -41,7 +41,7 @@ function Home() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    
+
     // Initial check
     handleScroll();
 
@@ -122,7 +122,7 @@ function Home() {
       </button>
 
       {/* 1. HERO SECTION */}
-      <Hero 
+      <Hero
         title="Sheffield's Data Science Community"
         subtitle="Join SheffDataSoc - where students passionate about data, AI, and analytics come together to learn, build, and grow."
         showButtons={true}
