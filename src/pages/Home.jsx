@@ -78,6 +78,14 @@ function Home() {
     fetchPartners();
   }, []);
 
+  const [activePartner, setActivePartner] = useState(null);
+  const [arrowOffset, setArrowOffset] = useState('50%');
+
+  const handlePartnerSelect = (partner, offset) => {
+    setActivePartner(partner);
+    if (offset) setArrowOffset(offset);
+  };
+
   const stats = [
     { value: '100+', title: 'Members' },
     { value: '20+', title: 'Events/Year' },
@@ -101,10 +109,20 @@ function Home() {
         partners={partners}
         images={heroImages}
         fallbackImage={FALLBACK_IMAGE}
+        onPartnerClick={handlePartnerSelect}
+        activePartnerId={activePartner?.id}
       />
 
       {/* 1.5 PLATINUM SPONSOR SPOTLIGHT */}
-      {platinumPartner && <SponsorSpotlight sponsor={platinumPartner} />}
+      <div id="spotlight-section">
+        {activePartner && (
+          <SponsorSpotlight
+            sponsor={activePartner}
+            arrowOffset={arrowOffset}
+            onClose={() => setActivePartner(null)}
+          />
+        )}
+      </div>
 
       {/* 2. ABOUT SECTION */}
       <AboutSection />

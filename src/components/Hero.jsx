@@ -13,7 +13,9 @@ const Hero = ({
   highlightWord,
   images = [],
   fallbackImage,
-  partners = [] // Add partners prop
+  partners = [],
+  onPartnerClick,
+  activePartnerId
 }) => {
 
   // --- IMAGE CAROUSEL LOGIC ---
@@ -75,11 +77,11 @@ const Hero = ({
   };
 
   useEffect(() => {
-    if (partnersWithLogos.length === 0) return;
+    if (partnersWithLogos.length === 0 || activePartnerId) return;
 
     const interval = setInterval(() => {
       setOffset((prevOffset) => {
-        const cardWidth = 220; // Updated to match new card width (200px) + gap (20px)
+        const cardWidth = 220;
         const newOffset = prevOffset + 1;
 
         if (newOffset >= cardWidth * partnersWithLogos.length) {
@@ -90,7 +92,35 @@ const Hero = ({
     }, 30);
 
     return () => clearInterval(interval);
-  }, [partnersWithLogos.length]);
+  }, [partnersWithLogos.length, activePartnerId]);
+
+  const handlePartnerClick = (e, partner) => {
+    if (partner.tier?.toLowerCase() !== 'platinum') return;
+
+    if (activePartnerId === partner.id) {
+      onPartnerClick(null);
+    } else {
+      // Calculate position for the arrow
+      const cardRect = e.currentTarget.getBoundingClientRect();
+      const carouselRect = e.currentTarget.closest('.hero-partner-carousel').getBoundingClientRect();
+      const relativeCenter = cardRect.left + (cardRect.width / 2) - carouselRect.left;
+      const offsetPercent = (relativeCenter / carouselRect.width) * 100;
+
+      onPartnerClick(partner, `${offsetPercent}%`);
+
+      // Wait for re-render then scroll to spotlight
+      setTimeout(() => {
+        const section = document.getElementById('spotlight-section');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const handleHeroClick = () => {
+    if (activePartnerId) {
+      onPartnerClick(null);
+    }
+  };
 
   const renderTitle = () => {
     if (!highlightWord) return title;
@@ -99,7 +129,7 @@ const Hero = ({
   };
 
   return (
-    <section className="hero-modern">
+    <section className="hero-modern" onClick={handleHeroClick}>
       <div className="hero-content-wrapper">
         {/* Left Column */}
         <div className="hero-text-content">
@@ -162,10 +192,21 @@ const Hero = ({
               {extendedPartners.map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
-                  className={`partner-logo-card ${partner.tier?.toLowerCase() === 'platinum' ? 'platinum-nudge' : ''}`}
+                  className={`partner-logo-card 
+                    ${partner.tier?.toLowerCase() === 'platinum' ? 'platinum-nudge' : ''} 
+                    ${activePartnerId === partner.id ? 'active' : ''}`
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePartnerClick(e, partner);
+                  }}
+                  style={{ cursor: partner.tier?.toLowerCase() === 'platinum' ? 'pointer' : 'default' }}
                 >
                   {partner.tier?.toLowerCase() === 'platinum' && (
-                    <span className="platinum-badge-nudge">Spotlight</span>
+                    <>
+                      <div className="platinum-diamond-badge"></div>
+                      <span className="platinum-label">PLATINUM</span>
+                    </>
                   )}
                   {brokenLogos.has(partner.id) ? (
                     <span className="partner-name-fallback">{partner.name}</span>

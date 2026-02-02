@@ -2,13 +2,17 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import './SponsorSpotlight.css';
 
-const SponsorSpotlight = ({ sponsor }) => {
+const SponsorSpotlight = ({ sponsor, onClose, arrowOffset }) => {
     if (!sponsor) return null;
 
     return (
         <section className="sponsor-spotlight visible">
-            <div className="spotlight-arrow"></div>
+            <div
+                className="spotlight-arrow"
+                style={{ left: arrowOffset || '50%' }}
+            ></div>
             <div className="spotlight-container">
+                <button className="spotlight-close" onClick={onClose}>×</button>
                 <div className="spotlight-badge" style={{ color: '#EBB479', fontWeight: 'bold' }}>
                     <span>Platinum Sponsor Spotlight</span>
                 </div>
