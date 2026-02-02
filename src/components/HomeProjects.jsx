@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase';
 import './HomeProjects.css';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
 
 // Simple preview card for projects
 function ProjectPreviewCard({ project }) {
@@ -55,6 +50,10 @@ function HomeProjects() {
 
   useEffect(() => {
     async function fetchData() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
       try {
         // Fetch latest 3 projects
         const { data: projectsData, error: projectsError } = await supabase
