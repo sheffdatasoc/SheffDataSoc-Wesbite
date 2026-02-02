@@ -40,8 +40,11 @@ function Home() {
 
         if (error) throw error;
 
+        console.log(`[Diagnostic] Found ${data?.length || 0} gallery items in DB`);
+
         if (data && data.length > 0) {
           const dbImages = data.map(item => item.image_url).filter(Boolean);
+          console.log(`[Diagnostic] Found ${dbImages.length} valid image URLs`);
           const combinedImages = [...dbImages];
 
           while (combinedImages.length < 3) {

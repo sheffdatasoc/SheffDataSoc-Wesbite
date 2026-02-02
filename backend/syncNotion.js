@@ -756,21 +756,23 @@ async function syncGallery() {
       try {
         const gallery = {
           notion_id: page.id,
-          title: extractText(page.properties.Title?.title),
-          event_date: extractDate(page.properties['Event Date']?.date),
+          title: extractText(page.properties.Title?.title || page.properties.Name?.title || page.properties.Image?.title),
+          event_date: extractDate(page.properties['Event Date']?.date || page.properties.Date?.date),
           description: extractText(page.properties.Description?.rich_text),
-          category: page.properties.Category?.select?.name || 'Uncategorized',
+          category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
 
           // 🔒 IMAGE PROTECTION
           image_url:
             existingGalleryMap.get(page.id) ||
             extractImageUrl(page.properties.Image) ||
-            extractUrl(page.properties.Image?.url),
+            extractUrl(page.properties.Image?.url) ||
+            extractImageUrl(page.properties['Image URL']) ||
+            extractUrl(page.properties['Image URL']?.url),
 
           created_at: page.created_time
         };
 
-        if (gallery.title) {
+        if (gallery.title || gallery.image_url) {
           galleryItems.push(gallery);
         }
 
