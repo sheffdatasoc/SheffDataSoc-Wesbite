@@ -95,7 +95,7 @@ const Hero = ({
   }, [partnersWithLogos.length, activePartnerId]);
 
   const handlePartnerClick = (e, partner) => {
-    if (partner.tier?.toLowerCase() !== 'platinum') return;
+    if (partner.tier?.trim().toLowerCase() !== 'platinum') return;
 
     if (activePartnerId === partner.id) {
       onPartnerClick(null);
@@ -168,10 +168,14 @@ const Hero = ({
             {displayImages.map((imgSrc, index) => (
               <img
                 key={index}
-                src={imgSrc}
+                src={imgSrc || fallbackImage}
                 className={`carousel-card ${getCardClass(index)}`}
                 alt={`Gallery ${index}`}
-                onError={(e) => e.target.src = fallbackImage}
+                onError={(e) => {
+                  if (e.target.src !== fallbackImage) {
+                    e.target.src = fallbackImage;
+                  }
+                }}
                 onClick={() => handleCardClick(index)}
               />
             ))}

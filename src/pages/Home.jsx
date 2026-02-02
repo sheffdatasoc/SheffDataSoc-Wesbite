@@ -34,13 +34,14 @@ function Home() {
         const { data, error } = await supabase
           .from('gallery_items')
           .select('image_url')
+          .not('image_url', 'is', null)
           .order('event_date', { ascending: false })
-          .limit(5);
+          .limit(10);
 
         if (error) throw error;
 
-        if (data) {
-          const dbImages = data.map(item => item.image_url);
+        if (data && data.length > 0) {
+          const dbImages = data.map(item => item.image_url).filter(Boolean);
           const combinedImages = [...dbImages];
 
           while (combinedImages.length < 3) {

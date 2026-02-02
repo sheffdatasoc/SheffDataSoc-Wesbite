@@ -764,7 +764,8 @@ async function syncGallery() {
           // 🔒 IMAGE PROTECTION
           image_url:
             existingGalleryMap.get(page.id) ||
-            extractImageUrl(page.properties.Image),
+            extractImageUrl(page.properties.Image) ||
+            extractUrl(page.properties.Image?.url),
 
           created_at: page.created_time
         };
