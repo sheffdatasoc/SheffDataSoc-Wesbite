@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import './HomeEvents.css';
 
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 function EventPreviewCard({ event, isOngoing, showDescription }) {

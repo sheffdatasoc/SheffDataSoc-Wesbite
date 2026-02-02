@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { ArrowUp } from 'lucide-react';
 import Hero from '../components/Hero';
-import Footer from '../components/Footer'; 
+import SponsorSpotlight from '../components/SponsorSpotlight';
+import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
 import HomeProjects from '../components/HomeProjects';
 import HomeEvents from '../components/HomeEvents';
@@ -14,8 +15,8 @@ import useSectionFadeIn from '../hooks/useSectionFadeIn';
 
 // Initialize Supabase
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 const TEST_IMAGES = [
@@ -27,36 +28,9 @@ const FALLBACK_IMAGE = TEST_IMAGES[0];
 
 function Home() {
   useSectionFadeIn();
-  
+
   const [heroImages, setHeroImages] = useState(TEST_IMAGES);
   const [partners, setPartners] = useState([]);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  // 1. Simplified Scroll Listener (Listens to Window directly)
-  useEffect(() => {
-    const handleScroll = () => {
-      // Check vertical scroll position of the window
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      setShowScrollTop(scrollTop > 400);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    
-    // Initial check
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // 2. Simplified Scroll Action
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
 
   // Fetch data
   useEffect(() => {
@@ -104,37 +78,51 @@ function Home() {
     fetchPartners();
   }, []);
 
+  const [activePartner, setActivePartner] = useState(null);
+  const [arrowOffset, setArrowOffset] = useState('50%');
+
+  const handlePartnerSelect = (partner, offset) => {
+    setActivePartner(partner);
+    if (offset) setArrowOffset(offset);
+  };
+
   const stats = [
     { value: '100+', title: 'Members' },
     { value: '20+', title: 'Events/Year' },
     { value: '5+', title: 'Partners' }
   ];
 
+  const platinumPartner = partners.find(p => p.tier?.trim().toLowerCase() === 'platinum');
+
   return (
     <div className="home-page">
-      {/* Scroll to Top Button */}
-      <button
-        className={`scroll-to-top-btn ${showScrollTop ? 'visible' : ''}`}
-        onClick={scrollToTop}
-        aria-label="Scroll to top"
-      >
-        <ArrowUp size={24} />
-      </button>
-
       {/* 1. HERO SECTION */}
-      <Hero 
+      <Hero
         title="Sheffield's Data Science Community"
-        subtitle="Join SheffDataSoc - where students passionate about data, AI, and analytics come together to learn, build, and grow."
+        subtitle="Empowering students through data-driven innovation, community events, and collaborative projects."
         showButtons={true}
         showStats={true}
         stats={stats}
         showBadge={true}
-        badgeText="The University of Sheffield"
+        badgeText="Welcome to SheffDataSoc"
         highlightWord="Data Science"
+        partners={partners}
         images={heroImages}
         fallbackImage={FALLBACK_IMAGE}
-        partners={partners}
+        onPartnerClick={handlePartnerSelect}
+        activePartnerId={activePartner?.id}
       />
+
+      {/* 1.5 PLATINUM SPONSOR SPOTLIGHT */}
+      <div id="spotlight-section">
+        {activePartner && (
+          <SponsorSpotlight
+            sponsor={activePartner}
+            arrowOffset={arrowOffset}
+            onClose={() => setActivePartner(null)}
+          />
+        )}
+      </div>
 
       {/* 2. ABOUT SECTION */}
       <AboutSection />

@@ -152,10 +152,7 @@ function TheSandbox() {
         )}
 
         {/* 
-          ✅ CLEANER CODE:
-          The CTA is now outside the conditional logic. 
-          It will always appear at the bottom of the content, 
-          regardless of whether it's projects, workshops, or empty.
+        
         */}
         <div className="sandbox-cta-wrapper">
           <SandboxCTA />

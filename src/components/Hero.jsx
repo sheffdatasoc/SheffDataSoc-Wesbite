@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Hero.css'; 
+import './Hero.css';
 
-const Hero = ({ 
-  title, 
-  subtitle, 
-  showButtons, 
-  showStats, 
-  stats, 
-  showBadge, 
-  badgeText, 
-  highlightWord, 
-  images = [], 
+const Hero = ({
+  title,
+  subtitle,
+  showButtons,
+  showStats,
+  stats,
+  showBadge,
+  badgeText,
+  highlightWord,
+  images = [],
   fallbackImage,
-  partners = [] // Add partners prop
+  partners = [],
+  onPartnerClick,
+  activePartnerId
 }) => {
-  
+
   // --- IMAGE CAROUSEL LOGIC ---
   const getDisplayImages = () => {
     if (!images || images.length === 0) {
@@ -35,7 +37,7 @@ const Hero = ({
 
   // Auto-rotate timer for images
   useEffect(() => {
-    if (images.length < 2) return; 
+    if (images.length < 2) return;
 
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % displayImages.length);
@@ -50,9 +52,9 @@ const Hero = ({
     const nextIndex = (activeIndex + 1) % total;
 
     if (index === activeIndex) return 'card-center';
-    if (index === prevIndex)   return 'card-left';
-    if (index === nextIndex)   return 'card-right';
-    
+    if (index === prevIndex) return 'card-left';
+    if (index === nextIndex) return 'card-right';
+
     return 'card-hidden';
   };
 
@@ -62,20 +64,26 @@ const Hero = ({
 
   // --- PARTNER CAROUSEL LOGIC ---
   const [offset, setOffset] = useState(0);
-  
+  const [brokenLogos, setBrokenLogos] = useState(new Set());
+
+  // Keep all partners with logos, don't filter out broken ones from the array
   const partnersWithLogos = partners.filter(p => p.logo);
-  const extendedPartners = partnersWithLogos.length > 0 
-    ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos] 
+  const extendedPartners = partnersWithLogos.length > 0
+    ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos]
     : [];
 
+  const handleLogoError = (partnerId) => {
+    setBrokenLogos(prev => new Set([...prev, partnerId]));
+  };
+
   useEffect(() => {
-    if (partnersWithLogos.length === 0) return;
+    if (partnersWithLogos.length === 0 || activePartnerId) return;
 
     const interval = setInterval(() => {
       setOffset((prevOffset) => {
-        const cardWidth = 220; // Updated to match new card width (200px) + gap (20px)
+        const cardWidth = 220;
         const newOffset = prevOffset + 1;
-        
+
         if (newOffset >= cardWidth * partnersWithLogos.length) {
           return 0;
         }
@@ -84,7 +92,35 @@ const Hero = ({
     }, 30);
 
     return () => clearInterval(interval);
-  }, [partnersWithLogos.length]);
+  }, [partnersWithLogos.length, activePartnerId]);
+
+  const handlePartnerClick = (e, partner) => {
+    if (partner.tier?.toLowerCase() !== 'platinum') return;
+
+    if (activePartnerId === partner.id) {
+      onPartnerClick(null);
+    } else {
+      // Calculate position for the arrow
+      const cardRect = e.currentTarget.getBoundingClientRect();
+      const carouselRect = e.currentTarget.closest('.hero-partner-carousel').getBoundingClientRect();
+      const relativeCenter = cardRect.left + (cardRect.width / 2) - carouselRect.left;
+      const offsetPercent = (relativeCenter / carouselRect.width) * 100;
+
+      onPartnerClick(partner, `${offsetPercent}%`);
+
+      // Wait for re-render then scroll to spotlight
+      setTimeout(() => {
+        const section = document.getElementById('spotlight-section');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
+  const handleHeroClick = () => {
+    if (activePartnerId) {
+      onPartnerClick(null);
+    }
+  };
 
   const renderTitle = () => {
     if (!highlightWord) return title;
@@ -93,12 +129,12 @@ const Hero = ({
   };
 
   return (
-    <section className="hero-modern">
+    <section className="hero-modern" onClick={handleHeroClick}>
       <div className="hero-content-wrapper">
         {/* Left Column */}
         <div className="hero-text-content">
           {showBadge && <div className="hero-badge">{badgeText}</div>}
-          
+
           <h1>{renderTitle()}</h1>
           <p className="hero-subtitle">{subtitle}</p>
 
@@ -107,7 +143,7 @@ const Hero = ({
               <Link to="/events" className="btn-primary">
                 Explore Events &rarr;
               </Link>
-              
+
               <Link to="/about" className="btn-secondary">
                 Learn More
               </Link>
@@ -130,11 +166,11 @@ const Hero = ({
         <div className="hero-image-container">
           <div className="carousel-stage">
             {displayImages.map((imgSrc, index) => (
-              <img 
+              <img
                 key={index}
-                src={imgSrc} 
+                src={imgSrc}
                 className={`carousel-card ${getCardClass(index)}`}
-                alt={`Gallery ${index}`} 
+                alt={`Gallery ${index}`}
                 onError={(e) => e.target.src = fallbackImage}
                 onClick={() => handleCardClick(index)}
               />
@@ -147,22 +183,41 @@ const Hero = ({
       {partnersWithLogos.length > 0 && (
         <div className="hero-partner-carousel">
           <p className="partner-carousel-label" style={{ marginBottom: '30px' }}>Our Trusted Partners</p>
-          
+
           <div className="partner-carousel-wrapper">
-            <div 
+            <div
               className="partner-carousel-track"
               style={{ transform: `translateX(-${offset}px)` }}
             >
               {extendedPartners.map((partner, index) => (
                 <div
                   key={`${partner.id}-${index}`}
-                  className="partner-logo-card"
+                  className={`partner-logo-card 
+                    ${partner.tier?.toLowerCase() === 'platinum' ? 'platinum-nudge' : ''} 
+                    ${activePartnerId === partner.id ? 'active' : ''}`
+                  }
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePartnerClick(e, partner);
+                  }}
+                  style={{ cursor: partner.tier?.toLowerCase() === 'platinum' ? 'pointer' : 'default' }}
                 >
-                  <img 
-                    src={partner.logo} 
-                    alt={partner.name}
-                    className="partner-logo-img"
-                  />
+                  {partner.tier?.toLowerCase() === 'platinum' && (
+                    <>
+                      <div className="platinum-diamond-badge"></div>
+                      <span className="platinum-label">PLATINUM</span>
+                    </>
+                  )}
+                  {brokenLogos.has(partner.id) ? (
+                    <span className="partner-name-fallback">{partner.name}</span>
+                  ) : (
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="partner-logo-img"
+                      onError={() => handleLogoError(partner.id)}
+                    />
+                  )}
                 </div>
               ))}
             </div>

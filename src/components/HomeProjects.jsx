@@ -3,8 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import './HomeProjects.css';
 
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 // Simple preview card for projects
@@ -146,8 +146,8 @@ function HomeProjects() {
         )}
 
         <div className="projects-buttons">
-          <a 
-            href="/sandbox" 
+          <a
+            href="/sandbox"
             className="btn btn-primary"
           >
             View All Projects & Workshops →

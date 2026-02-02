@@ -8,8 +8,8 @@ import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Gallery.css';
 
 const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
 function Gallery() {
@@ -17,7 +17,7 @@ function Gallery() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
-  
+
   // State for the Expanded View (Modal)
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
@@ -130,8 +130,8 @@ function Gallery() {
           {filteredItems.length > 0 ? (
             <div className="gallery-grid">
               {filteredItems.map((item, index) => (
-                <div 
-                  key={item.notion_id} 
+                <div
+                  key={item.notion_id}
                   className="gallery-item"
                   onClick={() => openModal(index)} // Opens the modal
                 >
@@ -167,7 +167,7 @@ function Gallery() {
       {activeItem && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            
+
             {/* Close Button */}
             <button className="modal-close-btn" onClick={closeModal}>
               <X size={24} />
@@ -193,26 +193,26 @@ function Gallery() {
             {/* Details Container */}
             <div className="modal-details">
               <h2>{activeItem.title}</h2>
-              
+
               {/* Purple Subtitle (Category) - KEPT */}
               {activeItem.category && (
                 <h4 className="modal-subtitle">
                   {activeItem.category.charAt(0).toUpperCase() + activeItem.category.slice(1)}
                 </h4>
               )}
-              
+
               {activeItem.event_date && (
                 <p className="modal-date">
-                  {new Date(activeItem.event_date).toLocaleDateString('en-GB', { 
-                    day: 'numeric', month: 'long', year: 'numeric' 
+                  {new Date(activeItem.event_date).toLocaleDateString('en-GB', {
+                    day: 'numeric', month: 'long', year: 'numeric'
                   })}
                 </p>
               )}
-              
+
               {activeItem.description && (
                 <p className="modal-description">{activeItem.description}</p>
               )}
-              
+
               {/* TAGS REMOVED FROM HERE */}
             </div>
           </div>

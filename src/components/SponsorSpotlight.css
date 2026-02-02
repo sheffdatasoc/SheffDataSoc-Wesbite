@@ -1,0 +1,218 @@
+.sponsor-spotlight {
+    width: 100%;
+    padding: 6rem 2rem 4rem;
+    /* Increased top padding for the arrow */
+    background: radial-gradient(circle at top left, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+    overflow: visible;
+    /* Allow arrow to be seen */
+}
+
+.spotlight-arrow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 25px solid transparent;
+    border-right: 25px solid transparent;
+    border-top: 25px solid #182F4D;
+    /* Matches Hero bottom color */
+    z-index: 5;
+}
+
+.spotlight-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    animation: slideUpFade 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.spotlight-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #182F4D;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    z-index: 20;
+}
+
+.spotlight-close:hover {
+    opacity: 1;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Platinum Shine Effect */
+.spotlight-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.1) 45%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0.1) 55%,
+            transparent 100%);
+    transform: rotate(-45deg);
+    animation: shine 6s infinite;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%) rotate(-45deg);
+    }
+
+    20%,
+    100% {
+        transform: translateX(100%) rotate(-45deg);
+    }
+}
+
+.spotlight-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #182F4D 0%, #3a506b 100%);
+    color: #EBB479;
+    /* Gold/Platinum accent */
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 12px rgba(24, 47, 77, 0.2);
+}
+
+.spotlight-content {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.spotlight-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.spotlight-logo-wrapper {
+    width: 220px;
+    height: 220px;
+    background: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+}
+
+.spotlight-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.spotlight-name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #182F4D;
+    margin-bottom: 1.5rem;
+}
+
+.spotlight-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #182F4D;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.spotlight-cta:hover {
+    transform: translateY(-2px);
+    background: #2c3e50;
+    box-shadow: 0 5px 15px rgba(24, 47, 77, 0.3);
+}
+
+.spotlight-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.spotlight-block h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #182F4D;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+.spotlight-block h3::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: #EBB479;
+    border-radius: 2px;
+}
+
+.spotlight-block p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #4a5568;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .spotlight-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .spotlight-container {
+        padding: 2rem;
+    }
+}
