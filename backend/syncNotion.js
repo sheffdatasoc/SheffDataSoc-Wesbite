@@ -761,13 +761,13 @@ async function syncGallery() {
           description: extractText(page.properties.Description?.rich_text),
           category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
 
-          // 🔒 IMAGE PROTECTION
+          // � ALWAYS REFRESH EPHEMERAL NOTION URLS
           image_url:
-            existingGalleryMap.get(page.id) ||
             extractImageUrl(page.properties.Image) ||
             extractUrl(page.properties.Image?.url) ||
             extractImageUrl(page.properties['Image URL']) ||
-            extractUrl(page.properties['Image URL']?.url),
+            extractUrl(page.properties['Image URL']?.url) ||
+            existingGalleryMap.get(page.id),
 
           created_at: page.created_time
         };
