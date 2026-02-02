@@ -64,11 +64,59 @@ function extractUrl(urlObj) {
 
 
 function extractImageUrl(imageProperty) {
-  const files = imageProperty?.files || [];
-  if (files.length === 0) return null;
-  return files[0].type === 'external'
-    ? files[0].external.url
-    : files[0].file.url;
+  if (!imageProperty) return null;
+
+  // Handle "Files & media" type
+  if (imageProperty.type === 'files') {
+    const files = imageProperty.files || [];
+    if (files.length === 0) return null;
+    return files[0].type === 'external'
+      ? files[0].external.url
+      : files[0].file.url;
+  }
+
+  // Handle "URL" type
+  if (imageProperty.type === 'url') {
+    return imageProperty.url;
+  }
+
+  return null;
+}
+
+function robustExtractImage(page) {
+  const props = page.properties;
+  const propKeys = Object.keys(props);
+
+  // 1. Try Case-Insensitive Named Properties
+  const possibleNames = ['Image', 'Cover', 'Photo', 'Logo', 'Thumbnail', 'Main Image', 'Image URL', 'image_url', 'image'];
+
+  for (const name of possibleNames) {
+    const match = propKeys.find(k => k.toLowerCase() === name.toLowerCase());
+    if (match) {
+      const url = extractImageUrl(props[match]);
+      if (url) return url;
+    }
+  }
+
+  // 2. Fallback to any property containing "image", "photo", or "logo"
+  for (const key of propKeys) {
+    if (key.toLowerCase().includes('image') || key.toLowerCase().includes('photo') || key.toLowerCase().includes('logo')) {
+      const url = extractImageUrl(props[key]);
+      if (url) return url;
+    }
+  }
+
+  // 3. Fallback to Page Cover
+  if (page.cover) {
+    return page.cover.type === 'external'
+      ? page.cover.external.url
+      : page.cover.file.url;
+  }
+
+  // 4. Diagnostic Logging (Visible in Render Logs)
+  console.log(`[Diagnostic] No image found for page ${page.id}. Available properties: ${propKeys.join(', ')}`);
+
+  return null;
 }
 
 
@@ -84,7 +132,9 @@ function debugLog(...args) {
 }
 
 function preserveImage(existingMap, notionId, newImageUrl) {
-  return existingMap.get(notionId) || newImageUrl || null;
+  // 💡 FIX: Prioritize the new URL from Notion.
+  // Notion URLs for files are ephemeral and MUST be refreshed.
+  return newImageUrl || existingMap.get(notionId) || null;
 }
 
 
@@ -150,7 +200,7 @@ async function syncEvents() {
         image_url: preserveImage(
           existingEventMap,
           page.id,
-          extractImageUrl(page.properties.Image)
+          robustExtractImage(page)
         ),
 
         registration_url: page.properties['Registration URL']?.url || null,
@@ -224,7 +274,7 @@ async function syncBlogPosts() {
           published_date: extractDate(page.properties['Published Date']?.date),
           excerpt: extractText(page.properties.Excerpt?.rich_text),
           status,
-          image: extractImageUrl(page.properties.Image),
+          image: robustExtractImage(page),
 
           // 🔒 PROTECT CONTENT
           content: existingPost?.content ?? mdString.parent,
@@ -395,7 +445,7 @@ async function syncGuides() {
           author: extractText(page.properties.Author?.rich_text),
           read_time: page.properties['Read Time']?.number,
           github_url: page.properties.GitHub?.url,
-          image: extractImageUrl(page.properties.Image),
+          image: robustExtractImage(page),
           featured: page.properties.Featured?.checkbox || false,
           created_at: page.created_time,
           updated_at: page.last_edited_time
@@ -450,7 +500,7 @@ async function syncMembers() {
           page.properties.major?.select?.name ||
           extractText(page.properties.major?.rich_text) ||
           null,
-        image_url: page.properties['Image URL']?.url,
+        image_url: robustExtractImage(page),
         github_url: page.properties['GitHub URL']?.url,
         linkedin_url: page.properties['LinkedIn URL']?.url,
         created_at: page.created_time,
@@ -673,10 +723,10 @@ async function syncTimeline() {
           tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
           icon: extractText(page.properties.Icon?.rich_text) || null,
 
-          // 🔒 IMAGE PROTECTION
+          // 🔄 ALWAYS REFRESH EPHEMERAL NOTION URLS
           image_url:
-            existingTimelineMap.get(page.id) ||
-            extractImageUrl(page.properties.Image),
+            robustExtractImage(page) ||
+            existingTimelineMap.get(page.id),
 
           created_at: page.created_time
         };
@@ -761,12 +811,9 @@ async function syncGallery() {
           description: extractText(page.properties.Description?.rich_text),
           category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
 
-          // � ALWAYS REFRESH EPHEMERAL NOTION URLS
+          // 🔄 ALWAYS REFRESH EPHEMERAL NOTION URLS
           image_url:
-            extractImageUrl(page.properties.Image) ||
-            extractUrl(page.properties.Image?.url) ||
-            extractImageUrl(page.properties['Image URL']) ||
-            extractUrl(page.properties['Image URL']?.url) ||
+            robustExtractImage(page) ||
             existingGalleryMap.get(page.id),
 
           created_at: page.created_time
@@ -839,7 +886,7 @@ async function syncPartners() {
         name: extractText(page.properties.Name?.title),
         description: extractText(page.properties.Description?.rich_text),
         tier: page.properties.Tier?.select?.name || 'Bronze',
-        logo: extractImageUrl(page.properties.Logo) || extractUrl(page.properties.Logo?.url),
+        logo: robustExtractImage(page),
         website: extractUrl(page.properties.Website?.url),
         about_blurb: extractText(page.properties['About Blurb']?.rich_text),
         why_sponsor: extractText(page.properties['Why Sponsor']?.rich_text),

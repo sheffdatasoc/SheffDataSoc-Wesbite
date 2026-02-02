@@ -19,7 +19,7 @@ const isCommitteeMember = (member) => {
 const checkMemberMatches = (member, query) => {
   if (!query) return true;
   const lowerQuery = query.toLowerCase();
-  
+
   return (
     (member.name && member.name.toLowerCase().includes(lowerQuery)) ||
     (member.role && member.role.toLowerCase().includes(lowerQuery)) ||
@@ -47,17 +47,17 @@ function Members() {
   // Group members by academic year
   const membersByYear = academicYears.reduce((acc, year) => {
     acc[year] = members.filter(member => {
-      
+
       const matchesSearch = checkMemberMatches(member, searchQuery);
       const matchesYear = getMemberYear(member) === year;
-      
+
       // Tab Logic:
       // 'extended' -> Shows everyone (Extended + Core + Members)
       // 'committee' -> Shows only those marked as Committee in Notion
-      const matchesTab = activeTab === 'extended' 
-        ? true 
+      const matchesTab = activeTab === 'extended'
+        ? true
         : isCommitteeMember(member);
-      
+
       return matchesSearch && matchesYear && matchesTab;
     });
     return acc;
@@ -81,7 +81,7 @@ function Members() {
     <div className="members-page">
       {/* Header */}
       <div className="members-header">
-        <h1>Our Community</h1>
+        <h1>Our Team</h1>
         <p>Meet the amazing people who make our society vibrant and dynamic</p>
       </div>
 

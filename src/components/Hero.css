@@ -44,6 +44,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  /* SCOOT CONTENT DOWN ON DESKTOP */
+  margin-top: 2.5rem;
 }
 
 /* Badge Styling */
@@ -416,6 +418,8 @@
     flex: none;
     align-items: center;
     max-width: 100%;
+    /* RESET MARGIN ON MOBILE */
+    margin-top: 0;
   }
 
   .hero-text-content h1 {

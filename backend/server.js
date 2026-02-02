@@ -5,6 +5,13 @@ const cron = require('node-cron');
 const { syncAllData } = require('./syncNotion');
 const { processMailchimpAction } = require('./syncMailchimp');
 
+// Global sync state
+let lastSyncStatus = {
+    lastRun: null,
+    status: 'Initalizing',
+    results: null
+};
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -27,13 +34,20 @@ app.get('/health', (req, res) => {
 app.post('/api/sync', async (req, res) => {
     try {
         console.log('Manual sync triggered via API');
+        lastSyncStatus.status = 'Running (Manual)';
         const results = await syncAllData();
+
+        lastSyncStatus.lastRun = new Date().toISOString();
+        lastSyncStatus.status = 'Success';
+        lastSyncStatus.results = results;
+
         res.json({
             success: true,
             message: 'Sync completed successfully',
             results
         });
     } catch (error) {
+        lastSyncStatus.status = 'Failed (Manual)';
         console.error('Manual sync failed:', error);
         res.status(500).json({
             success: false,
@@ -64,8 +78,10 @@ app.post('/api/mailchimp', async (req, res) => {
 // Get sync status endpoint
 app.get('/api/sync/status', (req, res) => {
     res.json({
-        schedule: '*/5 * * * *', // Every 5 minutes
-        nextRun: cron.getTasks().size > 0 ? 'Active' : 'No scheduled tasks',
+        schedule: SYNC_SCHEDULE,
+        lastRun: lastSyncStatus.lastRun,
+        status: lastSyncStatus.status,
+        nextRun: cron.getTasks().size > 0 ? 'Scheduled' : 'Inactive',
         serverTime: new Date().toISOString()
     });
 });
@@ -81,8 +97,13 @@ console.log('   (Every 5 minutes)\n');
 cron.schedule(SYNC_SCHEDULE, async () => {
     console.log(`\n⏰ Scheduled sync triggered at ${new Date().toISOString()}`);
     try {
-        await syncAllData();
+        lastSyncStatus.status = 'Running (Scheduled)';
+        const results = await syncAllData();
+        lastSyncStatus.lastRun = new Date().toISOString();
+        lastSyncStatus.status = 'Success';
+        lastSyncStatus.results = results;
     } catch (error) {
+        lastSyncStatus.status = 'Failed (Scheduled)';
         console.error('Scheduled sync failed:', error);
     }
 });
@@ -99,11 +120,19 @@ app.listen(PORT, () => {
     console.log(`   Sync status: http://localhost:${PORT}/api/sync/status\n`);
 
     console.log('🚀 Triggering initial sync in background...\n');
+    lastSyncStatus.status = 'Running (Initial)';
     syncAllData()
-        .then(() => {
-            console.log('✅ Initial background sync complete\n');
+        .then((results) => {
+            const total = Object.values(results || {})
+                .filter(r => r && typeof r === 'object')
+                .reduce((sum, r) => sum + (r.count || 0), 0);
+            console.log(`✅ Initial background sync complete (${total} records)\n`);
+            lastSyncStatus.lastRun = new Date().toISOString();
+            lastSyncStatus.status = 'Success';
+            lastSyncStatus.results = results;
         })
         .catch((error) => {
+            lastSyncStatus.status = 'Failed (Initial)';
             console.error('❌ Initial background sync failed:', error);
             console.log('⚠️  Server will continue running. Scheduled syncs will retry.\n');
         });
