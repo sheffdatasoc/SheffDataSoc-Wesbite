@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { ArrowUp } from 'lucide-react';
 import Hero from '../components/Hero';
+import SponsorSpotlight from '../components/SponsorSpotlight';
 import Footer from '../components/Footer';
 import AboutSection from '../components/AboutSection';
 import HomeProjects from '../components/HomeProjects';
@@ -83,22 +84,23 @@ function Home() {
     { value: '5+', title: 'Partners' }
   ];
 
+  const platinumPartner = partners.find(p => p.tier?.toLowerCase() === 'platinum');
+
   return (
     <div className="home-page">
       {/* 1. HERO SECTION */}
       <Hero
         title="Sheffield's Data Science Community"
-        subtitle="Join SheffDataSoc - where students passionate about data, AI, and analytics come together to learn, build, and grow."
-        showButtons={true}
-        showStats={true}
-        stats={stats}
-        showBadge={true}
-        badgeText="The University of Sheffield"
+        subtitle="Empowering students through data-driven innovation, community events, and collaborative projects."
+        badgeText="Welcome to SheffDataSoc"
         highlightWord="Data Science"
+        partners={partners}
         images={heroImages}
         fallbackImage={FALLBACK_IMAGE}
-        partners={partners}
       />
+
+      {/* 1.5 PLATINUM SPONSOR SPOTLIGHT */}
+      {platinumPartner && <SponsorSpotlight sponsor={platinumPartner} />}
 
       {/* 2. ABOUT SECTION */}
       <AboutSection />

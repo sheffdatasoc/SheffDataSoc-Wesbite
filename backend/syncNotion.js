@@ -89,22 +89,22 @@ async function getAllPages(databaseId) {
   let results = [];
   let hasMore = true;
   let startCursor = undefined;
- 
+
   while (hasMore) {
     const response = await notion.databases.query({
       database_id: databaseId,
       start_cursor: startCursor,
     });
-   
+
     results.push(...response.results);
     hasMore = response.has_more;
     startCursor = response.next_cursor;
-   
+
     if (hasMore) {
       await delay(RATE_LIMIT_DELAY);
     }
   }
- 
+
   return results;
 }
 
@@ -171,24 +171,24 @@ async function syncBlogPosts() {
 
     const posts = [];
     const errors = [];
-   
+
     for (const page of pages) {
       try {
         const mdBlocks = await n2m.pageToMarkdown(page.id);
         const mdString = n2m.toMarkdownString(mdBlocks);
-       
+
         // Map Notion status to appropriate status value
         // Status is stored as rich_text, not select
         const notionStatus = extractText(page.properties.Status?.rich_text) || 'draft';
         let status = 'draft'; // default
-       
+
         const statusLower = notionStatus.toLowerCase();
         if (statusLower === 'published') {
           status = 'published';
         } else if (statusLower === 'completed') {
           status = 'in_review';
         }
-       
+
         const post = {
           notion_id: page.id,
           title: extractText(page.properties.Title?.title),
@@ -207,7 +207,7 @@ async function syncBlogPosts() {
         if (post.title) {
           posts.push(post);
         }
-       
+
         await delay(RATE_LIMIT_DELAY);
       } catch (err) {
         errors.push({
@@ -382,7 +382,7 @@ async function syncGuides() {
         if (guide.title) {
           guides.push(guide);
         }
-       
+
         await delay(RATE_LIMIT_DELAY);
       } catch (err) {
         errors.push({
@@ -449,14 +449,14 @@ async function syncMembers() {
         interests: page.properties.Interests?.multi_select
           ? page.properties.Interests.multi_select.map(t => t.name)
           : extractText(page.properties.Interests?.rich_text)
-              .split(',')
-              .map(s => s.trim())
-              .filter(Boolean),
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean),
         academic_year:
           page.properties.academic_year?.select?.name ||
           extractText(page.properties.academic_year?.rich_text) ||
           null,
-        is_committee: 
+        is_committee:
           page.properties.Committee?.checkbox === true
       }))
       .filter(member => member.name); // Skip members without names
@@ -497,10 +497,10 @@ async function syncGlossary() {
     const glossaryTerms = pages
       .map(page => {
         const term = extractText(page.properties.Term?.title);
-       
+
         debugLog(`\nTerm: "${term}"`);
         debugLog('Related Terms property:', page.properties['Related Terms']);
-       
+
         return {
           notion_id: page.id,
           term: term,
@@ -558,7 +558,7 @@ async function syncGlossary() {
 async function syncResources() {
   try {
     console.log('Syncing resources...');
-   
+
     const pages = await getAllPages(DATABASES.resources); // Fetch all Notion pages for resources
     const resources = [];
     const errors = [];
@@ -782,7 +782,7 @@ async function syncGallery() {
 async function syncPartners() {
   try {
     console.log('Syncing partners...');
-    
+
     // Check if database ID is configured
     if (!DATABASES.partners) {
       console.log('⚠️  NOTION_PARTNERS_DB_ID not configured in .env file');
@@ -799,6 +799,9 @@ async function syncPartners() {
         tier: page.properties.Tier?.select?.name || 'Bronze',
         logo: extractImageUrl(page.properties.Logo) || extractUrl(page.properties.Logo?.url),
         website: extractUrl(page.properties.Website?.url),
+        about_blurb: extractText(page.properties['About Blurb']?.rich_text),
+        why_sponsor: extractText(page.properties['Why Sponsor']?.rich_text),
+        cta_link: extractUrl(page.properties['CTA Link']?.url),
         active: page.properties.Active?.checkbox !== false,
         created_at: page.created_time,
         updated_at: page.last_edited_time
