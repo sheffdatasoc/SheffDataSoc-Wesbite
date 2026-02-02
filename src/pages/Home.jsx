@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
 import { ArrowUp } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import Hero from '../components/Hero';
 import SponsorSpotlight from '../components/SponsorSpotlight';
 import Footer from '../components/Footer';
@@ -12,12 +12,6 @@ import NewsletterSignup from '../components/NewsletterSignup';
 import HomeContact from '../components/HomeContact';
 import './Home.css';
 import useSectionFadeIn from '../hooks/useSectionFadeIn';
-
-// Initialize Supabase
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
 
 const TEST_IMAGES = [
   "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1000&auto=format&fit=crop",
@@ -35,6 +29,7 @@ function Home() {
   // Fetch data
   useEffect(() => {
     async function fetchHeroImages() {
+      if (!supabase) return;
       try {
         const { data, error } = await supabase
           .from('gallery_items')
@@ -60,6 +55,7 @@ function Home() {
     }
 
     async function fetchPartners() {
+      if (!supabase) return;
       try {
         const { data, error } = await supabase
           .from('partners')

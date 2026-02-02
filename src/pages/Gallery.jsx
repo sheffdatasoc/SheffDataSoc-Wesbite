@@ -1,16 +1,7 @@
-/* ========================================
-   /pages/Gallery.jsx
-   ======================================== */
-
 import React, { useState, useEffect, useCallback } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Gallery.css';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
 
 function Gallery() {
   const [galleryItems, setGalleryItems] = useState([]);
@@ -24,6 +15,10 @@ function Gallery() {
   // Fetch gallery items
   useEffect(() => {
     async function fetchGallery() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
       try {
         setLoading(true);
         const { data, error } = await supabase

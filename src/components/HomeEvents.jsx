@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase';
 import './HomeEvents.css';
-
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
 
 function EventPreviewCard({ event, isOngoing, showDescription }) {
   const startDate = new Date(event.date);
@@ -77,6 +72,10 @@ function HomeEvents() {
 
   useEffect(() => {
     async function fetchEvents() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
       try {
         const { data, error } = await supabase
           .from('events')
