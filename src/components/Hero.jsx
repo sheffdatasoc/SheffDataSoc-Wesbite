@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './Hero.css'; 
+import './Hero.css';
 
-const Hero = ({ 
-  title, 
-  subtitle, 
-  showButtons, 
-  showStats, 
-  stats, 
-  showBadge, 
-  badgeText, 
-  highlightWord, 
-  images = [], 
+const Hero = ({
+  title,
+  subtitle,
+  showButtons,
+  showStats,
+  stats,
+  showBadge,
+  badgeText,
+  highlightWord,
+  images = [],
   fallbackImage,
   partners = [] // Add partners prop
 }) => {
-  
+
   // --- IMAGE CAROUSEL LOGIC ---
   const getDisplayImages = () => {
     if (!images || images.length === 0) {
@@ -35,7 +35,7 @@ const Hero = ({
 
   // Auto-rotate timer for images
   useEffect(() => {
-    if (images.length < 2) return; 
+    if (images.length < 2) return;
 
     const interval = setInterval(() => {
       setActiveIndex((current) => (current + 1) % displayImages.length);
@@ -50,9 +50,9 @@ const Hero = ({
     const nextIndex = (activeIndex + 1) % total;
 
     if (index === activeIndex) return 'card-center';
-    if (index === prevIndex)   return 'card-left';
-    if (index === nextIndex)   return 'card-right';
-    
+    if (index === prevIndex) return 'card-left';
+    if (index === nextIndex) return 'card-right';
+
     return 'card-hidden';
   };
 
@@ -62,11 +62,16 @@ const Hero = ({
 
   // --- PARTNER CAROUSEL LOGIC ---
   const [offset, setOffset] = useState(0);
-  
-  const partnersWithLogos = partners.filter(p => p.logo);
-  const extendedPartners = partnersWithLogos.length > 0 
-    ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos] 
+  const [brokenLogos, setBrokenLogos] = useState(new Set());
+
+  const partnersWithLogos = partners.filter(p => p.logo && !brokenLogos.has(p.id));
+  const extendedPartners = partnersWithLogos.length > 0
+    ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos]
     : [];
+
+  const handleLogoError = (partnerId) => {
+    setBrokenLogos(prev => new Set([...prev, partnerId]));
+  };
 
   useEffect(() => {
     if (partnersWithLogos.length === 0) return;
@@ -75,7 +80,7 @@ const Hero = ({
       setOffset((prevOffset) => {
         const cardWidth = 220; // Updated to match new card width (200px) + gap (20px)
         const newOffset = prevOffset + 1;
-        
+
         if (newOffset >= cardWidth * partnersWithLogos.length) {
           return 0;
         }
@@ -98,7 +103,7 @@ const Hero = ({
         {/* Left Column */}
         <div className="hero-text-content">
           {showBadge && <div className="hero-badge">{badgeText}</div>}
-          
+
           <h1>{renderTitle()}</h1>
           <p className="hero-subtitle">{subtitle}</p>
 
@@ -107,7 +112,7 @@ const Hero = ({
               <Link to="/events" className="btn-primary">
                 Explore Events &rarr;
               </Link>
-              
+
               <Link to="/about" className="btn-secondary">
                 Learn More
               </Link>
@@ -130,11 +135,11 @@ const Hero = ({
         <div className="hero-image-container">
           <div className="carousel-stage">
             {displayImages.map((imgSrc, index) => (
-              <img 
+              <img
                 key={index}
-                src={imgSrc} 
+                src={imgSrc}
                 className={`carousel-card ${getCardClass(index)}`}
-                alt={`Gallery ${index}`} 
+                alt={`Gallery ${index}`}
                 onError={(e) => e.target.src = fallbackImage}
                 onClick={() => handleCardClick(index)}
               />
@@ -147,9 +152,9 @@ const Hero = ({
       {partnersWithLogos.length > 0 && (
         <div className="hero-partner-carousel">
           <p className="partner-carousel-label" style={{ marginBottom: '30px' }}>Our Trusted Partners</p>
-          
+
           <div className="partner-carousel-wrapper">
-            <div 
+            <div
               className="partner-carousel-track"
               style={{ transform: `translateX(-${offset}px)` }}
             >
@@ -158,10 +163,11 @@ const Hero = ({
                   key={`${partner.id}-${index}`}
                   className="partner-logo-card"
                 >
-                  <img 
-                    src={partner.logo} 
+                  <img
+                    src={partner.logo}
                     alt={partner.name}
                     className="partner-logo-img"
+                    onError={() => handleLogoError(partner.id)}
                   />
                 </div>
               ))}
