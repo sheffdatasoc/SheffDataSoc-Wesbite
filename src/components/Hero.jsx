@@ -64,7 +64,8 @@ const Hero = ({
   const [offset, setOffset] = useState(0);
   const [brokenLogos, setBrokenLogos] = useState(new Set());
 
-  const partnersWithLogos = partners.filter(p => p.logo && !brokenLogos.has(p.id));
+  // Keep all partners with logos, don't filter out broken ones from the array
+  const partnersWithLogos = partners.filter(p => p.logo);
   const extendedPartners = partnersWithLogos.length > 0
     ? [...partnersWithLogos, ...partnersWithLogos, ...partnersWithLogos]
     : [];
@@ -163,12 +164,16 @@ const Hero = ({
                   key={`${partner.id}-${index}`}
                   className="partner-logo-card"
                 >
-                  <img
-                    src={partner.logo}
-                    alt={partner.name}
-                    className="partner-logo-img"
-                    onError={() => handleLogoError(partner.id)}
-                  />
+                  {brokenLogos.has(partner.id) ? (
+                    <span className="partner-name-fallback">{partner.name}</span>
+                  ) : (
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="partner-logo-img"
+                      onError={() => handleLogoError(partner.id)}
+                    />
+                  )}
                 </div>
               ))}
             </div>

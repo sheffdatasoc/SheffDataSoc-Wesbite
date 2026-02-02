@@ -314,6 +314,15 @@
 
 .partner-logo-card:hover .partner-logo-img { filter: grayscale(0%); }
 
+.partner-name-fallback {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #182F4D;
+  text-align: center;
+  padding: 0 5px;
+  line-height: 1.2;
+}
+
 /* ========================================
    MOBILE RESPONSIVENESS
    ======================================== */
