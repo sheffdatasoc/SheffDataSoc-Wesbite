@@ -4,6 +4,7 @@ const cors = require('cors');
 const cron = require('node-cron');
 const { syncAllData } = require('./syncNotion');
 const { processMailchimpAction } = require('./syncMailchimp');
+const chatClient = require('./ibmWatsonxClient');
 
 // Global sync state
 let lastSyncStatus = {
@@ -13,7 +14,7 @@ let lastSyncStatus = {
 };
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 app.use(cors());
@@ -84,6 +85,23 @@ app.get('/api/sync/status', (req, res) => {
         nextRun: cron.getTasks().size > 0 ? 'Scheduled' : 'Inactive',
         serverTime: new Date().toISOString()
     });
+});
+
+// ChatBot API Endpoint (IBM Granite)
+app.post('/api/chat', async (req, res) => {
+    const { prompt, history } = req.body;
+
+    if (!prompt) {
+        return res.status(400).json({ success: false, message: 'Prompt is required' });
+    }
+
+    try {
+        const response = await chatClient.generateResponse(prompt, history || []);
+        res.json({ success: true, response });
+    } catch (error) {
+        console.error('Chat API failed:', error.message);
+        res.status(500).json({ success: false, message: 'Failed to generate response from IBM Granite' });
+    }
 });
 
 // --- Scheduling ---
