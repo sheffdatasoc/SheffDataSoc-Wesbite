@@ -19,7 +19,7 @@ export default function HomeSocial() {
         <a href="https://github.com/sheffdatasoc" target="_blank" rel="noopener noreferrer" className="github">
           <FaGithub className="filled-icon" />
         </a>
-        <a href="https://x.com/SheffDataSoc" target="_blank" rel="noopener noreferrer" className="twitter">
+        <a href="https://x.com/SheffDatasoc" target="_blank" rel="noopener noreferrer" className="twitter">
           <FaTwitter className="filled-icon" />
         </a>
         <a href="https://www.facebook.com/sheffdatasoc" target="_blank" rel="noopener noreferrer" className="facebook">

@@ -10,8 +10,8 @@ export default function Footer() {
 
         {/* Brand Side */}
         <div className="footer-col footer-brand">
-          <img src={Logo} alt="DataSoc Logo" className="footer-logo" />
-          <h2 className="footer-title">SheffDataSoc</h2>
+          <img src={Logo} alt="Datasoc Logo" className="footer-logo" />
+          <h2 className="footer-title">SheffDatasoc</h2>
           <p className="footer-description">
             Empowering students through data, community, and real-world projects.
           </p>
@@ -59,7 +59,7 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="https://x.com/SheffDataSoc" target="_blank" rel="noopener noreferrer">
+              <a href="https://x.com/SheffDatasoc" target="_blank" rel="noopener noreferrer">
                 <FaTwitter /> Twitter
               </a>
             </li>
@@ -87,7 +87,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        © 2024 SheffDataSoc. All rights reserved.
+        © {new Date().getFullYear()} SheffDatasoc. All rights reserved.
       </div>
     </footer>
   );

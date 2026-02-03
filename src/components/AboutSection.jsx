@@ -24,7 +24,7 @@ function AboutSection() {
   return (
     <section className="about-section">
       <div className="about-container">
-        <h2 className="about-title">Why Join SheffDataSoc?</h2>
+        <h2 className="about-title">Why Join SheffDatasoc?</h2>
         <p className="about-subtitle">
           Whether you're a complete beginner or an experienced data scientist, there's a place for you in our community.
         </p>
@@ -40,8 +40,8 @@ function AboutSection() {
         </div>
 
         <div className="about-buttons">
-          <a 
-            href="https://su.sheffield.ac.uk/activities/view/data-science-society" 
+          <a
+            href="https://su.sheffield.ac.uk/activities/view/data-science-society"
             className="btn btn-primary"
             target="_blank"
             rel="noopener noreferrer"

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Home, 
-  Calendar, 
-  BookOpen, 
-  Code, 
-  Book, 
-  Image as ImageIcon, 
+import {
+  Home,
+  Calendar,
+  BookOpen,
+  Code,
+  Book,
+  Image as ImageIcon,
   Info,
   ChevronDown,
   Menu,
   X
 } from 'lucide-react';
-import logoImg from '../assets/datasoc-logo.png'; 
+import logoImg from '../assets/datasoc-logo.png';
 import './NavBar.css';
 
 function NavBar() {
@@ -46,8 +46,8 @@ function NavBar() {
 
   // Helper to set active class for Dropdown parents
   const getDropdownClass = (paths) => {
-    return paths.some(path => location.pathname.startsWith(path)) 
-      ? "nav-link dropdown-toggle active" 
+    return paths.some(path => location.pathname.startsWith(path))
+      ? "nav-link dropdown-toggle active"
       : "nav-link dropdown-toggle";
   };
 
@@ -59,8 +59,8 @@ function NavBar() {
         <Link to="/" className="nav-logo" onClick={() => setIsOpen(false)}>
           <img src={logoImg} alt="SheffDataSoc Logo" className="navbar-logo-img" />
           <div className="logo-text">
-            <h1>SheffDataSoc</h1>
-            <p>Sheffield Data Science Society</p>
+            <h1>SheffDatasoc</h1>
+            <p>Sheffield University Data Science Society</p>
           </div>
         </Link>
 
@@ -102,7 +102,7 @@ function NavBar() {
 
           {/* Learning Dropdown */}
           <li className="dropdown">
-            <button 
+            <button
               className={getDropdownClass(['/guides', '/glossary', '/resources'])}
               onClick={() => toggleDropdown('learning')}
             >

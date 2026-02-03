@@ -98,13 +98,13 @@ function Home() {
     <div className="home-page">
       {/* 1. HERO SECTION */}
       <Hero
-        title="Sheffield's Data Science Community"
+        title="Sheffield University Data Science Society"
         subtitle="Empowering students through data-driven innovation, community events, and collaborative projects."
         showButtons={true}
         showStats={true}
         stats={stats}
         showBadge={true}
-        badgeText="Welcome to SheffDataSoc"
+        badgeText="Welcome to SheffDatasoc"
         highlightWord="Data Science"
         partners={partners}
         images={heroImages}

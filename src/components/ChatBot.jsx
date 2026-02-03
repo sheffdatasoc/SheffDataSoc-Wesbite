@@ -4,7 +4,7 @@ import './ChatBot.css';
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hi!! I'm Sheff, DataSoc's Assistant, here to help 🫡" }
+        { role: 'assistant', content: "Hi!! I'm Sheff, Datasoc's Assistant, here to help 🫡" }
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);

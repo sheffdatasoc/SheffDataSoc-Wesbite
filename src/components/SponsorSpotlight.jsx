@@ -42,7 +42,7 @@ const SponsorSpotlight = ({ sponsor, onClose, arrowOffset }) => {
                         </div>
 
                         <div className="spotlight-block">
-                            <h3 style={{ color: '#182F4D' }}>Why They Sponsor DataSoc</h3>
+                            <h3 style={{ color: '#182F4D' }}>Why They Sponsor Datasoc</h3>
                             <p style={{ color: '#4a5568' }}>{sponsor.why_sponsor || 'Statement on data science sponsorship is coming soon.'}</p>
                         </div>
                     </div>
