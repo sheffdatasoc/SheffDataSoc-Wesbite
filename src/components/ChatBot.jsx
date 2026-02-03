@@ -8,6 +8,7 @@ const ChatBot = () => {
     ]);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showGreeting, setShowGreeting] = useState(true);
     const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
@@ -101,6 +102,16 @@ const ChatBot = () => {
                     </button>
                 </form>
             </div>
+
+            {/* Welcome Bubble */}
+            {showGreeting && !isOpen && (
+                <div className="welcome-bubble" onClick={() => {
+                    setIsOpen(true);
+                    setShowGreeting(false);
+                }}>
+                    Hi!, I'm Sheff 👋
+                </div>
+            )}
 
             {/* Toggle Button */}
             <button className="chat-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle Chat">
