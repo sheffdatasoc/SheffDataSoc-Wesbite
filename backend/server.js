@@ -16,14 +16,21 @@ let lastSyncStatus = {
 const app = express();
 const PORT = process.env.PORT || 10000; // Render's preferred port
 
-// 1. Manual CORS (Must be at the absolute top)
+// 1. Ultra-Explicit CORS (Absolute Top)
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    const origin = req.get('origin');
+    console.log(`[Sheff Backend] ${req.method} request from origin: ${origin || 'Unknown'}`);
 
+    // Always set these headers
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+    // Handle preflight (OPTIONS)
     if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+        console.log(`[Sheff Backend] Responding to OPTIONS preflight`);
+        return res.sendStatus(204);
     }
     next();
 });
