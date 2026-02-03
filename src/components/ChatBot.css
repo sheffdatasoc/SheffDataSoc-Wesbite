@@ -244,4 +244,48 @@
         bottom: calc(1.7rem + 55px);
         /* Adjusted for smaller mobile buttons */
     }
+} 
+
+/* Curved Welcome Text - Bold & Arced */
+.welcome-curved-container {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    width: 120px;
+    height: 120px;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.welcome-curve-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.curved-text {
+    font-size: 16px;
+    font-weight: 900; /* HEAVY BOLD */
+    fill: #002d5a;
+    text-shadow: 0 0 3px white;
+    cursor: pointer;
+    pointer-events: all;
+    animation: curve-float 3s ease-in-out infinite;
+}
+
+@keyframes curve-float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-3px, -3px) rotate(-1deg); }
+}
+
+@media (max-width: 768px) {
+    .welcome-curved-container {
+        width: 100px;
+        height: 100px;
+        bottom: -10px;
+        right: -10px;
+    }
+    .curved-text {
+        font-size: 14px;
+    }
 }

@@ -103,13 +103,20 @@ const ChatBot = () => {
                 </form>
             </div>
 
-            {/* Welcome Bubble */}
+            {/* Welcome Bubble - Curved & Bold */}
             {showGreeting && !isOpen && (
-                <div className="welcome-bubble" onClick={() => {
+                <div className="welcome-curved-container" onClick={() => {
                     setIsOpen(true);
                     setShowGreeting(false);
                 }}>
-                    Hi!, I'm Sheff 👋
+                    <svg viewBox="0 0 150 150" className="welcome-curve-svg">
+                        <path id="curvePath" d="M 60,115 A 55,55 0 0 1 115,60" fill="transparent" />
+                        <text className="curved-text">
+                            <textPath href="#curvePath" startOffset="50%" textAnchor="middle">
+                                Hi!, I'm Sheff 👋
+                            </textPath>
+                        </text>
+                    </svg>
                 </div>
             )}
 
