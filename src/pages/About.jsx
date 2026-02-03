@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Target, Eye, Heart, Clock, Users, ArrowRight,
   Mail, MapPin, Instagram
@@ -11,9 +11,22 @@ import { getPartners } from '../lib/supabase';
 
 import './About.css';
 function About() {
-
+  const { hash } = useLocation();
   const [partners, setPartners] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Handle hash scrolling
+  useEffect(() => {
+    if (hash && !loading) {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [hash, loading]);
 
   useEffect(() => {
     async function load() {
