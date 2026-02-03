@@ -155,7 +155,9 @@ function Members() {
 
             return (
               <div key={year} className="year-section">
-                <h2 className="year-heading">{year}</h2>
+                <h2 className="year-heading">
+                  {year} {year === '2024/25' && <span className="founding-badge">(Founding Committee)</span>}
+                </h2>
                 <div className="members-grid">
                   {yearMembers.map(member => (
                     <MemberCard key={member.id || member.notion_id} member={member} />

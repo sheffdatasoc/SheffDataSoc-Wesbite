@@ -175,6 +175,15 @@
   width: fit-content;
 }
 
+.founding-badge {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #182F4D;
+  opacity: 0.6;
+  margin-left: 1rem;
+  vertical-align: baseline;
+}
+
 /* ========================================
    MEMBERS GRID
    ======================================== */
