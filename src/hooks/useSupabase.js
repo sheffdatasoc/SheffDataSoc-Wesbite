@@ -12,6 +12,7 @@ import {
   getGalleryItems,
   getTimelineEvents
 } from '../lib/supabase';
+import { createMembers } from '../entities/Member';
 
 
 // Custom hook to fetch blog posts
@@ -184,7 +185,7 @@ export function useMembers() {
       try {
         setLoading(true);
         const data = await getMembers();
-        setMembers(data);
+        setMembers(createMembers(data || []));
         setError(null);
       } catch (err) {
         console.error('Error in useMembers:', err);
@@ -223,7 +224,7 @@ export function useGuides() {
         setLoading(false);
       }
     }
-   
+
     fetchGuides();
   }, []);
 
@@ -252,7 +253,7 @@ export function useGlossary() {
         setLoading(false);
       }
     }
-   
+
     fetchTerms();
   }, []);
 
@@ -283,7 +284,7 @@ export function useResources() {
         setLoading(false);
       }
     }
-   
+
     fetchResources();
   }, []);
 

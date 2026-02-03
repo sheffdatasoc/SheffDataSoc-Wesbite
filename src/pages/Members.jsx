@@ -7,7 +7,7 @@ import './Members.css';
 // --- Helper Functions ---
 
 const getMemberYear = (member) => {
-  return member.academic_year || 'Unknown';
+  return member.getAcademicYear ? member.getAcademicYear() : (member.academic_year || 'Unknown');
 };
 
 const isCommitteeMember = (member) => {
@@ -17,6 +17,8 @@ const isCommitteeMember = (member) => {
 };
 
 const checkMemberMatches = (member, query) => {
+  if (member.matchesSearch) return member.matchesSearch(query);
+
   if (!query) return true;
   const lowerQuery = query.toLowerCase();
 
@@ -38,28 +40,50 @@ function Members() {
   const academicYears = [...new Set(members.map(m => getMemberYear(m)))]
     .filter(year => year !== 'Unknown')
     .sort((a, b) => {
-      // Sort by first year in format "2024/25"
       const yearA = parseInt(a.split('/')[0]);
       const yearB = parseInt(b.split('/')[0]);
-      return yearB - yearA; // Most recent first
+      return yearB - yearA;
     });
 
-  // Group members by academic year
-  const membersByYear = academicYears.reduce((acc, year) => {
-    acc[year] = members.filter(member => {
+  // Hierarchy mapping
+  const roleHierarchy = {
+    'president': 0,
+    'vice president': 1,
+    'secretary': 2,
+    'treasurer': 3,
+    'inclusions officer': 4,
+    'inclusion officer': 4,
+    'social secretary': 5,
+    'education officer': 6,
+    'technical officer': 7
+  };
 
+  const getRoleWeight = (role) => {
+    if (!role) return 99;
+    const lowerRole = role.toLowerCase();
+    for (const [key, weight] of Object.entries(roleHierarchy)) {
+      if (lowerRole.includes(key)) return weight;
+    }
+    return 99;
+  };
+
+  // Group and sort members by academic year
+  const membersByYear = academicYears.reduce((acc, year) => {
+    const yearMembers = members.filter(member => {
       const matchesSearch = checkMemberMatches(member, searchQuery);
       const matchesYear = getMemberYear(member) === year;
-
-      // Tab Logic:
-      // 'extended' -> Shows everyone (Extended + Core + Members)
-      // 'committee' -> Shows only those marked as Committee in Notion
-      const matchesTab = activeTab === 'extended'
-        ? true
-        : isCommitteeMember(member);
-
+      const matchesTab = activeTab === 'extended' ? true : isCommitteeMember(member);
       return matchesSearch && matchesYear && matchesTab;
     });
+
+    // Sort by hierarchy then name
+    acc[year] = yearMembers.sort((a, b) => {
+      const weightA = getRoleWeight(a.role);
+      const weightB = getRoleWeight(b.role);
+      if (weightA !== weightB) return weightA - weightB;
+      return (a.name || '').localeCompare(b.name || '');
+    });
+
     return acc;
   }, {});
 

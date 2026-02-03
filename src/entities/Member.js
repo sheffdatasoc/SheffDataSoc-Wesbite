@@ -16,8 +16,8 @@ class Member {
     this.bio = data.bio;
     this.major = data.major || null; // now comes directly from DB
     this.imageUrl = data.image_url;
-    this.githubUrl = data.github_url;
-    this.linkedinUrl = data.linkedin_url;
+    this.githubUrl = data.github || data.github_url;
+    this.linkedinUrl = data.linkedin || data.linkedin_url;
     this.interests = data.interests || [];
     this.academicYear = data.academic_year;
     this.createdAt = data.created_at;
