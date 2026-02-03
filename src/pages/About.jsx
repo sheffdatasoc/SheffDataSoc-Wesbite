@@ -18,7 +18,13 @@ function About() {
   useEffect(() => {
     async function load() {
       const data = await getPartners();
-      setPartners(data || []);
+      const tierOrder = { 'platinum': 0, 'gold': 1, 'silver': 2, 'bronze': 3 };
+      const sortedData = (data || []).sort((a, b) => {
+        const tierA = (a.tier || '').trim().toLowerCase();
+        const tierB = (b.tier || '').trim().toLowerCase();
+        return (tierOrder[tierA] ?? 99) - (tierOrder[tierB] ?? 99);
+      });
+      setPartners(sortedData);
       setLoading(false);
     }
     load();
@@ -130,7 +136,7 @@ function About() {
       </section>
 
       {/* PARTNERS */}
-      <section className="partners-section">
+      <section id="sponsors-section" className="partners-section">
 
         <div className="partners-header">
           <span className="partners-badge">🏆 Proudly Supported By</span>

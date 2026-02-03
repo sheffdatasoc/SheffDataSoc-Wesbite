@@ -89,7 +89,7 @@ function Home() {
   const stats = [
     { value: '117', title: 'Members' },
     { value: '15+', title: 'Events/Year' },
-    { value: `${partners.length}+`, title: 'Partners' }
+    { value: `${partners.length}`, title: 'Partners' }
   ];
 
   const platinumPartner = partners.find(p => p.tier?.trim().toLowerCase() === 'platinum');
