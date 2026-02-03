@@ -14,11 +14,21 @@ let lastSyncStatus = {
 };
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 10000; // Render's preferred port
 
-// Middleware
-app.use(cors()); // Simple allow-all
-app.options('*', cors()); // Enable pre-flight for all routes
+// 1. Manual CORS (Must be at the absolute top)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
+
+// 2. Regular middleware
 app.use(express.json());
 
 // --- API Endpoints ---
