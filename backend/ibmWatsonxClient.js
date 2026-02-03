@@ -130,8 +130,8 @@ ${societyContext}`;
                     })),
                     { role: 'user', content: prompt }
                 ],
-                maxTokens: 300,
-                stop: ['user', 'USER', 'ASSISTANT', 'User:', 'Assistant:', 'USER:', 'Assistant:']
+                maxTokens: 500,
+                stop: ['user', 'USER', 'ASSISTANT', 'User:', 'Assistant:', 'USER:']
             };
 
             const response = await this.watsonx.textChat(params);
@@ -143,6 +143,9 @@ ${societyContext}`;
             }
         } catch (error) {
             console.error('WatsonX Error:', error.message);
+            if (error.response?.data) {
+                console.error('WatsonX Error Detail:', JSON.stringify(error.response.data, null, 2));
+            }
             throw error;
         }
     }
