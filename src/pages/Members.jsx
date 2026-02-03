@@ -46,25 +46,32 @@ function Members() {
     });
 
   // Hierarchy mapping
-  const roleHierarchy = {
-    'president': 0,
-    'vice president': 1,
-    'secretary': 2,
-    'treasurer': 3,
-    'inclusions officer': 4,
-    'inclusion officer': 4,
-    'social secretary': 5,
-    'education officer': 6,
-    'technical officer': 7
-  };
+  const roleHierarchy = [
+    { key: 'president', weight: 0 },
+    { key: 'secretary', weight: 1 },
+    { key: 'treasurer', weight: 2 },
+    { key: 'inclusion officer', weight: 3 },
+    { key: 'inclusions officer', weight: 3 },
+    { key: 'social secretary', weight: 4 },
+    { key: 'education officer', weight: 5 },
+    { key: 'technical officer', weight: 6 },
+    { key: 'vice president', weight: 0.5 } // Between President and Secretary
+  ];
 
   const getRoleWeight = (role) => {
     if (!role) return 99;
-    const lowerRole = role.toLowerCase();
-    for (const [key, weight] of Object.entries(roleHierarchy)) {
-      if (lowerRole.includes(key)) return weight;
-    }
-    return 99;
+    const lowerRole = role.trim().toLowerCase();
+
+    // First try exact match for priority roles
+    const exactMatch = roleHierarchy.find(h => lowerRole === h.key);
+    if (exactMatch) return exactMatch.weight;
+
+    // Then try include match for variations, but find the most specific one
+    const includeMatch = roleHierarchy
+      .filter(h => lowerRole.includes(h.key))
+      .sort((a, b) => b.key.length - a.length)[0]; // Longest match first
+
+    return includeMatch ? includeMatch.weight : 99;
   };
 
   // Group and sort members by academic year
