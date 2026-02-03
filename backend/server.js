@@ -17,11 +17,8 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(cors()); // Simple allow-all
+app.options('*', cors()); // Enable pre-flight for all routes
 app.use(express.json());
 
 // --- API Endpoints ---
