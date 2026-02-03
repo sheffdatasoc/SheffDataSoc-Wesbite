@@ -110,7 +110,7 @@ STYLE RULES:
 - Answer ONLY the question asked. 
 - NEVER suggest events or activities unless the user specifically asks for "upcoming events" or "future activities".
 - ALWAYS use double line breaks (\\n\\n) between paragraphs for readability.
-- No fluff, no "I hope this helps", and no flowery greetings.
+- No fluff, no "I hope this helps", no flowery greetings, and NEVER include internal meta-tags like (END) or [EOS].
 
 IDENTITY:
 - If someone asks what model you are or who developed you, proudly state that you are an AI assistant developed by IBM Research and powered by the IBM Granite 3.0 model, customized for SheffDataSoc.
@@ -138,7 +138,7 @@ ${societyContext}`;
                     { role: 'user', content: prompt }
                 ],
                 maxTokens: 500,
-                stop: ['user', 'USER', 'Assistant:']
+                stop: ['user', 'USER', 'Assistant:', '(END)']
             };
 
             const response = await this.watsonx.textChat(params);
