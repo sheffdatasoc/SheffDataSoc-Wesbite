@@ -98,8 +98,13 @@ class WatsonxClient {
             const societyContext = await this._getSocietyContext(prompt);
 
             const systemPrompt = `You are Sheff, the official Assistant of SheffDataSoc.
-Your personality: Professional, friendly, and helpful.
+Your personality: Professional, sharp, and helpful.
 CURRENT DATE: ${new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+
+STYLE RULES:
+- Be concise. Get straight to the point.
+- Use clean paragraphs for readability.
+- Avoid flowery language or repeated greetings.
 
 IDENTITY:
 - If someone asks what model you are or who developed you, proudly state that you are an AI assistant developed by IBM Research and powered by the IBM Granite 3.0 model, customized for SheffDataSoc.
@@ -125,8 +130,8 @@ ${societyContext}`;
                     })),
                     { role: 'user', content: prompt }
                 ],
-                maxTokens: 500,
-                stop: ['user', 'ASSISTANT', 'User:', 'Assistant:']
+                maxTokens: 300,
+                stop: ['user', 'USER', 'ASSISTANT', 'User:', 'Assistant:', 'USER:', 'Assistant:']
             };
 
             const response = await this.watsonx.textChat(params);
