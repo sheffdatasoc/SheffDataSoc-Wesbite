@@ -4,1029 +4,315 @@ const { NotionToMarkdown } = require("notion-to-md");
 
 require('dotenv').config();
 
-console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? '✓ Set' : '✗ Missing');
-console.log('SUPABASE_SERVICE_KEY:', process.env.SUPABASE_SERVICE_KEY ? '✓ Set' : '✗ Missing');
-console.log('NOTION_TOKEN:', process.env.NOTION_TOKEN ? '✓ Set' : '✗ Missing');
-console.log('---');
-
+// Configuration
+const DEBUG = process.env.DEBUG === 'true';
+const RATE_LIMIT_DELAY = 350;
+const INCREMENTAL_SYNC_WINDOW_MINS = 15; // Sync items changed in the last 15 mins
 
 // Initialize clients
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
-
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
-);
-
-
-// Initialize markdown converter
+const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 const n2m = new NotionToMarkdown({ notionClient: notion });
 
-
-// Database IDs from Notion
-const DATABASES = {
-  events: process.env.NOTION_EVENTS_DB_ID,
-  blog: process.env.NOTION_BLOG_DB_ID,
-  projects: process.env.NOTION_PROJECTS_DB_ID,
-  workshops: process.env.NOTION_WORKSHOPS_DB_ID,
-  guides: process.env.NOTION_GUIDES_DB_ID,
-  members: process.env.NOTION_MEMBERS_DB_ID,
-  glossary: process.env.NOTION_GLOSSARY_DB_ID,
-  resources: process.env.NOTION_RESOURCES_DB_ID,
-  timeline: process.env.NOTION_TIMELINE_DB_ID,
-  gallery: process.env.NOTION_GALLERY_DB_ID,
-  partners: process.env.NOTION_PARTNERS_DB_ID
-};
-
-
-// Configuration
-const RATE_LIMIT_DELAY = 350; // ~3 requests per second for Notion API
-const DEBUG = process.env.DEBUG === 'true';
-
-
 // Helper functions
-function extractText(richText) {
-  if (!richText || richText.length === 0) return '';
-  return richText.map(t => t.plain_text).join('');
-}
-
-
-function extractDate(dateObj) {
-  if (!dateObj) return null;
-  return dateObj.start;
-}
-
-
-function extractUrl(urlObj) {
-  return urlObj || null;
-}
-
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+const extractText = (richText) => (richText || []).map(t => t.plain_text).join('');
+const extractDate = (dateObj) => dateObj?.start || null;
+const extractUrl = (urlObj) => urlObj || null;
 
 function extractImageUrl(imageProperty) {
   if (!imageProperty) return null;
-
-  // Handle "Files & media" type
   if (imageProperty.type === 'files') {
     const files = imageProperty.files || [];
     if (files.length === 0) return null;
-    return files[0].type === 'external'
-      ? files[0].external.url
-      : files[0].file.url;
+    return files[0].type === 'external' ? files[0].external.url : files[0].file.url;
   }
-
-  // Handle "URL" type
-  if (imageProperty.type === 'url') {
-    return imageProperty.url;
-  }
-
-  return null;
+  return imageProperty.type === 'url' ? imageProperty.url : null;
 }
 
 function robustExtractImage(page) {
   const props = page.properties;
-  const propKeys = Object.keys(props);
-
-  // 1. Try Case-Insensitive Named Properties
   const possibleNames = ['Image', 'Cover', 'Photo', 'Logo', 'Thumbnail', 'Main Image', 'Image URL', 'image_url', 'image'];
 
   for (const name of possibleNames) {
-    const match = propKeys.find(k => k.toLowerCase() === name.toLowerCase());
+    const match = Object.keys(props).find(k => k.toLowerCase() === name.toLowerCase());
     if (match) {
       const url = extractImageUrl(props[match]);
       if (url) return url;
     }
   }
 
-  // 2. Fallback to any property containing "image", "photo", or "logo"
-  for (const key of propKeys) {
-    if (key.toLowerCase().includes('image') || key.toLowerCase().includes('photo') || key.toLowerCase().includes('logo')) {
-      const url = extractImageUrl(props[key]);
-      if (url) return url;
-    }
-  }
-
-  // 3. Fallback to Page Cover
-  if (page.cover) {
-    return page.cover.type === 'external'
-      ? page.cover.external.url
-      : page.cover.file.url;
-  }
-
-  // 4. Diagnostic Logging (Visible in Render Logs)
-  console.log(`[Diagnostic] No image found for page ${page.id}. Available properties: ${propKeys.join(', ')}`);
-
-  return null;
+  // Fallback to Page Cover
+  return page.cover ? (page.cover.type === 'external' ? page.cover.external.url : page.cover.file.url) : null;
 }
 
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-
-function debugLog(...args) {
-  if (DEBUG) {
-    console.log(...args);
-  }
-}
-
-function preserveImage(existingMap, notionId, newImageUrl) {
-  // 💡 FIX: Prioritize the new URL from Notion.
-  // Notion URLs for files are ephemeral and MUST be refreshed.
-  return newImageUrl || existingMap.get(notionId) || null;
-}
-
-
-// Get all pages from a database with pagination
-async function getAllPages(databaseId) {
+// Generic page fetcher with incremental sync support
+async function getAllPages(databaseId, incremental = false) {
   let results = [];
   let hasMore = true;
   let startCursor = undefined;
+
+  const filter = incremental ? {
+    timestamp: 'last_edited_time',
+    last_edited_time: {
+      on_or_after: new Date(Date.now() - INCREMENTAL_SYNC_WINDOW_MINS * 60 * 1000).toISOString()
+    }
+  } : undefined;
 
   while (hasMore) {
     const response = await notion.databases.query({
       database_id: databaseId,
       start_cursor: startCursor,
+      filter: filter
     });
 
     results.push(...response.results);
     hasMore = response.has_more;
     startCursor = response.next_cursor;
-
-    if (hasMore) {
-      await delay(RATE_LIMIT_DELAY);
-    }
+    if (hasMore) await delay(RATE_LIMIT_DELAY);
   }
-
   return results;
 }
 
+// Table Mappers
+const MAPPERS = {
+  events: (page) => ({
+    notion_id: page.id,
+    title: extractText(page.properties.Title?.title),
+    date: extractDate(page.properties.Date?.date),
+    end_date: page.properties['End Date']?.date?.start || null,
+    location: extractText(page.properties.Location?.rich_text),
+    description: extractText(page.properties.Description?.rich_text),
+    status: extractText(page.properties.status?.rich_text) || 'upcoming',
+    type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
+    attendees: page.properties.Attendees?.number || 0,
+    max_attendees: page.properties['Max Attendees']?.number || null,
+    image_url: robustExtractImage(page),
+    registration_url: page.properties['Registration URL']?.url || null,
+    is_featured: page.properties.Featured?.checkbox || false,
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  }),
+  blog_posts: async (page) => {
+    const mdBlocks = await n2m.pageToMarkdown(page.id);
+    const mdString = n2m.toMarkdownString(mdBlocks);
+    return {
+      notion_id: page.id,
+      title: extractText(page.properties.Title?.title),
+      author: extractText(page.properties.Author?.rich_text),
+      published_date: extractDate(page.properties['Published Date']?.date),
+      excerpt: extractText(page.properties.Excerpt?.rich_text),
+      status: (extractText(page.properties.Status?.rich_text) || 'draft').toLowerCase() === 'published' ? 'published' : 'draft',
+      image: robustExtractImage(page),
+      content: mdString.parent,
+      slug: extractText(page.properties.Slug?.rich_text) || page.id,
+      created_at: page.created_time,
+      updated_at: page.last_edited_time
+    };
+  },
+  projects: (page) => ({
+    notion_id: page.id,
+    title: extractText(page.properties.Title?.title),
+    description: extractText(page.properties.Description?.rich_text),
+    github_url: page.properties.Github?.url || null,
+    status: extractText(page.properties.Status?.rich_text) || 'in progress',
+    members: page.properties.Members?.number ?? null,
+    tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
+    demo_url: page.properties["Demo url"]?.url || null,
+    featured: page.properties.Featured?.checkbox || false,
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  }),
+  workshops: (page) => ({
+    notion_id: page.id,
+    title: extractText(page.properties.Title?.title),
+    description: extractText(page.properties.Description?.rich_text),
+    materials_url: page.properties.Materials?.url || null,
+    status: extractText(page.properties.Status?.rich_text) || 'beginner',
+    tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
+    date: page.properties.Date?.date?.start || null,
+    duration_minutes: page.properties["Duration Minutes"]?.number ?? null,
+    host: extractText(page.properties.Host?.rich_text),
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  }),
+  guides: async (page) => {
+    const mdBlocks = await n2m.pageToMarkdown(page.id);
+    const mdString = n2m.toMarkdownString(mdBlocks);
+    return {
+      notion_id: page.id,
+      title: extractText(page.properties.Name?.title),
+      description: extractText(page.properties.Description?.rich_text),
+      content: mdString.parent,
+      published_date: extractDate(page.properties['Published Date']?.date),
+      category: page.properties.Category?.select?.name || null,
+      difficulty: page.properties.Difficulty?.select?.name || 'beginner',
+      tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
+      author: extractText(page.properties.Author?.rich_text),
+      read_time: page.properties['Read Time']?.number,
+      github_url: page.properties.GitHub?.url,
+      image: robustExtractImage(page),
+      featured: page.properties.Featured?.checkbox || false,
+      created_at: page.created_time,
+      updated_at: page.last_edited_time
+    };
+  },
+  members: (page) => ({
+    notion_id: page.id,
+    name: extractText(page.properties.Name?.title),
+    role: page.properties.Role?.select?.name,
+    bio: extractText(page.properties.Bio?.rich_text),
+    major: page.properties.major?.select?.name || extractText(page.properties.major?.rich_text) || null,
+    image_url: robustExtractImage(page),
+    github_url: page.properties['GitHub URL']?.url,
+    linkedin_url: page.properties['LinkedIn URL']?.url,
+    created_at: page.created_time,
+    interests: page.properties.Interests?.multi_select ? page.properties.Interests.multi_select.map(t => t.name) : [],
+    academic_year: page.properties.academic_year?.select?.name || extractText(page.properties.academic_year?.rich_text) || null,
+    is_committee: page.properties.Committee?.checkbox === true
+  }),
+  glossary: (page) => ({
+    notion_id: page.id,
+    term: extractText(page.properties.Term?.title),
+    definition: extractText(page.properties.Definition?.rich_text),
+    category: extractText(page.properties.Category?.rich_text),
+    examples: extractText(page.properties.Examples?.rich_text),
+    related_terms: (page.properties['Related Terms']?.multi_select || []).map(item => item.name),
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  }),
+  resources: (page) => ({
+    notion_id: page.id,
+    name: extractText(page.properties.Name?.title),
+    resource_url: page.properties['Resource url']?.url || null,
+    type: extractText(page.properties.Type?.rich_text),
+    description: extractText(page.properties.Description?.rich_text),
+    category: extractText(page.properties.Category?.rich_text),
+    tags: (page.properties.Tags?.multi_select || []).map(tag => tag.name),
+    featured: page.properties.Featured?.checkbox || false,
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  }),
+  timeline_events: (page) => ({
+    notion_id: page.id,
+    title: extractText(page.properties.Title?.title),
+    event_date: extractDate(page.properties['Event date']?.date),
+    term: page.properties.Term?.select?.name || null,
+    description: extractText(page.properties.Description?.rich_text),
+    tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
+    icon: extractText(page.properties.Icon?.rich_text) || null,
+    image_url: robustExtractImage(page),
+    created_at: page.created_time
+  }),
+  gallery_items: (page) => ({
+    notion_id: page.id,
+    title: extractText(page.properties.Title?.title || page.properties.Name?.title || page.properties.Image?.title),
+    event_date: extractDate(page.properties['Event Date']?.date || page.properties.Date?.date),
+    description: extractText(page.properties.Description?.rich_text),
+    category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
+    image_url: robustExtractImage(page),
+    created_at: page.created_time
+  }),
+  partners: (page) => ({
+    notion_id: page.id,
+    name: extractText(page.properties.Name?.title),
+    description: extractText(page.properties.Description?.rich_text),
+    tier: page.properties.Tier?.select?.name || 'Bronze',
+    logo: robustExtractImage(page),
+    website: page.properties.Website?.url || null,
+    about_blurb: extractText(page.properties['About Blurb']?.rich_text),
+    why_sponsor: extractText(page.properties['Why Sponsor']?.rich_text),
+    cta_link: page.properties['CTA Link']?.url || null,
+    active: page.properties.Active?.checkbox !== false,
+    created_at: page.created_time,
+    updated_at: page.last_edited_time
+  })
+};
 
-// Sync Events
-async function syncEvents() {
+// Generic Sync Function
+async function genericSync(tableName, databaseId, incremental = false) {
+  if (!databaseId) return { count: 0, error: 'Database ID missing' };
+
   try {
-    console.log('Syncing events...');
+    console.log(`Syncing ${tableName}...${incremental ? ' (incremental)' : ''}`);
+    const pages = await getAllPages(databaseId, incremental);
+    if (pages.length === 0) return { count: 0 };
 
-    const pages = await getAllPages(DATABASES.events);
-
-    // 1️⃣ Fetch existing events FIRST (only id + image)
-    const { data: existingEvents, error: fetchError } = await supabase
-      .from('events')
-      .select('notion_id, image_url');
-
-    if (fetchError) throw fetchError;
-
-    // 2️⃣ Create a lookup map: notion_id → image_url
-    const existingEventMap = new Map(
-      (existingEvents || []).map(e => [e.notion_id, e.image_url])
-    );
-
-    // 3️⃣ Build events array, protecting image_url
-    const events = pages
-      .map(page => ({
-        notion_id: page.id,
-        title: extractText(page.properties.Title?.title),
-        date: extractDate(page.properties.Date?.date),
-        end_date: page.properties['End Date']?.date?.start || null,
-        location: extractText(page.properties.Location?.rich_text),
-        description: extractText(page.properties.Description?.rich_text),
-        status: extractText(page.properties.status?.rich_text) || 'upcoming',
-        type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
-        attendees: page.properties.Attendees?.number || 0,
-        max_attendees: page.properties['Max Attendees']?.number || null,
-
-        // 🔒 PROTECTED IMAGE FIELD
-        image_url: preserveImage(
-          existingEventMap,
-          page.id,
-          robustExtractImage(page)
-        ),
-
-        registration_url: page.properties['Registration URL']?.url || null,
-        is_featured: page.properties.Featured?.checkbox || false,
-        created_at: page.created_time,
-        updated_at: page.last_edited_time
-      }))
-      .filter(event => event.title);
-
-    if (events.length === 0) {
-      console.log('⚠️ No valid events found');
-      return { count: 0, data: null };
-    }
-
-    // 4️⃣ Upsert (unchanged)
-    const { data, error } = await supabase
-      .from('events')
-      .upsert(events, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${events.length} events`);
-    return { count: events.length, data };
-
-  } catch (error) {
-    console.error('Error syncing events:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Blog Posts
-async function syncBlogPosts() {
-  try {
-    console.log('Syncing blog posts...');
-    const pages = await getAllPages(DATABASES.blog);
-
-    const posts = [];
-    const errors = [];
+    const mapper = MAPPERS[tableName];
+    const data = [];
 
     for (const page of pages) {
-      try {
-        const mdBlocks = await n2m.pageToMarkdown(page.id);
-        const mdString = n2m.toMarkdownString(mdBlocks);
-
-        // Check if post already exists
-        const { data: existingPost } = await supabase
-          .from('blog_posts')
-          .select('content')
-          .eq('notion_id', page.id)
-          .single();
-
-        // Map Notion status to appropriate status value
-        const notionStatus = extractText(page.properties.Status?.rich_text) || 'draft';
-        let status = 'draft';
-
-        const statusLower = notionStatus.toLowerCase();
-        if (statusLower === 'published') {
-          status = 'published';
-        } else if (statusLower === 'completed') {
-          status = 'in_review';
-        }
-
-        const post = {
-          notion_id: page.id,
-          title: extractText(page.properties.Title?.title),
-          author: extractText(page.properties.Author?.rich_text),
-          published_date: extractDate(page.properties['Published Date']?.date),
-          excerpt: extractText(page.properties.Excerpt?.rich_text),
-          status,
-          image: robustExtractImage(page),
-
-          // 🔒 PROTECT CONTENT
-          content: existingPost?.content ?? mdString.parent,
-
-          slug: extractText(page.properties.Slug?.rich_text) || page.id,
-          created_at: page.created_time,
-          updated_at: page.last_edited_time
-        };
-
-        if (post.title) {
-          posts.push(post);
-        }
-        await delay(RATE_LIMIT_DELAY);
-
-      } catch (err) {
-        errors.push({
-          pageId: page.id,
-          title: extractText(page.properties.Title?.title),
-          error: err.message
-        });
-      }
+      const item = await mapper(page);
+      if (item && (item.title || item.name || item.term)) data.push(item);
+      if (tableName.includes('blog') || tableName.includes('guides')) await delay(RATE_LIMIT_DELAY);
     }
 
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .upsert(posts, { onConflict: 'notion_id' });
-
+    const { error } = await supabase.from(tableName).upsert(data, { onConflict: 'notion_id' });
     if (error) throw error;
 
-    console.log(`✓ Synced ${posts.length} blog posts`);
-    return { count: posts.length, data, errors };
-
+    console.log(`✓ Synced ${data.length} ${tableName}`);
+    return { count: data.length };
   } catch (error) {
-    console.error('Error syncing blog posts:', error.message);
+    console.error(`Error syncing ${tableName}:`, error.message);
     return { count: 0, error: error.message };
   }
 }
 
-
-
-
-// Sync Projects
-async function syncProjects() {
-  try {
-    console.log('Syncing projects...');
-    const pages = await getAllPages(DATABASES.projects);
-
-
-    const projects = pages
-      .map(page => ({
-        notion_id: page.id,
-        title: extractText(page.properties.Title?.title),
-        description: extractText(page.properties.Description?.rich_text),
-        github_url: extractUrl(page.properties.Github?.url),
-        status: extractText(page.properties.Status?.rich_text) || 'in progress',
-        members: page.properties.Members?.number ?? null,
-        tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
-        demo_url: page.properties["Demo url"]?.url || null,
-        featured: page.properties.Featured?.checkbox || false,
-        created_at: page.created_time,
-        updated_at: page.last_edited_time
-      }))
-      .filter(project => project.title); // Skip projects without titles
-
-
-    if (projects.length === 0) {
-      console.log('⚠️  No valid projects found');
-      return { count: 0, data: null };
-    }
-
-
-    // Upsert projects
-    const { data, error } = await supabase
-      .from('projects')
-      .upsert(projects, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-
-    if (error) throw error;
-    console.log(`✓ Synced ${projects.length} projects`);
-    return { count: projects.length, data };
-  } catch (error) {
-    console.error('Error syncing projects:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-async function syncWorkshops() {
-  try {
-    console.log('Syncing workshops...');
-    const pages = await getAllPages(DATABASES.workshops);
-
-    const workshops = pages
-      .map(page => {
-        return {
-          notion_id: page.id,
-          title: extractText(page.properties.Title?.title),
-          description: extractText(page.properties.Description?.rich_text),
-          materials_url: extractUrl(page.properties.Materials?.url),
-          status: extractText(page.properties.Status?.rich_text) || 'beginner',
-          tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
-          date: page.properties.Date?.date?.start || null,
-          duration_minutes: page.properties["Duration Minutes"]?.number ?? null,
-          host: extractText(page.properties.Host?.rich_text),
-          created_at: page.created_time,
-          updated_at: page.last_edited_time
-        };
-      })
-      .filter(workshop => workshop.title);
-
-    if (workshops.length === 0) {
-      console.log('⚠️ No valid workshops found');
-      return { count: 0, data: null };
-    }
-
-    // Upsert workshops
-    const { data, error } = await supabase
-      .from('workshops')
-      .upsert(workshops, { onConflict: 'notion_id', ignoreDuplicates: false });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${workshops.length} workshops`);
-    return { count: workshops.length, data };
-  } catch (error) {
-    console.error('Error syncing workshops:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Guides
-async function syncGuides() {
-  try {
-    console.log('Syncing guides...');
-    const pages = await getAllPages(DATABASES.guides);
-
-    const guides = [];
-    const errors = [];
-
-    for (const page of pages) {
-      try {
-        const mdBlocks = await n2m.pageToMarkdown(page.id);
-        const mdString = n2m.toMarkdownString(mdBlocks);
-
-        // Check existing guide
-        const { data: existingGuide } = await supabase
-          .from('guides')
-          .select('content')
-          .eq('notion_id', page.id)
-          .single();
-
-        const guide = {
-          notion_id: page.id,
-          title: extractText(page.properties.Name?.title),
-          description: extractText(page.properties.Description?.rich_text),
-
-          // 🔒 PROTECT CONTENT
-          content: existingGuide?.content ?? mdString.parent,
-
-          published_date: extractDate(page.properties['Published Date']?.date),
-          category: page.properties.Category?.select?.name || null,
-          difficulty: page.properties.Difficulty?.select?.name || 'beginner',
-          tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
-          author: extractText(page.properties.Author?.rich_text),
-          read_time: page.properties['Read Time']?.number,
-          github_url: page.properties.GitHub?.url,
-          image: robustExtractImage(page),
-          featured: page.properties.Featured?.checkbox || false,
-          created_at: page.created_time,
-          updated_at: page.last_edited_time
-        };
-
-        if (guide.title) {
-          guides.push(guide);
-        }
-        await delay(RATE_LIMIT_DELAY);
-
-      } catch (err) {
-        errors.push({
-          pageId: page.id,
-          title: extractText(page.properties.Name?.title),
-          error: err.message
-        });
-      }
-    }
-
-    const { data, error } = await supabase
-      .from('guides')
-      .upsert(guides, { onConflict: 'notion_id' });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${guides.length} guides`);
-    return { count: guides.length, data, errors };
-
-  } catch (error) {
-    console.error('Error syncing guides:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-
-// Sync Members
-async function syncMembers() {
-  try {
-    console.log('Syncing members...');
-    // Assuming getAllPages and DATABASES are defined in your scope or imported
-    const pages = await getAllPages(DATABASES.members);
-
-
-    const members = pages
-      .map(page => ({
-        notion_id: page.id,
-        name: extractText(page.properties.Name?.title),
-        role: page.properties.Role?.select?.name,
-        bio: extractText(page.properties.Bio?.rich_text),
-        major:
-          page.properties.major?.select?.name ||
-          extractText(page.properties.major?.rich_text) ||
-          null,
-        image_url: robustExtractImage(page),
-        github_url: page.properties['GitHub URL']?.url,
-        linkedin_url: page.properties['LinkedIn URL']?.url,
-        created_at: page.created_time,
-        interests: page.properties.Interests?.multi_select
-          ? page.properties.Interests.multi_select.map(t => t.name)
-          : extractText(page.properties.Interests?.rich_text)
-            .split(',')
-            .map(s => s.trim())
-            .filter(Boolean),
-        academic_year:
-          page.properties.academic_year?.select?.name ||
-          extractText(page.properties.academic_year?.rich_text) ||
-          null,
-        is_committee:
-          page.properties.Committee?.checkbox === true
-      }))
-      .filter(member => member.name); // Skip members without names
-
-
-    if (members.length === 0) {
-      console.log('⚠️  No valid members found');
-      return { count: 0, data: null };
-    }
-
-
-    // Upsert members
-    const { data, error } = await supabase
-      .from('members')
-      .upsert(members, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-
-    if (error) throw error;
-    console.log(`✓ Synced ${members.length} members`);
-    return { count: members.length, data };
-  } catch (error) {
-    console.error('Error syncing members:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Glossary
-async function syncGlossary() {
-  try {
-    console.log('Syncing glossary...');
-    const pages = await getAllPages(DATABASES.glossary);
-
-
-    const glossaryTerms = pages
-      .map(page => {
-        const term = extractText(page.properties.Term?.title);
-
-        debugLog(`\nTerm: "${term}"`);
-        debugLog('Related Terms property:', page.properties['Related Terms']);
-
-        return {
-          notion_id: page.id,
-          term: term,
-          definition: extractText(page.properties.Definition?.rich_text),
-          category: extractText(page.properties.Category?.rich_text),
-          examples: extractText(page.properties.Examples?.rich_text),
-          related_terms: page.properties['Related Terms']?.multi_select
-            ? page.properties['Related Terms'].multi_select.map(item => item.name)
-            : [],
-          created_at: page.created_time,
-          updated_at: page.last_edited_time
-        };
-      })
-      .filter(item => item.term && item.term.trim() !== ''); // Remove empty terms
-
-
-    // Remove duplicates - keep first occurrence only
-    const uniqueTerms = Array.from(
-      new Map(glossaryTerms.map(item => [item.term, item])).values()
-    );
-
-
-    if (glossaryTerms.length !== uniqueTerms.length) {
-      const duplicateCount = glossaryTerms.length - uniqueTerms.length;
-      console.log(`⚠️  Removed ${duplicateCount} duplicate terms`);
-    }
-
-
-    if (uniqueTerms.length === 0) {
-      console.log('⚠️  No valid glossary terms found');
-      return { count: 0, data: null };
-    }
-
-
-    // Upsert glossary terms
-    const { data, error } = await supabase
-      .from('glossary')
-      .upsert(uniqueTerms, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-
-    if (error) throw error;
-    console.log(`✓ Synced ${uniqueTerms.length} glossary terms`);
-    return { count: uniqueTerms.length, data };
-  } catch (error) {
-    console.error('Error syncing glossary:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Resources
-async function syncResources() {
-  try {
-    console.log('Syncing resources...');
-
-    const pages = await getAllPages(DATABASES.resources); // Fetch all Notion pages for resources
-    const resources = [];
-    const errors = [];
-
-
-    for (const page of pages) {
-      try {
-        // Map Notion properties to Supabase format
-        const resource = {
-          notion_id: page.id,
-          name: extractText(page.properties.Name?.title),
-          resource_url: extractUrl(page.properties['Resource url']?.url),
-          type: extractText(page.properties.Type?.rich_text),
-          description: extractText(page.properties.Description?.rich_text),
-          category: extractText(page.properties.Category?.rich_text),
-          tags: page.properties.Tags?.multi_select?.map(tag => tag.name) || [],
-          featured: page.properties.Featured?.checkbox || false,
-          created_at: page.created_time,
-          updated_at: page.last_edited_time
-        };
-
-
-        // Only push resources with a title
-        if (resource.name) {
-          resources.push(resource);
-        }
-
-
-        await delay(RATE_LIMIT_DELAY); // Respect rate limits
-      } catch (err) {
-        // Handle per-page errors without stopping the loop
-        errors.push({
-          pageId: page.id,
-          title: extractText(page.properties.Title?.title),
-          error: err.message
-        });
-        debugLog(`Failed to process resource ${page.id}:`, err.message);
-      }
-    }
-
-
-    if (errors.length > 0) {
-      console.warn(`⚠️  ${errors.length} resources failed to sync`);
-    }
-
-
-    if (resources.length === 0) {
-      console.log('⚠️  No valid resources found');
-      return { count: 0, data: null, errors };
-    }
-
-
-    // Upsert resources into Supabase
-    const { data, error } = await supabase
-      .from('resources')
-      .upsert(resources, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-
-    if (error) throw error;
-
-
-    console.log(`✓ Synced ${resources.length} resources`);
-    return { count: resources.length, data, errors };
-  } catch (error) {
-    console.error('Error syncing resources:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Timeline
-async function syncTimeline() {
-  try {
-    console.log('Syncing timeline events...');
-
-    const pages = await getAllPages(DATABASES.timeline);
-
-    // 🔒 1️⃣ Fetch existing timeline images
-    const { data: existingTimeline, error: fetchError } = await supabase
-      .from('timeline_events')
-      .select('notion_id, image_url');
-
-    if (fetchError) throw fetchError;
-
-    // 🔒 2️⃣ Create lookup map
-    const existingTimelineMap = new Map(
-      (existingTimeline || []).map(t => [t.notion_id, t.image_url])
-    );
-
-    const timelineEvents = [];
-    const errors = [];
-
-    for (const page of pages) {
-      try {
-        const timeline = {
-          notion_id: page.id,
-          title: extractText(page.properties.Title?.title),
-          event_date: extractDate(page.properties['Event date']?.date),
-          term: page.properties.Term?.select?.name || null,
-          description: extractText(page.properties.Description?.rich_text),
-          tags: page.properties.Tags?.multi_select?.map(t => t.name) || [],
-          icon: extractText(page.properties.Icon?.rich_text) || null,
-
-          // 🔄 ALWAYS REFRESH EPHEMERAL NOTION URLS
-          image_url:
-            robustExtractImage(page) ||
-            existingTimelineMap.get(page.id),
-
-          created_at: page.created_time
-        };
-
-        if (timeline.title) {
-          timelineEvents.push(timeline);
-        }
-
-        await delay(RATE_LIMIT_DELAY);
-      } catch (err) {
-        errors.push({
-          pageId: page.id,
-          title: extractText(page.properties.Title?.title),
-          error: err.message
-        });
-
-        debugLog(
-          `Failed to process timeline event ${page.id}:`,
-          err.message
-        );
-      }
-    }
-
-    if (errors.length > 0) {
-      console.warn(`⚠️  ${errors.length} timeline events failed to sync`);
-    }
-
-    if (timelineEvents.length === 0) {
-      console.log('⚠️  No valid timeline events found');
-      return { count: 0, data: null, errors };
-    }
-
-    // Upsert timeline events
-    const { data, error } = await supabase
-      .from('timeline_events')
-      .upsert(timelineEvents, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${timelineEvents.length} timeline events`);
-    return { count: timelineEvents.length, data, errors };
-
-  } catch (error) {
-    console.error('Error syncing timeline events:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-
-// Sync Gallery
-async function syncGallery() {
-  try {
-    console.log('Syncing gallery items...');
-
-    const pages = await getAllPages(DATABASES.gallery);
-
-    // 🔒 1️⃣ Fetch existing gallery images
-    const { data: existingGallery, error: fetchError } = await supabase
-      .from('gallery_items')
-      .select('notion_id, image_url');
-
-    if (fetchError) throw fetchError;
-
-    // 🔒 2️⃣ Create lookup map
-    const existingGalleryMap = new Map(
-      (existingGallery || []).map(item => [item.notion_id, item.image_url])
-    );
-
-    const galleryItems = [];
-    const errors = [];
-
-    for (const page of pages) {
-      try {
-        const gallery = {
-          notion_id: page.id,
-          title: extractText(page.properties.Title?.title || page.properties.Name?.title || page.properties.Image?.title),
-          event_date: extractDate(page.properties['Event Date']?.date || page.properties.Date?.date),
-          description: extractText(page.properties.Description?.rich_text),
-          category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
-
-          // 🔄 ALWAYS REFRESH EPHEMERAL NOTION URLS
-          image_url:
-            robustExtractImage(page) ||
-            existingGalleryMap.get(page.id),
-
-          created_at: page.created_time
-        };
-
-        if (gallery.title || gallery.image_url) {
-          galleryItems.push(gallery);
-        }
-
-        await delay(RATE_LIMIT_DELAY);
-      } catch (err) {
-        errors.push({
-          pageId: page.id,
-          title: extractText(page.properties.Title?.title),
-          error: err.message
-        });
-
-        debugLog(
-          `Failed to process gallery item ${page.id}:`,
-          err.message
-        );
-      }
-    }
-
-    if (errors.length > 0) {
-      console.warn(`${errors.length} gallery items failed to process.`);
-    }
-
-    if (galleryItems.length === 0) {
-      console.log('No valid gallery items found.');
-      return { count: 0, data: null, errors };
-    }
-
-    // Upsert gallery items
-    const { data, error } = await supabase
-      .from('gallery_items')
-      .upsert(galleryItems, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-    if (error) throw error;
-
-    console.log(`✓ Synced ${galleryItems.length} gallery items.`);
-    return { count: galleryItems.length, data, errors };
-
-  } catch (error) {
-    console.error('Error syncing gallery items:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-
-// Sync Partners
-async function syncPartners() {
-  try {
-    console.log('Syncing partners...');
-
-    // Check if database ID is configured
-    if (!DATABASES.partners) {
-      console.log('⚠️  NOTION_PARTNERS_DB_ID not configured in .env file');
-      return { count: 0, data: null, error: 'Database ID not configured' };
-    }
-
-    const pages = await getAllPages(DATABASES.partners);
-
-    const partners = pages
-      .map(page => ({
-        notion_id: page.id,
-        name: extractText(page.properties.Name?.title),
-        description: extractText(page.properties.Description?.rich_text),
-        tier: page.properties.Tier?.select?.name || 'Bronze',
-        logo: robustExtractImage(page),
-        website: extractUrl(page.properties.Website?.url),
-        about_blurb: extractText(page.properties['About Blurb']?.rich_text),
-        why_sponsor: extractText(page.properties['Why Sponsor']?.rich_text),
-        cta_link: extractUrl(page.properties['CTA Link']?.url),
-        active: page.properties.Active?.checkbox !== false,
-        created_at: page.created_time,
-        updated_at: page.last_edited_time
-      }))
-      .filter(partner => partner.name);
-
-    if (partners.length === 0) {
-      console.log('⚠️  No valid partners found');
-      return { count: 0, data: null };
-    }
-
-    const { data, error } = await supabase
-      .from('partners')
-      .upsert(partners, {
-        onConflict: 'notion_id',
-        ignoreDuplicates: false
-      });
-
-    if (error) throw error;
-    console.log(`✓ Synced ${partners.length} partners`);
-    return { count: partners.length, data };
-  } catch (error) {
-    console.error('Error syncing partners:', error.message);
-    return { count: 0, error: error.message };
-  }
-}
-
-// Main Sync
-async function syncAllData() {
-  console.log('\n🔄 Starting sync...\n');
+async function syncAllData(incremental = false) {
+  console.log(`\n🔄 Starting sync... ${incremental ? '(Incremental)' : '(Full)'}\n`);
   const startTime = Date.now();
 
+  const DB_CONFIGS = [
+    { table: 'events', id: process.env.NOTION_EVENTS_DB_ID },
+    { table: 'blog_posts', id: process.env.NOTION_BLOG_DB_ID },
+    { table: 'projects', id: process.env.NOTION_PROJECTS_DB_ID },
+    { table: 'workshops', id: process.env.NOTION_WORKSHOPS_DB_ID },
+    { table: 'guides', id: process.env.NOTION_GUIDES_DB_ID },
+    { table: 'members', id: process.env.NOTION_MEMBERS_DB_ID },
+    { table: 'glossary', id: process.env.NOTION_GLOSSARY_DB_ID },
+    { table: 'resources', id: process.env.NOTION_RESOURCES_DB_ID },
+    { table: 'timeline_events', id: process.env.NOTION_TIMELINE_DB_ID },
+    { table: 'gallery_items', id: process.env.NOTION_GALLERY_DB_ID },
+    { table: 'partners', id: process.env.NOTION_PARTNERS_DB_ID }
+  ];
 
-  const results = {
-    events: null,
-    blogPosts: null,
-    projects: null,
-    guides: null,
-    members: null,
-    glossary: null,
-    resources: null,
-    timeline: null,
-    gallery: null,
-    partners: null,
-    timestamp: new Date().toISOString()
-  };
+  const results = { timestamp: new Date().toISOString() };
 
-
-  try {
-    if (DATABASES.events) {
-      results.events = await syncEvents();
-      console.log('');
+  for (const config of DB_CONFIGS) {
+    if (config.id) {
+      try {
+        results[config.table] = await genericSync(config.table, config.id, incremental);
+      } catch (err) {
+        console.error(`FAILED to sync ${config.table}:`, err.message);
+        results[config.table] = { count: 0, error: err.message };
+      }
     }
-    if (DATABASES.blog) {
-      results.blogPosts = await syncBlogPosts();
-      console.log('');
-    }
-    if (DATABASES.projects) {
-      results.projects = await syncProjects();
-      console.log('');
-    }
-    if (DATABASES.workshops) {
-      results.projects = await syncWorkshops();
-      console.log('');
-    }
-    if (DATABASES.guides) {
-      results.guides = await syncGuides();
-      console.log('');
-    }
-    if (DATABASES.members) {
-      results.members = await syncMembers();
-      console.log('');
-    }
-    if (DATABASES.glossary) {
-      results.glossary = await syncGlossary();
-      console.log('');
-    }
-    if (DATABASES.resources) {
-      results.resources = await syncResources();
-      console.log('');
-    }
-    if (DATABASES.timeline) {
-      results.timeline = await syncTimeline();
-      console.log('');
-    }
-    if (DATABASES.gallery) {
-      results.gallery = await syncGallery();
-      console.log('');
-    }
-
-    if (DATABASES.partners) {
-      results.partners = await syncPartners();
-      console.log('');
-    }
-
-    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    const totalSynced = Object.values(results)
-      .filter(r => r && typeof r === 'object')
-      .reduce((sum, r) => sum + (r.count || 0), 0);
-
-
-    console.log(`✅ Sync completed in ${duration}s - ${totalSynced} records synced\n`);
-
-
-    return results;
-  } catch (error) {
-    console.error('\n❌ Sync failed:', error);
-    throw error;
   }
-}
 
+  const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+  const total = Object.values(results).reduce((sum, r) => sum + (r.count || 0), 0);
+  console.log(`✅ Sync completed in ${duration}s - ${total} records synced\n`);
+  return results;
+}
 
 module.exports = {
   syncAllData,
-  syncEvents,
-  syncBlogPosts,
-  syncProjects,
-  syncWorkshops,
-  syncGuides,
-  syncMembers,
-  syncGlossary,
-  syncResources,
-  syncTimeline,
-  syncGallery,
-  syncPartners
+  syncEvents: async () => genericSync('events', process.env.NOTION_EVENTS_DB_ID),
+  syncBlogPosts: async () => genericSync('blog_posts', process.env.NOTION_BLOG_DB_ID),
+  syncProjects: async () => genericSync('projects', process.env.NOTION_PROJECTS_DB_ID),
+  syncWorkshops: async () => genericSync('workshops', process.env.NOTION_WORKSHOPS_DB_ID),
+  syncGuides: async () => genericSync('guides', process.env.NOTION_GUIDES_DB_ID),
+  syncMembers: async () => genericSync('members', process.env.NOTION_MEMBERS_DB_ID),
+  syncGlossary: async () => genericSync('glossary', process.env.NOTION_GLOSSARY_DB_ID),
+  syncResources: async () => genericSync('resources', process.env.NOTION_RESOURCES_DB_ID),
+  syncTimeline: async () => genericSync('timeline_events', process.env.NOTION_TIMELINE_DB_ID),
+  syncGallery: async () => genericSync('gallery_items', process.env.NOTION_GALLERY_DB_ID),
+  syncPartners: async () => genericSync('partners', process.env.NOTION_PARTNERS_DB_ID)
 };
 
-
 if (require.main === module) {
-  syncAllData()
-    .then(() => {
-      console.log('✓ Sync complete\n');
-      process.exit(0);
-    })
-    .catch(error => {
-      console.error('✗ Sync failed:', error);
-      process.exit(1);
-    });
+  const isIncremental = process.argv.includes('--incremental');
+  syncAllData(isIncremental)
+    .then(() => process.exit(0))
+    .catch(() => process.exit(1));
 }
