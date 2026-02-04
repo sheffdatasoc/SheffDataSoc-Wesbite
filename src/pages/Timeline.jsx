@@ -12,9 +12,7 @@ function Timeline() {
 
   // Filters
   const [yearFilter, setYearFilter] = useState('');
-  const [termFilter, setTermFilter] = useState('');
-  const [tagFilter, setTagFilter] = useState('');
-  const [iconFilter, setIconFilter] = useState('');
+  const [expandedYears, setExpandedYears] = useState({});
 
   // Modal state
   const [modalImage, setModalImage] = useState(null);
@@ -31,34 +29,26 @@ function Timeline() {
 
   // Dynamic Filter Options
   const filterOptions = useMemo(() => {
-    const filteredEvents = events.filter(event => {
-      const eventYear = new Date(event.event_date).getFullYear();
-      return (
-        (!yearFilter || eventYear === parseInt(yearFilter)) &&
-        (!termFilter || event.term === termFilter) &&
-        (!tagFilter || event.tags?.includes(tagFilter)) &&
-        (!iconFilter || event.icon === iconFilter)
-      );
-    });
-
     return {
-      years: Array.from(new Set(events.map(e => new Date(e.event_date).getFullYear()))).sort((a,b)=>a-b), // ascending
-      terms: Array.from(new Set(filteredEvents.map(e => e.term).filter(Boolean))),
-      tags: Array.from(new Set(filteredEvents.flatMap(e => e.tags || []))),
-      icons: Array.from(new Set(filteredEvents.map(e => e.icon).filter(Boolean))),
+      years: Array.from(new Set(events.map(e => new Date(e.event_date).getFullYear()))).sort((a, b) => b - a), // descending
     };
-  }, [events, yearFilter, termFilter, tagFilter, iconFilter]);
+  }, [events]);
+
+  // Set initial expanded state when events load
+  useEffect(() => {
+    if (events.length > 0 && Object.keys(expandedYears).length === 0) {
+      const years = Array.from(new Set(events.map(e => new Date(e.event_date).getFullYear()))).sort((a, b) => b - a);
+      if (years.length > 0) {
+        setExpandedYears({ [years[0]]: true });
+      }
+    }
+  }, [events]);
 
   // Group events for timeline
   const groupedTimeline = useMemo(() => {
     const filtered = events.filter(event => {
       const eventYear = new Date(event.event_date).getFullYear();
-      return (
-        (!yearFilter || eventYear === parseInt(yearFilter)) &&
-        (!termFilter || event.term === termFilter) &&
-        (!tagFilter || event.tags?.includes(tagFilter)) &&
-        (!iconFilter || event.icon === iconFilter)
-      );
+      return !yearFilter || eventYear === parseInt(yearFilter);
     });
 
     const grouped = filtered.reduce((acc, event) => {
@@ -74,7 +64,7 @@ function Timeline() {
     }, {});
 
     return grouped;
-  }, [events, yearFilter, termFilter, tagFilter, iconFilter]);
+  }, [events, yearFilter]);
 
   const monthName = (month) =>
     new Date(0, month - 1).toLocaleString('default', { month: 'long' });
@@ -83,12 +73,17 @@ function Timeline() {
   const openModal = (imageUrl) => setModalImage(imageUrl);
   const closeModal = () => setModalImage(null);
 
+  // Toggle year expansion
+  const toggleYear = (year) => {
+    setExpandedYears(prev => ({
+      ...prev,
+      [year]: !prev[year]
+    }));
+  };
+
   // Clear all filters
   const clearAllFilters = () => {
     setYearFilter('');
-    setTermFilter('');
-    setTagFilter('');
-    setIconFilter('');
   };
 
   return (
@@ -100,7 +95,6 @@ function Timeline() {
         <p>Explore our journey and milestones over the years</p>
       </div>
 
-      {/* FILTERS */}
       <div className="timeline-filters">
         <div className="filter-wrapper">
           <select value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
@@ -109,90 +103,80 @@ function Timeline() {
           </select>
         </div>
 
-        <div className="filter-wrapper">
-          <select value={termFilter} onChange={e => setTermFilter(e.target.value)}>
-            <option value="">All Terms</option>
-            {filterOptions.terms.map(term => <option key={term} value={term}>{term}</option>)}
-          </select>
-        </div>
-
-        <div className="filter-wrapper">
-          <select value={tagFilter} onChange={e => setTagFilter(e.target.value)}>
-            <option value="">All Tags</option>
-            {filterOptions.tags.map(tag => <option key={tag} value={tag}>{tag}</option>)}
-          </select>
-        </div>
-
-        <div className="filter-wrapper">
-          <select value={iconFilter} onChange={e => setIconFilter(e.target.value)}>
-            <option value="">All Icons</option>
-            {filterOptions.icons.map(icon => <option key={icon} value={icon}>{icon}</option>)}
-          </select>
-        </div>
-
-        {/* Clear All Filters Button */}
-        <button className="clear-all-btn" onClick={clearAllFilters}>Clear All Filters</button>
+        {yearFilter && (
+          <button className="clear-all-btn" onClick={clearAllFilters}>Show All Years</button>
+        )}
       </div>
 
       {/* TIMELINE */}
       <div className="timeline">
         {loading ? (
-          <p style={{textAlign:'center'}}>Loading timeline...</p>
+          <p style={{ textAlign: 'center' }}>Loading timeline...</p>
         ) : (
-          Object.keys(groupedTimeline).sort((a,b)=>a-b).map(year => ( // years ascending
-            <div key={year} className="timeline-year-section">
-              <h2 className="timeline-year-header">{year}</h2>
+          Object.keys(groupedTimeline).sort((a, b) => b - a).map(year => { // years descending
+            const isExpanded = expandedYears[year];
+            return (
+              <div key={year} className={`timeline-year-section ${isExpanded ? 'expanded' : 'collapsed'}`}>
+                <h2 className="timeline-year-header" onClick={() => toggleYear(year)}>
+                  {year}
+                  <span className={`accordion-icon ${isExpanded ? 'open' : ''}`}>
+                    {isExpanded ? '−' : '+'}
+                  </span>
+                </h2>
 
-              {Object.keys(groupedTimeline[year]).sort((a,b)=>a-b).map(month => ( // months ascending
-                <div key={month} className="timeline-month-section">
-                  <h3 className="timeline-month-header">{monthName(month)}</h3>
+                <div className="year-content">
+                  {Object.keys(groupedTimeline[year]).sort((a, b) => b - a).map(month => ( // months descending
+                    <div key={month} className="timeline-month-section">
+                      <h3 className="timeline-month-header">{monthName(month)}</h3>
 
-                  {groupedTimeline[year][month]
-                    .sort((e1, e2) => new Date(e1.event_date) - new Date(e2.event_date)) // events ascending
-                    .map((event, index) => {
-                      const isLeft = index % 2 === 0;
-                      return (
-                        <div key={event.notion_id} className={`timeline-item ${isLeft ? 'left' : 'right'}`}>
-                          <div className="timeline-marker"/>
-                          <div className="timeline-connector"/>
-                          <div className={`timeline-icon ${isLeft ? 'left-icon' : 'right-icon'}`}>
-                            {event.icon || '📌'}
-                          </div>
-
-                          <div className="timeline-event-card">
-                            <div className="card-text">
-                              <h4>{event.title}</h4>
-                              <p>{event.description}</p>
-                              {event.term && <p><strong>Term:</strong> {event.term}</p>}
-                              {event.tags?.length > 0 && (
-                                <div className="tags-container">
-                                  {event.tags.map(tag => (
-                                    <span key={tag} className="tag-badge">{tag}</span>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-
-                            {event.image_url && (
-                              <div className="card-image-container" onClick={() => openModal(event.image_url)}>
-                                <img className="card-image" src={event.image_url} alt={event.title}/>
+                      {groupedTimeline[year][month]
+                        .sort((e1, e2) => new Date(e2.event_date) - new Date(e1.event_date)) // events descending
+                        .map((event, index) => {
+                          const isLeft = index % 2 === 0;
+                          return (
+                            <div key={event.notion_id} className={`timeline-item ${isLeft ? 'left' : 'right'}`}>
+                              <div className="timeline-marker" />
+                              <div className="timeline-connector" />
+                              <div className={`timeline-icon ${isLeft ? 'left-icon' : 'right-icon'}`}>
+                                {event.icon || '📌'}
                               </div>
-                            )}
-                          </div>
-                        </div>
-                      )
-                  })}
+
+                              <div className="timeline-event-card">
+                                <div className="card-text">
+                                  <h4>{event.title}</h4>
+                                  <p>{event.description}</p>
+                                  {event.term && <p><strong>Term:</strong> {event.term}</p>}
+                                  {event.tags?.length > 0 && (
+                                    <div className="tags-container">
+                                      {event.tags.map(tag => (
+                                        <span key={tag} className="tag-badge">{tag}</span>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {event.image_url && (
+                                  <div className="card-image-container" onClick={() => openModal(event.image_url)}>
+                                    <img className="card-image" src={event.image_url} alt={event.title} />
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )
+                        })}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ))
+              </div>
+            );
+          })
         )}
       </div>
 
       {/* IMAGE MODAL */}
       {modalImage && (
         <div className="image-modal" onClick={closeModal}>
-          <img src={modalImage} alt="Full view"/>
+          <img src={modalImage} alt="Full view" />
         </div>
       )}
     </div>
