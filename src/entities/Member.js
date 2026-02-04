@@ -20,6 +20,7 @@ class Member {
     this.linkedinUrl = data.linkedin || data.linkedin_url;
     this.interests = data.interests || [];
     this.academicYear = data.academic_year;
+    this.is_committee = data.is_committee; // Capture explicit flag from DB
     this.createdAt = data.created_at;
   }
 
@@ -119,8 +120,9 @@ class Member {
       linkedinUrl: this.linkedinUrl,
       interests: this.interests,
       academicYear: this.academicYear,
+      is_committee: this.is_committee,
       initials: this.getInitials(),
-      isCommittee: this.isCommittee(),
+      isCommittee: this.isCommittee() || this.is_committee === true,
       socialLinks: this.getSocialLinks(),
       createdAt: this.createdAt
     };
