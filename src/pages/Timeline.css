@@ -88,8 +88,10 @@
   background: linear-gradient(135deg, #182F4D 40%, #EBB479 85%, #DF694E 100%) !important;
   color: white;
   text-align: center;
-  padding: 5rem 2rem;
-  margin-bottom: 3rem;
+  padding: 3rem 2rem;
+  /* Reduced from 5rem */
+  margin-bottom: 1rem;
+  /* Reduced from 3rem */
   width: 100%;
   box-sizing: border-box;
 }
@@ -141,41 +143,6 @@
 /* ========================================
    FILTERS
    ======================================== */
-.timeline-filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 3rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0 1rem;
-}
-
-.timeline-filters select {
-  padding: 0.75rem 1.5rem;
-  /* Updated: Navy border */
-  border: 1px solid #182F4D !important;
-  border-radius: 8px;
-  background-color: white;
-  /* Updated: Navy text */
-  color: #182F4D !important;
-  font-size: 0.95rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  outline: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.timeline-filters select:hover {
-  /* Updated: Light Navy background on hover */
-  background-color: rgba(24, 47, 77, 0.05) !important;
-}
-
-.timeline-filters select:focus {
-  /* Updated: Sand border on focus */
-  border-color: #EBB479 !important;
-  box-shadow: 0 0 0 3px rgba(235, 180, 121, 0.1);
-}
 
 /* ========================================
    TIMELINE STRUCTURE
@@ -184,18 +151,24 @@
   position: relative;
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem 0 5rem 0;
+  padding: 0 0 5rem 0;
+  /* Reduced top padding */
   display: flex;
   flex-direction: column;
 }
 
 /* Vertical center line */
-.timeline::after {
+.year-content {
+  position: relative;
+  padding-top: 1rem;
+}
+
+/* Vertical center line - only inside year-content */
+.year-content::before {
   content: '';
   position: absolute;
   left: 50%;
-  top: 10rem;
-  /* Start line after the first header area */
+  top: 0;
   bottom: 0;
   width: 4px;
   /* Updated: Navy line */
@@ -207,12 +180,7 @@
 
 /* Hide line inside collapsed sections or handle gap */
 .timeline-year-section.collapsed {
-  margin-bottom: 2rem;
-}
-
-.year-content {
-  position: relative;
-  /* Line continues inside year-content if needed, or we use the main timeline line */
+  margin-bottom: 1rem;
 }
 
 /* ========================================
