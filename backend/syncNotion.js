@@ -1,7 +1,6 @@
 const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
 const { NotionToMarkdown } = require("notion-to-md");
-
 require('dotenv').config();
 
 // Configuration
@@ -44,6 +43,34 @@ function robustExtractImage(page) {
 
   // Fallback to Page Cover
   return page.cover ? (page.cover.type === 'external' ? page.cover.external.url : page.cover.file.url) : null;
+}
+
+function normalizeWorkshopUrl(title, currentUrl, dateStr) {
+  if (!title) return currentUrl;
+
+  const date = dateStr ? new Date(dateStr) : new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+
+  // Determine Academic Year (Sept start)
+  const academicYear = month >= 9 ? `${year}-${(year + 1).toString().slice(-2)}` : `${year - 1}-${year.toString().slice(-2)}`;
+
+  // Base Repo for now
+  const baseRepo = "https://github.com/sheffdatasoc/2024-25/tree/main";
+  const encodedTitle = encodeURIComponent(title.trim());
+
+  // Logic: Rebuild if current is corrupted or missing, otherwise honor it if it's a valid remote URL
+  if (currentUrl && currentUrl.startsWith('http') && !currentUrl.includes('"')) {
+    return currentUrl;
+  }
+
+  if (academicYear === '2024-25') {
+    return `${baseRepo}/The%20Sandbox/${encodedTitle}`;
+  } else if (academicYear === '2025-26') {
+    return `${baseRepo}/2025-26/${encodedTitle}`;
+  }
+
+  return `${baseRepo}/The%20Sandbox/${encodedTitle}`;
 }
 
 // Generic page fetcher with incremental sync support
@@ -123,19 +150,25 @@ const MAPPERS = {
     created_at: page.created_time,
     updated_at: page.last_edited_time
   }),
-  workshops: (page) => ({
-    notion_id: page.id,
-    title: extractText(page.properties.Title?.title),
-    description: extractText(page.properties.Description?.rich_text),
-    materials_url: page.properties.Materials?.url || null,
-    status: extractText(page.properties.Status?.rich_text) || 'beginner',
-    tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
-    date: page.properties.Date?.date?.start || null,
-    duration_minutes: page.properties["Duration Minutes"]?.number ?? null,
-    host: extractText(page.properties.Host?.rich_text),
-    created_at: page.created_time,
-    updated_at: page.last_edited_time
-  }),
+  workshops: (page) => {
+    const title = extractText(page.properties.Title?.title);
+    const currentUrl = page.properties.Materials?.url || null;
+    const date = page.properties.Date?.date?.start || null;
+
+    return {
+      notion_id: page.id,
+      title: title,
+      description: extractText(page.properties.Description?.rich_text),
+      materials_url: normalizeWorkshopUrl(title, currentUrl, date),
+      status: extractText(page.properties.Status?.rich_text) || 'beginner',
+      tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
+      date: date,
+      duration_minutes: page.properties["Duration Minutes"]?.number ?? null,
+      host: extractText(page.properties.Host?.rich_text),
+      created_at: page.created_time,
+      updated_at: page.last_edited_time
+    };
+  },
   guides: async (page) => {
     const mdBlocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdBlocks);
