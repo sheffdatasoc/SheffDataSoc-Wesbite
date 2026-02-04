@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import { getTimelineEvents } from '../lib/supabase';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import './Timeline.css';
 
 function Timeline() {
@@ -118,10 +119,10 @@ function Timeline() {
             return (
               <div key={year} className={`timeline-year-section ${isExpanded ? 'expanded' : 'collapsed'}`}>
                 <h2 className="timeline-year-header" onClick={() => toggleYear(year)}>
-                  {year}
                   <span className={`accordion-icon ${isExpanded ? 'open' : ''}`}>
-                    {isExpanded ? '−' : '+'}
+                    {isExpanded ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                   </span>
+                  {year}
                 </h2>
 
                 <div className="year-content">
