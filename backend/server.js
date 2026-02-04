@@ -128,7 +128,7 @@ app.post('/api/chat', async (req, res) => {
 const SYNC_SCHEDULE = process.env.SYNC_SCHEDULE || '*/5 * * * *';
 
 console.log(`\n⏰ Setting up automatic sync: ${SYNC_SCHEDULE}`);
-console.log('   (Every 5 minutes)\n');
+console.log('   (Every 5 minutes)\n');
 
 cron.schedule(SYNC_SCHEDULE, async () => {
     console.log(`\n⏰ Scheduled sync triggered at ${new Date().toISOString()}`);
@@ -143,6 +143,28 @@ cron.schedule(SYNC_SCHEDULE, async () => {
         console.error('Scheduled sync failed:', error);
     }
 });
+
+// 💓 Heartbeat / Keep-Alive Mechanism (for Render Free Plan)
+// Render Free Plan spins down after 15 minutes of inactivity.
+// Internal cron jobs do NOT count as activity.
+// This self-ping runs every 10 minutes to keep the instance alive.
+const axios = require('axios');
+const RENDER_EXTERNAL_URL = process.env.RENDER_EXTERNAL_URL;
+
+if (RENDER_EXTERNAL_URL) {
+    console.log(`💓 Heartbeat configured: Ping every 10 mins to ${RENDER_EXTERNAL_URL}/health`);
+    cron.schedule('*/10 * * * *', async () => {
+        try {
+            console.log(`💓 Sending heartbeat ping to keep Render instance alive...`);
+            await axios.get(`${RENDER_EXTERNAL_URL}/health`);
+            console.log('✅ Heartbeat successful');
+        } catch (error) {
+            console.error('❌ Heartbeat failed:', error.message);
+        }
+    });
+} else {
+    console.log('⚠️  RENDER_EXTERNAL_URL not set. Heartbeat disabled (Local development).');
+}
 
 // --- Server Startup ---
 
