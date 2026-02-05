@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.sheffdatasoc.org/sitemap.xml
+Sitemap: https://sheffdatasoc.org/sitemap.xml
