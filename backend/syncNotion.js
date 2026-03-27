@@ -1,6 +1,7 @@
 const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
 const { NotionToMarkdown } = require("notion-to-md");
+const path = require('path');
 require('dotenv').config();
 
 // Configuration
@@ -19,6 +20,52 @@ const extractText = (richText) => (richText || []).map(t => t.plain_text).join('
 const extractDate = (dateObj) => dateObj?.start || null;
 const extractUrl = (urlObj) => urlObj || null;
 
+// Returns true for Notion-hosted S3 URLs (they expire after ~1 hour)
+function isNotionInternalUrl(url) {
+  if (!url) return false;
+  return url.includes('prod-files-secure.s3') ||
+    (url.includes('amazonaws.com') && url.includes('X-Amz-Signature'));
+}
+
+// Downloads a Notion S3 image and stores it permanently in Supabase Storage.
+// Uses the page ID as the filename so it only uploads once per image.
+async function mirrorImageToSupabase(url, pageId) {
+  if (!url || !isNotionInternalUrl(url)) return url;
+
+  try {
+    const ext = path.extname(new URL(url).pathname) || '.jpg';
+    const storagePath = `notion-images/${pageId}${ext}`;
+    const BUCKET = 'images';
+
+    // Check if already uploaded — skip download if so
+    const { data: existing } = await supabase.storage.from(BUCKET).list('notion-images', { search: `${pageId}${ext}` });
+    if (existing && existing.length > 0) {
+      const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
+      return publicUrl;
+    }
+
+    // Download from Notion
+    const axios = require('axios');
+    const response = await axios.get(url, { responseType: 'arraybuffer', timeout: 15000 });
+    const contentType = response.headers['content-type'] || 'image/jpeg';
+
+    // Upload to Supabase Storage
+    const { error } = await supabase.storage.from(BUCKET).upload(storagePath, Buffer.from(response.data), {
+      contentType,
+      upsert: false
+    });
+
+    if (error && !error.message?.includes('already exists')) throw error;
+
+    const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(storagePath);
+    console.log(`  📸 Mirrored image for ${pageId}`);
+    return publicUrl;
+  } catch (err) {
+    console.warn(`  ⚠️  Failed to mirror image for ${pageId}: ${err.message}`);
+    return url; // Fall back to original (may be expired)
+  }
+}
+
 function extractImageUrl(imageProperty) {
   if (!imageProperty) return null;
   if (imageProperty.type === 'files') {
@@ -29,7 +76,7 @@ function extractImageUrl(imageProperty) {
   return imageProperty.type === 'url' ? imageProperty.url : null;
 }
 
-function robustExtractImage(page) {
+async function robustExtractImage(page) {
   const props = page.properties;
   const possibleNames = ['Image', 'Cover', 'Photo', 'Logo', 'Thumbnail', 'Main Image', 'Image URL', 'image_url', 'image'];
 
@@ -37,12 +84,13 @@ function robustExtractImage(page) {
     const match = Object.keys(props).find(k => k.toLowerCase() === name.toLowerCase());
     if (match) {
       const url = extractImageUrl(props[match]);
-      if (url) return url;
+      if (url) return mirrorImageToSupabase(url, page.id);
     }
   }
 
   // Fallback to Page Cover
-  return page.cover ? (page.cover.type === 'external' ? page.cover.external.url : page.cover.file.url) : null;
+  const coverUrl = page.cover ? (page.cover.type === 'external' ? page.cover.external.url : page.cover.file.url) : null;
+  return mirrorImageToSupabase(coverUrl, page.id);
 }
 
 function normalizeWorkshopUrl(title, currentUrl, dateStr) {
@@ -103,7 +151,7 @@ async function getAllPages(databaseId, incremental = false) {
 
 // Table Mappers
 const MAPPERS = {
-  events: (page) => ({
+  events: async (page) => ({
     notion_id: page.id,
     title: extractText(page.properties.Title?.title),
     date: extractDate(page.properties.Date?.date),
@@ -114,7 +162,7 @@ const MAPPERS = {
     type: extractText(page.properties.Type?.rich_text)?.toLowerCase() || 'workshop',
     attendees: page.properties.Attendees?.number || 0,
     max_attendees: page.properties['Max Attendees']?.number || null,
-    image_url: robustExtractImage(page),
+    image_url: await robustExtractImage(page),
     registration_url: page.properties['Registration URL']?.url || null,
     is_featured: page.properties.Featured?.checkbox || false,
     created_at: page.created_time,
@@ -130,7 +178,7 @@ const MAPPERS = {
       published_date: extractDate(page.properties['Published Date']?.date),
       excerpt: extractText(page.properties.Excerpt?.rich_text),
       status: (extractText(page.properties.Status?.rich_text) || 'draft').toLowerCase() === 'published' ? 'published' : 'draft',
-      image: robustExtractImage(page),
+      image: await robustExtractImage(page),
       content: mdString.parent,
       slug: extractText(page.properties.Slug?.rich_text) || page.id,
       created_at: page.created_time,
@@ -184,19 +232,19 @@ const MAPPERS = {
       author: extractText(page.properties.Author?.rich_text),
       read_time: page.properties['Read Time']?.number,
       github_url: page.properties.GitHub?.url,
-      image: robustExtractImage(page),
+      image: await robustExtractImage(page),
       featured: page.properties.Featured?.checkbox || false,
       created_at: page.created_time,
       updated_at: page.last_edited_time
     };
   },
-  members: (page) => ({
+  members: async (page) => ({
     notion_id: page.id,
     name: extractText(page.properties.Name?.title),
     role: page.properties.Role?.select?.name,
     bio: extractText(page.properties.Bio?.rich_text),
     major: page.properties.major?.select?.name || extractText(page.properties.major?.rich_text) || null,
-    image_url: robustExtractImage(page),
+    image_url: await robustExtractImage(page),
     github_url: page.properties['GitHub URL']?.url,
     linkedin_url: page.properties['LinkedIn URL']?.url,
     created_at: page.created_time,
@@ -226,7 +274,7 @@ const MAPPERS = {
     created_at: page.created_time,
     updated_at: page.last_edited_time
   }),
-  timeline_events: (page) => ({
+  timeline_events: async (page) => ({
     notion_id: page.id,
     title: extractText(page.properties.Title?.title),
     event_date: extractDate(page.properties['Event date']?.date),
@@ -234,24 +282,24 @@ const MAPPERS = {
     description: extractText(page.properties.Description?.rich_text),
     tags: (page.properties.Tags?.multi_select || []).map(t => t.name),
     icon: extractText(page.properties.Icon?.rich_text) || null,
-    image_url: robustExtractImage(page),
+    image_url: await robustExtractImage(page),
     created_at: page.created_time
   }),
-  gallery_items: (page) => ({
+  gallery_items: async (page) => ({
     notion_id: page.id,
     title: extractText(page.properties.Title?.title || page.properties.Name?.title || page.properties.Image?.title),
     event_date: extractDate(page.properties['Event Date']?.date || page.properties.Date?.date),
     description: extractText(page.properties.Description?.rich_text),
     category: page.properties.Category?.select?.name || extractText(page.properties.Category?.rich_text) || 'Uncategorized',
-    image_url: robustExtractImage(page),
+    image_url: await robustExtractImage(page),
     created_at: page.created_time
   }),
-  partners: (page) => ({
+  partners: async (page) => ({
     notion_id: page.id,
     name: extractText(page.properties.Name?.title),
     description: extractText(page.properties.Description?.rich_text),
     tier: page.properties.Tier?.select?.name || 'Bronze',
-    logo: robustExtractImage(page),
+    logo: await robustExtractImage(page),
     website: page.properties.Website?.url || null,
     about_blurb: extractText(page.properties['About Blurb']?.rich_text),
     why_sponsor: extractText(page.properties['Why Sponsor']?.rich_text),
