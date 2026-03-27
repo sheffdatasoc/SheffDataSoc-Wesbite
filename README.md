@@ -101,17 +101,19 @@ cd backend && npm install && cd ..
 **Frontend** — create `.env.local` in the project root:
 
 ```bash
-REACT_APP_SUPABASE_URL=https://xxxxx.supabase.co
-REACT_APP_SUPABASE_ANON_KEY=your-anon-key
-REACT_APP_BACKEND_URL=http://localhost:10000
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_API_URL=http://localhost:10000
 ```
 
 **Backend** — create `backend/.env`:
 
 ```bash
+# Supabase
 SUPABASE_URL=https://xxxxx.supabase.co
 SUPABASE_SERVICE_KEY=your-service-role-key
 
+# Notion — one ID per database
 NOTION_TOKEN=secret_xxxxx
 NOTION_BLOG_DB_ID=xxxxx
 NOTION_EVENTS_DB_ID=xxxxx
@@ -123,10 +125,19 @@ NOTION_PARTNERS_DB_ID=xxxxx
 NOTION_TIMELINE_DB_ID=xxxxx
 NOTION_GLOSSARY_DB_ID=xxxxx
 NOTION_WORKSHOPS_DB_ID=xxxxx
+NOTION_RESOURCES_DB_ID=xxxxx
 
+# Sync
 SYNC_SECRET=your-secret-key
+SYNC_SCHEDULE=*/5 * * * *   # default: every 5 minutes
+
+# IBM watsonx (AI chatbot)
 WATSONX_PROJECT_ID=xxxxx
 WATSONX_SERVICE_URL=https://...
+
+# Optional
+PORT=10000
+DEBUG=false
 ```
 
 ### 3. Set up the database
