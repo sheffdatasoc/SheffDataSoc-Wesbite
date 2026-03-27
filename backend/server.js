@@ -65,6 +65,14 @@ const chatRateLimitMap = new Map();
 const CHAT_RATE_LIMIT = 20;
 const CHAT_RATE_WINDOW_MS = 60 * 1000;
 
+// Periodically evict expired entries to prevent unbounded memory growth
+setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of chatRateLimitMap.entries()) {
+        if (now > entry.resetAt) chatRateLimitMap.delete(ip);
+    }
+}, CHAT_RATE_WINDOW_MS);
+
 function chatRateLimit(req, res, next) {
     const ip = req.ip || req.connection.remoteAddress;
     const now = Date.now();

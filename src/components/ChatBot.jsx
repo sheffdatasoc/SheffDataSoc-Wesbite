@@ -30,7 +30,6 @@ const ChatBot = () => {
 
         try {
             const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
-            console.log(`[Sheff Debug] Fetching from: ${API_URL}/api/chat`);
             const response = await fetch(`${API_URL}/api/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

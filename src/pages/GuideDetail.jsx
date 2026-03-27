@@ -30,14 +30,20 @@ function GuideDetail() {
   /* Fetch guide */
   useEffect(() => {
     async function fetchGuide() {
-      const { data } = await supabase
-        .from("guides")
-        .select("*")
-        .eq("id", id)
-        .single();
-
-      setGuide(data);
-      setLoading(false);
+      try {
+        const { data, error } = await supabase
+          .from("guides")
+          .select("*")
+          .eq("id", id)
+          .single();
+        if (error) throw error;
+        setGuide(data);
+      } catch (err) {
+        console.error("Error fetching guide:", err);
+        setGuide(null);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchGuide();
   }, [id]);

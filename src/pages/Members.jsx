@@ -69,7 +69,7 @@ function Members() {
     // Then try include match for variations, but find the most specific one
     const includeMatch = roleHierarchy
       .filter(h => lowerRole.includes(h.key))
-      .sort((a, b) => b.key.length - a.length)[0]; // Longest match first
+      .sort((a, b) => b.key.length - a.key.length)[0]; // Longest match first
 
     return includeMatch ? includeMatch.weight : 99;
   };

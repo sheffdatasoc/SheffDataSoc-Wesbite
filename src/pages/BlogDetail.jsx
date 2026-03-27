@@ -126,24 +126,25 @@ function BlogDetail() {
   /* --- Giscus Integration --- */
   useEffect(() => {
     if (!post) return;
+    const container = document.getElementById("giscus-container");
+    if (!container || container.querySelector("iframe")) return;
+
     const script = document.createElement('script');
     script.src = "https://giscus.app/client.js";
     script.async = true;
     script.crossOrigin = "anonymous";
     script.setAttribute("data-repo", "sheffdatasoc/SheffDataSoc-Wesbite");
-    script.setAttribute("data-repo-id", "R_kgDOP3f9TQ"); 
+    script.setAttribute("data-repo-id", "R_kgDOP3f9TQ");
     script.setAttribute("data-category", "Announcements");
-    script.setAttribute("data-category-id", "DIC_kwDOP3f9Tc4CzUdv"); 
-    script.setAttribute("data-mapping", "pathname"); // each page uses pathname for unique comments
+    script.setAttribute("data-category-id", "DIC_kwDOP3f9Tc4CzUdv");
+    script.setAttribute("data-mapping", "pathname");
     script.setAttribute("data-strict", "0");
     script.setAttribute("data-reactions-enabled", "1");
     script.setAttribute("data-emit-metadata", "0");
     script.setAttribute("data-input-position", "bottom");
     script.setAttribute("data-theme", "light");
     script.setAttribute("data-lang", "en");
-
-    const container = document.getElementById("giscus-container");
-    if (container) container.appendChild(script);
+    container.appendChild(script);
   }, [post]);
 
   const formattedDate = post?.published_date
