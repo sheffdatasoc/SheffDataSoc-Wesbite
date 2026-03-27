@@ -14,8 +14,9 @@ function App({ children }) {
 
   return (
     <div className="app">
+      <a href="#main-content" className="skip-to-content">Skip to main content</a>
       <NavBar />
-      <main className="main-content">
+      <main id="main-content" className="main-content">
         {children}
       </main>
 

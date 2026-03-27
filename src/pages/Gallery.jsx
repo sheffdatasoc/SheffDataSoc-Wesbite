@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Gallery.css';
@@ -11,6 +11,8 @@ function Gallery() {
 
   // State for the Expanded View (Modal)
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const modalRef = useRef(null);
+  const closeBtnRef = useRef(null);
 
   // Fetch gallery items
   useEffect(() => {
@@ -70,10 +72,31 @@ function Gallery() {
     setSelectedItemIndex(newIndex);
   }, [selectedItemIndex, filteredItems.length]);
 
-  // Keyboard shortcuts
+  // Focus close button when modal opens
+  useEffect(() => {
+    if (selectedItemIndex !== null && closeBtnRef.current) {
+      closeBtnRef.current.focus();
+    }
+  }, [selectedItemIndex]);
+
+  // Keyboard shortcuts + focus trap
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (selectedItemIndex === null) return;
+
+      if (e.key === 'Tab' && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey ? document.activeElement === first : document.activeElement === last) {
+          e.preventDefault();
+          (e.shiftKey ? last : first).focus();
+        }
+        return;
+      }
+
       switch (e.key) {
         case 'Escape': closeModal(); break;
         case 'ArrowLeft': navigateModal(-1); break;
@@ -160,11 +183,11 @@ function Gallery() {
 
       {/* --- MODAL OVERLAY (Outside main div) --- */}
       {activeItem && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay" onClick={closeModal} role="dialog" aria-modal="true" aria-label={activeItem.title}>
+          <div className="modal-content" ref={modalRef} onClick={(e) => e.stopPropagation()}>
 
             {/* Close Button */}
-            <button className="modal-close-btn" onClick={closeModal}>
+            <button className="modal-close-btn" ref={closeBtnRef} onClick={closeModal} aria-label="Close modal">
               <X size={24} />
             </button>
 
