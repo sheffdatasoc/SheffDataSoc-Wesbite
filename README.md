@@ -1,219 +1,182 @@
-# SheffDataSoc Wesbite
+# Sheffield Data Science Society — Website
 
-## quick edit
-## 📋 Understanding the Architecture
+The official website for Sheffield Data Science Society. Built with React, backed by Supabase, and content-managed through Notion with an automated sync pipeline deployed on Render.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React, Tailwind CSS |
+| Database | Supabase (PostgreSQL) |
+| Image Storage | Supabase Storage |
+| CMS | Notion |
+| Backend / Sync | Node.js, Express |
+| Deployment | Render |
+| AI Chatbot | IBM watsonx |
+
+---
+
+## Architecture
+
+Content flows from Notion through a Node.js sync service into Supabase, which the React frontend queries directly.
 
 ```
-┌─────────────────────────────────────────────────┐
-│  NOTION (The CMS)                              │
-│  - Blog posts, events, projects                 │
-│  - Edited by committee members                  │
-└─────────────────┬───────────────────────────────┘
-                  │
-                  │ backend/syncNotion.js
-                  │ (Syncs data every hour)
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  SUPABASE (PostgreSQL Database)                 │
-│  - Tables: blog_posts, events, projects         │
-│  - Persistent data storage                      │
-└─────────────────┬───────────────────────────────┘
-                  │
-                  │ src/lib/supabase.js
-                  │ (Connection & helpers)
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  REACT HOOKS (src/hooks/useSupabase.js)         │
-│  - useBlogPosts(), useEvents(), useProjects()   │
-│  - Handles loading states & errors              │
-└─────────────────┬───────────────────────────────┘
-                  │
-                  │ Returns data to pages
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  PAGES (News.jsx, Events.jsx, TheSandbox.jsx)   │
-│  - Receives data from hooks                     │
-│  - Maps data to card components                 │
-└─────────────────┬───────────────────────────────┘
-                  │
-                  │ Passes individual items
-                  ▼
-┌─────────────────────────────────────────────────┐
-│  CARDS (BlogCard, EventCard, ProjectCard)       │
-│  - Displays individual items                    │
-│  - No data fetching logic                       │
-└─────────────────────────────────────────────────┘
+Notion (CMS)
+  - Blog posts, events, guides, members, gallery
+  - Edited by committee members
+        |
+        |  backend/syncNotion.js
+        |  Runs every 5 minutes via cron
+        v
+Supabase (PostgreSQL + Storage)
+  - Tables: blog_posts, events, guides, members,
+            gallery_items, partners, timeline_events,
+            projects, workshops, glossary
+  - Storage: public-images bucket (permanent image mirror)
+        |
+        |  src/lib/supabase.js
+        v
+React Hooks  (src/hooks/useSupabase.js)
+  - useBlogPosts(), useEvents(), useGuides() ...
+  - Handles loading states and errors
+        |
+        v
+Pages  (News.jsx, Events.jsx, TheSandbox.jsx ...)
+  - Receives data from hooks
+  - Maps data to card components
+        |
+        v
+Cards  (BlogCard, EventCard, ProjectCard ...)
+  - Displays individual items
+  - No data fetching logic
 ```
 
-## 🚀 Step-by-Step Setup
+### Image Mirroring
 
-### 1. Create Supabase Account
-1. Go to https://supabase.com
-2. Sign up with GitHub
-3. Click "New Project"
-4. Choose organization and project name: `sheffdatasoc`
-5. Set database password (save this!)
-6. Choose region: `Europe West (London)`
-7. Wait 2-3 minutes for project to spin up
+Notion uploads images to AWS S3 with signed URLs that expire after approximately one hour. During each sync, the backend downloads any Notion-hosted images and stores them permanently in the `public-images` Supabase Storage bucket under `notion-images/<pageId>.<ext>`. Subsequent syncs skip re-uploading if the file already exists.
 
-### 2. Run SQL Schema
-1. In Supabase dashboard, go to **SQL Editor**
-2. Click **New Query**
-3. Copy the entire content from `supabase-schema.sql`
-4. Paste and click **Run**
-5. You should see "Success. No rows returned"
+---
 
-### 3. Verify Tables Created
-1. Go to **Table Editor** in sidebar
-2. You should see three tables:
-   - `blog_posts` (with 3 sample rows)
-   - `events` (with 3 sample rows)
-   - `projects` (with 3 sample rows)
+## Project Structure
 
-### 4. Get API Keys
-1. Go to **Settings** → **API**
-2. Copy these values:
-   - **Project URL**: `https://xxxxx.supabase.co`
-   - **anon public key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
-   - **service_role key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` (for backend only)
+```
+/
+|-- src/
+|   |-- components/       Reusable UI components
+|   |-- pages/            Full page views (one per route)
+|   |-- hooks/            Custom React hooks for data fetching
+|   |-- lib/              Third-party client setup (Supabase, etc.)
+|   |-- entities/         Data model helpers
+|
+|-- backend/
+|   |-- server.js         Express server and sync API endpoints
+|   |-- syncNotion.js     Notion-to-Supabase sync logic
+|
+|-- supabase-schema.sql   Full database schema
+```
 
-### 5. Configure Environment Variables
+---
 
-**Frontend (.env.local):**
+## Local Development
+
+### Prerequisites
+
+- Node.js 18+
+- A Supabase project
+- A Notion integration token
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/sheffdatasoc/SheffDataSoc-Wesbite.git
+cd SheffDataSoc-Wesbite
+npm install
+cd backend && npm install && cd ..
+```
+
+### 2. Configure environment variables
+
+**Frontend** — create `.env.local` in the project root:
+
 ```bash
 REACT_APP_SUPABASE_URL=https://xxxxx.supabase.co
-REACT_APP_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+REACT_APP_SUPABASE_ANON_KEY=your-anon-key
+REACT_APP_BACKEND_URL=http://localhost:10000
 ```
 
-**Backend (.env):**
-```bash
-# Supabase
-SUPABASE_URL=https://xxxxx.supabase.co
-SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+**Backend** — create `backend/.env`:
 
-# Notion (for later)
+```bash
+SUPABASE_URL=https://xxxxx.supabase.co
+SUPABASE_SERVICE_KEY=your-service-role-key
+
 NOTION_TOKEN=secret_xxxxx
 NOTION_BLOG_DB_ID=xxxxx
 NOTION_EVENTS_DB_ID=xxxxx
 NOTION_PROJECTS_DB_ID=xxxxx
+NOTION_GUIDES_DB_ID=xxxxx
+NOTION_MEMBERS_DB_ID=xxxxx
+NOTION_GALLERY_DB_ID=xxxxx
+NOTION_PARTNERS_DB_ID=xxxxx
+NOTION_TIMELINE_DB_ID=xxxxx
+NOTION_GLOSSARY_DB_ID=xxxxx
+NOTION_WORKSHOPS_DB_ID=xxxxx
+
+SYNC_SECRET=your-secret-key
+WATSONX_PROJECT_ID=xxxxx
+WATSONX_SERVICE_URL=https://...
 ```
 
-### 6. Test Connection
-```powershell
-# Start your React app
+### 3. Set up the database
+
+1. Open your Supabase project and go to **SQL Editor**
+2. Paste the contents of `supabase-schema.sql` and run it
+3. In **Storage**, create a public bucket named `public-images`
+
+### 4. Run locally
+
+```bash
+# Start the backend (in one terminal)
+cd backend && npm start
+
+# Start the frontend (in another terminal)
 npm start
-
-# Visit http://localhost:3000/news
-# You should see 3 blog posts from Supabase!
 ```
 
-## 🎯 How Each Folder Works
+The frontend runs on `http://localhost:3000` and the backend on `http://localhost:10000`.
 
-### `src/lib/` - Third-party Integrations
-**Purpose:** Connect to external services
-- `supabase.js` - Supabase client + helper functions
-- Think of it as your "database connection file"
+---
 
-**Example:**
-```javascript
-import { getBlogPosts } from '../lib/supabase';
-const posts = await getBlogPosts(); // Fetches from database
+## Triggering a Manual Sync
+
+Send a POST request to the sync endpoint with your secret:
+
+```bash
+curl -X POST https://sheffdatasoc-website.onrender.com/api/sync \
+  -H "Content-Type: application/json" \
+  -d '{"secret": "YOUR_SYNC_SECRET", "full": true}'
 ```
 
-### `src/hooks/` - Custom React Hooks
-**Purpose:** Reusable data fetching logic with loading states
-- `useSupabase.js` - Hooks for fetching data
-- Handles loading, errors, and state management
+Set `"full": true` to sync all records, or omit it for an incremental sync (last 15 minutes of changes only).
 
-**Example:**
-```javascript
-const { posts, loading, error } = useBlogPosts();
-if (loading) return <div>Loading...</div>;
-if (error) return <div>Error: {error}</div>;
-return <div>{posts.map(...)}</div>;
+---
+
+## Deployment
+
+The site is hosted on Render. Pushes to `main` trigger an automatic redeploy. Environment variables are managed through the Render dashboard.
+
+---
+
+## Contributing
+
+Each committee member works on their own named branch and opens a pull request to `main` for review before merging.
+
+```bash
+git checkout joaquin       # switch to your branch
+git pull origin main       # stay up to date
+# make changes...
+git push origin joaquin
+# open a pull request on GitHub
 ```
-
-### `src/entities/` - Data Models (Optional)
-**Purpose:** Define structure and behavior of your data
-- `BlogPost.js`, `Event.js`, `Project.js`
-- Add validation, formatting, calculated fields
-- Like TypeScript interfaces but in JavaScript
-
-**Example:**
-```javascript
-const post = new BlogPost(data);
-post.isPublished(); // true/false
-post.getFormattedDate(); // "5 November 2024"
-```
-
-## 📊 Data Flow Example
-
-### Without Supabase (Current Mock Data):
-```javascript
-// News.jsx
-const mockPosts = [{...}, {...}]; // Hard-coded
-return <BlogCard post={post} />;
-```
-
-### With Supabase (Real Database):
-```javascript
-// News.jsx
-const { posts, loading, error } = useBlogPosts(); // From database!
-if (loading) return <div>Loading...</div>;
-return posts.map(post => <BlogCard post={post} />);
-```
-
-## 🔄 Complete Flow in Action
-
-1. **Committee edits blog post in Notion**
-2. **Backend sync runs** (every hour via `syncNotion.js`)
-   - Fetches from Notion API
-   - Writes to Supabase database
-3. **User visits website**
-4. **React app loads** (`News.jsx`)
-5. **Custom hook fetches data** (`useBlogPosts()`)
-   - Calls `getBlogPosts()` from `lib/supabase.js`
-   - Returns data + loading state
-6. **Component renders** with real data
-7. **Cards display** the blog posts
-
-## 🛠️ Testing Your Setup
-
-```powershell
-# 1. Check environment variables are loaded
-npm start
-# Open browser console, check for Supabase warnings
-
-# 2. Test Supabase connection
-# Visit http://localhost:3000/news
-# Open browser console, check for errors
-
-# 3. Verify data is from database
-# Go to Supabase dashboard
-# Edit a blog post title
-# Refresh your website - title should update!
-```
-
-## 🐛 Troubleshooting
-
-### "Supabase not configured, returning empty array"
-- Check `.env.local` exists and has correct keys
-- Restart `npm start` after editing `.env.local`
-
-### "Error fetching blog posts: Failed to fetch"
-- Check Supabase project is running (not paused)
-- Verify URL and API key are correct
-- Check browser console for CORS errors
-
-### No data showing
-- Check tables have data in Supabase dashboard
-- Verify RLS policies are set (should be done by schema)
-
-## 🎉 Next Steps
-
-Once Supabase is working:
-1. Set up Notion integration
-2. Run `npm run sync` to sync from Notion
-3. Add more fields to tables (images, tags, etc.)
-4. Build individual post/event detail pages
-=======
