@@ -30,8 +30,7 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "test": "echo \"No tests configured yet\" && exit 0",
     "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
     "docker:dev:detached": "docker-compose -f docker-compose.dev.yml up -d --build",
     "docker:dev:down": "docker-compose -f docker-compose.dev.yml down",
@@ -66,7 +65,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3000",
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.3",
     "vite": "^7.3.1"

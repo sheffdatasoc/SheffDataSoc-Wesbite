@@ -63,7 +63,6 @@ const Hero = ({
   };
 
   // --- PARTNER CAROUSEL LOGIC ---
-  const [offset, setOffset] = useState(0);
   const [brokenLogos, setBrokenLogos] = useState(new Set());
 
   // Keep all partners with logos, don't filter out broken ones from the array
@@ -75,24 +74,6 @@ const Hero = ({
   const handleLogoError = (partnerId) => {
     setBrokenLogos(prev => new Set([...prev, partnerId]));
   };
-
-  useEffect(() => {
-    if (partnersWithLogos.length === 0 || activePartnerId) return;
-
-    const interval = setInterval(() => {
-      setOffset((prevOffset) => {
-        const cardWidth = 220;
-        const newOffset = prevOffset + 1;
-
-        if (newOffset >= cardWidth * partnersWithLogos.length) {
-          return 0;
-        }
-        return newOffset;
-      });
-    }, 30);
-
-    return () => clearInterval(interval);
-  }, [partnersWithLogos.length, activePartnerId]);
 
   const handlePartnerClick = (e, partner) => {
     if (partner.tier?.trim().toLowerCase() !== 'platinum') return;
@@ -170,7 +151,7 @@ const Hero = ({
                 key={index}
                 src={imgSrc || fallbackImage}
                 className={`carousel-card ${getCardClass(index)}`}
-                alt={`Gallery ${index}`}
+                alt={`Society event photo ${index + 1}`}
                 onError={(e) => {
                   if (e.target.src !== fallbackImage) {
                     e.target.src = fallbackImage;
@@ -192,8 +173,8 @@ const Hero = ({
 
           <div className="partner-carousel-wrapper">
             <div
-              className="partner-carousel-track"
-              style={{ transform: `translateX(-${offset}px)` }}
+              className={`partner-carousel-track ${activePartnerId ? 'paused' : ''}`}
+              style={{ '--partner-count': partnersWithLogos.length }}
             >
               {extendedPartners.map((partner, index) => (
                 <div

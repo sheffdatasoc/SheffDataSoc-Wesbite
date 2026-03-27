@@ -21,8 +21,8 @@ function Blog() {
     post.author?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleReadMore = (id) => {
-    navigate(`/blog/${id}`);
+  const handleReadMore = (post) => {
+    navigate(`/blog/${post.slug || post.id}`);
   };
 
   if (loading) {
@@ -71,7 +71,7 @@ function Blog() {
                 date={post.published_date}
                 image={post.image}
                 category={post.category}
-                onReadMore={() => handleReadMore(post.id)}
+                onReadMore={() => handleReadMore(post)}
               />
             ))}
           </div>

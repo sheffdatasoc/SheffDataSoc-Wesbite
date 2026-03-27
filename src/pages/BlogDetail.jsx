@@ -7,7 +7,7 @@ import rehypePrism from 'rehype-prism-plus';
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 
-import { getBlogPostById } from '../lib/supabase';
+import { getBlogPostById, getBlogPostBySlug } from '../lib/supabase';
 import './BlogDetail.css';
 import "prismjs/themes/prism-tomorrow.css";
 
@@ -28,12 +28,15 @@ function BlogDetail() {
     setFabOpen(false);
   };
 
-  /* Fetch Blog Post */
+  /* Fetch Blog Post — try slug first, fall back to UUID for old bookmarked links */
   useEffect(() => {
     const fetchBlogPost = async () => {
       try {
         setLoading(true);
-        const data = await getBlogPostById(id);
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+        const data = isUUID
+          ? await getBlogPostById(id)
+          : await getBlogPostBySlug(id);
         setPost(data);
         setError(null);
       } catch (err) {

@@ -52,11 +52,11 @@ class WatsonxClient {
                 .order('date', { ascending: true })
                 .limit(5);
 
-            // 2. Search glossary for technical terms
+            // 2. Search glossary for technical terms (fetch all for keyword matching)
             const { data: glossary } = await this.supabase
                 .from('glossary')
                 .select('term, definition')
-                .limit(15);
+                .order('term', { ascending: true });
 
             // 3. Get Members/Leadership (Increased limit to skip cutoff)
             const { data: members } = await this.supabase
