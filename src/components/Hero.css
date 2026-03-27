@@ -295,13 +295,23 @@
       transparent 100%);
 }
 
+@keyframes partner-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-240px * var(--partner-count, 4))); }
+}
+
 .partner-carousel-track {
   display: flex;
   gap: 20px;
   will-change: transform;
+  animation: partner-scroll calc(var(--partner-count, 4) * 4s) linear infinite;
   /* Ensure track takes height of children */
   height: 100%;
   align-items: center;
+}
+
+.partner-carousel-track.paused {
+  animation-play-state: paused;
 }
 
 .partner-logo-card {

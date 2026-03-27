@@ -10,6 +10,7 @@ import './Timeline.css';
 function Timeline() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Filters
   const [expandedYears, setExpandedYears] = useState({});
@@ -19,10 +20,16 @@ function Timeline() {
 
   useEffect(() => {
     async function fetchTimeline() {
-      setLoading(true);
-      const data = await getTimelineEvents();
-      setEvents(data || []);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const data = await getTimelineEvents();
+        setEvents(data || []);
+      } catch (err) {
+        console.error('Error fetching timeline:', err);
+        setError('Failed to load timeline. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
     }
     fetchTimeline();
   }, []);
@@ -76,6 +83,10 @@ function Timeline() {
       <div className="timeline">
         {loading ? (
           <p style={{ textAlign: 'center' }}>Loading timeline...</p>
+        ) : error ? (
+          <p style={{ textAlign: 'center', color: 'red' }}>{error}</p>
+        ) : events.length === 0 ? (
+          <p style={{ textAlign: 'center' }}>No timeline events found.</p>
         ) : (
           Object.keys(groupedTimeline).sort((a, b) => a - b).map(year => { // years ascending
             const isExpanded = expandedYears[year];
