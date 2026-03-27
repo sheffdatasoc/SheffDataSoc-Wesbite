@@ -171,6 +171,14 @@ const MAPPERS = {
   blog_posts: async (page) => {
     const mdBlocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdBlocks);
+
+    // Try property/cover first, then fall back to first image in the content
+    let image = await robustExtractImage(page);
+    if (!image) {
+      const match = mdString.parent.match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
+      if (match) image = await mirrorImageToSupabase(match[1], page.id);
+    }
+
     return {
       notion_id: page.id,
       title: extractText(page.properties.Title?.title),
@@ -178,7 +186,7 @@ const MAPPERS = {
       published_date: extractDate(page.properties['Published Date']?.date),
       excerpt: extractText(page.properties.Excerpt?.rich_text),
       status: (extractText(page.properties.Status?.rich_text) || 'draft').toLowerCase() === 'published' ? 'published' : 'draft',
-      image: await robustExtractImage(page),
+      image,
       content: mdString.parent,
       slug: extractText(page.properties.Slug?.rich_text) || page.id,
       created_at: page.created_time,
@@ -220,6 +228,13 @@ const MAPPERS = {
   guides: async (page) => {
     const mdBlocks = await n2m.pageToMarkdown(page.id);
     const mdString = n2m.toMarkdownString(mdBlocks);
+
+    let image = await robustExtractImage(page);
+    if (!image) {
+      const match = mdString.parent.match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
+      if (match) image = await mirrorImageToSupabase(match[1], page.id);
+    }
+
     return {
       notion_id: page.id,
       title: extractText(page.properties.Name?.title),
@@ -232,7 +247,7 @@ const MAPPERS = {
       author: extractText(page.properties.Author?.rich_text),
       read_time: page.properties['Read Time']?.number,
       github_url: page.properties.GitHub?.url,
-      image: await robustExtractImage(page),
+      image,
       featured: page.properties.Featured?.checkbox || false,
       created_at: page.created_time,
       updated_at: page.last_edited_time
