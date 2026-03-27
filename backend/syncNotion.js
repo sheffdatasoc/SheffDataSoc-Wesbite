@@ -35,7 +35,7 @@ async function mirrorImageToSupabase(url, pageId) {
   try {
     const ext = path.extname(new URL(url).pathname) || '.jpg';
     const storagePath = `notion-images/${pageId}${ext}`;
-    const BUCKET = 'images';
+    const BUCKET = 'public-images';
 
     // Check if already uploaded — skip download if so
     const { data: existing } = await supabase.storage.from(BUCKET).list('notion-images', { search: `${pageId}${ext}` });
