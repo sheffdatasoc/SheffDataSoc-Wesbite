@@ -9,7 +9,7 @@ const chatClient = require('./ibmWatsonxClient');
 // Global sync state
 let lastSyncStatus = {
     lastRun: null,
-    status: 'Initalizing',
+    status: 'Initializing',
     results: null
 };
 

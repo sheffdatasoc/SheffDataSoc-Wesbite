@@ -153,7 +153,7 @@ function Gallery() {
                   className="gallery-item"
                   onClick={() => openModal(index)} // Opens the modal
                 >
-                  <img src={item.image_url} alt={item.title} className="card-bg-img" />
+                  <img src={item.image_url} alt={item.title || 'Gallery image'} className="card-bg-img" />
                   <div className="gallery-overlay">
                     <div className="gallery-text-content">
                       <h3>{item.title}</h3>

@@ -307,13 +307,15 @@ function GuideDetail() {
             )}
 
             <div className="guide-content markdown-body">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypePrism]}
-                components={components}
-              >
-                {guide.content}
-              </ReactMarkdown>
+              {guide.content && (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypePrism]}
+                  components={components}
+                >
+                  {guide.content}
+                </ReactMarkdown>
+              )}
             </div>
 
             {/* COMMENTS SECTION */}
