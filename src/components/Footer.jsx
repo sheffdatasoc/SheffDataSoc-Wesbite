@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo from "../assets/datasoc-logo.png";
 import { FaInstagram, FaLinkedin, FaGithub, FaTwitter, FaFacebook } from "react-icons/fa";
 import "./Footer.css";
@@ -21,10 +22,10 @@ export default function Footer() {
         <div className="footer-col">
           <h3 className="footer-heading">Quick Links</h3>
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/events">Events</a></li>
-            <li><a href="/blog">The Blog</a></li>
-            <li><a href="/about">About Us</a></li>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/events">Events</Link></li>
+            <li><Link to="/blog">The Blog</Link></li>
+            <li><Link to="/about">About Us</Link></li>
           </ul>
         </div>
 
@@ -32,10 +33,10 @@ export default function Footer() {
         <div className="footer-col">
           <h3 className="footer-heading">Resources</h3>
           <ul>
-            <li><a href="/guides">Guides</a></li>
-            <li><a href="/glossary">Glossary</a></li>
-            <li><a href="/sandbox">The Sandbox</a></li>
-            <li><a href="/gallery">Gallery</a></li>
+            <li><Link to="/guides">Guides</Link></li>
+            <li><Link to="/glossary">Glossary</Link></li>
+            <li><Link to="/sandbox">The Sandbox</Link></li>
+            <li><Link to="/gallery">Gallery</Link></li>
           </ul>
         </div>
 

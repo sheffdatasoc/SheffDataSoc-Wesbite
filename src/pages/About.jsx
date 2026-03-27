@@ -179,9 +179,7 @@ function About() {
         <div className="partners-cta">
           <p>Interested in partnering with us?</p>
           <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&to=datascience@sheffield.ac.uk"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:datascience@sheffield.ac.uk"
             className="btn-partner-inquiry"
           >
             Become a Partner

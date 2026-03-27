@@ -2,6 +2,7 @@ const { Client } = require('@notionhq/client');
 const { createClient } = require('@supabase/supabase-js');
 const { NotionToMarkdown } = require("notion-to-md");
 const path = require('path');
+const axios = require('axios');
 require('dotenv').config();
 
 // Configuration
@@ -45,7 +46,6 @@ async function mirrorImageToSupabase(url, pageId) {
     }
 
     // Download from Notion
-    const axios = require('axios');
     const response = await axios.get(url, { responseType: 'arraybuffer', timeout: 15000 });
     const contentType = response.headers['content-type'] || 'image/jpeg';
 
