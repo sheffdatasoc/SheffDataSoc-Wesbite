@@ -16,16 +16,28 @@ let lastSyncStatus = {
 const app = express();
 const PORT = process.env.PORT || 10000; // Render's preferred port
 
-// 1. Ultra-Explicit CORS (Absolute Top)
+// Allowed origins
+const ALLOWED_ORIGINS = [
+    'https://sheffdatasoc.org',
+    'https://www.sheffdatasoc.org',
+    'http://localhost:5173',
+    'http://localhost:3000',
+];
+
+// 1. CORS
 app.use((req, res, next) => {
     const origin = req.get('origin');
     console.log(`[Sheff Backend] ${req.method} request from origin: ${origin || 'Unknown'}`);
 
-    // Always set these headers
-    res.setHeader('Access-Control-Allow-Origin', origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    if (origin && ALLOWED_ORIGINS.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+    } else if (origin) {
+        // Reject unknown origins
+        return res.status(403).json({ error: 'CORS: origin not allowed' });
+    }
 
     // Handle preflight (OPTIONS)
     if (req.method === 'OPTIONS') {
@@ -35,7 +47,44 @@ app.use((req, res, next) => {
     next();
 });
 
-// 2. Regular middleware
+// 2. Security headers
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'none'; frame-ancestors 'none'"
+    );
+    next();
+});
+
+// Simple in-memory rate limiter for /api/chat (20 req/min per IP)
+const chatRateLimitMap = new Map();
+const CHAT_RATE_LIMIT = 20;
+const CHAT_RATE_WINDOW_MS = 60 * 1000;
+
+function chatRateLimit(req, res, next) {
+    const ip = req.ip || req.connection.remoteAddress;
+    const now = Date.now();
+    const entry = chatRateLimitMap.get(ip) || { count: 0, resetAt: now + CHAT_RATE_WINDOW_MS };
+
+    if (now > entry.resetAt) {
+        entry.count = 0;
+        entry.resetAt = now + CHAT_RATE_WINDOW_MS;
+    }
+
+    entry.count += 1;
+    chatRateLimitMap.set(ip, entry);
+
+    if (entry.count > CHAT_RATE_LIMIT) {
+        return res.status(429).json({ success: false, message: 'Too many requests. Please wait a moment.' });
+    }
+    next();
+}
+
+// 3. Regular middleware
 app.use(express.json());
 
 // --- API Endpoints ---
@@ -51,6 +100,10 @@ app.get('/health', (req, res) => {
 
 // Manual sync endpoint (Notion -> Supabase)
 app.post('/api/sync', async (req, res) => {
+    const token = req.headers['authorization']?.replace('Bearer ', '');
+    if (!process.env.SYNC_SECRET || token !== process.env.SYNC_SECRET) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
     try {
         console.log('Manual sync triggered via API');
         lastSyncStatus.status = 'Running (Manual)';
@@ -106,7 +159,7 @@ app.get('/api/sync/status', (req, res) => {
 });
 
 // ChatBot API Endpoint (IBM Granite)
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatRateLimit, async (req, res) => {
     const { prompt, history } = req.body;
 
     if (!prompt) {

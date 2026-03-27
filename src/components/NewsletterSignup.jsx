@@ -139,7 +139,9 @@ function NewsletterSignup() {
           </p>
 
           <form onSubmit={handleSubmit} className="newsletter-form">
+            <label htmlFor="newsletter-email" className="visually-hidden">Email address</label>
             <input
+              id="newsletter-email"
               type="email"
               placeholder="Enter your email"
               value={email}
@@ -161,14 +163,13 @@ function NewsletterSignup() {
 
           <p className="newsletter-note">
             We respect your privacy.{' '}
-            <span
+            <button
+              type="button"
               className="unsubscribe-link"
               onClick={requestUnsubscribe}
-              role="button"
-              tabIndex="0"
             >
               Unsubscribe
-            </span>{' '}
+            </button>{' '}
             at any time.
           </p>
         </div>
