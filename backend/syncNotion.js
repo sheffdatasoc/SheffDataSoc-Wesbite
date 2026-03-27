@@ -175,7 +175,7 @@ const MAPPERS = {
     // Try property/cover first, then fall back to first image in the content
     let image = await robustExtractImage(page);
     if (!image) {
-      const match = mdString.parent.match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
+      const match = (mdString.parent || '').match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
       if (match) image = await mirrorImageToSupabase(match[1], page.id);
     }
 
@@ -231,7 +231,7 @@ const MAPPERS = {
 
     let image = await robustExtractImage(page);
     if (!image) {
-      const match = mdString.parent.match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
+      const match = (mdString.parent || '').match(/!\[.*?\]\((https?:\/\/[^)]+)\)/);
       if (match) image = await mirrorImageToSupabase(match[1], page.id);
     }
 
